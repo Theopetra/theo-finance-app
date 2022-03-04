@@ -1,9 +1,8 @@
-import LightSwitch from "@/components/LightSwitch";
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html>
+    <Html className="h-full bg-gray-100">
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -12,7 +11,7 @@ export default function Document() {
           rel="stylesheet"
         />
       </Head>
-      <body>
+      <body className="h-full">
         <Main />
         <NextScript />
       </body>
