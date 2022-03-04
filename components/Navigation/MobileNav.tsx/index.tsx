@@ -1,8 +1,9 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { classNames } from "../../../util/class-names-util";
+import { classNames } from "@/util/class-names-util";
 import { navigation } from "../nav-config";
+import Logo from "../Logo";
 
 type MobileNavProps = {
   sidebarOpen: boolean;
@@ -60,11 +61,7 @@ const MobileNav = ({ sidebarOpen, setSidebarOpen }: MobileNavProps) => {
             </Transition.Child>
             <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
               <div className="flex-shrink-0 flex items-center px-4">
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-                  alt="Workflow"
-                />
+                <Logo />
               </div>
               <nav className="mt-5 px-2 space-y-1">
                 {navigation.map((item) => (
