@@ -5,9 +5,9 @@ import { useRouter } from "next/router";
 type NavItemProps = {
   name?: string;
   href?: string;
-  current?: boolean;
+  comingSoon?: boolean;
 };
-const NavItem = ({ name, href, current }: NavItemProps) => {
+const NavItem = ({ name, href, comingSoon }: NavItemProps) => {
   const router = useRouter();
   return (
     <Link key={name} href={href as any}>
@@ -26,7 +26,16 @@ const NavItem = ({ name, href, current }: NavItemProps) => {
         )}
         aria-hidden="true"
       /> */}
-        {name}
+        <div>
+          <span className={comingSoon ? "line-through" : ""}>{name}</span>
+          {comingSoon ? (
+            <span className="text-xs text-gray-300 block font-normal">
+              (Coming Soon)
+            </span>
+          ) : (
+            <></>
+          )}
+        </div>
       </a>
     </Link>
   );
