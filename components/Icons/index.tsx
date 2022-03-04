@@ -1,9 +1,23 @@
+import { classNames } from "@/util/class-names-util";
 import React from "react";
 import { ReactSVG } from "react-svg";
 
-const Icon: React.FC<{ name: string }> = ({ name }) => {
+type IconProps = {
+  name: string;
+  className?: string;
+};
+
+const Icon = ({ name, className = "" }: IconProps) => {
   const src = `./icons/${name}.svg`;
-  return <ReactSVG src="./icons/file.svg" />;
+  return (
+    <ReactSVG
+      src={src}
+      className={className}
+      beforeInjection={(svg) => {
+        svg.classList.add("w-full");
+      }}
+    />
+  );
 };
 
 export default Icon;
