@@ -14,9 +14,9 @@ const NavItem = ({ name, href, current }: NavItemProps) => {
       href={href}
       className={classNames(
         current
-          ? "bg-theo-navy text-white"
-          : "text-gray-300 hover:bg-gray-700 hover:text-white",
-        "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+          ? "bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy"
+          : "hover:bg-theo-cyan hover:text-white text-theo-navy dark:text-white dark:bg-black bg-theo-light",
+        "group flex items-center px-4 py-4  font-bold rounded-md text-lg"
       )}
     >
       {/* <Icon

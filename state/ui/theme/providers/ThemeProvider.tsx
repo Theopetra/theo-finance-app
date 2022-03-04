@@ -5,6 +5,7 @@ export const ThemeContext = React.createContext<any>(null);
 
 export const ThemeProvider: React.FC = (props) => {
   const [theme, setTheme] = useState("light");
+  // TODO: Set localstorage value to save setting between sessions.
   return (
     <ThemeContext.Provider
       value={[

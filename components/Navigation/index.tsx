@@ -12,9 +12,9 @@ const Navigation = () => {
             alt="Workflow"
           />
         </div>
-        <nav className="mt-5 flex-1 px-2 space-y-1">
+        <nav className="mt-5 flex-1 px-2 space-y-2">
           {navigation.map((item) => (
-            <NavItem name={item.name} />
+            <NavItem name={item.name} current={item.current} />
           ))}
         </nav>
       </div>
