@@ -1,14 +1,11 @@
-import AppContainer from "../components/AppContainer";
-import LightSwitch from "@/components/LightSwitch";
+import PageContainer from "@/components/PageContainer";
 
-export default function Dashboard() {
-  return (
-    <AppContainer>
-      <div className="py-4">
-        <div className="border-4 border-dashed border-gray-200 rounded-lg h-96">
-          <LightSwitch />
-        </div>
-      </div>
-    </AppContainer>
-  );
-}
+const Dashboard = () => {
+  return <PageContainer>Dashboard Content</PageContainer>;
+};
+
+Dashboard.PageHead = () => {
+  return <div>Welcome Home</div>;
+};
+
+export default Dashboard;

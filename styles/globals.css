@@ -5,3 +5,7 @@
 body {
   font-family: "Montserrat", serif;
 }
+
+[data-reactroot] {
+  height: 100%;
+}

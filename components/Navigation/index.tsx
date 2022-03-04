@@ -11,7 +11,7 @@ const Navigation = () => {
         </div>
         <nav className="mt-5 flex-1 px-2 space-y-2">
           {navigation.map((item) => (
-            <NavItem name={item.name} current={item.current} />
+            <NavItem name={item.name} current={item.current} href={item.href} />
           ))}
         </nav>
       </div>
