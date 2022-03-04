@@ -1,11 +1,11 @@
 import PageContainer from "@/components/PageContainer";
 
 const BoostBuy = () => {
-  return <PageContainer> Content</PageContainer>;
+  return <PageContainer>BoostBuy Content</PageContainer>;
 };
 
 BoostBuy.PageHead = () => {
-  return 'Boost + Buy';
+  return 'Boost Buy';
 };
 
 export default BoostBuy;
