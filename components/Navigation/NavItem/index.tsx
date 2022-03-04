@@ -1,11 +1,9 @@
 import { classNames } from "@/util/class-names-util";
-import { ReactNode } from "react";
 
 type NavItemProps = {
   name?: string;
   href?: string;
   current?: boolean;
-  // Icon?: ReactNode;
 };
 const NavItem = ({ name, href, current }: NavItemProps) => {
   return (
