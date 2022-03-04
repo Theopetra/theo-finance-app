@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { MenuIcon } from "@heroicons/react/outline";
 import Navigation from "../Navigation";
 import MobileNav from "../Navigation/MobileNav.tsx";
