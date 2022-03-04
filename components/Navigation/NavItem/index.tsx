@@ -14,13 +14,16 @@ const NavItem = ({ name, href, icon, comingSoon }: NavItemProps) => {
   return (
     <Link key={name} href={!comingSoon ? (href as any) : "#"}>
       <a
+        key={name}
+        href={href as any}
         className={classNames(
           router.asPath === href
             ? "bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy"
             : "text-theo-navy dark:text-white dark:bg-black bg-theo-light",
           "group cursor-pointer flex items-center px-4 py-4  font-bold rounded-md text-lg transition",
           comingSoon && "cursor-not-allowed ",
-          !comingSoon && "hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white"
+          !comingSoon &&
+            "hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white"
         )}
       >
         <div>
