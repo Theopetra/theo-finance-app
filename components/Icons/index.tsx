@@ -12,7 +12,7 @@ const Icon = ({ name, className = "" }: IconProps) => {
   return (
     <ReactSVG
       src={src}
-      className={className}
+      className={`${className} inline-block`}
       beforeInjection={(svg) => {
         svg.classList.add("w-full");
       }}
