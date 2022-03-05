@@ -17,7 +17,9 @@ const Card = ({
   lightModeBgColor,
 }: CardProps) => {
   const LMBGC = lightModeBgColor ? lightModeBgColor : "bg-[#ffffffcc]";
-  const DMBGC = darkModeBgColor ? darkModeBgColor : "dark:bg-theo-cyan ";
+  const DMBGC = darkModeBgColor
+    ? `dark:${darkModeBgColor}`
+    : "dark:bg-theo-cyan ";
 
   return (
     <div

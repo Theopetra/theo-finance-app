@@ -1,3 +1,4 @@
+import Card from "@/components/Card";
 import PageContainer from "@/components/PageContainer";
 import StatCard from "@/components/Stats/StatCard";
 import StatList from "@/components/Stats/StatList";
@@ -23,11 +24,16 @@ const BoostBuy = () => {
           <StatCard {...props} />
         ))}
       </StatList>
+
     </PageContainer>
   );
 };
 BoostBuy.PageHead = () => {
-  return "Boost Buy";
+  return (
+    <>
+      Boost Buy <span className="text-xl">(Bond)</span>
+    </>
+  );
 };
 
 export default BoostBuy;

@@ -1,5 +1,4 @@
 import { Popover } from "@headlessui/react";
-import { defaultConfig } from "next/dist/server/config-shared";
 import Icon from "../Icons";
 
 const Tooltip: React.FC = ({ children = "No content" }) => {
