@@ -3,11 +3,12 @@ import Icon from "../Icons";
 
 const LightSwitch = () => {
   const [{ theme }, { setTheme }] = useTheme();
+
   return (
     <label className="border-button">
       <input
         type="checkbox"
-        value={theme}
+        checked={theme === "dark"}
         className="sr-only"
         onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
       />
