@@ -8,7 +8,7 @@ type IconProps = {
 };
 
 const Icon = ({ name, className = "" }: IconProps) => {
-  const src = `./icons/${name}.svg`;
+  const src = `./assets/icons/${name}.svg`;
   return (
     <ReactSVG
       src={src}

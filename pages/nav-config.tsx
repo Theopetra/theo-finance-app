@@ -9,5 +9,5 @@ export const navigation = [
   },
   { name: "THEO Platinum", href: "/theo-platinum", comingSoon: true, icon: "diamond" },
   { name: "Theom", href: "/theom", comingSoon: true, icon: "door" },
-  { name: "Documents", href: "/documents", comingSoon: false, icon: "file" },
+  { name: "Documents", href: "/documents", comingSoon: true, icon: "file" },
 ];

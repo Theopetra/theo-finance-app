@@ -1,4 +1,4 @@
-import { navigation } from "./nav-config";
+import { navigation } from "../../pages/nav-config";
 import NavItem from "./NavItem";
 import Logo from "./Logo";
 import Icon from "../Icons";
