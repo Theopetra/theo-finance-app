@@ -1,12 +1,19 @@
 import { navigation } from "./nav-config";
 import NavItem from "./NavItem";
 import Logo from "./Logo";
+import Icon from "../Icons";
 
+const socialLinks = [
+  { icon: "twitter-logo", href: "#" },
+  { icon: "telegram-logo", href: "#" },
+  { icon: "discord-logo", href: "#" },
+  { icon: "youtube-logo", href: "#" },
+];
 const Navigation = () => {
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-gradient-to-t from-[#ebebeb] to-[rgb(171, 171, 171)] dark:from-theo-dark-navy dark:to-theo-dark-navy dark:bg-theo-dark-navy p-8">
-      <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-        <div className="flex items-center flex-shrink-0 px-4">
+    <div className="flex-1 flex flex-col min-h-0 bg-gradient-to-t from-[#ebebeb] to-[rgb(171, 171, 171)] dark:from-theo-dark-navy dark:to-theo-dark-navy dark:bg-theo-dark-navy">
+      <div className="flex-1 flex flex-col pt-5 overflow-y-auto  p-8">
+        <div className="flex items-center  px-4">
           <Logo />
         </div>
         <nav className="mt-5 flex-1 px-2 space-y-2">
@@ -19,11 +26,14 @@ const Navigation = () => {
             />
           ))}
         </nav>
-      </div>
-      <div className="flex-shrink-0 flex bg-gray-700 p-4">
-        <a href="#" className="flex-shrink-0 w-full group block">
-          <div className="flex items-center">social</div>
-        </a>
+
+        <div className="flex justify-between items-center w-full">
+          {socialLinks.map((x) => (
+            <a href={x.href} className="dark:text-theo-cyan dark:hover:bg-theo-gray hover:bg-theo-cyan hover:text-white p-4 block rounded transition">
+              <Icon name={x.icon} />
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );

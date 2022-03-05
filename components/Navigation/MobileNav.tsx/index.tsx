@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { classNames } from "@/util/class-names-util";
 import { navigation } from "../nav-config";
 import Logo from "../Logo";
 import NavItem from "../NavItem";
@@ -67,6 +66,7 @@ const MobileNav = ({ sidebarOpen, setSidebarOpen }: MobileNavProps) => {
               <nav className="mt-5 px-2 space-y-1">
                 {navigation.map((item) => (
                   <NavItem
+                    icon={item.icon}
                     name={item.name}
                     comingSoon={item.comingSoon}
                     href={item.href}
