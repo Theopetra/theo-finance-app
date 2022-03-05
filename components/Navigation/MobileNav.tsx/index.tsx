@@ -65,12 +65,14 @@ const MobileNav = ({ sidebarOpen, setSidebarOpen }: MobileNavProps) => {
               </div>
               <nav className="mt-5 px-2 space-y-1">
                 {navigation.map((item) => (
-                  <NavItem
-                    icon={item.icon}
-                    name={item.name}
-                    comingSoon={item.comingSoon}
-                    href={item.href}
-                  />
+                  <Fragment key={`${item.name}_mobile`}>
+                    <NavItem
+                      icon={item.icon}
+                      name={item.name}
+                      comingSoon={item.comingSoon}
+                      href={item.href}
+                    />
+                  </Fragment>
                 ))}
               </nav>
             </div>
