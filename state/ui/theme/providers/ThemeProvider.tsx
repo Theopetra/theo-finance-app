@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ThemeContext = React.createContext<any>(null);
 
 export const ThemeProvider: React.FC = (props) => {
-  const [theme, setTheme] = useState("light");
-  // TODO: Set localstorage value to save setting between sessions.
+  const [theme, setTheme] = useState("");
+
+  useEffect(() => {
+    theme && localStorage.setItem("uiTheme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const lsUiTheme = localStorage.getItem("uiTheme");
+    lsUiTheme && setTheme(lsUiTheme);
+  }, []);
+
   return (
-    <ThemeContext.Provider
-      value={[
-        { theme },
-        {
-          setTheme,
-        },
-      ]}
-    >
+    <ThemeContext.Provider value={[{ theme }, { setTheme }]}>
       {props.children}
     </ThemeContext.Provider>
   );

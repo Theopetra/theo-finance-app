@@ -4,6 +4,7 @@ import Navigation from "../Navigation";
 import MobileNav from "../Navigation/MobileNav.tsx";
 import { useTheme } from "@/state/ui/theme";
 import LightSwitch from "@/components/LightSwitch";
+import ConnectWallet from "../ConnectWallet";
 
 const AppContainer: React.FC<{ Header?: any }> = ({ children, Header }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,7 +32,10 @@ const AppContainer: React.FC<{ Header?: any }> = ({ children, Header }) => {
               <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
                 <Header />
               </h1>
-              <LightSwitch />
+              <div className="space-x-2 flex-1 flex justify-end">
+                <ConnectWallet />
+                <LightSwitch />
+              </div>
             </div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               {children}

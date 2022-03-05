@@ -24,6 +24,6 @@
     "**/*.ts",
     "**/*.tsx",
     "components/Navigation/NavItem"
-  ],
+, "pages/theom.page", "pages/theo-platinum.page", "pages/boost-buy.page", "pages/documents.page", "pages/stake-and-grow.page"  ],
   "exclude": ["node_modules"]
 }
