@@ -1,7 +1,8 @@
-import Card from "@/components/Card";
+import ActionCard from "@/components/ActionCard";
+import CardList from "@/components/CardList";
 import PageContainer from "@/components/PageContainer";
-import StatCard from "@/components/Stats/StatCard";
-import StatList from "@/components/Stats/StatList";
+import StatCard from "@/components/StatCard";
+import { Fragment } from "react";
 
 const STATS = [
   {
@@ -16,15 +17,71 @@ const STATS = [
   },
 ];
 
+const ACTION_CARD = [
+  {
+    header: {
+      primary: <span className="text-4xl">10%</span>,
+      secondary: "Market Discount",
+    },
+    icon: "intersect",
+    data: [
+      { label: "Assets", value: "ETH-THEO" },
+      { label: "Bond Price", value: "$25.20" },
+      { label: "Duration", value: "120 Days" },
+    ],
+    actionButton: { label: "Buy Theo", onClick: "", icon: "intersect" },
+    warning:
+      "Important: New bonds are auto-staked (accrue rebase rewards) and no longer vest linearly",
+  },
+  {
+    header: {
+      primary: <span className="text-4xl">10%</span>,
+      secondary: "Market Discount",
+    },
+    icon: "intersect",
+    data: [
+      { label: "Assets", value: "ETH-THEO" },
+      { label: "Bond Price", value: "$25.20" },
+      { label: "Duration", value: "120 Days" },
+    ],
+    actionButton: { label: "Buy Theo", onClick: "", icon: "intersect" },
+    warning:
+      "Important: New bonds are auto-staked (accrue rebase rewards) and no longer vest linearly",
+  },
+  {
+    header: {
+      primary: <span className="text-4xl">30%</span>,
+      secondary: "Market Discount",
+    },
+    icon: "intersect",
+    data: [
+      { label: "Assets", value: "ETH-THEO" },
+      { label: "Bond Price", value: "$25.20" },
+      { label: "Duration", value: "120 Days" },
+    ],
+    actionButton: { label: "Buy Theo", onClick: "", icon: "intersect" },
+    warning:
+      "Important: New bonds are auto-staked (accrue rebase rewards) and no longer vest linearly",
+  },
+];
+
 const BoostBuy = () => {
   return (
     <PageContainer>
-      <StatList>
+      <CardList className={"mb-4"}>
         {STATS.map((props) => (
-          <StatCard {...props} />
+          <Fragment key={props.name}>
+            <StatCard {...props} />
+          </Fragment>
         ))}
-      </StatList>
-
+      </CardList>
+      <CardList>
+        {ACTION_CARD.map((props, i) => (
+          <Fragment key={`${props.header.secondary}_${i}`}>
+            <ActionCard {...props} />
+          </Fragment>
+        ))}
+      </CardList>
     </PageContainer>
   );
 };

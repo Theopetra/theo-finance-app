@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 
 type CardProps = {
-  title?: string | undefined;
+  title?: string | ReactElement | undefined;
   cardHeader?: ReactElement;
   headerRightComponent?: ReactElement;
   children: ReactElement;
@@ -23,14 +23,14 @@ const Card = ({
 
   return (
     <div
-      className={`${LMBGC} ${DMBGC} rounded-xl py-4 px-6 dark:text-white text-theo-navy flex-1`}
+      className={`${LMBGC} ${DMBGC} rounded-xl py-4 px-6 dark:text-white text-theo-navy flex-1 flex flex-col `}
     >
-      <div className="flex justify-between mb-16">
+      <div className="flex justify-between mb-16 items-center">
         {title && <div className="font-normal text-xl">{title}</div>}
         {cardHeader && cardHeader}
         {headerRightComponent}
       </div>
-      <div>{children} </div>
+      <div className="flex flex-col flex-1">{children} </div>
     </div>
   );
 };
