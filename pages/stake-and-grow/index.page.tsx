@@ -68,7 +68,9 @@ const StakeGrow = () => {
     <PageContainer>
       <CardList className={"mb-4"}>
         {STATS.map((props) => (
-          <StatCard {...props} />
+          <Fragment key={props.name}>
+            <StatCard {...props} />
+          </Fragment>
         ))}
       </CardList>
       <CardList>
