@@ -11,14 +11,14 @@ body {
 }
 
 .border-button {
-  @apply flex items-center justify-center p-[7px] border-2 rounded-[10px] cursor-pointer transition;
+  @apply flex items-center justify-center font-semibold p-[7px] border-2 rounded-[10px] cursor-pointer transition;
   @apply bg-white  border-theo-navy;
   /* dark  */
-  @apply dark:bg-black dark:text-theo-cyan;
+  @apply dark:bg-black dark:text-theo-cyan dark:border-theo-cyan;
   /* dark hover */
   @apply dark:bg-[#1e1f20];
   /* dark active */
-  @apply dark:active:bg-white dark:active:text-theo-cyan dark:active:border-theo-cyan;
+  @apply dark:active:bg-white dark:active:text-theo-cyan;
   /* light hover */
   @apply hover:bg-theo-navy hover:text-white;
   /* light active */

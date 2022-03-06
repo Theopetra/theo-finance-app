@@ -1,8 +1,9 @@
 import Card from "@/components/Card";
+import CardList from "@/components/CardList";
 import PageContainer from "@/components/PageContainer";
-import StatCard from "@/components/Stats/StatCard";
-import StatList from "@/components/Stats/StatList";
+import StatCard from "@/components/StatCard";
 import { useTheme } from "@/state/ui/theme";
+import { Fragment } from "react";
 
 const STATS = [
   {
@@ -45,28 +46,32 @@ const Dashboard = () => {
   const [{ theme }] = useTheme();
   return (
     <PageContainer>
-      <StatList>
+      <CardList>
         {STATS.map((props) => (
-          <StatCard {...props} />
+          <Fragment key={props.name}>
+            <StatCard {...props} />
+          </Fragment>
         ))}
-      </StatList>
+      </CardList>
       <div className="mt-4">
         <Card title="Property Management" darkModeBgColor={"bg-black"}>
           <div className="flex space-x-2 items-end mb-14">
             {PROPERTY_MANAGEMENT.map((x) => (
-              <div className="flex-1">
-                <div className="flex flex-col justify-center items-center">
-                  <img
-                    src={theme === "dark" ? x.darkImgSrc : x.lightImgSrc}
-                    alt={`${x.title} graphic`}
-                    className="mb-7 max-h-[200px]"
-                  />
-                  <div>
-                    <div className="text-3xl mb-2 font-bold">{x.title}</div>
-                    <div>{x.subtitle}</div>
+              <Fragment key={x.title}>
+                <div className="flex-1">
+                  <div className="flex flex-col justify-center items-center">
+                    <img
+                      src={theme === "dark" ? x.darkImgSrc : x.lightImgSrc}
+                      alt={`${x.title} graphic`}
+                      className="mb-7 max-h-[200px]"
+                    />
+                    <div>
+                      <div className="text-3xl mb-2 font-bold">{x.title}</div>
+                      <div>{x.subtitle}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Fragment>
             ))}
           </div>
         </Card>
