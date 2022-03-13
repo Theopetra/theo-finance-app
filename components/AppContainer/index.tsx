@@ -5,6 +5,7 @@ import MobileNav from "../Navigation/MobileNav.tsx";
 import { useTheme } from "@/state/ui/theme";
 import LightSwitch from "@/components/LightSwitch";
 import ConnectWallet from "../ConnectWallet";
+import NavBar from "../Navigation/NavBar.tsx";
 
 const AppContainer: React.FC<{ Header?: any }> = ({ children, Header }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -12,32 +13,23 @@ const AppContainer: React.FC<{ Header?: any }> = ({ children, Header }) => {
   return (
     <div className={`${theme} h-full`}>
       <MobileNav sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="hidden md:flex md:max-w-64 md:flex-col md:fixed md:inset-y-0 w-[350px]">
+      <div className="hidden lg:flex lg:max-w-64 lg:flex-col lg:fixed lg:inset-y-0 w-[350px]">
         <Navigation />
       </div>
-      <div className="md:pl-[350px] flex flex-col flex-1 dark:bg-[#262626] min-h-full">
-        <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100 ">
-          <button
-            type="button"
-            className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <span className="sr-only">Open sidebar</span>
-            <MenuIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
+      <div className="lg:pl-[350px] flex flex-col flex-1 dark:bg-[#262626] min-h-full">
+        <NavBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main className="flex-1 ">
           <div className="py-6">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between mb-14">
+            <div className="max-w-7xl dark:bg-[#262626] bg-gray-100 sticky top-0 mx-auto px-4 sm:px-6 lg:px-8 flex  flex-col-reverse justify-center items-center md:flex-row md:justify-between pb-14">
               <h1 className="text-5xl font-semibold text-gray-900 dark:text-white">
                 <Header />
               </h1>
-              <div className="space-x-2 flex-1 flex justify-end">
+              <div className="space-x-2 flex-1 flex justify-end mb-12 md:mb-0">
                 <ConnectWallet />
                 <LightSwitch />
               </div>
             </div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               {children}
             </div>
           </div>

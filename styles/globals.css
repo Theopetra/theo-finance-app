@@ -2,25 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "Montserrat", serif;
-}
+@layer base {
+  body {
+    font-family: "Montserrat", serif;
+  }
 
-[data-reactroot] {
-  height: 100%;
-}
+  [data-reactroot] {
+    height: 100%;
+  }
 
-.border-button {
-  @apply flex items-center justify-center font-semibold p-[7px] border-2 rounded-[10px] cursor-pointer transition;
-  @apply bg-white  border-theo-navy;
-  /* dark  */
-  @apply dark:bg-black dark:text-theo-cyan dark:border-theo-cyan;
-  /* dark hover */
-  @apply dark:bg-[#1e1f20];
-  /* dark active */
-  @apply dark:active:bg-white dark:active:text-theo-cyan;
-  /* light hover */
-  @apply hover:bg-theo-navy hover:text-white;
-  /* light active */
-  @apply active:bg-theo-cyan active:text-white;
+  .border-button {
+    @apply flex items-center justify-center font-semibold p-[7px] border-2 rounded-[10px] cursor-pointer transition;
+    @apply bg-white  border-theo-navy;
+    /* dark  */
+    @apply dark:bg-black dark:text-theo-cyan dark:border-theo-cyan;
+    /* dark hover */
+    @apply dark:bg-[#1e1f20];
+    /* dark active */
+    @apply dark:active:bg-white dark:active:text-theo-cyan;
+    /* light hover */
+    @apply hover:bg-theo-navy hover:text-white;
+    /* light active */
+    @apply active:bg-theo-cyan active:text-white;
+  }
+
+  .hide-scroll-bar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scroll-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .horrizontal-scroll-container {
+    @apply flex flex-nowrap overflow-x-scroll hide-scroll-bar pb-10 lg:grid lg:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3;
+  }
+  .horrizontal-scroll-container > div {
+    @apply w-[342px] min-w-[342px] lg:w-full lg:min-w-full;
+  }
+  .sticky-list {
+    @apply dark:bg-[#262626] bg-gray-100 sticky top-[194px] md:relative md:top-0;
+  }
 }

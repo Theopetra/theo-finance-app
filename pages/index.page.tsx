@@ -46,7 +46,7 @@ const Dashboard = () => {
   const [{ theme }] = useTheme();
   return (
     <PageContainer>
-      <CardList>
+      <CardList horizontalScroll>
         {STATS.map((props) => (
           <Fragment key={props.name}>
             <StatCard {...props} />

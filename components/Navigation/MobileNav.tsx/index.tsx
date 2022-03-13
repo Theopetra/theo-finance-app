@@ -4,18 +4,14 @@ import { XIcon } from "@heroicons/react/outline";
 import { navigation } from "../../../pages/nav-config";
 import Logo from "../Logo";
 import NavItem from "../NavItem";
+import { NavDrawerProps } from "../types";
 
-type MobileNavProps = {
-  sidebarOpen: boolean;
-  setSidebarOpen: any;
-};
-
-const MobileNav = ({ sidebarOpen, setSidebarOpen }: MobileNavProps) => {
+const MobileNav = ({ sidebarOpen, setSidebarOpen }: NavDrawerProps) => {
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 flex z-40 md:hidden"
+        className="fixed inset-0 flex z-40 lg:hidden"
         onClose={setSidebarOpen}
       >
         <Transition.Child

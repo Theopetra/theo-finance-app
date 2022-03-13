@@ -66,7 +66,7 @@ const ACTION_CARD = [
 const StakeGrow = () => {
   return (
     <PageContainer>
-      <CardList className={"mb-4"}>
+      <CardList className={"mb-4"} horizontalScroll>
         {STATS.map((props) => (
           <StatCard {...props} />
         ))}
