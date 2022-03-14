@@ -1,16 +1,33 @@
 import { MenuIcon } from "@heroicons/react/outline";
 import { NavDrawerProps } from "../types";
+import homeButtonLight from "../assets/homeButtonlight.png";
+import homeButtonDark from "../assets/homeButtonDark.png";
+import { useTheme } from "@/state/ui/theme";
 
 const NavBar = ({ sidebarOpen, setSidebarOpen }: NavDrawerProps) => {
+  const [{ theme }] = useTheme();
+
   return (
-    <div className="w-full fixed bottom-0 z-10 lg:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-black ">
+    <div className="fixed bottom-0 z-50 flex w-full pt-1 pl-1 bg-black lg:hidden sm:pl-3 sm:pt-3">
       <button
         type="button"
-        className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-        onClick={() => setSidebarOpen(true)}
+        className=""
+        onClick={() => setSidebarOpen(!sidebarOpen)}
       >
-        <span className="sr-only">Open sidebar</span>
-        <MenuIcon className="h-6 w-6" aria-hidden="true" />
+        <span className="sr-only">Open nav bar</span>
+        {theme === "dark" ? (
+          <img
+            className="hidden w-auto h-24 dark:block"
+            src={homeButtonDark.src}
+            alt="Theopetra Labs"
+          />
+        ) : (
+          <img
+            className="block w-auto h-24"
+            src={homeButtonLight.src}
+            alt="Theopetra Labs"
+          />
+        )}
       </button>
     </div>
   );
