@@ -1,13 +1,14 @@
-import { Fragment } from "react";
-import { Transition } from "@headlessui/react";
-import { navigation } from "../../../pages/nav-config";
-import Logo from "../Logo";
-import NavItem from "../NavItem";
-import { NavDrawerProps } from "../types";
+import { Fragment } from 'react';
+import { Transition } from '@headlessui/react';
+import { navigation } from '../../../pages/nav-config';
+import Logo from '../Logo';
+import NavItem from '../NavItem';
+import { useTheme } from '@/state/ui/theme';
 
-const MobileNav = ({ sidebarOpen }: NavDrawerProps) => {
+const MobileNav = () => {
+  const [{ navigationOpen }] = useTheme();
   return (
-    <Transition.Root show={sidebarOpen} as={Fragment}>
+    <Transition.Root show={navigationOpen} as={Fragment}>
       <div className="fixed inset-0 z-40 flex lg:hidden">
         <Transition.Child
           as={Fragment}
