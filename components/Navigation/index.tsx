@@ -1,23 +1,23 @@
-import { navigation } from "../../pages/nav-config";
-import NavItem from "./NavItem";
-import Logo from "./Logo";
-import Icon from "../Icons";
-import { Fragment } from "react";
+import { navigation } from '../../pages/nav-config';
+import NavItem from './NavItem';
+import Logo from './Logo';
+import Icon from '../Icons';
+import { Fragment } from 'react';
 
 const socialLinks = [
-  { icon: "twitter-logo", href: "#" },
-  { icon: "telegram-logo", href: "#" },
-  { icon: "discord-logo", href: "#" },
-  { icon: "youtube-logo", href: "#" },
+  { icon: 'twitter-logo', href: '#' },
+  { icon: 'telegram-logo', href: '#' },
+  { icon: 'discord-logo', href: '#' },
+  { icon: 'youtube-logo', href: '#' },
 ];
 const Navigation = () => {
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-gradient-to-t from-[#ebebeb] to-[rgb(171, 171, 171)] dark:from-theo-dark-navy dark:to-theo-dark-navy dark:bg-theo-dark-navy">
-      <div className="flex-1 flex flex-col pt-5 overflow-y-auto  p-8">
-        <div className="flex items-center  px-4">
+    <div className="to-[rgb(171, 171, 171)] flex min-h-0 flex-1 flex-col bg-gradient-to-t from-[#ebebeb] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
+      <div className="flex flex-col flex-1 p-8 pt-5 overflow-y-auto">
+        <div className="flex items-center px-4">
           <Logo />
         </div>
-        <nav className="mt-5 flex-1 px-2 space-y-2">
+        <nav className="flex-1 px-2 mt-5 space-y-2">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
               <NavItem
@@ -29,13 +29,12 @@ const Navigation = () => {
             </Fragment>
           ))}
         </nav>
-
-        <div className="flex justify-between items-center w-full">
+        <div className="flex items-center justify-between w-full">
           {socialLinks.map((x) => (
             <Fragment key={x.icon}>
               <a
                 href={x.href}
-                className="dark:text-theo-cyan dark:hover:bg-theo-gray hover:bg-theo-cyan hover:text-white p-4 block rounded transition"
+                className="block p-4 transition rounded hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
               >
                 <Icon name={x.icon} />
               </a>

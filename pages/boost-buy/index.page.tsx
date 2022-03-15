@@ -68,7 +68,7 @@ const ACTION_CARD = [
 const BoostBuy = () => {
   return (
     <PageContainer>
-      <CardList className={"mb-4"}>
+      <CardList className={"mb-4"} horizontalScroll>
         {STATS.map((props) => (
           <Fragment key={props.name}>
             <StatCard {...props} />
