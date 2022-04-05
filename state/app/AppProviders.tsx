@@ -1,8 +1,12 @@
-import React from "react";
-import { ThemeProvider } from "../ui/theme";
+import React from 'react';
+import { ThemeProvider, ModalProvider } from '../ui/theme';
 
 const AppProviders = (props) => {
-  return <ThemeProvider>{props.children}</ThemeProvider>;
+  return (
+    <ThemeProvider>
+      <ModalProvider>{props.children}</ModalProvider>
+    </ThemeProvider>
+  );
 };
 
 export default AppProviders;

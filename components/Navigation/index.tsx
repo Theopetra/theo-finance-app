@@ -12,7 +12,7 @@ const socialLinks = [
 ];
 const Navigation = () => {
   return (
-    <div className="to-[rgb(171, 171, 171)] flex min-h-0 flex-1 flex-col bg-gradient-to-t from-[#ebebeb] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
+    <div className="to-[#ababab] flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
       <div className="flex flex-col flex-1 p-8 pt-5 overflow-y-auto">
         <div className="flex items-center px-4">
           <Logo />
