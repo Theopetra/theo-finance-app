@@ -3,8 +3,9 @@ import CardList from '@/components/CardList';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { Fragment } from 'react';
-import BuyProcess from './BuyProcess';
+import { Fragment, ReactNode } from 'react';
+import BuyFormProvider from './state/BuyFormProvider';
+import DiscountBuyForm from './components/DiscountBuyForm';
 
 const STATS = [
   {
@@ -35,7 +36,7 @@ const DiscountBuy = () => {
       ],
       actionButton: {
         label: 'Buy Theo',
-        onClick: () => openModal(<BuyProcess />),
+        onClick: () => openModal(<DiscountBuyForm />),
         icon: 'intersect',
       },
       warning:
@@ -54,7 +55,7 @@ const DiscountBuy = () => {
       ],
       actionButton: {
         label: 'Buy Theo',
-        onClick: () => openModal(<BuyProcess />),
+        onClick: () => openModal(<DiscountBuyForm />),
         icon: 'intersect',
       },
       warning:
@@ -73,7 +74,7 @@ const DiscountBuy = () => {
       ],
       actionButton: {
         label: 'Buy Theo',
-        onClick: () => openModal(<BuyProcess />),
+        onClick: () => openModal(<DiscountBuyForm />),
         icon: 'intersect',
       },
       warning:
@@ -82,30 +83,36 @@ const DiscountBuy = () => {
   ];
 
   return (
-    <PageContainer>
-      <CardList className={'mb-4'} horizontalScroll>
-        {STATS.map((props) => (
-          <Fragment key={props.name}>
-            <StatCard {...props} />
-          </Fragment>
-        ))}
-      </CardList>
-      <CardList>
-        {ACTION_CARD.map((props, i) => (
-          <Fragment key={`${props.header.primary}_${i}`}>
-            <ActionCard {...props} />
-          </Fragment>
-        ))}
-      </CardList>
-    </PageContainer>
+    <BuyFormProvider>
+      <PageContainer>
+        <CardList className={'mb-4'} horizontalScroll>
+          {STATS.map((props) => (
+            <Fragment key={props.name}>
+              <StatCard {...props} />
+            </Fragment>
+          ))}
+        </CardList>
+        <CardList>
+          {ACTION_CARD.map((props, i) => (
+            <Fragment key={`${props.header.primary}_${i}`}>
+              <ActionCard {...props} />
+            </Fragment>
+          ))}
+        </CardList>
+      </PageContainer>
+    </BuyFormProvider>
   );
 };
-DiscountBuy.PageHead = () => {
+const PageHeadComponent = () => {
   return (
     <>
       Discount Buy <span className="text-xl">(Bond)</span>
     </>
   );
 };
+
+DiscountBuy.PageStateProvider = (props) => <BuyFormProvider {...props} />;
+
+DiscountBuy.PageHead = PageHeadComponent;
 
 export default DiscountBuy;

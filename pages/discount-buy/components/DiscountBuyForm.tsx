@@ -1,16 +1,15 @@
 import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { useState } from 'react';
-import InputMask from 'react-input-mask';
+import { BaseSyntheticEvent, useState } from 'react';
+import useBuyForm from '../state/use-buy-form';
+import ConfirmBuy from './ConfirmBuy';
 
-const BuyProcess = () => {
-  const [, { closeModal }] = useModal();
-  const [step, setStep] = useState(1);
-
+const DiscountBuyForm = () => {
+  const [, { openModal, closeModal }] = useModal();
+  const [{ purchasePrice }, { handleUpdate }] = useBuyForm();
   return (
     <div>
-      {/* fauxModalHeader w/ back button, icon and title ? */}
       <div className="flex justify-between">
         <div>
           <button onClick={() => closeModal()} className="text-theo-cyan">
@@ -73,18 +72,26 @@ const BuyProcess = () => {
         <p className="mb-8 text-xs">
           Important: New bonds are auto-staked (accrue rebase rewards) and no longer vest linearly
         </p>
-        <CurrencyInput className={'mb-4'} tokenSymbol="ETH" balance="18.34" />
+        <CurrencyInput
+          className={'mb-4'}
+          tokenSymbol="ETH"
+          balance="18.34"
+          value={purchasePrice}
+          onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}
+        />
         <CurrencyInput tokenSymbol="THEO" />
       </div>
 
       <div className="flex w-full items-center">
         <div className="w-1/2  underline dark:text-white">Learn about Discount Buy</div>
         <div className="w-1/2">
-          <button className="border-button w-full">Buy Theo</button>
+          <button className="border-button w-full " onClick={() => openModal(<ConfirmBuy />)}>
+            Buy Theo
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default BuyProcess;
+export default DiscountBuyForm;

@@ -1,14 +1,18 @@
+import { BaseSyntheticEvent } from 'react';
+
 type CurrrencyInputProps = {
   className?: string;
   tokenSymbol?: string;
   balance?: string;
-  onChange?: () => void;
+  value?: number;
+  onChange?: any;
 };
 
 const CurrencyInput: React.FC<CurrrencyInputProps> = ({
   className,
   balance,
   tokenSymbol,
+  value,
   onChange,
 }) => {
   return (
@@ -30,6 +34,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
           )}
           <input
             type="text"
+            value={value}
             onChange={onChange}
             className="flex-1 text-right focus:outline-none"
             placeholder="00.00"
