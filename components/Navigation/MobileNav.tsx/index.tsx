@@ -30,7 +30,7 @@ const MobileNav = () => {
                     <NavItem
                       icon={item.icon}
                       name={item.name}
-                      comingSoon={item.comingSoon}
+                      disabled={item.disabled}
                       href={item.href}
                     />
                   </Fragment>

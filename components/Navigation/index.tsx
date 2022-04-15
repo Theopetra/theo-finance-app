@@ -12,29 +12,29 @@ const socialLinks = [
 ];
 const Navigation = () => {
   return (
-    <div className="to-[#ababab] flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
-      <div className="flex flex-col flex-1 p-8 pt-5 overflow-y-auto">
+    <div className="flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
+      <div className="flex flex-1 flex-col overflow-y-auto p-8 pt-5">
         <div className="flex items-center px-4">
           <Logo />
         </div>
-        <nav className="flex-1 px-2 mt-5 space-y-2">
+        <nav className="mt-5 flex-1 space-y-2 px-2">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
               <NavItem
                 icon={item.icon}
                 name={item.name}
-                comingSoon={item.comingSoon}
+                disabled={item.disabled}
                 href={item.href}
               />
             </Fragment>
           ))}
         </nav>
-        <div className="flex items-center justify-between w-full">
+        <div className="flex w-full items-center justify-between">
           {socialLinks.map((x) => (
             <Fragment key={x.icon}>
               <a
                 href={x.href}
-                className="block p-4 transition rounded hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
+                className="block rounded p-4 transition hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
               >
                 <Icon name={x.icon} />
               </a>
