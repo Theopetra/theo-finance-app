@@ -7,7 +7,7 @@ import ConfirmBuy from './ConfirmBuy';
 
 const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
-  const [{ purchasePrice }, { handleUpdate }] = useBuyForm();
+  const [{ purchasePrice, purchaseCurrency }, { handleUpdate }] = useBuyForm();
   return (
     <div>
       <div className="flex justify-between">
@@ -74,12 +74,14 @@ const DiscountBuyForm = () => {
         </p>
         <CurrencyInput
           className={'mb-4'}
-          tokenSymbol="ETH"
+          selectedCurrency={purchaseCurrency}
+          options={[{ name: 'ETH' }, { name: 'USDC' }]}
           balance="18.34"
           value={purchasePrice}
+          onCurrencyChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseCurrency')}
           onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}
         />
-        <CurrencyInput tokenSymbol="THEO" />
+        <CurrencyInput selectedCurrency={{ name: 'THEO' }} />
       </div>
 
       <div className="flex w-full items-center">
