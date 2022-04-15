@@ -25,7 +25,12 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
       <div className="flex min-h-full flex-1 flex-col dark:bg-[#262626] lg:pl-[350px]">
         <NavBar />
         <PageStateProvider>
-          <main className="flex-1 ">
+          <main
+            className="flex-1 bg-contain bg-bottom bg-no-repeat dark:bg-none"
+            style={{
+              backgroundImage: theme !== 'dark' ? 'url(/assets/images/Grid-Background-01.svg)' : '',
+            }}
+          >
             {/* provider */}
             <Transition
               show={isOpen}
