@@ -7,7 +7,6 @@ export const navigation = [
     comingSoon: false,
     icon: "lock-laminated",
   },
-  { name: "THEO Platinum", href: "/theo-platinum", comingSoon: true, icon: "diamond" },
-  { name: "Theom", href: "/theom", comingSoon: true, icon: "door" },
-  { name: "Documents", href: "/documents", comingSoon: true, icon: "file" },
+  { name: "T-Homes", href: "/t-homes", comingSoon: true, icon: "door" },
+  { name: "Learn More", href: "/learn-more", comingSoon: true, icon: "file" },
 ];
