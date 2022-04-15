@@ -28,16 +28,11 @@ const DiscountBuy = () => {
         primary: <span className="text-4xl">Intro</span>,
       },
       icon: 'intersect',
-      data: [
-        { label: 'Discount', value: '1-4%' },
-        { label: 'Buy With', value: 'ETH/USD' },
-        { label: 'Bond Price', value: '$31.50' },
-        { label: 'Lock Duration', value: '14 Days' },
-      ],
-      actionButton: {
-        label: 'Buy Theo',
-        onClick: () => openModal(<DiscountBuyForm />),
-        icon: 'intersect',
+      data: {
+        discount: { label: 'Discount', value: '1-4%' },
+        buyWith: { label: 'Buy With', value: 'ETH/USD' },
+        bondPrice: { label: 'Bond Price', value: '$31.50' },
+        lockDuration: { label: 'Lock Duration', value: '14 Days' },
       },
       warning:
         'Important: New buys are auto-staked (accrue rebase rewards) and no longer vest linearly',
@@ -47,16 +42,11 @@ const DiscountBuy = () => {
         primary: <span className="text-4xl">Intermediate</span>,
       },
       icon: 'intersect',
-      data: [
-        { label: 'Discount', value: '3-9%' },
-        { label: 'Buy With', value: 'ETH/USD' },
-        { label: 'Bond Price', value: '$28.30' },
-        { label: 'Lock Duration', value: '28 Days' },
-      ],
-      actionButton: {
-        label: 'Buy Theo',
-        onClick: () => openModal(<DiscountBuyForm />),
-        icon: 'intersect',
+      data: {
+        discount: { label: 'Discount', value: '3-9%' },
+        buyWith: { label: '', value: 'ETH/USD' },
+        bondPrice: { label: 'Bond Price', value: '$28.30' },
+        lockDuration: { label: 'Lock Duration', value: '28 Days' },
       },
       warning:
         'Important: New buys are auto-staked (accrue rebase rewards) and no longer vest linearly',
@@ -66,16 +56,11 @@ const DiscountBuy = () => {
         primary: <span className="text-4xl">Pro</span>,
       },
       icon: 'intersect',
-      data: [
-        { label: 'Discount', value: 'ETH-THEO' },
-        { label: 'Buy With', value: '8-30%' },
-        { label: 'Bond Price', value: '$25.20' },
-        { label: 'Lock Duration', value: '84 Days' },
-      ],
-      actionButton: {
-        label: 'Buy Theo',
-        onClick: () => openModal(<DiscountBuyForm />),
-        icon: 'intersect',
+      data: {
+        discount: { label: 'Discount', value: 'ETH-THEO' },
+        buyWith: { label: '', value: '8-30%' },
+        bondPrice: { label: 'Bond Price', value: '$25.20' },
+        lockDuration: { label: 'Lock Duration', value: '84 Days' },
       },
       warning:
         'Important: New buys are auto-staked (accrue rebase rewards) and no longer vest linearly',
@@ -95,7 +80,15 @@ const DiscountBuy = () => {
         <CardList>
           {ACTION_CARD.map((props, i) => (
             <Fragment key={`${props.header.primary}_${i}`}>
-              <ActionCard {...props} />
+              <ActionCard
+                {...props}
+                data={Object.values(props.data)}
+                actionButton={{
+                  label: 'Buy Theo',
+                  onClick: () => openModal(<DiscountBuyForm data={props.data} />),
+                  icon: 'intersect',
+                }}
+              />
             </Fragment>
           ))}
         </CardList>

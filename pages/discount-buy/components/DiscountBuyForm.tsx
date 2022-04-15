@@ -5,7 +5,7 @@ import { BaseSyntheticEvent, useState } from 'react';
 import useBuyForm from '../state/use-buy-form';
 import ConfirmBuy from './ConfirmBuy';
 
-const DiscountBuyForm = () => {
+const DiscountBuyForm = ({ data }) => {
   const [, { openModal, closeModal }] = useModal();
   const [{ purchasePrice, purchaseCurrency }, { handleUpdate }] = useBuyForm();
   return (
@@ -42,11 +42,11 @@ const DiscountBuyForm = () => {
           <div className="text-sm">Purchase Type</div>
         </div>
         <div>
-          <div className="text-xl font-bold leading-8 ">4% Off</div>
+          <div className="text-xl font-bold leading-8 ">{data.discount.value} Off</div>
           <div className="text-sm">Market Rate </div>
         </div>
         <div>
-          <div className="text-xl font-bold leading-8 ">14 Days</div>
+          <div className="text-xl font-bold leading-8 ">{data.lockDuration.value}</div>
           <div className="text-sm">Unlocked 05-12-22</div>
         </div>
       </div>

@@ -1,7 +1,5 @@
-import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { useState } from 'react';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 
