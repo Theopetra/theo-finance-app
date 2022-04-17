@@ -54,7 +54,7 @@ const Dashboard = () => {
         ))}
       </CardList>
       <div className="mt-4">
-        <Card title="Property Management" darkModeBgColor={'bg-black bg-none'}>
+        <Card title="Property Management" darkModeBgColor={'bg-black dark:bg-none'}>
           <div className="flex flex-col items-center space-x-2 md:items-end mb-14 md:flex-row">
             {PROPERTY_MANAGEMENT.map((x) => (
               <Fragment key={x.title}>

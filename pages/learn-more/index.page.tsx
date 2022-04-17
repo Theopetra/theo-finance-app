@@ -1,11 +1,11 @@
 import PageContainer from "@/components/PageContainer";
 
 const Documents = () => {
-  return <PageContainer>Documents Content</PageContainer>;
+  return <PageContainer>Learn More Content</PageContainer>;
 };
 
 Documents.PageHead = () => {
-  return 'Documents';
+  return 'Learn More';
 };
 
 export default Documents;
