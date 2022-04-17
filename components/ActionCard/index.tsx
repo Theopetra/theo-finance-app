@@ -7,7 +7,7 @@ type ActionCardProps = {
     primary?: string | ReactElement;
     secondary?: string;
   };
-  data: { label: string; value: string; info?: string }[];
+  data: { label: string; value: string; info?: string; type?: string }[];
   actionButton: { label: string; onClick?: () => void; icon?: string };
   warning: string;
   icon: string;

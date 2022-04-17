@@ -5,9 +5,10 @@ import { BaseSyntheticEvent, useState } from 'react';
 import useBuyForm from '../state/use-buy-form';
 import ConfirmBuy from './ConfirmBuy';
 
-const DiscountBuyForm = ({ data }) => {
+const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
-  const [{ purchasePrice, purchaseAmount, purchaseCurrency }, { handleUpdate }] = useBuyForm();
+  const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }, { handleUpdate }] =
+    useBuyForm();
   return (
     <div>
       <div className="flex justify-between">
@@ -38,17 +39,17 @@ const DiscountBuyForm = ({ data }) => {
       </div>
       <div className="mb-2 flex justify-between rounded-2xl bg-white p-6 text-center text-theo-navy dark:bg-black dark:text-white">
         <div>
-          <div className="text-xl font-bold leading-8 ">Intro</div>
+          <div className="text-xl font-bold leading-8 capitalize"> {selection?.level?.value}</div>
           <div className="text-sm">Purchase Type</div>
         </div>
         <div>
-          <div className="text-xl font-bold leading-8 ">{data?.discount?.value} Off</div>
+          <div className="text-xl font-bold leading-8 ">{selection?.discount?.value} Off</div>
           <div className="text-sm">Market Rate </div>
         </div>
         <div>
           <div className="text-xl font-bold leading-8 ">
-            <Icon name="lock-laminated" className="h-4 w-4 mr-2"  />
-            {data?.lockDuration?.value}
+            <Icon name="lock-laminated" className="mr-2 h-4 w-4" />
+            {selection?.lockDuration?.value}
           </div>
           <div className="text-sm">Unlocked 05-12-22</div>
         </div>

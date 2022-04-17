@@ -18,16 +18,13 @@ const ConfirmRow = ({ title, value, subtext = '' }) => {
 
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
-  const [{ purchasePrice, purchaseAmount, purchaseCurrency }] = useBuyForm();
+  const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }] = useBuyForm();
   return (
     <div>
       {/* fauxModalHeader w/ back button, icon and title ? */}
       <div className="flex justify-between">
         <div>
-          <button
-            onClick={() => openModal(<DiscountBuyForm data={{}} />)}
-            className="text-theo-cyan"
-          >
+          <button onClick={() => openModal(<DiscountBuyForm />)} className="text-theo-cyan">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-12 w-12"
@@ -54,7 +51,8 @@ const ConfirmBuy = () => {
       <div className="mb-4 flex flex-col gap-2">
         <ConfirmRow
           title="Market Discount"
-          value="4%"
+          value={selection.discount.value}
+          // TODO: Calc market price
           subtext={'Current market price = $34 USDC'}
         />
         <ConfirmRow
@@ -62,7 +60,13 @@ const ConfirmBuy = () => {
           value={`${purchasePrice} ${purchaseCurrency.name}`}
         />
         <ConfirmRow title="Purchase Amount" value={purchaseAmount} />
-        <ConfirmRow title="Lock Duration" value="4%" subtext={'Tokens will unlock on'} />
+        <ConfirmRow
+          title="Lock Duration"
+          value={selection.lockDuration.value}
+          // TODO: calc lock end date
+          subtext={'Tokens will unlock on'}
+        />
+        {/* TODO: calc time remaining */}
         <ConfirmRow title="Offer Valid For" value="10:00" subtext={'18:14 pm EST'} />
       </div>
       <div className="flex w-full items-center justify-center">

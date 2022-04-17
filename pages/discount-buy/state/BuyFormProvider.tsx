@@ -10,6 +10,19 @@ type formStateType = {
   purchaseAmount;
 };
 
+type Selection = {
+  label: string;
+  value: string | number;
+};
+
+type SelectionType = {
+  level?: Selection;
+  discount?: Selection;
+  buyWith?: Selection;
+  bondPrice?: Selection;
+  lockDuration?: Selection;
+};
+
 export const BuyFormProvider: React.FC = (props) => {
   const [formState, setFormState] = useState<formStateType>({
     theoPrice: 100,
@@ -17,6 +30,7 @@ export const BuyFormProvider: React.FC = (props) => {
     purchasePrice: 0,
     purchaseAmount: 0,
   });
+  const [selection, setSelection] = useState<SelectionType>();
 
   const handleUpdate: any = (e: BaseSyntheticEvent, fieldName: string) => {
     const value = e.target.value;
@@ -24,7 +38,12 @@ export const BuyFormProvider: React.FC = (props) => {
   };
 
   return (
-    <BuyFormContext.Provider value={[{ ...formState }, { handleUpdate }]}>
+    <BuyFormContext.Provider
+      value={[
+        { ...formState, selection },
+        { setSelection, handleUpdate },
+      ]}
+    >
       {props.children}
     </BuyFormContext.Provider>
   );

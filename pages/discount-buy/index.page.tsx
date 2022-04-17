@@ -6,6 +6,7 @@ import useModal from '@/state/ui/theme/hooks/use-modal';
 import { Fragment, ReactNode, useEffect } from 'react';
 import BuyFormProvider from './state/BuyFormProvider';
 import DiscountBuyForm from './components/DiscountBuyForm';
+import useBuyForm from './state/use-buy-form';
 
 const STATS = [
   {
@@ -20,8 +21,8 @@ const STATS = [
   },
 ];
 const DiscountBuy = () => {
-  const [{ isOpen }, { closeModal, openModal }] = useModal();
-
+  const [{}, { openModal }] = useModal();
+  const [{}, { setSelection }] = useBuyForm();
   const ACTION_CARD = [
     {
       header: {
@@ -29,6 +30,7 @@ const DiscountBuy = () => {
       },
       icon: 'intersect',
       data: {
+        level: { label: 'Intro', value: 'intro' },
         discount: { label: 'Discount', value: '1-4%' },
         buyWith: { label: 'Buy With', value: 'ETH/USD' },
         bondPrice: { label: 'Bond Price', value: '$31.50' },
@@ -43,8 +45,9 @@ const DiscountBuy = () => {
       },
       icon: 'intersect',
       data: {
+        level: { label: 'Intermediate', value: 'intermediate' },
         discount: { label: 'Discount', value: '3-9%' },
-        buyWith: { label: '', value: 'ETH/USD' },
+        buyWith: { label: 'Buy With', value: 'ETH/USD' },
         bondPrice: { label: 'Bond Price', value: '$28.30' },
         lockDuration: { label: 'Lock Duration', value: '28 Days' },
       },
@@ -58,8 +61,9 @@ const DiscountBuy = () => {
       icon: 'intersect',
       highlight: true,
       data: {
+        level: { label: 'Pro', value: 'pro' },
         discount: { label: 'Discount', value: 'ETH-THEO' },
-        buyWith: { label: '', value: '8-30%' },
+        buyWith: { label: 'Buy With', value: '8-30%' },
         bondPrice: { label: 'Bond Price', value: '$25.20' },
         lockDuration: { label: 'Lock Duration', value: '84 Days' },
       },
@@ -87,7 +91,10 @@ const DiscountBuy = () => {
                 actionButton={{
                   label: 'Buy Theo',
                   // TODO: Set props.data values to formState and provider state instead of passing around
-                  onClick: () => openModal(<DiscountBuyForm data={props.data} />),
+                  onClick: () => {
+                    setSelection(props.data);
+                    openModal(<DiscountBuyForm />);
+                  },
                   icon: 'intersect',
                 }}
               />

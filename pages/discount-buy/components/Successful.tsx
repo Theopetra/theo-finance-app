@@ -14,7 +14,7 @@ const ConfirmRow = ({ title, value, subtext = '' }) => {
 };
 
 const Successfull = () => {
-  const [{ purchasePrice, purchaseAmount, purchaseCurrency }] = useBuyForm();
+  const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }] = useBuyForm();
   return (
     <div>
       {/* fauxModalHeader w/ back button, icon and title ? */}
@@ -34,7 +34,7 @@ const Successfull = () => {
       <div className="mb-4 flex flex-col gap-2">
         <ConfirmRow
           title="Market Discount"
-          value="4%"
+          value={selection.discount.value}
           subtext={'Current market price = $34 USDC'}
         />
         <ConfirmRow
@@ -42,7 +42,11 @@ const Successfull = () => {
           value={`${purchasePrice} ${purchaseCurrency.name}`}
         />
         <ConfirmRow title="Amount Purchased" value={purchaseAmount} />
-        <ConfirmRow title="Lock Duration" value="4%" subtext={'Tokens will unlock on'} />
+        <ConfirmRow
+          title="Lock Duration"
+          value={selection.lockDuration.value}
+          subtext={'Tokens will unlock on'}
+        />
       </div>
       <div className="flex w-full items-center justify-center">
         <button className="border-button w-72">View Etherscan Transaction</button>
