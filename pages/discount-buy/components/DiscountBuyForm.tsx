@@ -7,7 +7,7 @@ import ConfirmBuy from './ConfirmBuy';
 
 const DiscountBuyForm = ({ data }) => {
   const [, { openModal, closeModal }] = useModal();
-  // const [{ purchasePrice, purchaseAmount, purchaseCurrency }, { handleUpdate }] = useBuyForm();
+  const [{ purchasePrice, purchaseAmount, purchaseCurrency }, { handleUpdate }] = useBuyForm();
   return (
     <div>
       <div className="flex justify-between">
@@ -46,7 +46,10 @@ const DiscountBuyForm = ({ data }) => {
           <div className="text-sm">Market Rate </div>
         </div>
         <div>
-          <div className="text-xl font-bold leading-8 ">{data?.lockDuration?.value}</div>
+          <div className="text-xl font-bold leading-8 ">
+            <Icon name="lock-laminated" className="h-4 w-4 mr-2"  />
+            {data?.lockDuration?.value}
+          </div>
           <div className="text-sm">Unlocked 05-12-22</div>
         </div>
       </div>
@@ -74,17 +77,17 @@ const DiscountBuyForm = ({ data }) => {
         </p>
         <CurrencyInput
           className={'mb-4'}
-          selectedCurrency={{ name: 'test' }}
+          selectedCurrency={purchaseCurrency}
           options={[{ name: 'ETH' }, { name: 'USDC' }]}
           balance="18.34"
-          // value={purchasePrice}
-          // onCurrencyChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseCurrency')}
-          // onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}
+          value={purchasePrice}
+          onCurrencyChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseCurrency')}
+          onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}
         />
         <CurrencyInput
           selectedCurrency={{ name: 'THEO' }}
-          // value={purchaseAmount}
-          // onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseAmount')}
+          value={purchaseAmount}
+          onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseAmount')}
         />
       </div>
 

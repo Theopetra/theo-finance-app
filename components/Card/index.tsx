@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 
 type CardProps = {
   title?: string | ReactElement | undefined;
@@ -7,30 +7,30 @@ type CardProps = {
   children: ReactElement;
   darkModeBgColor?: string;
   lightModeBgColor?: string;
+  className?;
 };
 const Card = ({
-  title = "",
+  title = '',
   cardHeader,
   headerRightComponent,
   children,
   darkModeBgColor,
   lightModeBgColor,
+  className,
 }: CardProps) => {
-  const LMBGC = lightModeBgColor ? lightModeBgColor : "bg-[#ffffffcc]";
-  const DMBGC = darkModeBgColor
-    ? `dark:${darkModeBgColor}`
-    : "dark:bg-theo-cyan ";
+  const LMBGC = lightModeBgColor ? lightModeBgColor : 'bg-gradient-to-b from-white to-[#EDEDED]';
+  const DMBGC = darkModeBgColor ? `dark:${darkModeBgColor}` : 'dark:bg-theo-cyan dark:bg-none';
 
   return (
     <div
-      className={`${LMBGC} ${DMBGC} rounded-xl py-4 px-6 dark:text-white text-theo-navy flex-1 flex flex-col `}
+      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl py-4 px-6 text-theo-navy dark:text-white `}
     >
-      <div className="flex justify-between mb-16 items-center">
-        {title && <div className="font-normal text-xl">{title}</div>}
+      <div className="mb-16 flex items-center justify-between">
+        {title && <div className="text-xl font-normal">{title}</div>}
         {cardHeader && cardHeader}
         {headerRightComponent}
       </div>
-      <div className="flex flex-col flex-1">{children} </div>
+      <div className="flex flex-1 flex-col">{children} </div>
     </div>
   );
 };

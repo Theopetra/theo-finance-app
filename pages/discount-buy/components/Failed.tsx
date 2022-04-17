@@ -1,6 +1,7 @@
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import useBuyForm from '../state/use-buy-form';
+import ConfirmBuy from './ConfirmBuy';
 import Successfull from './Successful';
 
 const ConfirmRow = ({ title, value, subtext = '' }) => {
@@ -21,13 +22,40 @@ const Failed = () => {
   const [{ purchasePrice, purchaseAmount, purchaseCurrency }] = useBuyForm();
   return (
     <div>
-      {/* fauxModalHeader w/ back button, icon and title ? */}
-      <div className="flex justify-between">
+      <div className="mb-8 flex items-center justify-between ">
+        <button onClick={() => openModal(<ConfirmBuy />)} className="text-theo-cyan">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-12 w-12"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
         <div
-          className="mb-8 text-center text-theo-navy dark:text-white"
+          className="text-center text-theo-navy dark:text-white"
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
-          <div className="mb-4 text-4xl font-bold ">Buy Failed</div>
+          <div className=" text-center text-4xl font-bold">
+            Buy Failed...
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="inline-block h-10 w-10 text-theo-cyan"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
         </div>
         <div>
           <Icon name="intersect" className="h-12 w-12" />
@@ -46,12 +74,10 @@ const Failed = () => {
         <ConfirmRow title="Purchase Amount" value={purchaseAmount} />
         <ConfirmRow title="Lock Duration" value="4%" subtext={'Tokens will unlock on'} />
       </div>
-      <div className="flex w-full items-center">
-        <div className="w-1/2">
-          <button className="border-button w-full" onClick={() => openModal(<Successfull />)}>
-            Try Again
-          </button>
-        </div>
+      <div className="flex w-full items-center justify-center">
+        <button className="border-button w-60" onClick={() => openModal(<Successfull />)}>
+          Try Again
+        </button>
       </div>
     </div>
   );

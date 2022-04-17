@@ -11,12 +11,16 @@ type ActionCardProps = {
   actionButton: { label: string; onClick?: () => void; icon?: string };
   warning: string;
   icon: string;
+  highlight?: boolean;
 };
 
-const ActionCard = ({ header, data, actionButton, warning, icon }: ActionCardProps) => {
+const ActionCard = ({ header, data, actionButton, warning, icon, highlight }: ActionCardProps) => {
+  const highlightClasses =
+    'drop-shadow-[4px_4px_4px_rgba(80,174,203,0.75)] border-4 border-double border-theo-cyan';
   return (
     <Card
-      darkModeBgColor="bg-black"
+      className={highlight ? highlightClasses : ''}
+      darkModeBgColor="bg-black dark:bg-none"
       title={
         <div className="flex items-center pr-2">
           <div className="mr-2 text-2xl font-semibold">{header.primary}</div>

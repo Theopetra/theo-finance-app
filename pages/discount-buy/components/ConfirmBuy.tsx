@@ -65,12 +65,10 @@ const ConfirmBuy = () => {
         <ConfirmRow title="Lock Duration" value="4%" subtext={'Tokens will unlock on'} />
         <ConfirmRow title="Offer Valid For" value="10:00" subtext={'18:14 pm EST'} />
       </div>
-      <div className="flex w-full items-center">
-        <div className="w-1/2">
-          <button className="border-button w-full" onClick={() => openModal(<Failed />)}>
-            Confirm Purchase
-          </button>
-        </div>
+      <div className="flex w-full items-center justify-center">
+        <button className="border-button w-60" onClick={() => openModal(<Failed />)}>
+          Confirm Purchase
+        </button>
       </div>
     </div>
   );

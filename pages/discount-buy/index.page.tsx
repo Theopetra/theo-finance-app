@@ -25,7 +25,7 @@ const DiscountBuy = () => {
   const ACTION_CARD = [
     {
       header: {
-        primary: <span className="text-4xl">Intro</span>,
+        primary: <span className="text-4xl lg:text-2xl xl:text-4xl">Intro</span>,
       },
       icon: 'intersect',
       data: {
@@ -39,7 +39,7 @@ const DiscountBuy = () => {
     },
     {
       header: {
-        primary: <span className="text-4xl">Intermediate</span>,
+        primary: <span className="text-4xl lg:text-2xl xl:text-4xl">Intermediate</span>,
       },
       icon: 'intersect',
       data: {
@@ -53,9 +53,10 @@ const DiscountBuy = () => {
     },
     {
       header: {
-        primary: <span className="text-4xl">Pro</span>,
+        primary: <span className="text-4xl lg:text-2xl xl:text-4xl">Pro</span>,
       },
       icon: 'intersect',
+      highlight: true,
       data: {
         discount: { label: 'Discount', value: 'ETH-THEO' },
         buyWith: { label: '', value: '8-30%' },

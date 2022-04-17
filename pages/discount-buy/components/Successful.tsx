@@ -19,6 +19,8 @@ const Successfull = () => {
     <div>
       {/* fauxModalHeader w/ back button, icon and title ? */}
       <div className="flex justify-between">
+        <div className="w-16"></div>
+
         <div
           className="mb-8 text-center text-theo-navy dark:text-white"
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
@@ -42,10 +44,8 @@ const Successfull = () => {
         <ConfirmRow title="Amount Purchased" value={purchaseAmount} />
         <ConfirmRow title="Lock Duration" value="4%" subtext={'Tokens will unlock on'} />
       </div>
-      <div className="flex w-full items-center">
-        <div className="w-1/2">
-          <button className="border-button w-full">View Etherscan Transaction</button>
-        </div>
+      <div className="flex w-full items-center justify-center">
+        <button className="border-button w-72">View Etherscan Transaction</button>
       </div>
     </div>
   );
