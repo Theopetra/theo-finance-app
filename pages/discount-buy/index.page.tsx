@@ -3,7 +3,7 @@ import CardList from '@/components/CardList';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { Fragment, ReactNode } from 'react';
+import { Fragment, ReactNode, useEffect } from 'react';
 import BuyFormProvider from './state/BuyFormProvider';
 import DiscountBuyForm from './components/DiscountBuyForm';
 
@@ -20,7 +20,7 @@ const STATS = [
   },
 ];
 const DiscountBuy = () => {
-  const [{}, { closeModal, openModal }] = useModal();
+  const [{ isOpen }, { closeModal, openModal }] = useModal();
 
   const ACTION_CARD = [
     {
@@ -85,6 +85,7 @@ const DiscountBuy = () => {
                 data={Object.values(props.data)}
                 actionButton={{
                   label: 'Buy Theo',
+                  // TODO: Set props.data values to formState and provider state instead of passing around
                   onClick: () => openModal(<DiscountBuyForm data={props.data} />),
                   icon: 'intersect',
                 }}

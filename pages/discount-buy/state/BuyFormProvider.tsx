@@ -7,6 +7,7 @@ type formStateType = {
   theoPrice: number;
   purchaseCurrency: CurrencySelectOptionType;
   purchasePrice;
+  purchaseAmount;
 };
 
 export const BuyFormProvider: React.FC = (props) => {
@@ -14,6 +15,7 @@ export const BuyFormProvider: React.FC = (props) => {
     theoPrice: 100,
     purchaseCurrency: { name: 'ETH' },
     purchasePrice: 0,
+    purchaseAmount: 0,
   });
 
   const handleUpdate: any = (e: BaseSyntheticEvent, fieldName: string) => {
