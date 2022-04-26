@@ -11,7 +11,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="fixed bottom-0 z-50 flex justify-between w-full h-16 pt-1 pl-1 bg-white dark:bg-black sm:pl-3 sm:pt-3 lg:hidden">
+    <div className="fixed bottom-0 z-30 flex justify-between w-full h-16 pt-1 pl-1 bg-white dark:bg-black sm:pl-3 sm:pt-3 lg:hidden">
       <div className={classes.statContainer}>
         <div className={classes.number}>101,221,000</div>
         <div className={classes.label}>Your $THEO</div>

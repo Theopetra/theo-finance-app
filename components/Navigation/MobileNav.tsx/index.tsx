@@ -9,7 +9,7 @@ const MobileNav = () => {
   const [{ navigationOpen }] = useTheme();
   return (
     <Transition.Root show={navigationOpen} as={Fragment}>
-      <div className="fixed inset-0 z-40 flex lg:hidden">
+      <div className="fixed inset-0 z-30 flex lg:hidden">
         <Transition.Child
           as={Fragment}
           enter="transition ease-in-out duration-300 transform"
@@ -30,7 +30,7 @@ const MobileNav = () => {
                     <NavItem
                       icon={item.icon}
                       name={item.name}
-                      comingSoon={item.comingSoon}
+                      disabled={item.disabled}
                       href={item.href}
                     />
                   </Fragment>

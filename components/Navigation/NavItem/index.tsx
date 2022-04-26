@@ -7,15 +7,15 @@ import { useRouter } from 'next/router';
 type NavItemProps = {
   name?: string;
   href?: string;
-  comingSoon?: boolean;
+  disabled?: boolean;
   icon?: string;
 };
-const NavItem = ({ name, href, icon, comingSoon }: NavItemProps) => {
+const NavItem = ({ name, href, icon, disabled }: NavItemProps) => {
   const router = useRouter();
   const [, { setNavigationOpen }] = useTheme();
 
   return (
-    <Link key={name} href={!comingSoon ? (href as any) : '#'} passHref={true}>
+    <Link key={name} href={!disabled ? (href as any) : '#'} passHref={true}>
       <a
         onClick={() => setNavigationOpen(false)}
         key={name}
@@ -24,22 +24,15 @@ const NavItem = ({ name, href, icon, comingSoon }: NavItemProps) => {
             ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
             : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white',
           'group flex cursor-pointer items-center rounded-md px-4  py-4 text-lg font-bold transition',
-          comingSoon && 'cursor-not-allowed ',
-          !comingSoon &&
+          disabled && 'cursor-not-allowed opacity-50',
+          !disabled &&
             'hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white'
         )}
       >
         <div>
           <div className={`flex items-center`}>
-            {icon && <Icon name={icon} className="w-8 mr-4" />}
-            <div>
-              <span className={comingSoon ? 'line-through' : ''}>{name}</span>
-              {comingSoon ? (
-                <span className="block text-xs font-normal text-gray-300">(Coming Soon)</span>
-              ) : (
-                <></>
-              )}
-            </div>
+            {icon && <Icon name={icon} className="mr-4 w-8" />}
+            <div>{name}</div>
           </div>
         </div>
       </a>
