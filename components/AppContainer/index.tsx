@@ -14,7 +14,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
   PageStateProvider,
 }) => {
   const [{ theme }] = useTheme();
-  const [{ isOpen }] = useModal();
+  const [{ isOpen, transitioning }, { setTransitioning }] = useModal();
 
   return (
     <div className={`${theme} h-full`}>
@@ -26,45 +26,42 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
         <NavBar />
         <PageStateProvider>
           <main
-            className="flex-1 bg-contain bg-bottom bg-no-repeat dark:bg-none"
+            className={`${
+              transitioning ? 'overflow-hidden' : ''
+            } relative flex-1  bg-contain bg-bottom bg-no-repeat dark:bg-none`}
             style={{
               backgroundImage: theme !== 'dark' ? 'url(/assets/images/Grid-Background-01.svg)' : '',
             }}
           >
             {/* provider */}
             <Transition
+              beforeEnter={() => setTransitioning(true)}
+              afterEnter={() => setTransitioning(false)}
+              beforeLeave={() => setTransitioning(true)}
+              afterLeave={() => setTransitioning(false)}
               show={isOpen}
-              enter="transition-all delay-250 duration-250"
-              enterFrom=" translate-x-32 opacity-0"
+              enter="absolute inset-0 z-40 transition-all duration-1000"
+              enterFrom="translate-x-32 opacity-0"
               enterTo=" translate-x-0 opacitity-1"
-              leave="transition-all duration-250"
+              leave="absolute inset-0 z-40 transition-all duration-1000"
               leaveFrom="translate-x-0 opacity-1"
               leaveTo="translate-x-32 opacity-0"
             >
               <FauxModal />
             </Transition>
-            <Transition
-              show={!isOpen}
-              enter="transition-opacity delay-250 duration-250"
-              enterFrom="opacity-0"
-              enterTo="opacity-1"
-              leave="transition-opacity duration-250"
-              leaveFrom="opacity-1"
-              leaveTo="opacity-0"
-            >
-              <div className="py-6 ">
-                <div className="sticky top-0 z-10 mx-auto flex max-w-7xl flex-col-reverse items-center justify-center bg-gray-100 px-4  pb-14 dark:bg-[#262626] sm:px-6 md:flex-row md:justify-between lg:px-8">
-                  <h1 className="text-5xl font-semibold text-gray-900 dark:text-white">
-                    <Header />
-                  </h1>
-                  <div className="mb-12 flex flex-1 justify-end space-x-2 md:mb-0">
-                    <ConnectWallet />
-                    <LightSwitch />
-                  </div>
+
+            <div className="py-6 ">
+              <div className="sticky top-0 z-10 mx-auto flex max-w-7xl flex-col-reverse items-center justify-center bg-gray-100 px-4  pb-14 dark:bg-[#262626] sm:px-6 md:flex-row md:justify-between lg:px-8">
+                <h1 className="text-5xl font-semibold text-gray-900 dark:text-white">
+                  <Header />
+                </h1>
+                <div className="mb-12 flex flex-1 justify-end space-x-2 md:mb-0">
+                  <ConnectWallet />
+                  <LightSwitch />
                 </div>
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
               </div>
-            </Transition>
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
+            </div>
           </main>
         </PageStateProvider>
       </div>

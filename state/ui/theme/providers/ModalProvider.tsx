@@ -5,6 +5,7 @@ export const ModalContext = React.createContext<any>(null);
 
 export const ModalProvider: React.FC = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
   const [modalContent, setModalContent] = useState(null as ReactNode);
   const router = useRouter();
 
@@ -32,10 +33,12 @@ export const ModalProvider: React.FC = (props) => {
   return (
     <ModalContext.Provider
       value={[
-        { isOpen, modalContent },
-        { openModal, closeModal },
+        { isOpen, modalContent, transitioning },
+        { openModal, closeModal, setTransitioning },
       ]}
     >
+      {/* provider */}
+
       {props.children}
     </ModalContext.Provider>
   );
