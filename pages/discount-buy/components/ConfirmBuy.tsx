@@ -4,13 +4,13 @@ import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
 
-const ConfirmRow = ({ title, value, subtext = '' }) => {
+export const ConfirmRow = ({ title, value, subtext = '' }) => {
   return (
-    <div className="space-between flex items-center rounded-2xl bg-white bg-gradient-to-l from-[#EDEDED] to-[#ffffff] px-8 py-3 shadow">
-      <div className="flex-1 text-xl text-theo-navy">{title}</div>
+    <div className="space-between flex items-center rounded-2xl bg-white bg-gradient-to-l from-[#EDEDED] to-[#ffffff] px-8 py-3 shadow dark:from-[#000000] dark:to-[#262626]">
+      <div className="flex-1 text-xl text-theo-navy dark:text-white">{title}</div>
       <div className="text-right">
-        <div className="text-2xl font-bold">{value}</div>
-        <div className="text-sm text-theo-cyan">{subtext}</div>
+        <div className="text-2xl font-bold dark:text-theo-cyan">{value}</div>
+        <div className="text-sm text-theo-cyan dark:text-white">{subtext}</div>
       </div>
     </div>
   );

@@ -37,7 +37,6 @@ export const ModalProvider: React.FC = (props) => {
         { openModal, closeModal, setTransitioning },
       ]}
     >
-      {/* provider */}
 
       {props.children}
     </ModalContext.Provider>

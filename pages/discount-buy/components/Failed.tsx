@@ -1,20 +1,9 @@
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import useBuyForm from '../state/use-buy-form';
-import ConfirmBuy from './ConfirmBuy';
+import ConfirmBuy, { ConfirmRow } from './ConfirmBuy';
 import Successfull from './Successful';
 
-const ConfirmRow = ({ title, value, subtext = '' }) => {
-  return (
-    <div className="space-between flex items-center rounded-2xl bg-white bg-gradient-to-l from-[#EDEDED] to-[#ffffff] px-8 py-3 shadow">
-      <div className="flex-1 text-xl text-theo-navy">{title}</div>
-      <div className="text-right">
-        <div className="text-2xl font-bold">{value}</div>
-        <div className="text-sm text-theo-cyan">{subtext}</div>
-      </div>
-    </div>
-  );
-};
 
 const Failed = () => {
   const [, { openModal }] = useModal();

@@ -62,8 +62,8 @@ const DiscountBuy = () => {
       highlight: true,
       data: {
         level: { label: 'Pro', value: 'pro' },
-        discount: { label: 'Discount', value: 'ETH-THEO' },
-        buyWith: { label: 'Buy With', value: '8-30%' },
+        discount: { label: 'Discount', value: '8-30%' },
+        buyWith: { label: 'Buy With', value: 'ETH/USD' },
         bondPrice: { label: 'Bond Price', value: '$25.20' },
         lockDuration: { label: 'Lock Duration', value: '84 Days' },
       },
