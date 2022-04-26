@@ -40,10 +40,10 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
               beforeLeave={() => setTransitioning(true)}
               afterLeave={() => setTransitioning(false)}
               show={isOpen}
-              enter="absolute inset-0 z-40 transition-all duration-1000"
+              enter="absolute inset-0 z-40 transition-all duration-250"
               enterFrom="translate-x-32 opacity-0"
               enterTo=" translate-x-0 opacitity-1"
-              leave="absolute inset-0 z-40 transition-all duration-1000"
+              leave="absolute inset-0 z-40 transition-all duration-250"
               leaveFrom="translate-x-0 opacity-1"
               leaveTo="translate-x-32 opacity-0"
             >
