@@ -23,7 +23,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
   options,
 }) => {
   return (
-    <div className={`${className} flex items-center rounded-lg bg-[#ebebeb]`}>
+    <div className={`${className} flex items-center rounded-lg bg-[#ebebeb] dark:bg-theo-dark-navy`}>
       {options ? (
         <CurrencySelect options={options} selected={selectedCurrency} onChange={onCurrencyChange} />
       ) : (
@@ -31,7 +31,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
       )}
 
       <div className="flex-1 p-2">
-        <div className="flex min-h-[40px] items-center rounded-lg bg-white">
+        <div className="flex min-h-[40px] items-center rounded-lg bg-white dark:bg-[#262626]">
           {balance ? (
             <div className="p-2 text-xs">
               Balance: {balance}
@@ -47,7 +47,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
             type="text"
             value={value}
             onChange={onChange}
-            className="flex-1 text-right focus:outline-none"
+            className="flex-1 text-right focus:outline-none bg-transparent "
             placeholder="00.00"
             onKeyPress={(event) => {
               if (!/^\d*\.?\d*$/.test(event.key)) {
