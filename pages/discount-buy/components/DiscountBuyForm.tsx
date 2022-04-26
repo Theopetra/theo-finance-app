@@ -34,7 +34,7 @@ const DiscountBuyForm = () => {
           <div>Review carefully, this purchase is final</div>
         </div>
         <div>
-          <Icon name="intersect" className="h-12 w-12" />
+          <Icon name="intersect" className="h-12 w-12 dark:text-white" />
         </div>
       </div>
       <div className="mb-2 flex justify-between rounded-2xl bg-white p-6 text-center text-theo-navy dark:bg-black dark:text-white">
@@ -48,7 +48,7 @@ const DiscountBuyForm = () => {
         </div>
         <div>
           <div className="text-xl font-bold leading-8 ">
-            <Icon name="lock-laminated" className="mr-2 h-4 w-4" />
+            <Icon name="lock-laminated" className="mr-2 h-4 w-4 " />
             {selection?.lockDuration?.value}
           </div>
           <div className="text-sm">Unlocked 05-12-22</div>

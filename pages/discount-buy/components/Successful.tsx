@@ -28,7 +28,7 @@ const Successfull = () => {
           <div className="mb-4 text-4xl font-bold ">Buy Successfull!</div>
         </div>
         <div>
-          <Icon name="intersect" className="h-12 w-12" />
+          <Icon name="intersect" className="h-12 w-12 dark:text-white" />
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-2">
