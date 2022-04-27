@@ -10,14 +10,20 @@ const socialLinks = [
   { icon: 'discord-logo', href: '#' },
   { icon: 'youtube-logo', href: '#' },
 ];
+const classes = {
+  statContainer: 'flex flex-col items-center justify-center flex-1 ',
+  number: 'font-bold text-theo-cyan dark:text-white',
+  label: 'text-xs font-normal text-theo-navy dark:text-theo-cyan',
+};
+
 const Navigation = () => {
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
-      <div className="flex flex-1 flex-col overflow-y-auto p-8 pt-5">
-        <div className="flex items-center px-4">
+    <div className=" flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
+      <div className="flex flex-1 flex-col overflow-y-auto pt-5">
+        <div className="flex items-center px-9">
           <Logo />
         </div>
-        <nav className="mt-5 flex-1 space-y-2 px-2">
+        <nav className="mt-5 flex-1 space-y-2 px-2 pr-8 pl-8">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
               <NavItem
@@ -29,7 +35,7 @@ const Navigation = () => {
             </Fragment>
           ))}
         </nav>
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center justify-between px-8 pb-2">
           {socialLinks.map((x) => (
             <Fragment key={x.icon}>
               <a
@@ -40,6 +46,16 @@ const Navigation = () => {
               </a>
             </Fragment>
           ))}
+        </div>
+        <div className=" flex h-16 w-full justify-between bg-white pt-1 pl-1 dark:bg-black sm:pl-3 sm:pt-3">
+          <div className={classes.statContainer}>
+            <div className={classes.number}>101,221,000</div>
+            <div className={classes.label}>Your $THEO</div>
+          </div>
+          <div className={classes.statContainer}>
+            <div className={classes.number}>80,221,000</div>
+            <div className={classes.label}>$THEO Staked</div>
+          </div>
         </div>
       </div>
     </div>
