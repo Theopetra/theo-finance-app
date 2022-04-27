@@ -52,7 +52,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
 
             <div className="py-6 ">
               <div className="sticky top-0 z-10 mx-auto flex max-w-7xl flex-col-reverse items-center justify-center bg-gray-100 px-4  pb-14 dark:bg-[#262626] sm:px-6 md:flex-row md:justify-between lg:px-8">
-                <h1 className="text-5xl font-semibold text-gray-900 dark:text-white">
+                <h1 className="text-5xl font-bold text-theo-navy dark:text-white">
                   <Header />
                 </h1>
                 <div className="mb-12 flex flex-1 justify-end space-x-2 md:mb-0">

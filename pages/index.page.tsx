@@ -7,39 +7,31 @@ import { Fragment } from 'react';
 
 const STATS = [
   {
-    name: 'Market Cap',
-    value: '$110,310,013',
+    name: 'Your THEO Holdings',
+    value: '24,000',
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
   {
-    name: 'THEO Price',
-    value: '$35.42',
+    name: 'Your Staked THEO',
+    value: '21,000',
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
   {
-    name: 'Circulating Supply',
-    value: '$11,186,090',
+    name: 'Total THEO Earned',
+    value: '800',
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
 ];
 const PROPERTY_MANAGEMENT = [
   {
-    title: '7 Buildings',
-    subtitle: '$110,310,013',
+    title: 'New Wallets',
     darkImgSrc: '/assets/images/dashboard/Ismetric_building_both_versions.png',
     lightImgSrc: '/assets/images/dashboard/Ismetric_building_both_versions.png',
   },
   {
-    title: '50 units/month',
-    subtitle: 'Growth Rate',
+    title: 'Market Cap',
     darkImgSrc: '/assets/images/dashboard/Graph_dark_version.png',
     lightImgSrc: '/assets/images/dashboard/Graph_light_version.png',
-  },
-  {
-    title: '96% Rented',
-    subtitle: 'Occupancy Rate',
-    darkImgSrc: '/assets/images/dashboard/Progress_dark_version.png',
-    lightImgSrc: '/assets/images/dashboard/Progress_light_version.png',
   },
 ];
 const Dashboard = () => {
@@ -54,27 +46,28 @@ const Dashboard = () => {
         ))}
       </CardList>
       <div className="mt-4">
-        <Card title="Property Management" darkModeBgColor={'bg-black dark:bg-none'}>
-          <div className="flex flex-col items-center space-x-2 md:items-end mb-14 md:flex-row">
-            {PROPERTY_MANAGEMENT.map((x) => (
-              <Fragment key={x.title}>
-                <div className="flex-1 mb-24 md:m-0">
+        <div className="mb-14 flex flex-col space-x-2 md:flex-row ">
+          {PROPERTY_MANAGEMENT.map((x) => (
+            <Card
+              title={x.title}
+              key={x.title}
+              darkModeBgColor={'bg-black dark:bg-none'}
+            >
+              <Fragment>
+                <div className="mb-24 flex-1 md:m-0">
                   <div className="flex flex-col items-center justify-center">
                     <img
                       src={theme === 'dark' ? x.darkImgSrc : x.lightImgSrc}
                       alt={`${x.title} graphic`}
                       className="mb-7 max-h-[200px]"
                     />
-                    <div className="text-center md:text-left">
-                      <div className="mb-2 text-3xl font-bold">{x.title}</div>
-                      <div>{x.subtitle}</div>
-                    </div>
+            
                   </div>
                 </div>
               </Fragment>
-            ))}
-          </div>
-        </Card>
+            </Card>
+          ))}
+        </div>
       </div>
     </PageContainer>
   );
