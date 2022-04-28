@@ -8,5 +8,5 @@ export const navigation = [
     disabled: true,
   },
   { name: 'T-Homes', href: '/t-homes', disabled: true, icon: 'door' },
-  { name: 'Learn More', href: '/learn-more', icon: 'file' },
+  { name: 'Learn More', href: '/#', icon: 'file' },
 ];
