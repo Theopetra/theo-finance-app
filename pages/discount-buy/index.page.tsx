@@ -83,23 +83,26 @@ const DiscountBuy = () => {
           ))}
         </CardList>
         <CardList>
-          {ACTION_CARD.map((props, i) => (
-            <Fragment key={`${props.header.primary}_${i}`}>
-              <ActionCard
-                {...props}
-                data={Object.values(props.data)}
-                actionButton={{
-                  label: 'Buy Theo',
-                  // TODO: Set props.data values to formState and provider state instead of passing around
-                  onClick: () => {
-                    setSelection(props.data);
-                    openModal(<DiscountBuyForm />);
-                  },
-                  icon: 'intersect',
-                }}
-              />
-            </Fragment>
-          ))}
+          {ACTION_CARD.map((props: any, i) => {
+            const listData = { ...props.data };
+            delete listData.level;
+            return (
+              <Fragment key={`${props.header.primary}_${i}`}>
+                <ActionCard
+                  {...props}
+                  data={Object.values(listData)}
+                  actionButton={{
+                    label: 'Buy Theo',
+                    onClick: () => {
+                      setSelection(props.data);
+                      openModal(<DiscountBuyForm />);
+                    },
+                    icon: 'intersect',
+                  }}
+                />
+              </Fragment>
+            );
+          })}
         </CardList>
       </PageContainer>
     </BuyFormProvider>

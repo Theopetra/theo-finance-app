@@ -63,7 +63,7 @@ const ACTION_CARD = [
     warning: 'Connect your wallet to stake THEO',
   },
 ];
-const StakeGrow = () => {
+const Memberships = () => {
   return (
     <PageContainer>
       <CardList className={'mb-4'} horizontalScroll>
@@ -82,8 +82,8 @@ const StakeGrow = () => {
   );
 };
 
-StakeGrow.PageHead = () => {
+Memberships.PageHead = () => {
   return 'Memberships';
 };
 
-export default StakeGrow;
+export default Memberships;

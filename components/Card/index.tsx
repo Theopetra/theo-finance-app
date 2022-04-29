@@ -7,7 +7,8 @@ type CardProps = {
   children: ReactElement;
   darkModeBgColor?: string;
   lightModeBgColor?: string;
-  className?;
+  className?: string;
+  headerClasses?: string;
 };
 const Card = ({
   title = '',
@@ -17,20 +18,21 @@ const Card = ({
   darkModeBgColor,
   lightModeBgColor,
   className,
+  headerClasses,
 }: CardProps) => {
   const LMBGC = lightModeBgColor ? lightModeBgColor : 'bg-gradient-to-b from-white to-[#EDEDED]';
   const DMBGC = darkModeBgColor ? `dark:${darkModeBgColor}` : 'dark:bg-theo-cyan dark:bg-none';
 
   return (
     <div
-      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl py-4 px-6 text-theo-navy dark:text-white `}
+      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl text-theo-navy dark:text-white `}
     >
-      <div className="mb-16 flex items-center justify-between">
+      <div className={`mb-8 flex items-center justify-between px-6 rounded-t-xl py-4 ${headerClasses}`}>
         {title && <div className="text-xl font-normal">{title}</div>}
         {cardHeader && cardHeader}
         {headerRightComponent}
       </div>
-      <div className="flex flex-1 flex-col">{children} </div>
+      <div className="flex flex-1 flex-col px-6 pb-4">{children} </div>
     </div>
   );
 };
