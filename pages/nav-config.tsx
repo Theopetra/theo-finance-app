@@ -1,6 +1,16 @@
 export const navigation = [
   { name: 'Dashboard', href: '/', icon: 'gauge' },
-  { name: 'Discount Buy', href: '/discount-buy', icon: 'intersect' },
+  {
+    name: 'Discount Buy',
+    href: '/discount-buy',
+    icon: 'intersect',
+    subNav: [
+      {
+        name: 'Your Purchases',
+        href: '/your-purchases',
+      },
+    ],
+  },
   {
     name: 'Memberships',
     href: '/memberships',

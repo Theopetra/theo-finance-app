@@ -26,12 +26,7 @@ const Navigation = () => {
         <nav className="mt-5 flex-1 space-y-2 px-2 pr-8 pl-8">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
-              <NavItem
-                icon={item.icon}
-                name={item.name}
-                disabled={item.disabled}
-                href={item.href}
-              />
+              <NavItem item={item} />
             </Fragment>
           ))}
         </nav>
