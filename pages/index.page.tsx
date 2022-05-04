@@ -1,5 +1,6 @@
 import Card from '@/components/Card';
 import CardList from '@/components/CardList';
+import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import { useTheme } from '@/state/ui/theme';
@@ -37,39 +38,39 @@ const PROPERTY_MANAGEMENT = [
 const Dashboard = () => {
   const [{ theme }] = useTheme();
   return (
-    <PageContainer>
-      <CardList horizontalScroll>
-        {STATS.map((props) => (
-          <Fragment key={props.name}>
-            <StatCard {...props} />
-          </Fragment>
-        ))}
-      </CardList>
-      <div className="mt-4">
-        <div className="mb-14 flex flex-col space-x-2 md:flex-row ">
-          {PROPERTY_MANAGEMENT.map((x) => (
-            <Card
-              title={x.title}
-              key={x.title}
-              darkModeBgColor={'bg-black dark:bg-none'}
-            >
-              <Fragment>
-                <div className="mb-24 flex-1 md:m-0">
-                  <div className="flex flex-col items-center justify-center">
-                    <img
-                      src={theme === 'dark' ? x.darkImgSrc : x.lightImgSrc}
-                      alt={`${x.title} graphic`}
-                      className="mb-7 max-h-[200px]"
-                    />
-            
-                  </div>
-                </div>
-              </Fragment>
-            </Card>
-          ))}
-        </div>
+    <>
+      <div className="pt-4">
+        <HorizontalSubNav items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]} />
       </div>
-    </PageContainer>
+      <PageContainer>
+        <CardList horizontalScroll>
+          {STATS.map((props) => (
+            <Fragment key={props.name}>
+              <StatCard {...props} />
+            </Fragment>
+          ))}
+        </CardList>
+        <div className="mt-4">
+          <div className="mb-14 flex flex-col space-x-2 md:flex-row ">
+            {PROPERTY_MANAGEMENT.map((x) => (
+              <Card title={x.title} key={x.title} darkModeBgColor={'bg-black dark:bg-none'}>
+                <Fragment>
+                  <div className="mb-24 flex-1 md:m-0">
+                    <div className="flex flex-col items-center justify-center">
+                      <img
+                        src={theme === 'dark' ? x.darkImgSrc : x.lightImgSrc}
+                        alt={`${x.title} graphic`}
+                        className="mb-7 max-h-[200px]"
+                      />
+                    </div>
+                  </div>
+                </Fragment>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </PageContainer>
+    </>
   );
 };
 
