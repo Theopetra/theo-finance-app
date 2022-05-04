@@ -104,7 +104,7 @@ const YourPurchases = () => {
 };
 
 YourPurchases.PageHead = () => {
-  return 'Your Purchases';
+  return <div>Your Purchases</div>;
 };
 
 export default YourPurchases;

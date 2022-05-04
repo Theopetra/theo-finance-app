@@ -7,6 +7,7 @@ import NavBar from '../Navigation/NavBar.tsx';
 import FauxModal from '../FauxModal';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { Transition } from '@headlessui/react';
+import { ReactElement, ReactNode } from 'react';
 
 const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
   children,

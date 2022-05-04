@@ -1,11 +1,11 @@
-import PageContainer from "@/components/PageContainer";
+import PageContainer from '@/components/PageContainer';
 
 const THomes = () => {
   return <PageContainer>T-Homes Content</PageContainer>;
 };
 
 THomes.PageHead = () => {
-  return 'THomes';
+  return <div>THomes</div>;
 };
 
 export default THomes;

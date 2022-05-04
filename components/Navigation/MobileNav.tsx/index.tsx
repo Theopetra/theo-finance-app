@@ -19,26 +19,21 @@ const MobileNav = () => {
           leaveFrom="translate-y-0"
           leaveTo="translate-y-full"
         >
-          <div className="relative flex flex-col flex-1 w-full bg-gray-800">
-            <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4">
+          <div className="relative flex w-full flex-1 flex-col bg-gray-800">
+            <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
+              <div className="flex flex-shrink-0 items-center px-4">
                 <Logo altLogo />
               </div>
-              <nav className="px-2 mt-5 space-y-1">
+              <nav className="mt-5 space-y-1 px-2">
                 {navigation.map((item) => (
                   <Fragment key={`${item.name}_mobile`}>
-                    <NavItem
-                      icon={item.icon}
-                      name={item.name}
-                      disabled={item.disabled}
-                      href={item.href}
-                    />
+                    <NavItem item={item} />
                   </Fragment>
                 ))}
               </nav>
             </div>
-            <div className="flex flex-shrink-0 p-4 bg-gray-700">
-              <a href="#" className="flex-shrink-0 block group">
+            <div className="flex flex-shrink-0 bg-gray-700 p-4">
+              <a href="#" className="group block flex-shrink-0">
                 <div className="flex items-center"></div>
               </a>
             </div>
