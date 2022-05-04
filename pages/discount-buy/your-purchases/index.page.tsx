@@ -1,5 +1,5 @@
 import PageContainer from '@/components/PageContainer';
-import Table from '@/components/Table';
+import PurchasesTable from './components/PurchasesTable';
 import { LinkIcon } from '@heroicons/react/solid';
 import {
   rand,
@@ -91,13 +91,20 @@ const YourPurchases = () => {
 
   return (
     <PageContainer>
-      <Table columns={columns} data={data} />
+      <PurchasesTable
+        columns={columns}
+        data={data.map((x) => ({
+          ...x,
+          status:
+            x.status === 'unclaimed' ? <button className="border-button">Claim</button> : x.status,
+        }))}
+      />
     </PageContainer>
   );
 };
 
 YourPurchases.PageHead = () => {
-  return 'Your Purchases';
+  return <div>Your Purchases</div>;
 };
 
 export default YourPurchases;

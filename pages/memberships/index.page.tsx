@@ -83,7 +83,7 @@ const Memberships = () => {
 };
 
 Memberships.PageHead = () => {
-  return 'Memberships';
+  return <div>Memberships</div>;
 };
 
 export default Memberships;

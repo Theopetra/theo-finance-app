@@ -129,7 +129,7 @@ const WhitelistSale = () => {
 };
 
 WhitelistSale.PageHead = () => {
-  return 'Whitelist Sale!';
+  return <div>Whitelist Sale!</div>;
 };
 
 export default WhitelistSale;

@@ -7,6 +7,7 @@ import { Fragment, ReactNode, useEffect } from 'react';
 import BuyFormProvider from './state/BuyFormProvider';
 import DiscountBuyForm from './components/DiscountBuyForm';
 import useBuyForm from './state/use-buy-form';
+import HorizontalSubNav from '@/components/HorizontalSubNav';
 
 const STATS = [
   {
@@ -74,6 +75,11 @@ const DiscountBuy = () => {
 
   return (
     <BuyFormProvider>
+      <div className="pt-4">
+        <HorizontalSubNav
+          items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
+        />
+      </div>
       <PageContainer>
         <CardList className={'mb-4'} horizontalScroll>
           {STATS.map((props) => (
@@ -108,16 +114,15 @@ const DiscountBuy = () => {
     </BuyFormProvider>
   );
 };
-const PageHeadComponent = () => {
-  return (
-    <>
-      Discount Buy <span className="text-xl">(Bond)</span>
-    </>
-  );
-};
 
 DiscountBuy.PageStateProvider = (props) => <BuyFormProvider {...props} />;
 
-DiscountBuy.PageHead = PageHeadComponent;
+DiscountBuy.PageHead = () => {
+  return (
+    <div>
+      Discount Buy <span className="text-xl">(Bond)</span>
+    </div>
+  );
+};
 
 export default DiscountBuy;
