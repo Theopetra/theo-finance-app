@@ -6,11 +6,11 @@ import Failed from './Failed';
 
 export const ConfirmRow = ({ title, value, subtext = '' }) => {
   return (
-    <div className="space-between flex items-center rounded-2xl bg-white bg-gradient-to-l from-[#EDEDED] to-[#ffffff] px-8 py-3 shadow dark:from-[#000000] dark:to-[#262626]">
-      <div className="flex-1 text-xl text-theo-navy dark:text-white">{title}</div>
+    <div className="space-between flex items-center rounded-2xl bg-white bg-gradient-to-l from-[#EDEDED] to-[#ffffff] p-4 py-3 shadow dark:from-[#000000] dark:to-[#262626] sm:px-8">
+      <div className="flex-1 text-lg text-theo-navy dark:text-white sm:text-xl">{title}</div>
       <div className="text-right">
-        <div className="text-2xl font-bold dark:text-theo-cyan">{value}</div>
-        <div className="text-sm text-theo-cyan dark:text-white">{subtext}</div>
+        <div className="text-lg font-bold dark:text-theo-cyan sm:text-2xl">{value}</div>
+        <div className="text-xs text-theo-cyan dark:text-white sm:text-sm">{subtext}</div>
       </div>
     </div>
   );
@@ -41,7 +41,7 @@ const ConfirmBuy = () => {
           className="mb-8 text-center text-theo-navy dark:text-white"
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
-          <div className="mb-4 text-4xl font-bold ">Confirm Buy</div>
+          <div className="mb-4 text-3xl font-bold sm:text-4xl">Confirm Buy</div>
           <div>Review carefully, this purchase is final</div>
         </div>
         <div>

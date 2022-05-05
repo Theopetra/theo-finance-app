@@ -23,17 +23,21 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
   options,
 }) => {
   return (
-    <div className={`${className} flex items-center rounded-lg bg-[#ebebeb] dark:bg-theo-dark-navy`}>
+    <div
+      className={`${className} flex rounded-lg bg-[#ebebeb] dark:bg-theo-dark-navy sm:items-center`}
+    >
       {options ? (
         <CurrencySelect options={options} selected={selectedCurrency} onChange={onCurrencyChange} />
       ) : (
-        <span className="block truncate p-3 text-2xl font-bold uppercase">{selectedCurrency?.name}</span>
+        <span className="block truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
+          {selectedCurrency?.name}
+        </span>
       )}
 
       <div className="flex-1 p-2">
         <div className="flex min-h-[40px] items-center rounded-lg bg-white dark:bg-[#262626]">
           {balance ? (
-            <div className="p-2 text-xs">
+            <div className="hidden p-2 text-xs sm:block">
               Balance: {balance}
               {selectedCurrency?.name}
               <span className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white">
@@ -47,7 +51,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
             type="text"
             value={value}
             onChange={onChange}
-            className="flex-1 text-right focus:outline-none bg-transparent "
+            className="w-full flex-1 bg-transparent text-right focus:outline-none"
             placeholder="00.00"
             onKeyPress={(event) => {
               if (!/^\d*\.?\d*$/.test(event.key)) {
@@ -56,6 +60,13 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
             }}
           />
           <div className="pr-4 pl-2">{selectedCurrency?.name}</div>
+        </div>
+        <div className="p-2 text-right text-xs sm:hidden">
+          Balance: {balance}
+          {selectedCurrency?.name}
+          <span className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white">
+            max
+          </span>
         </div>
       </div>
     </div>

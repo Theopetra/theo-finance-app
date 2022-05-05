@@ -27,7 +27,7 @@ const DiscountBuy = () => {
   const ACTION_CARD = [
     {
       header: {
-        primary: <span className="text-4xl lg:text-2xl xl:text-4xl">Intro</span>,
+        primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Intro</span>,
       },
       icon: 'intersect',
       data: {
@@ -42,7 +42,7 @@ const DiscountBuy = () => {
     },
     {
       header: {
-        primary: <span className="text-4xl lg:text-2xl xl:text-4xl">Intermediate</span>,
+        primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Intermediate</span>,
       },
       icon: 'intersect',
       data: {
@@ -57,7 +57,7 @@ const DiscountBuy = () => {
     },
     {
       header: {
-        primary: <span className="text-4xl lg:text-2xl xl:text-4xl">Pro</span>,
+        primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Pro</span>,
       },
       icon: 'intersect',
       highlight: true,
@@ -81,7 +81,7 @@ const DiscountBuy = () => {
         />
       </div>
       <PageContainer>
-        <CardList className={'mb-4'} horizontalScroll>
+        <CardList className={'sm:mb-4'} horizontalScroll>
           {STATS.map((props) => (
             <Fragment key={props.name}>
               <StatCard {...props} />
@@ -118,11 +118,7 @@ const DiscountBuy = () => {
 DiscountBuy.PageStateProvider = (props) => <BuyFormProvider {...props} />;
 
 DiscountBuy.PageHead = () => {
-  return (
-    <div>
-      Discount Buy <span className="text-xl">(Bond)</span>
-    </div>
-  );
+  return <div>Discount Buy</div>;
 };
 
 export default DiscountBuy;

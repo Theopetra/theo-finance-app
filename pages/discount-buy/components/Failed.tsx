@@ -28,11 +28,11 @@ const Failed = () => {
           className="text-center text-theo-navy dark:text-white"
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
-          <div className=" text-center text-4xl font-bold">
+          <div className="mb-4 text-3xl font-bold sm:text-4xl">
             Buy Failed...
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="inline-block h-10 w-10 text-theo-cyan"
+              className="inline-block w-8 sm:w-10 text-theo-cyan"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

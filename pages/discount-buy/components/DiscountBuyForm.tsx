@@ -11,12 +11,12 @@ const DiscountBuyForm = () => {
     useBuyForm();
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex w-full justify-between">
         <div>
           <button onClick={() => closeModal()} className="text-theo-cyan">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12"
+              className="w-10 sm:w-12"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -30,31 +30,35 @@ const DiscountBuyForm = () => {
           className="mb-8 text-center text-theo-navy dark:text-white"
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
-          <div className="mb-4 text-4xl font-bold ">Discount Buy</div>
+          <div className="mb-4 text-3xl font-bold sm:text-4xl">Discount Buy</div>
           <div>Review carefully, this purchase is final</div>
         </div>
         <div>
-          <Icon name="intersect" className="h-12 w-12 dark:text-white" />
+          <Icon name="intersect" className="w-8  dark:text-white sm:w-12" />
         </div>
       </div>
-      <div className="mb-2 flex justify-between rounded-2xl bg-white p-6 text-center text-theo-navy dark:bg-black dark:text-white">
+      <div className="mb-2 flex justify-between rounded-2xl bg-white p-2 text-center text-theo-navy dark:bg-black dark:text-white sm:p-6">
         <div>
-          <div className="text-xl font-bold leading-8 capitalize"> {selection?.level?.value}</div>
-          <div className="text-sm">Purchase Type</div>
+          <div className="text-lg font-bold capitalize leading-8 sm:text-xl">
+            {selection?.level?.value}
+          </div>
+          <div className="text-xs">Purchase Type</div>
         </div>
         <div>
-          <div className="text-xl font-bold leading-8 ">{selection?.discount?.value} Off</div>
-          <div className="text-sm">Market Rate </div>
+          <div className="text-lg font-bold leading-8 sm:text-xl ">
+            {selection?.discount?.value} Off
+          </div>
+          <div className="text-xs">Market Rate </div>
         </div>
         <div>
-          <div className="text-xl font-bold leading-8 ">
+          <div className="text-lg font-bold leading-8 sm:text-xl ">
             <Icon name="lock-laminated" className="mr-2 h-4 w-4 " />
             {selection?.lockDuration?.value}
           </div>
-          <div className="text-sm">Unlocked 05-12-22</div>
+          <div className="text-xs">Unlocked 05-12-22</div>
         </div>
       </div>
-      <div className="mb-7 rounded-2xl bg-white p-6 text-theo-navy dark:bg-black dark:text-white">
+      <div className="mb-7 rounded-2xl bg-white p-3 text-theo-navy dark:bg-black dark:text-white sm:p-6">
         <div className="flex items-center text-xl font-bold leading-8">
           ETH/USDC{' '}
           <svg
@@ -92,9 +96,11 @@ const DiscountBuyForm = () => {
         />
       </div>
 
-      <div className="flex w-full items-center">
-        <div className="w-1/2  underline dark:text-white">Learn about Discount Buy</div>
-        <div className="w-1/2">
+      <div className="flex w-full flex-col items-center sm:flex-row">
+        <div className="mb-4 underline dark:text-white sm:mb-0 sm:w-1/2">
+          Learn about Discount Buy
+        </div>
+        <div className="w-full sm:w-1/2">
           <button className="border-button w-full " onClick={() => openModal(<ConfirmBuy />)}>
             Buy Theo
           </button>

@@ -27,7 +27,9 @@ const Card = ({
     <div
       className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl text-theo-navy dark:text-white `}
     >
-      <div className={`mb-8 flex items-center justify-between px-6 rounded-t-xl py-4 ${headerClasses}`}>
+      <div
+        className={`mb-4 flex items-center justify-between rounded-t-xl px-6 py-4 sm:mb-8 ${headerClasses}`}
+      >
         {title && <div className="text-xl font-normal">{title}</div>}
         {cardHeader && cardHeader}
         {headerRightComponent}

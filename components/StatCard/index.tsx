@@ -10,7 +10,7 @@ type StatCardProps = {
 const StatCard = ({ name, value, tooltip }: StatCardProps) => {
   return (
     <Card title={name} headerRightComponent={<Tooltip>{tooltip}</Tooltip>}>
-      <div className=" text-3xl font-extrabold">{value}</div>
+      <div className="text-2xl sm:text-3xl font-extrabold">{value}</div>
     </Card>
   );
 };

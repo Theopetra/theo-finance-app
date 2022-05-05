@@ -35,7 +35,7 @@
   }
 
   .horrizontal-scroll-container {
-    @apply flex flex-nowrap overflow-x-scroll hide-scroll-bar pb-10 lg:grid lg:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3;
+    @apply flex flex-nowrap overflow-x-scroll hide-scroll-bar pb-5 sm:pb-10 lg:grid lg:grid-cols-3 ;
   }
   .horrizontal-scroll-container > div {
     @apply w-[342px] min-w-[342px] lg:w-full lg:min-w-full;
