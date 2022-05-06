@@ -2,6 +2,7 @@ import CurrencySelect, {
   CurrencySelectOptionsType,
   CurrencySelectOptionType,
 } from '../CurrencySelect';
+import Icon from '../Icons';
 
 type CurrrencyInputProps = {
   className?: string;
@@ -29,7 +30,9 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
       {options ? (
         <CurrencySelect options={options} selected={selectedCurrency} onChange={onCurrencyChange} />
       ) : (
-        <span className="block truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
+        <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
+          {selectedCurrency && <Icon name={selectedCurrency?.name.toLowerCase()} className="w-8 mr-2" />}
+
           {selectedCurrency?.name}
         </span>
       )}
