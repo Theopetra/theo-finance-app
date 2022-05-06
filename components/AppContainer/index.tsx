@@ -52,7 +52,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
             </Transition>
 
             <div className="py-6 ">
-              <div className="sticky top-0 z-10 mx-auto flex max-w-7xl flex-col-reverse items-center justify-center bg-gray-100 px-4  dark:bg-[#262626] sm:px-6 md:flex-row md:justify-between lg:px-8">
+              <div className="z-10 mx-auto flex max-w-7xl flex-col-reverse items-center justify-center bg-gray-100 px-4  dark:bg-[#262626] sm:px-6 md:flex-row md:justify-between lg:px-8">
                 <h1 className="text-4xl font-extrabold text-theo-navy dark:text-white sm:text-5xl">
                   <Header />
                 </h1>

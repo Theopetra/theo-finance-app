@@ -25,7 +25,7 @@ const YourPurchases = () => {
         status: rand(statuses),
         etherscan: (
           <a href="https://etherscan.io/" className="text-center">
-            <LinkIcon className="inline w-4 text-theo-cyan" />
+            <LinkIcon className="inline w-5 text-theo-cyan" />
           </a>
         ),
       },
@@ -38,7 +38,7 @@ const YourPurchases = () => {
         status: rand(statuses),
         etherscan: (
           <a href="https://etherscan.io/" className="text-center">
-            <LinkIcon className="inline w-4 text-theo-cyan" />
+            <LinkIcon className="inline w-5 text-theo-cyan" />
           </a>
         ),
       },

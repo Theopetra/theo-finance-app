@@ -6,7 +6,7 @@ const PurchasesTable = ({ columns, data }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
   return (
     <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-      <table {...getTableProps()} className="min-w-full divide-y divide-gray-300">
+      <table {...getTableProps()} className="min-w-full">
         <thead className="bg-gray-50 dark:bg-black ">
           {
             // Loop over the header rows
@@ -49,7 +49,7 @@ const PurchasesTable = ({ columns, data }) => {
           }
         </thead>
         {/* Apply the table body props */}
-        <tbody {...getTableBodyProps()} className="divide-y divide-gray-200 bg-white dark:bg-black">
+        <tbody {...getTableBodyProps()} className="bg-white dark:bg-black">
           {
             // Loop over the table rows
             rows.map((row, i) => {
