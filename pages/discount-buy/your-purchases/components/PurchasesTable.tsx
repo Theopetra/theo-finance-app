@@ -18,8 +18,8 @@ const PurchasesTable = ({ columns, data }) => {
                   headerGroup.headers.map((column, i) => (
                     // Apply the header cell props
                     <th
+                      key={`head_${i}`}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
-                      key={i}
                       width={column.width}
                       scope="col"
                       className={`${
