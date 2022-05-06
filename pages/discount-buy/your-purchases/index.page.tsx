@@ -13,9 +13,10 @@ import { format } from 'date-fns';
 import { useMemo } from 'react';
 
 const YourPurchases = () => {
-  const statuses = ['locked', 'claimed', 'unclaimed'];
-  const data = useMemo(
-    () => [
+  const data = useMemo(() => {
+    const statuses = ['locked', 'claimed', 'unclaimed'];
+
+    return [
       {
         date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
         txId: randMask({ mask: 'B####' }),
@@ -42,9 +43,9 @@ const YourPurchases = () => {
           </a>
         ),
       },
-    ],
-    []
-  );
+    ];
+  }, []);
+
   const columns = useMemo(
     () => [
       {
