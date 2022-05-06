@@ -29,9 +29,9 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
           <main
             className={`${
               transitioning ? 'overflow-hidden' : ''
-            } relative flex-1  bg-contain bg-bottom bg-no-repeat dark:bg-none`}
+            } relative w-full flex-1  bg-contain bg-bottom bg-no-repeat `}
             style={{
-              backgroundImage: theme !== 'dark' ? 'url(/assets/images/Grid-Background-01.svg)' : '',
+              backgroundImage: 'url(/assets/images/Grid-Background-01.svg)',
             }}
           >
             {/* provider */}
@@ -52,8 +52,8 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
             </Transition>
 
             <div className="py-6 ">
-              <div className="sticky top-0 z-10 mx-auto flex max-w-7xl flex-col-reverse items-center justify-center bg-gray-100 px-4  dark:bg-[#262626] sm:px-6 md:flex-row md:justify-between lg:px-8">
-                <h1 className="text-5xl font-extrabold text-theo-navy dark:text-white">
+              <div className="z-10 mx-auto flex max-w-7xl flex-col-reverse items-center justify-center bg-gray-100 px-4  dark:bg-[#262626] sm:px-6 md:flex-row md:justify-between lg:px-8">
+                <h1 className="text-4xl font-extrabold text-theo-navy dark:text-white sm:text-5xl">
                   <Header />
                 </h1>
                 <div className="mb-12 flex flex-1 justify-end space-x-2 md:mb-0">

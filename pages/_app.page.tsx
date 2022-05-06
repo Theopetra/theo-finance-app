@@ -21,7 +21,7 @@ export interface CustomAppProps extends Omit<AppProps, 'Component'> {
 const NoopComponent = (props) => <>{props.children}</>;
 
 function App({ Component, pageProps }: CustomAppProps) {
-  const { PageHead, PageStateProvider = NoopComponent } = Component;
+  const { PageHead = NoopComponent, PageStateProvider = NoopComponent } = Component;
   return (
     <AppContainer Header={PageHead} PageStateProvider={PageStateProvider}>
       <Component {...pageProps} />

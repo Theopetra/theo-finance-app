@@ -30,7 +30,7 @@ const ActionCard = ({ header, data, actionButton, warning, icon, highlight }: Ac
       headerRightComponent={<Icon name={icon} className="w-10" />}
     >
       <div className="flex flex-1 flex-col justify-between">
-        <div className="mb-8 flex-1 space-y-4">
+        <div className="mb-8 flex-1 space-y-2 sm:space-y-4">
           {data?.map((x) => (
             <Fragment key={x.label}>
               <div className="flex justify-between text-xl">

@@ -13,77 +13,80 @@ import { format } from 'date-fns';
 import { useMemo } from 'react';
 
 const YourPurchases = () => {
-  const statuses = ['locked', 'claimed', 'unclaimed'];
-  const data = useMemo(
-    () => [
+  const data = useMemo(() => {
+    const statuses = ['locked', 'claimed', 'unclaimed'];
+
+    return [
       {
-        date: format(
-          randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
-          'MMM-dd-yy'
-        ),
+        date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
         txId: randMask({ mask: 'B####' }),
         amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
-        discount: randNumber({ min: 6, max: 12 }),
-        unlockDate: format(randFutureDate(), 'MMM-dd-yy'),
+        discount: `${randNumber({ min: 6, max: 12 })}%`,
+        unlockDate: randFutureDate(),
         status: rand(statuses),
         etherscan: (
-          <a href="https://etherscan.io/">
-            <LinkIcon className="w-4 text-theo-cyan" />
+          <a href="https://etherscan.io/" className="text-center">
+            <LinkIcon className="inline w-5 text-theo-cyan" />
           </a>
         ),
       },
       {
-        date: format(
-          randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
-          'MMM-dd-yy'
-        ),
+        date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
         txId: randMask({ mask: 'B####' }),
         amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
-        discount: randNumber({ min: 6, max: 12 }),
-        unlockDate: format(randFutureDate(), 'MMM-dd-yy'),
+        discount: `${randNumber({ min: 6, max: 12 })}%`,
+        unlockDate: randFutureDate(),
         status: rand(statuses),
         etherscan: (
-          <a href="https://etherscan.io/">
-            <LinkIcon className="w-4 text-theo-cyan" />
+          <a href="https://etherscan.io/" className="text-center">
+            <LinkIcon className="inline w-5 text-theo-cyan" />
           </a>
         ),
       },
-    ],
-    []
-  );
+    ];
+  }, []);
+
   const columns = useMemo(
     () => [
       {
         Header: 'Date',
-        // accessor is the "key" in the data
         accessor: 'date',
-        className: 'text-left',
+        Cell: ({ value }) => format(value, 'MMM-dd-yy'),
+        width: '10%',
       },
       {
         Header: 'Tx ID',
         accessor: 'txId',
         disableSortBy: true,
+        width: '10%',
       },
       {
         Header: 'Amount Purchased',
         accessor: 'amount',
+        width: '20%',
       },
       {
         Header: 'Discount',
         accessor: 'discount',
+        width: '10%',
       },
       {
         Header: 'Unlock Date',
         accessor: 'unlockDate',
+        Cell: ({ value }) => format(value, 'MMM-dd-yy'),
+        width: '15%',
       },
       {
         Header: 'Status',
         accessor: 'status',
+        width: '10%',
+        Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
       },
       {
         Header: 'Etherscan',
         accessor: 'etherscan',
         disableSortBy: true,
+        width: '15%',
       },
     ],
     []

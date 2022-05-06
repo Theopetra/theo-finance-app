@@ -6,8 +6,8 @@ const PurchasesTable = ({ columns, data }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
   return (
     <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-      <table {...getTableProps()} className="min-w-full divide-y divide-gray-300">
-        <thead className="bg-gray-50 dark:bg-black">
+      <table {...getTableProps()} className="min-w-full">
+        <thead className="bg-gray-50 dark:bg-black ">
           {
             // Loop over the header rows
             headerGroups.map((headerGroup, i) => (
@@ -18,23 +18,24 @@ const PurchasesTable = ({ columns, data }) => {
                   headerGroup.headers.map((column, i) => (
                     // Apply the header cell props
                     <th
+                      key={`head_${i}`}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
-                      key={i}
+                      width={column.width}
                       scope="col"
                       className={`${
                         column.isSorted ? 'underline' : ''
-                      } py-3.5 pl-3 pr-3 text-left align-middle text-sm font-semibold text-gray-900 dark:text-theo-cyan `}
+                      } py-5 pl-3 pr-3 text-center align-middle text-sm font-semibold text-gray-900 dark:text-theo-cyan `}
                     >
                       {
                         // Render the header
                         column.render('Header')
                       }
-                      <span>
+                      <span className="relative">
                         {column.isSorted ? (
                           column.isSortedDesc ? (
-                            <ChevronDownIcon width={25} className="inline w-6" />
+                            <ChevronDownIcon width={25} className="absolute inline w-6" />
                           ) : (
-                            <ChevronUpIcon className="inline w-6" />
+                            <ChevronUpIcon className="absolute inline w-6" />
                           )
                         ) : (
                           ''
@@ -48,7 +49,7 @@ const PurchasesTable = ({ columns, data }) => {
           }
         </thead>
         {/* Apply the table body props */}
-        <tbody {...getTableBodyProps()} className="divide-y divide-gray-200 bg-white dark:bg-black">
+        <tbody {...getTableBodyProps()} className="bg-white dark:bg-black">
           {
             // Loop over the table rows
             rows.map((row, i) => {
@@ -64,7 +65,7 @@ const PurchasesTable = ({ columns, data }) => {
                       return (
                         <td
                           {...cell.getCellProps()}
-                          className="whitespace-nowrap px-3 py-4 text-sm text-theo-navy  dark:text-white"
+                          className="whitespace-nowrap px-3 py-4 text-center text-sm text-theo-navy  dark:text-white"
                           key={i}
                         >
                           {

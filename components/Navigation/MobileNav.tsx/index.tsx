@@ -19,9 +19,9 @@ const MobileNav = () => {
           leaveFrom="translate-y-0"
           leaveTo="translate-y-full"
         >
-          <div className="relative flex w-full flex-1 flex-col bg-gray-800">
+          <div className=" pt-12 relative flex w-full flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
             <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
-              <div className="flex flex-shrink-0 items-center px-4">
+              <div className="flex flex-shrink-0 items-center px-4 w-64 mx-auto mb-10">
                 <Logo altLogo />
               </div>
               <nav className="mt-5 space-y-1 px-2">

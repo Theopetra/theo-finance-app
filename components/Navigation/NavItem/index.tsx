@@ -30,7 +30,7 @@ const NavItem = ({ item }: NavItem) => {
             router.asPath === href
               ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
               : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white',
-            'group flex cursor-pointer items-center rounded-md px-4  py-4 text-lg font-bold transition',
+            'group flex cursor-pointer items-center rounded-md px-4  py-4 text-lg font-bold transition max-w-[318px] mx-auto',
             disabled && 'cursor-not-allowed opacity-50',
             !disabled &&
               'hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white'
