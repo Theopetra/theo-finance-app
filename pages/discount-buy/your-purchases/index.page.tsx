@@ -25,7 +25,7 @@ const YourPurchases = () => {
         status: rand(statuses),
         etherscan: (
           <a href="https://etherscan.io/" className="text-center">
-            <LinkIcon className="w-4 text-theo-cyan inline" />
+            <LinkIcon className="inline w-4 text-theo-cyan" />
           </a>
         ),
       },
@@ -38,7 +38,7 @@ const YourPurchases = () => {
         status: rand(statuses),
         etherscan: (
           <a href="https://etherscan.io/" className="text-center">
-            <LinkIcon className="w-4 text-theo-cyan inline" />
+            <LinkIcon className="inline w-4 text-theo-cyan" />
           </a>
         ),
       },
@@ -79,6 +79,7 @@ const YourPurchases = () => {
         Header: 'Status',
         accessor: 'status',
         width: '10%',
+        Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
       },
       {
         Header: 'Etherscan',
