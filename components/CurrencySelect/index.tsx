@@ -26,7 +26,6 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
         <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-transparent py-2 pl-1 pr-4 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:pl-3 sm:pr-10 sm:text-sm">
             <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
             <img src={iconMap[selected.name]?.src} alt={`${selected.name} icon`} className="w-8 mr-2" />
-              {/* <Icon name={selected.name.toLowerCase()} className="w-8 mr-2"/> */}
               {selected.name}
             </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center sm:pr-6">
