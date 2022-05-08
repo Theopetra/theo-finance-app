@@ -31,7 +31,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
               transitioning ? 'overflow-hidden' : ''
             } relative w-full flex-1  bg-contain bg-bottom bg-no-repeat `}
             style={{
-              backgroundImage: 'url(/assets/images/Grid-Background-01.svg)',
+              backgroundImage: 'url(/assets/images/Grid-Background-02.svg)',
             }}
           >
             {/* provider */}
