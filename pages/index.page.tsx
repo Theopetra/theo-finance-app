@@ -40,7 +40,9 @@ const Dashboard = () => {
   return (
     <>
       <div className="pt-4">
-        <HorizontalSubNav items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]} />
+        <HorizontalSubNav
+          items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
+        />
       </div>
       <PageContainer>
         <CardList horizontalScroll>
@@ -51,7 +53,7 @@ const Dashboard = () => {
           ))}
         </CardList>
         <div className="mt-4">
-          <div className="mb-14 flex flex-col space-x-2 md:flex-row ">
+          <div className="mb-14 flex flex-col space-x-0 space-y-4 sm:space-x-2 sm:space-y-0 md:flex-row">
             {PROPERTY_MANAGEMENT.map((x) => (
               <Card title={x.title} key={x.title} darkModeBgColor={'bg-black dark:bg-none'}>
                 <Fragment>
