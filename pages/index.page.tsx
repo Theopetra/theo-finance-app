@@ -5,6 +5,7 @@ import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import { useTheme } from '@/state/ui/theme';
 import { Fragment } from 'react';
+import { useAccount, useBalance } from 'wagmi';
 
 const STATS = [
   {
@@ -37,12 +38,26 @@ const PROPERTY_MANAGEMENT = [
 ];
 const Dashboard = () => {
   const [{ theme }] = useTheme();
+  const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
+  const {
+    data: balance,
+    isError: balanceIsError,
+    isLoading: balanceIsLoading,
+  } = useBalance({ addressOrName: account?.address });
   return (
     <>
       <div className="pt-4">
         <HorizontalSubNav
           items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
         />
+        <div className="text-white">
+          {accountIsLoading && <div>Loading account…</div>}
+          {accountIsError && <div>Error loading account</div>}
+          <div>{account?.address}</div>
+          <div>
+            Balance: {balance?.formatted} {balance?.symbol}
+          </div>
+        </div>
       </div>
       <PageContainer>
         <CardList horizontalScroll>
