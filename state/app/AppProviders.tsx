@@ -1,11 +1,14 @@
 import React from 'react';
 import { ThemeProvider, ModalProvider } from '../ui/theme';
+import ChainProvider from './ChainProvider';
 
 const AppProviders = (props) => {
   return (
-    <ThemeProvider>
-      <ModalProvider>{props.children}</ModalProvider>
-    </ThemeProvider>
+    <ChainProvider>
+      <ThemeProvider>
+        <ModalProvider>{props.children}</ModalProvider>
+      </ThemeProvider>
+    </ChainProvider>
   );
 };
 
