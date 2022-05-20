@@ -1,8 +1,9 @@
-import '../styles/globals.css';
+import { FC } from 'react';
 import type { AppProps } from 'next/app';
 import AppProviders from '@/state/app/AppProviders';
 import AppContainer from '@/components/AppContainer';
-import { FC } from 'react';
+import '../styles/globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
 
 const AppWrapper = (props: JSX.IntrinsicAttributes & CustomAppProps) => (
   <AppProviders>

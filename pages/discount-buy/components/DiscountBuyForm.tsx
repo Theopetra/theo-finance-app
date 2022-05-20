@@ -2,6 +2,7 @@ import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BaseSyntheticEvent, useState } from 'react';
+import { useAccount, useBalance } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import ConfirmBuy from './ConfirmBuy';
 
@@ -9,6 +10,14 @@ const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
   const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }, { handleUpdate }] =
     useBuyForm();
+
+  const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
+  const {
+    data: balance,
+    isError: balanceIsError,
+    isLoading: balanceIsLoading,
+  } = useBalance({ addressOrName: account?.address });
+
   return (
     <div>
       <div className="flex w-full justify-between">
@@ -84,7 +93,7 @@ const DiscountBuyForm = () => {
           className={'mb-4'}
           selectedCurrency={purchaseCurrency}
           options={[{ name: 'ETH' }, { name: 'USDC' }]}
-          balance="18.34"
+          balance={balance?.formatted}
           value={purchasePrice}
           onCurrencyChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseCurrency')}
           onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}

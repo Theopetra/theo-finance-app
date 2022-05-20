@@ -37,6 +37,7 @@ const PROPERTY_MANAGEMENT = [
 ];
 const Dashboard = () => {
   const [{ theme }] = useTheme();
+
   return (
     <>
       <div className="pt-4">
