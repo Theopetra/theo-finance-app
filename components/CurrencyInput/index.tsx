@@ -31,7 +31,9 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
         <CurrencySelect options={options} selected={selectedCurrency} onChange={onCurrencyChange} />
       ) : (
         <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
-          {selectedCurrency && <Icon name={selectedCurrency?.name.toLowerCase()} className="w-8 mr-2" />}
+          {selectedCurrency && (
+            <Icon name={selectedCurrency?.name.toLowerCase()} className="mr-2 w-8" />
+          )}
 
           {selectedCurrency?.name}
         </span>
@@ -43,7 +45,10 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
             <div className="hidden p-2 text-xs sm:block">
               Balance: {balance}
               {selectedCurrency?.name}
-              <span className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white">
+              <span
+                onClick={() => onChange({ target: { value: balance } }, 'purchasePrice')}
+                className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white"
+              >
                 max
               </span>
             </div>
