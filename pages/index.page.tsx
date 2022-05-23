@@ -43,12 +43,12 @@ const Dashboard = () => {
   const { data, isError, isLoading } = useContractRead(
     {
       addressOrName: '0x7130212e81e74db3BA13cE052B93a7E5F1Df00B3',
-      contractInterface: TheopetraBondDeposiotory.abi,yarb
+      contractInterface: TheopetraBondDeposiotory.abi,
     },
     'liveMarkets'
   );
   console.log(data);
-  
+
   return (
     <>
       <div className="pt-4">
