@@ -59,18 +59,17 @@ const WhitelistSale = () => {
     },
   ];
 
-  const startTimer = () => {
-    setInterval(() => {
+  const startTimer = () => {};
+
+  useEffect(() => {
+    const timer = setInterval(() => {
       const duration = intervalToDuration({
         start: new Date(),
         end: startDate,
       });
       setTimer(duration);
     }, 1000);
-  };
-
-  useEffect(() => {
-    startTimer();
+    return () => clearTimeout(timer);
   }, []);
 
   return (
