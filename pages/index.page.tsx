@@ -5,8 +5,6 @@ import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import { useTheme } from '@/state/ui/theme';
 import { Fragment } from 'react';
-import { useContractRead } from 'wagmi';
-import TheopetraBondDeposiotory from './TheopetraBondDepository.json';
 
 const STATS = [
   {
@@ -40,14 +38,6 @@ const PROPERTY_MANAGEMENT = [
 
 const Dashboard = () => {
   const [{ theme }] = useTheme();
-  const { data, isError, isLoading } = useContractRead(
-    {
-      addressOrName: '0x7130212e81e74db3BA13cE052B93a7E5F1Df00B3',
-      contractInterface: TheopetraBondDeposiotory.abi,
-    },
-    'liveMarkets'
-  );
-  console.log(data);
 
   return (
     <>
