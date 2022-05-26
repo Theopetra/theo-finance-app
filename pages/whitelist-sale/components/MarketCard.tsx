@@ -1,10 +1,35 @@
 import Card from '@/components/Card';
 import Icon from '@/components/Icons';
+import { useContractInfo } from '@/hooks/useContractInfo';
 import DiscountBuyForm from '@/pages/discount-buy/components/DiscountBuyForm';
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
+import { useContractRead, useToken } from 'wagmi';
 
+const TokenName = ({ quoteToken }) => {
+  const { data: token, isLoading, isError } = useToken({ address: quoteToken });
+
+  return <div>{token?.symbol}</div>;
+};
+
+const TokenPrice = ({ marketId: id, quoteToken }) => {
+  const { data: token, isLoading, isError } = useToken({ address: quoteToken });
+
+  const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);
+  const { data: priceInfo } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'calculatePrice',
+    { args: id }
+  );
+
+  const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(5);
+
+  return <div>{token?.symbol === 'USDC' ? Number(output).toFixed(2) : output}</div>;
+};
 const MarketCard = ({ bondMarkets }) => {
   const [{}, { openModal }] = useModal();
   const [{}, { setSelection }] = useBuyForm();
@@ -35,15 +60,17 @@ const MarketCard = ({ bondMarkets }) => {
                 key={i}
                 className="flex justify-between rounded-lg bg-[#e3e3e3] p-5 dark:bg-[#262626]"
               >
-                <div>Logo</div>
-                <div className="text-xl">{utils.formatUnits(bondMarkets.bigNumberPrice, 2)}</div>
+                <TokenName quoteToken={market.marketData.quoteToken} />
+                <div className="text-xl">
+                  <TokenPrice marketId={market.id} quoteToken={market.marketData.quoteToken} />
+                </div>
               </div>
             ))}
           </div>
           <button
             className="border-button mb-3 w-full"
             onClick={() => {
-              setSelection(bondMarkets);
+              setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: 'WhiteList' });
               openModal(<DiscountBuyForm />);
             }}
           >

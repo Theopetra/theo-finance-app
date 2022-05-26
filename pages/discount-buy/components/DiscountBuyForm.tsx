@@ -10,6 +10,7 @@ const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
   const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }, { handleUpdate }] =
     useBuyForm();
+  console.log(selection);
 
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
   const {
@@ -49,15 +50,15 @@ const DiscountBuyForm = () => {
       <div className="mb-2 flex justify-between rounded-2xl bg-white p-2 text-center text-theo-navy dark:bg-black dark:text-white sm:p-6">
         <div>
           <div className="text-lg font-bold capitalize leading-8 sm:text-xl">
-            {selection?.level?.value}
+            {selection?.purchaseType}
           </div>
           <div className="text-xs">Purchase Type</div>
         </div>
         <div>
           <div className="text-lg font-bold leading-8 sm:text-xl ">
-            {selection?.discount?.value} Off
+            {selection?.discountedPrice}
           </div>
-          <div className="text-xs">Market Rate </div>
+          <div className="text-xs">Discounted Price </div>
         </div>
         <div>
           <div className="text-lg font-bold leading-8 sm:text-xl ">
