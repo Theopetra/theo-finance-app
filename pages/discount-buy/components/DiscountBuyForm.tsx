@@ -8,10 +8,11 @@ import ConfirmBuy from './ConfirmBuy';
 
 const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
-  const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }, { handleUpdate }] =
-    useBuyForm();
-  console.log(selection);
-
+  const [
+    { purchasePrice, purchaseAmount, purchaseToken, selection, groupedBondMarketsMap },
+    { handleUpdate },
+  ] = useBuyForm();
+  const bondMarkets = groupedBondMarketsMap[selection.selectedBondDuration];
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
   const {
     data: balance,
@@ -92,15 +93,15 @@ const DiscountBuyForm = () => {
         </p>
         <CurrencyInput
           className={'mb-4'}
-          selectedCurrency={purchaseCurrency}
-          options={[{ name: 'ETH' }, { name: 'USDC' }]}
+          selectedCurrency={purchaseToken}
+          options={bondMarkets.markets.map((x) => ({ ...x.marketData }))}
           balance={balance?.formatted}
           value={purchasePrice}
           onCurrencyChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseCurrency')}
           onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}
         />
         <CurrencyInput
-          selectedCurrency={{ name: 'THEO' }}
+          selectedCurrency={{ symbol: 'THEO' }}
           value={purchaseAmount}
           onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseAmount')}
         />

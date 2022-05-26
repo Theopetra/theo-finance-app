@@ -7,7 +7,7 @@ export const BuyFormContext = React.createContext<any>(null);
 
 type formStateType = {
   theoPrice: number;
-  purchaseCurrency: CurrencySelectOptionType;
+  purchaseToken: CurrencySelectOptionType;
   purchasePrice;
   purchaseAmount;
 };
@@ -28,7 +28,7 @@ type SelectionType = {
 export const BuyFormProvider: React.FC = (props) => {
   const [formState, setFormState] = useState<formStateType>({
     theoPrice: 100,
-    purchaseCurrency: { name: 'ETH' },
+    purchaseToken: { symbol: 'ETH', address: '' },
     purchasePrice: 0,
     purchaseAmount: 0,
   });
@@ -87,6 +87,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const handleUpdate: any = (e: BaseSyntheticEvent, fieldName: string) => {
     const value = e.target.value;
+
     setFormState({ ...formState, [fieldName]: value });
   };
 
