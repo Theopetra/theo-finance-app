@@ -57,13 +57,14 @@ const Whitelist = () => {
               ))}
             </CardList>
             <CardList>
-              {groupedBondMarkets.map((groupedBondMarket, i) => {
-                return (
-                  <Fragment key={`${groupedBondMarket?.header}_${i}`}>
-                    <MarketCard bondMarkets={groupedBondMarket} />
-                  </Fragment>
-                );
-              })}
+              {groupedBondMarkets &&
+                groupedBondMarkets.map((groupedBondMarket, i) => {
+                  return (
+                    <Fragment key={`${groupedBondMarket?.header}_${i}`}>
+                      <MarketCard bondMarkets={groupedBondMarket} />
+                    </Fragment>
+                  );
+                })}
             </CardList>
           </>
         ) : (

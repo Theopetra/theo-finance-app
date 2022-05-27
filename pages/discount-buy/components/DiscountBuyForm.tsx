@@ -2,6 +2,7 @@ import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { TokenInfo } from '@/util/tokenInfo';
+import { add, format } from 'date-fns';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
@@ -10,7 +11,7 @@ import ConfirmBuy from './ConfirmBuy';
 const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
   const [
-    { purchasePrice, purchaseAmount, purchaseToken, selection, bondMarkets },
+    { purchasePrice, purchaseAmount, purchaseToken, selection, selectedMarket, bondMarkets },
     { handleUpdate, getSelectedMarketPrice },
   ] = useBuyForm();
 
@@ -20,6 +21,7 @@ const DiscountBuyForm = () => {
     isError: balanceIsError,
     isLoading: balanceIsLoading,
   } = useBalance({ addressOrName: account?.address });
+  console.log(bondMarkets);
 
   const initialToken = TokenInfo(bondMarkets.markets[0].marketData.quoteToken);
 
@@ -79,9 +81,11 @@ const DiscountBuyForm = () => {
         <div>
           <div className="text-lg font-bold leading-8 sm:text-xl ">
             <Icon name="lock-laminated" className="mr-2 h-4 w-4 " />
-            {selection?.lockDuration?.value}
+            {bondMarkets?.header}-Months
           </div>
-          <div className="text-xs">Unlocked 05-12-22</div>
+          <div className="text-xs">
+            Unlocked {format(add(new Date(), { months: bondMarkets?.header }), 'MM-dd-yy')}{' '}
+          </div>
         </div>
       </div>
       <div className="mb-7 rounded-2xl bg-white p-3 text-theo-navy dark:bg-black dark:text-white sm:p-6">
