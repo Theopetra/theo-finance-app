@@ -74,7 +74,7 @@ const DiscountBuy = () => {
   ];
 
   return (
-    <BuyFormProvider>
+    <>
       <div className="pt-4">
         <HorizontalSubNav
           items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
@@ -111,7 +111,7 @@ const DiscountBuy = () => {
           })}
         </CardList>
       </PageContainer>
-    </BuyFormProvider>
+    </>
   );
 };
 

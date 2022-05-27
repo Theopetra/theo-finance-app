@@ -10,6 +10,7 @@ import useBuyForm from '../discount-buy/state/use-buy-form';
 import MarketCard from './components/MarketCard';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
+import HorizontalSubNav from '@/components/HorizontalSubNav';
 
 const startDate = addDays(new Date(), 1);
 const endDate = new Date();
@@ -54,6 +55,11 @@ const Whitelist = () => {
 
   return (
     <>
+      <div className="pt-4">
+        <HorizontalSubNav
+          items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
+        />
+      </div>
       <PageContainer>
         {account?.address ? (
           <>
@@ -85,6 +91,9 @@ const Whitelist = () => {
       </PageContainer>
     </>
   );
+};
+Whitelist.PageHead = () => {
+  return <div>Whitelist Sale!</div>;
 };
 Whitelist.PageStateProvider = (props) => <BuyFormProvider {...props} />;
 
