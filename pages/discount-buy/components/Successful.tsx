@@ -5,7 +5,7 @@ import { ConfirmRow } from './ConfirmBuy';
 
 const Successfull = () => {
   const [, { closeModal }] = useModal();
-  const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }] = useBuyForm();
+  const [{ purchasePrice, purchaseAmount, purchaseToken, selection }] = useBuyForm();
   return (
     <div>
       {/* fauxModalHeader w/ back button, icon and title ? */}
@@ -25,17 +25,17 @@ const Successfull = () => {
       <div className="mb-4 flex flex-col gap-2">
         <ConfirmRow
           title="Market Discount"
-          value={selection.discount.value}
+          value={selection?.discount?.value}
           subtext={'Current market price = $34 USDC'}
         />
         <ConfirmRow
           title="THEO Purchase Price"
-          value={`${purchasePrice} ${purchaseCurrency.name}`}
+          value={`${purchasePrice} ${purchaseToken.symbol}`}
         />
         <ConfirmRow title="Amount Purchased" value={purchaseAmount} />
         <ConfirmRow
           title="Lock Duration"
-          value={selection.lockDuration.value}
+          value={selection?.lockDuration?.value}
           subtext={'Tokens will unlock on'}
         />
       </div>

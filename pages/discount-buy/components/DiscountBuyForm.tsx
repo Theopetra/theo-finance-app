@@ -1,7 +1,8 @@
 import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { BaseSyntheticEvent, useState } from 'react';
+import { TokenInfo } from '@/util/tokenInfo';
+import { BaseSyntheticEvent, useEffect } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import ConfirmBuy from './ConfirmBuy';
@@ -9,16 +10,32 @@ import ConfirmBuy from './ConfirmBuy';
 const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
   const [
-    { purchasePrice, purchaseAmount, purchaseToken, selection, groupedBondMarketsMap },
-    { handleUpdate },
+    { purchasePrice, purchaseAmount, purchaseToken, selection, bondMarkets },
+    { handleUpdate, getSelectedMarketPrice },
   ] = useBuyForm();
-  const bondMarkets = groupedBondMarketsMap[selection.selectedBondDuration];
+
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
   const {
     data: balance,
     isError: balanceIsError,
     isLoading: balanceIsLoading,
   } = useBalance({ addressOrName: account?.address });
+
+  const initialToken = TokenInfo(bondMarkets.markets[0].marketData.quoteToken);
+
+  useEffect(() => {
+    handleUpdate(
+      {
+        target: {
+          value: {
+            ...bondMarkets.markets[0].marketData,
+            ...initialToken,
+          },
+        },
+      },
+      'purchaseToken'
+    );
+  }, [initialToken]);
 
   return (
     <div>
@@ -56,9 +73,7 @@ const DiscountBuyForm = () => {
           <div className="text-xs">Purchase Type</div>
         </div>
         <div>
-          <div className="text-lg font-bold leading-8 sm:text-xl ">
-            {selection?.discountedPrice}
-          </div>
+          <div className="text-lg font-bold leading-8 sm:text-xl ">{getSelectedMarketPrice()}</div>
           <div className="text-xs">Discounted Price </div>
         </div>
         <div>
@@ -93,15 +108,17 @@ const DiscountBuyForm = () => {
         </p>
         <CurrencyInput
           className={'mb-4'}
-          selectedCurrency={purchaseToken}
+          selectedToken={{ ...purchaseToken }}
           options={bondMarkets.markets.map((x) => ({ ...x.marketData }))}
           balance={balance?.formatted}
           value={purchasePrice}
-          onCurrencyChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseCurrency')}
+          onCurrencyChange={(e: BaseSyntheticEvent) => {
+            handleUpdate(e, 'purchaseToken');
+          }}
           onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}
         />
         <CurrencyInput
-          selectedCurrency={{ symbol: 'THEO' }}
+          selectedToken={{ symbol: 'THEO' }}
           value={purchaseAmount}
           onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseAmount')}
         />

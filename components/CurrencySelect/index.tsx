@@ -17,6 +17,7 @@ export type CurrencySelectProps = {
 
 const iconMap = {
   ETH: EthIcon,
+  WETH: EthIcon,
   USDC: UdcIcon,
 };
 
@@ -27,11 +28,11 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
         <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-transparent py-2 pl-1 pr-4 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:pl-3 sm:pr-10 sm:text-sm">
           <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
             <img
-              src={iconMap[selected.symbol]?.src}
-              alt={`${selected.symbol} icon`}
+              src={iconMap[selected]?.src}
+              alt={`${selected?.symbol} icon`}
               className="mr-2 w-8"
             />
-            {selected.symbol}
+            {selected}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center sm:pr-6">
             <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -56,7 +57,7 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
                         active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                       }`
                     }
-                    value={token.symbol}
+                    value={{ ...option, ...token }}
                   >
                     {({ selected }) => (
                       <>
