@@ -1,14 +1,16 @@
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import useBuyForm from '../state/use-buy-form';
-import ConfirmBuy, { ConfirmRow } from './ConfirmBuy';
+import ConfirmBuy, {
+  LockDurationRow,
+  MarketDiscountRow,
+  PurchaseAmountRow,
+  TheoPurchasePriceRow,
+} from './ConfirmBuy';
 import Successfull from './Successful';
-
 
 const Failed = () => {
   const [, { openModal }] = useModal();
 
-  const [{ purchasePrice, purchaseAmount, purchaseToken, selection }] = useBuyForm();
   return (
     <div>
       <div className="mb-8 flex items-center justify-between ">
@@ -32,7 +34,7 @@ const Failed = () => {
             Buy Failed...
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="inline-block w-8 sm:w-10 text-theo-cyan"
+              className="inline-block w-8 text-theo-cyan sm:w-10"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -51,21 +53,10 @@ const Failed = () => {
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-2">
-        <ConfirmRow
-          title="Market Discount"
-          value={selection?.discount?.value}
-          subtext={'Current market price = $34 USDC'}
-        />
-        <ConfirmRow
-          title="THEO Purchase Price"
-          value={`${purchasePrice} ${purchaseToken.name}`}
-        />
-        <ConfirmRow title="Purchase Amount" value={purchaseAmount} />
-        <ConfirmRow
-          title="Lock Duration"
-          value={selection?.lockDuration?.value}
-          subtext={'Tokens will unlock on'}
-        />
+        <MarketDiscountRow />
+        <TheoPurchasePriceRow />
+        <PurchaseAmountRow />
+        <LockDurationRow />
       </div>
       <div className="flex w-full items-center justify-center">
         <button className="border-button w-60" onClick={() => openModal(<Successfull />)}>

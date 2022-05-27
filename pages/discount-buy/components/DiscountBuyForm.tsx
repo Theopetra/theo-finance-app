@@ -84,7 +84,7 @@ const DiscountBuyForm = () => {
             {bondMarkets?.header}-Months
           </div>
           <div className="text-xs">
-            Unlocked {format(add(new Date(), { months: bondMarkets?.header }), 'MM-dd-yy')}{' '}
+            Unlocked {format(add(new Date(), { months: bondMarkets?.header }), 'MM-dd-yy')}
           </div>
         </div>
       </div>

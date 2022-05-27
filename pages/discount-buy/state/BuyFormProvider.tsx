@@ -9,7 +9,6 @@ export const BuyFormContext = React.createContext<any>(null);
 type formStateType = {
   theoPrice: number;
   purchaseToken: CurrencySelectOptionType | null;
-  purchasePrice;
   purchaseAmount;
 };
 
@@ -34,7 +33,6 @@ export const BuyFormProvider: React.FC = (props) => {
   const [formState, setFormState] = useState<formStateType>({
     theoPrice: 100,
     purchaseToken: null,
-    purchasePrice: 0,
     purchaseAmount: 0,
   });
   const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);

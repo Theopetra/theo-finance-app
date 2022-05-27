@@ -31,7 +31,7 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
     'calculatePrice',
     { args: id }
   );
-  if (!id) return "";
+  if (!id) return <></>;
 
   const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(5);
 
