@@ -4,6 +4,7 @@ import Icon from '@/components/Icons';
 import PageContainer from '@/components/PageContainer';
 import { addDays, intervalToDuration } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
 import useBuyForm from '../discount-buy/state/use-buy-form';
 import MarketCard from './components/MarketCard';
@@ -14,6 +15,8 @@ const endDate = new Date();
 const Whitelist = () => {
   const [timer, setTimer] = useState<Duration>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [{ groupedBondMarkets }] = useBuyForm();
+  const { data: account, isError, isLoading } = useAccount();
+
   const STATS = [
     {
       name: 'Time Remaining',
@@ -37,30 +40,35 @@ const Whitelist = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
-
   return (
     <>
       <PageContainer>
-        <CardList className={'mb-4'} horizontalScroll>
-          {STATS.map(({ name, value, tooltip }, i) => (
-            <Card
-              title={name}
-              headerRightComponent={<Icon name="clock" className="h-6 w-6 text-theo-navy" />}
-              key={i}
-            >
-              <div className=" text-3xl font-extrabold">{value}</div>
-            </Card>
-          ))}
-        </CardList>
-        <CardList>
-          {groupedBondMarkets.map((groupedBondMarket, i) => {
-            return (
-              <Fragment key={`${groupedBondMarket?.header}_${i}`}>
-                <MarketCard bondMarkets={groupedBondMarket} />
-              </Fragment>
-            );
-          })}
-        </CardList>
+        {account?.address ? (
+          <>
+            <CardList className={'mb-4'} horizontalScroll>
+              {STATS.map(({ name, value, tooltip }, i) => (
+                <Card
+                  title={name}
+                  headerRightComponent={<Icon name="clock" className="h-6 w-6 text-theo-navy" />}
+                  key={i}
+                >
+                  <div className=" text-3xl font-extrabold">{value}</div>
+                </Card>
+              ))}
+            </CardList>
+            <CardList>
+              {groupedBondMarkets.map((groupedBondMarket, i) => {
+                return (
+                  <Fragment key={`${groupedBondMarket?.header}_${i}`}>
+                    <MarketCard bondMarkets={groupedBondMarket} />
+                  </Fragment>
+                );
+              })}
+            </CardList>
+          </>
+        ) : (
+          'Please connect your wallet'
+        )}
       </PageContainer>
     </>
   );
