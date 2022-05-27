@@ -74,16 +74,19 @@ const Whitelist = () => {
                 </Card>
               ))}
             </CardList>
-            <CardList>
-              {groupedBondMarkets &&
-                groupedBondMarkets.map((groupedBondMarket, i) => {
+            {groupedBondMarkets.length ? (
+              <CardList>
+                {groupedBondMarkets.map((groupedBondMarket, i) => {
                   return (
                     <Fragment key={`${groupedBondMarket?.header}_${i}`}>
                       <MarketCard bondMarkets={groupedBondMarket} />
                     </Fragment>
                   );
                 })}
-            </CardList>
+              </CardList>
+            ) : (
+              <>There are no markets on the network. Please switch to a supported network.</>
+            )}
           </>
         ) : (
           'Please connect your wallet'

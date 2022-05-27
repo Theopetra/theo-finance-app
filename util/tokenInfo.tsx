@@ -12,7 +12,12 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
   const { data: token } = useToken({ address: quoteToken });
 
   const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);
-  const { data: priceInfo } = useContractRead(
+  const {
+    data: priceInfo,
+    isError,
+    error,
+    isSuccess,
+  } = useContractRead(
     {
       addressOrName: address,
       contractInterface: abi,
@@ -20,9 +25,16 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
     'calculatePrice',
     { args: id }
   );
-  if (!id) return <></>;
 
-  const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(5);
+  if (isSuccess) {
+    const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(5);
+    return <>{token?.symbol === 'USDC' ? Number(output).toFixed(2) : output}</>;
+  }
 
-  return <>{token?.symbol === 'USDC' ? Number(output).toFixed(2) : output}</>;
+  if (isError) {
+    console.log(error);
+
+    return <></>;
+  }
+  return <></>;
 };

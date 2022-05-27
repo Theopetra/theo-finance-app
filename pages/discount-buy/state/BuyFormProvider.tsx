@@ -44,7 +44,7 @@ export const BuyFormProvider: React.FC = (props) => {
     (x) => x.marketData.quoteToken === formState.purchaseToken?.address
   );
 
-  const { data: WhitelistBondMarkets } = useContractRead(
+  const { data: WhitelistBondMarkets, isSuccess: WhitelistBondMarketsSuccess } = useContractRead(
     {
       addressOrName: address,
       contractInterface: abi,
@@ -60,33 +60,35 @@ export const BuyFormProvider: React.FC = (props) => {
 
   useEffect(() => {
     const termsMap = {};
-    const setTerms =
-      WhitelistBondMarkets?.map(
-        async (bondMarket) =>
-          await contract
-            .terms(bondMarket)
-            .then(async (terms) => {
-              const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
-              const mapKey = vestingInMonths;
+    if (WhitelistBondMarketsSuccess) {
+      const setTerms =
+        WhitelistBondMarkets?.map(
+          async (bondMarket) =>
+            await contract
+              .terms(bondMarket)
+              .then(async (terms) => {
+                const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
+                const mapKey = vestingInMonths;
 
-              const market = await contract.markets(bondMarket).then((market) => market);
+                const market = await contract.markets(bondMarket).then((market) => market);
 
-              return (termsMap[mapKey] = {
-                header: mapKey,
-                highlight: vestingInMonths === 18,
-                markets: [
-                  ...(termsMap?.[mapKey] ? termsMap?.[mapKey].markets : []),
-                  { ...terms, marketData: market, id: bondMarket.toString() },
-                ],
-              });
-            })
-            .catch((err) => console.log(err.stack))
-      ) || [];
+                return (termsMap[mapKey] = {
+                  header: mapKey,
+                  highlight: vestingInMonths === 18,
+                  markets: [
+                    ...(termsMap?.[mapKey] ? termsMap?.[mapKey].markets : []),
+                    { ...terms, marketData: market, id: bondMarket.toString() },
+                  ],
+                });
+              })
+              .catch((err) => console.log(err.stack))
+        ) || [];
 
-    Promise.allSettled(setTerms).then(([result]) => {
-      setGroupedBondMarketsMap(termsMap);
-    });
-  }, [contract, WhitelistBondMarkets]);
+      Promise.allSettled(setTerms).then(([result]) => {
+        setGroupedBondMarketsMap(termsMap);
+      });
+    }
+  }, [contract, WhitelistBondMarkets, WhitelistBondMarketsSuccess]);
 
   const groupedBondMarkets = useMemo(() => {
     return Object.values(groupedBondMarketsMap).sort((a, b) => a.header - b.header);

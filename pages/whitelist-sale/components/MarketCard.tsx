@@ -5,8 +5,6 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import DiscountBuyForm from '@/pages/discount-buy/components/DiscountBuyForm';
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { BigNumber } from 'ethers';
-import { useContractRead, useToken } from 'wagmi';
 import EthIcon from '../../../public/assets/icons/eth.svg';
 import UdcIcon from '../../../public/assets/icons/usdc.svg';
 const MarketCard = ({ bondMarkets }) => {

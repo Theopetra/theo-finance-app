@@ -3,7 +3,7 @@ import CardList from '@/components/CardList';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { Fragment, ReactNode, useEffect } from 'react';
+import { Fragment } from 'react';
 import BuyFormProvider from './state/BuyFormProvider';
 import DiscountBuyForm from './components/DiscountBuyForm';
 import useBuyForm from './state/use-buy-form';
