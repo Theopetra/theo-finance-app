@@ -8,6 +8,8 @@ import { useAccount } from 'wagmi';
 import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
 import useBuyForm from '../discount-buy/state/use-buy-form';
 import MarketCard from './components/MarketCard';
+import EthIcon from '../../public/assets/icons/eth.svg';
+import UdcIcon from '../../public/assets/icons/usdc.svg';
 
 const startDate = addDays(new Date(), 1);
 const endDate = new Date();
@@ -25,7 +27,16 @@ const Whitelist = () => {
     },
     {
       name: 'Assets Accepted',
-      value: '',
+      value: (
+        <div className="flex">
+          <div className="border- mr-3 flex items-center border-r-2 border-[#2f455c] p-3 text-[#2776cb]">
+            <img src={UdcIcon.src} alt="" className="w-10" /> USDC
+          </div>
+          <div className="flex items-center  text-[#262626]">
+            <img src={EthIcon.src} alt="" className="w-8" /> ETHER
+          </div>
+        </div>
+      ),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
     },
   ];
@@ -40,6 +51,7 @@ const Whitelist = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
+
   return (
     <>
       <PageContainer>

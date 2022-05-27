@@ -7,11 +7,16 @@ import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BigNumber } from 'ethers';
 import { useContractRead, useToken } from 'wagmi';
-
+import EthIcon from '../../../public/assets/icons/eth.svg';
+import UdcIcon from '../../../public/assets/icons/usdc.svg';
 const MarketCard = ({ bondMarkets }) => {
   const [{}, { openModal }] = useModal();
   const [{}, { setSelection }] = useBuyForm();
-
+  const iconMap = {
+    ETH: EthIcon,
+    WETH: EthIcon,
+    USDC: UdcIcon,
+  };
   return (
     <>
       <Card
@@ -38,10 +43,18 @@ const MarketCard = ({ bondMarkets }) => {
               return (
                 <div
                   key={i}
-                  className="flex justify-between rounded-lg bg-[#e3e3e3] p-5 dark:bg-[#262626]"
+                  className="flex items-center justify-between  rounded-lg bg-[#e3e3e3] p-5 dark:bg-[#262626]"
                 >
-                  {token?.symbol}
-                  <div className="text-xl">
+                  {token?.symbol && (
+                    <>
+                      <img
+                        src={iconMap[token?.symbol]?.src}
+                        alt={`${token?.symbol} icon`}
+                        className="mr-2 w-8"
+                      />{' '}
+                    </>
+                  )}
+                  <div className="text-2xl font-bold">
                     {WhitelistTokenPrice({
                       marketId: market.id,
                       quoteToken: market.marketData.quoteToken,
