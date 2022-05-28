@@ -4,11 +4,11 @@ import ChainProvider from './ChainProvider';
 
 const AppProviders = (props) => {
   return (
-    <ChainProvider>
-      <ThemeProvider>
+    <ThemeProvider>
+      <ChainProvider>
         <ModalProvider>{props.children}</ModalProvider>
-      </ThemeProvider>
-    </ChainProvider>
+      </ChainProvider>
+    </ThemeProvider>
   );
 };
 

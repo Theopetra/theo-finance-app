@@ -18,12 +18,12 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
   const [{ isOpen, transitioning }, { setTransitioning }] = useModal();
 
   return (
-    <div className={`${theme} h-full`}>
+    <div className={`${theme} h-full min-h-screen`}>
       <MobileNav />
       <div className="lg:max-w-64 hidden w-[350px] lg:fixed lg:inset-y-0 lg:flex lg:flex-col">
         <Navigation />
       </div>
-      <div className="flex min-h-full flex-1 flex-col dark:bg-[#262626] lg:pl-[350px]">
+      <div className="flex min-h-screen flex-1 flex-col dark:bg-[#262626] lg:pl-[350px]">
         <NavBar />
         <PageStateProvider>
           <main

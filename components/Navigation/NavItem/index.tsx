@@ -1,9 +1,10 @@
+import { Fragment, useState } from 'react';
 import Icon from '@/components/Icons';
 import { useTheme } from '@/state/ui/theme';
 import { classNames } from '@/util/class-names-util';
+import { Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Fragment } from 'react';
 type NavItemProps = {
   name?: string;
   href?: string;
@@ -18,19 +19,23 @@ type NavItem = {
 
 const NavItem = ({ item }: NavItem) => {
   const router = useRouter();
-  const [, { setNavigationOpen }] = useTheme();
+  const [{ activeSubNav }, { setActiveSubNav, setNavigationOpen }] = useTheme();
   const { name, href, icon, disabled, subNav } = item;
+
   return (
     <>
       <Link key={name} href={!disabled ? (href as any) : '#'} passHref={true}>
         <a
-          onClick={() => setNavigationOpen(false)}
+          onClick={() => {
+            setNavigationOpen(false);
+            setActiveSubNav(name);
+          }}
           key={name}
           className={classNames(
             router.asPath === href
               ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
               : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white',
-            'group flex cursor-pointer items-center rounded-md px-4  py-4 text-lg font-bold transition max-w-[318px] mx-auto',
+            'group mx-auto flex max-w-[318px] cursor-pointer items-center  rounded-md px-4 py-4 text-lg font-bold transition',
             disabled && 'cursor-not-allowed opacity-50',
             !disabled &&
               'hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white'
@@ -44,24 +49,35 @@ const NavItem = ({ item }: NavItem) => {
           </div>
         </a>
       </Link>
-      {item?.subNav?.length &&
-        item.subNav.map((subItem) => (
-          <Fragment key={`${subItem.name}_main`}>
-            <Link key={name} href={!disabled ? (subItem.href as any) : '#'} passHref={true}>
-              <a
-                onClick={() => setNavigationOpen(false)}
-                key={name}
-                className={classNames(
-                  router.asPath === subItem.href ? 'underline' : '',
-                  ' block py-4 text-center text-lg font-bold text-theo-dark-navy dark:text-white',
-                  disabled && 'cursor-not-allowed opacity-50'
-                )}
-              >
-                {subItem.name}
-              </a>
-            </Link>
-          </Fragment>
-        ))}
+      {item?.subNav?.length && (
+        <Transition
+          show={Boolean(activeSubNav === name)}
+          enter="transition-opacity duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          {item?.subNav.map((subItem) => (
+            <Fragment key={`${subItem.name}_main`}>
+              <Link key={name} href={!disabled ? (subItem.href as any) : '#'} passHref={true}>
+                <a
+                  onClick={() => setNavigationOpen(false)}
+                  key={name}
+                  className={classNames(
+                    router.asPath === subItem.href ? 'underline' : '',
+                    ' block py-4 text-center text-lg font-bold text-theo-dark-navy dark:text-white',
+                    disabled && 'cursor-not-allowed opacity-50'
+                  )}
+                >
+                  {subItem.name}
+                </a>
+              </Link>
+            </Fragment>
+          ))}
+        </Transition>
+      )}
     </>
   );
 };

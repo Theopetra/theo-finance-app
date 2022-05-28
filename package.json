@@ -21,7 +21,7 @@
     "react-dom": "17.0.2",
     "react-svg": "^14.1.12",
     "react-table": "^7.7.0",
-    "wagmi": "^0.3.5"
+    "wagmi": "^0.4.3"
   },
   "devDependencies": {
     "@types/node": "17.0.21",

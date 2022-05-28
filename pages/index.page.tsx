@@ -35,6 +35,7 @@ const PROPERTY_MANAGEMENT = [
     lightImgSrc: '/assets/images/dashboard/Graph_light_version.png',
   },
 ];
+
 const Dashboard = () => {
   const [{ theme }] = useTheme();
 

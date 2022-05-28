@@ -1,10 +1,64 @@
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
+import { WhitelistTokenPrice } from '@/util/tokenInfo';
+import { add, format } from 'date-fns';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
 
-export const ConfirmRow = ({ title, value, subtext = '' }) => {
+export const Price = () => {
+  const [{ selectedMarket, purchaseToken }] = useBuyForm();
+
+  return (
+    <>
+      <WhitelistTokenPrice
+        marketId={selectedMarket.id}
+        quoteToken={selectedMarket.marketData.quoteToken}
+      />{' '}
+      {purchaseToken.symbol}
+    </>
+  );
+};
+export const MarketDiscountRow = () => {
+  return (
+    <ConfirmRow
+      title="Market Discount"
+      value={'5% (??)'}
+      subtext={
+        <>
+          Current market price = <Price />
+        </>
+      }
+    />
+  );
+};
+
+export const PurchaseAmountRow = () => {
+  const [{ purchaseAmount }] = useBuyForm();
+
+  return <ConfirmRow title="Purchase Amount" value={purchaseAmount} />;
+};
+
+export const TheoPurchasePriceRow = () => {
+  const [{ purchaseToken }] = useBuyForm();
+  return <ConfirmRow title="THEO Purchase Price" value={<Price />} />;
+};
+
+export const LockDurationRow = () => {
+  const [{ bondMarkets }] = useBuyForm();
+  return (
+    <ConfirmRow
+      title="Lock Duration"
+      value={`${bondMarkets?.header} Months`}
+      subtext={`Tokens will unlock on ${format(
+        add(new Date(), { months: bondMarkets?.header }),
+        'MM-dd-yy'
+      )}`}
+    />
+  );
+};
+
+export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, value, subtext }) => {
   return (
     <div className="space-between flex items-center rounded-2xl bg-white bg-gradient-to-l from-[#EDEDED] to-[#ffffff] p-4 py-3 shadow dark:from-[#000000] dark:to-[#262626] sm:px-8">
       <div className="flex-1 text-lg text-theo-navy dark:text-white sm:text-xl">{title}</div>
@@ -18,10 +72,8 @@ export const ConfirmRow = ({ title, value, subtext = '' }) => {
 
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
-  const [{ purchasePrice, purchaseAmount, purchaseCurrency, selection }] = useBuyForm();
   return (
     <div>
-      {/* fauxModalHeader w/ back button, icon and title ? */}
       <div className="flex justify-between">
         <div>
           <button onClick={() => openModal(<DiscountBuyForm />)} className="text-theo-cyan">
@@ -49,25 +101,12 @@ const ConfirmBuy = () => {
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-2">
-        <ConfirmRow
-          title="Market Discount"
-          value={selection.discount.value}
-          // TODO: Calc market price
-          subtext={'Current market price = $34 USDC'}
-        />
-        <ConfirmRow
-          title="THEO Purchase Price"
-          value={`${purchasePrice} ${purchaseCurrency.name}`}
-        />
-        <ConfirmRow title="Purchase Amount" value={purchaseAmount} />
-        <ConfirmRow
-          title="Lock Duration"
-          value={selection.lockDuration.value}
-          // TODO: calc lock end date
-          subtext={'Tokens will unlock on'}
-        />
+        <MarketDiscountRow />
+        <TheoPurchasePriceRow />
+        <PurchaseAmountRow />
+        <LockDurationRow />
         {/* TODO: calc time remaining */}
-        <ConfirmRow title="Offer Valid For" value="10:00" subtext={'18:14 pm EST'} />
+        <ConfirmRow title="Offer Valid For" value="10:00 (??)" subtext={'18:14 pm EST'} />
       </div>
       <div className="flex w-full items-center justify-center">
         <button className="border-button w-60" onClick={() => openModal(<Failed />)}>
