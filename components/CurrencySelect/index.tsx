@@ -3,7 +3,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
-import { TokenInfo } from '@/util/tokenInfo';
+import { TokenInfo } from '../TokenName';
 
 export type CurrencySelectOptionType = { symbol: string; address?: string; quoteToken?: string };
 export type CurrencySelectOptionsType = CurrencySelectOptionType[];
