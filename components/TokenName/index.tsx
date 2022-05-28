@@ -1,7 +1,7 @@
 import { useToken } from 'wagmi';
 
-export const TokenName = ({ quoteToken }) => {
-  const { data } = useToken({ address: quoteToken });
+export const TokenInfo = (quoteToken: string) => {
+  const { data: token, isLoading, isError } = useToken({ address: quoteToken });
 
-  return data;
+  return token;
 };

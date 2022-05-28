@@ -1,7 +1,7 @@
 import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
+import { TokenInfo } from '@/components/TokenName';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { TokenInfo } from '@/util/tokenInfo';
 import { add, format } from 'date-fns';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import { useAccount, useBalance } from 'wagmi';

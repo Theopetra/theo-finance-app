@@ -1,7 +1,7 @@
 import Card from '@/components/Card';
 import Icon from '@/components/Icons';
-import { TokenInfo, WhitelistTokenPrice } from '@/util/tokenInfo';
-import { useContractInfo } from '@/hooks/useContractInfo';
+import { TokenInfo } from '@/components/TokenName';
+import { WhitelistTokenPrice } from '@/components/TokenPrice';
 import DiscountBuyForm from '@/pages/discount-buy/components/DiscountBuyForm';
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import useModal from '@/state/ui/theme/hooks/use-modal';
