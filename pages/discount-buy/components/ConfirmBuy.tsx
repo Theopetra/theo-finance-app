@@ -1,6 +1,6 @@
 import Icon from '@/components/Icons';
+import { WhitelistTokenPrice } from '@/components/TokenPrice';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { WhitelistTokenPrice } from '@/util/tokenInfo';
 import { add, format } from 'date-fns';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
