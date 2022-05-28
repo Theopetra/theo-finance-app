@@ -91,7 +91,7 @@ export const BuyFormProvider: React.FC = (props) => {
   }, [contract, WhitelistBondMarkets, WhitelistBondMarketsSuccess]);
 
   const groupedBondMarkets = useMemo(() => {
-    return Object.values(groupedBondMarketsMap).sort((a, b) => a.header - b.header);
+    return Object.values(groupedBondMarketsMap).sort((a: any, b: any) => a.header - b.header);
   }, [groupedBondMarketsMap]);
 
   const handleUpdate: any = (e: BaseSyntheticEvent, fieldName: string) => {
