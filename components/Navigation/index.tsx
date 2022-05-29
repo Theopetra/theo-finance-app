@@ -11,9 +11,9 @@ const socialLinks = [
   { icon: 'youtube-logo', href: '#' },
 ];
 const classes = {
-  statContainer: 'flex flex-col items-center justify-center flex-1 ',
+  statContainer: 'flex flex-row-reverse items-center justify-between flex-1  ',
   number: 'font-bold text-theo-cyan dark:text-white',
-  label: 'text-xs font-normal text-theo-navy dark:text-theo-cyan',
+  label: 'font-semibold  text-theo-navy dark:text-theo-cyan',
 };
 
 const Navigation = () => {
@@ -42,14 +42,10 @@ const Navigation = () => {
             </Fragment>
           ))}
         </div>
-        <div className=" flex h-16 w-full justify-between bg-white pt-1 pl-1 dark:bg-black sm:pl-3 sm:pt-3">
+        <div className=" flex h-16 w-full justify-between bg-white p-1 dark:bg-black sm:p-5">
           <div className={classes.statContainer}>
             <div className={classes.number}>101,221,000</div>
             <div className={classes.label}>Your $THEO</div>
-          </div>
-          <div className={classes.statContainer}>
-            <div className={classes.number}>80,221,000</div>
-            <div className={classes.label}>$THEO Staked</div>
           </div>
         </div>
       </div>

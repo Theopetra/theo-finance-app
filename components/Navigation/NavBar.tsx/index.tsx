@@ -31,8 +31,6 @@ const NavBar = () => {
         </button>
       </div>
       <div className={classes.statContainer}>
-        <div className={classes.number}>80,221,000</div>
-        <div className={classes.label}>$THEO Staked</div>
       </div>
     </div>
   );
