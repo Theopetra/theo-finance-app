@@ -5,9 +5,9 @@ import Icon from '../Icons';
 import { Fragment } from 'react';
 
 const socialLinks = [
-  { icon: 'twitter-logo', href: '#' },
+  { icon: 'twitter-logo', href: 'https://twitter.com/TheopetraLabs' },
   { icon: 'telegram-logo', href: '#' },
-  { icon: 'discord-logo', href: '#' },
+  { icon: 'discord-logo', href: 'https://discord.gg/Y5wzSGhg37' },
   { icon: 'youtube-logo', href: '#' },
 ];
 const classes = {
