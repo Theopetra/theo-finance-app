@@ -7,7 +7,7 @@ export const navigation = [
     subNav: [
       {
         name: 'Your Purchases',
-        href: '/discount-buy/your-purchases',
+        href: '/whitelist-sale/your-purchases',
       },
     ],
   },
