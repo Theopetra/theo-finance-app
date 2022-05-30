@@ -3,56 +3,45 @@ import CardList from '@/components/CardList';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
+import useMetrics from '@/hooks/useMetrics';
 import { useTheme } from '@/state/ui/theme';
 import { Fragment } from 'react';
 
-const STATS = [
-  {
-    name: (
-      <>
-        THEO Locked - <strong>6 Months</strong>
-      </>
-    ),
-    value: '24,000',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-    tooltipIcon: 'lock-laminated',
-  },
-  {
-    name: (
-      <>
-        THEO Locked - <strong>6 Months</strong>
-      </>
-    ),
-    value: '21,000',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-    tooltipIcon: 'lock-laminated',
-  },
-  {
-    name: (
-      <>
-        THEO Locked - <strong>6 Months</strong>
-      </>
-    ),
-    value: '800',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-    tooltipIcon: 'lock-laminated',
-  },
-];
-const PROPERTY_MANAGEMENT = [
-  {
-    title: 'Total Unique Wallets',
-    darkImgSrc: '/assets/images/dashboard/Ismetric_building_both_versions.png',
-    lightImgSrc: '/assets/images/dashboard/Ismetric_building_both_versions.png',
-  },
-  {
-    title: 'Market Cap',
-    darkImgSrc: '/assets/images/dashboard/Graph_dark_version.png',
-    lightImgSrc: '/assets/images/dashboard/Graph_light_version.png',
-  },
-];
-
 const Dashboard = () => {
   const [{ theme }] = useTheme();
+  const { currentMetrics } = useMetrics();
+  const STATS = [
+    {
+      name: (
+        <>
+          THEO Locked - <strong>6 Months</strong>
+        </>
+      ),
+      value: currentMetrics?.lockedTheo,
+      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
+      tooltipIcon: 'lock-laminated',
+    },
+    {
+      name: (
+        <>
+          THEO Locked - <strong>12 Months</strong>
+        </>
+      ),
+      value: currentMetrics?.lockedTheo,
+      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
+      tooltipIcon: 'lock-laminated',
+    },
+    {
+      name: (
+        <>
+          THEO Locked - <strong>18 Months</strong>
+        </>
+      ),
+      value: currentMetrics?.lockedTheo,
+      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
+      tooltipIcon: 'lock-laminated',
+    },
+  ];
 
   return (
     <>
@@ -70,7 +59,7 @@ const Dashboard = () => {
           ))}
         </CardList>
         <div className="mt-4">
-          <div className="mb-14 gap-x-2 space-x-0 space-y-4 sm:space-x-2 sm:space-y-0 flex flex-col md:flex-row">
+          <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2 sm:space-y-0 md:flex-row">
             <Card
               title={'Total Unique Wallets'}
               darkModeBgColor={'bg-black dark:bg-none'}
