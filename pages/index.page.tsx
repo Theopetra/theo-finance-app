@@ -66,18 +66,11 @@ const Dashboard = () => {
               className="basis-1/3"
             >
               <Fragment>
-                <div className="mb-24 flex-1 md:m-0">
-                  <div className="flex flex-col items-center justify-center">
-                    <img
-                      src={
-                        theme === 'dark'
-                          ? '/assets/images/dashboard/Ismetric_building_both_versions.png'
-                          : '/assets/images/dashboard/Ismetric_building_both_versions.png'
-                      }
-                      alt="Total Unique Wallets graphic"
-                      className="mb-7 max-h-[200px]"
-                    />
+                <div className="mb-24 flex-1 md:m-0 pb-10">
+                  <div className='flex-1 h-full'>
+                    <div className="sr-only">Total Wallets Graph</div>
                   </div>
+                  <div className="font-bold text-3xl">{currentMetrics?.uniqueWallets}</div>
                 </div>
               </Fragment>
             </Card>
