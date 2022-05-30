@@ -25,15 +25,17 @@ const Card = ({
 
   return (
     <div
-      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl text-theo-navy dark:text-white `}
+      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl pt-2 text-theo-navy dark:text-white sm:pt-4 `}
     >
-      <div
-        className={`mb-4 flex items-center justify-between rounded-t-xl px-6 py-4 sm:mb-8 ${headerClasses}`}
-      >
-        {title && <div className="text-xl font-normal">{title}</div>}
-        {cardHeader && cardHeader}
-        {headerRightComponent}
-      </div>
+      {(title || cardHeader) && (
+        <div
+          className={`mb-4 flex items-center justify-between rounded-t-xl px-6 py-4 ${headerClasses}`}
+        >
+          {title && <div className="text-xl font-normal">{title}</div>}
+          {cardHeader && cardHeader}
+          {headerRightComponent}
+        </div>
+      )}
       <div className="flex flex-1 flex-col px-6 pb-4">{children} </div>
     </div>
   );

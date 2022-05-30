@@ -1,16 +1,18 @@
-import Card from "@/components/Card";
-import Tooltip from "@/components/Tooltip";
+import Card from '@/components/Card';
+import Tooltip from '@/components/Tooltip';
+import { ReactElement } from 'react';
 
 type StatCardProps = {
-  name?: string;
+  name?: string | ReactElement;
   value?: string | number;
   tooltip?: string;
+  tooltipIcon?: string;
 };
 
-const StatCard = ({ name, value, tooltip }: StatCardProps) => {
+const StatCard = ({ name, value, tooltip, tooltipIcon }: StatCardProps) => {
   return (
-    <Card title={name} headerRightComponent={<Tooltip>{tooltip}</Tooltip>}>
-      <div className="text-2xl sm:text-3xl font-extrabold">{value}</div>
+    <Card title={name} headerRightComponent={<Tooltip icon={tooltipIcon}>{tooltip}</Tooltip>}>
+      <div className="text-2xl font-extrabold sm:text-3xl">{value}</div>
     </Card>
   );
 };
