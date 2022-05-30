@@ -1,14 +1,15 @@
-import { Popover } from "@headlessui/react";
-import Icon from "../Icons";
+import { Popover } from '@headlessui/react';
+import { ReactElement } from 'react';
+import Icon from '../Icons';
 
-const Tooltip: React.FC = ({ children = "No content" }) => {
+const Tooltip: React.FC<{ icon?: string }> = ({ children = 'No content', icon }) => {
   return (
     <Popover className="relative inline">
       <Popover.Button>
-        <Icon name="info" className="w-6" />
+        <Icon name={icon ? icon : 'info'} className="w-4" />
       </Popover.Button>
 
-      <Popover.Panel className="right-[50%] translate-x-[50%] w-40 text-center rounded-xl trans absolute z-10 bg-theo-navy text-gray-300 p-2 text-xs shadow-xl">
+      <Popover.Panel className="trans absolute right-[50%] z-10 w-40 translate-x-[50%] rounded-xl bg-theo-navy p-2 text-center text-xs text-gray-300 shadow-xl">
         {children}
       </Popover.Panel>
     </Popover>
