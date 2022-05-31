@@ -21,9 +21,15 @@ const NavItem = ({ item }: NavItem) => {
   const router = useRouter();
   const [{ activeSubNav }, { setActiveSubNav, setNavigationOpen }] = useTheme();
   const { name, href, icon, disabled, subNav } = item;
+  const activeClass =
+    href && router.asPath.includes(href)
+      ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
+      : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white';
 
+  const hoverClasses =
+    'hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white';
   return (
-    <>
+    <div className={classNames(activeClass, 'rounded-md')}>
       <Link key={name} href={!disabled ? (href as any) : '#'} passHref={true}>
         <a
           onClick={() => {
@@ -32,13 +38,9 @@ const NavItem = ({ item }: NavItem) => {
           }}
           key={name}
           className={classNames(
-            router.asPath === href
-              ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
-              : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white',
             'group mx-auto flex max-w-[318px] cursor-pointer items-center  rounded-md px-4 py-4 text-lg font-bold transition',
             disabled && 'cursor-not-allowed opacity-50',
-            !disabled &&
-              'hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white'
+            !disabled && hoverClasses
           )}
         >
           <div>
@@ -67,7 +69,8 @@ const NavItem = ({ item }: NavItem) => {
                   key={name}
                   className={classNames(
                     router.asPath === subItem.href ? 'underline' : '',
-                    ' block py-4 text-center text-lg font-bold text-theo-dark-navy dark:text-white',
+                    ' block py-4 text-center text-lg font-bold text-white',
+                    hoverClasses,
                     disabled && 'cursor-not-allowed opacity-50'
                   )}
                 >
@@ -78,7 +81,7 @@ const NavItem = ({ item }: NavItem) => {
           ))}
         </Transition>
       )}
-    </>
+    </div>
   );
 };
 

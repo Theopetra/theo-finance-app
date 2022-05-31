@@ -57,7 +57,7 @@ const Whitelist = () => {
     <>
       <div className="pt-4">
         <HorizontalSubNav
-          items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
+          items={[{ href: '/whitelist-sale/your-purchases', name: 'Your Purchases' }]}
         />
       </div>
       <PageContainer>
