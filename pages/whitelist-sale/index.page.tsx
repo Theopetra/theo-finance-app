@@ -20,28 +20,6 @@ const Whitelist = () => {
   const [{ groupedBondMarkets }] = useBuyForm();
   const { data: account, isError, isLoading } = useAccount();
 
-  const STATS = [
-    {
-      name: 'Time Remaining',
-      value: `${timer.hours}:${timer.minutes}:${timer.seconds}`,
-      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-    },
-    {
-      name: 'Assets Accepted',
-      value: (
-        <div className="flex">
-          <div className="border- mr-3 flex items-center border-r-2 border-[#2f455c] p-3 text-[#2776cb]">
-            <img src={UdcIcon.src} alt="" className="w-10" /> USDC
-          </div>
-          <div className="flex items-center  text-[#262626]">
-            <img src={EthIcon.src} alt="" className="w-8" /> ETHER
-          </div>
-        </div>
-      ),
-      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-    },
-  ];
-
   useEffect(() => {
     const timer = setInterval(() => {
       const duration = intervalToDuration({
@@ -63,17 +41,31 @@ const Whitelist = () => {
       <PageContainer>
         {account?.address ? (
           <>
-            <CardList className={'mb-4'} horizontalScroll>
-              {STATS.map(({ name, value, tooltip }, i) => (
-                <Card
-                  title={name}
-                  headerRightComponent={<Icon name="clock" className="h-6 w-6 text-theo-navy" />}
-                  key={i}
-                >
-                  <div className=" text-3xl font-extrabold">{value}</div>
-                </Card>
-              ))}
-            </CardList>
+            <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2 sm:space-y-0 md:flex-row">
+              <Card
+                className="basis-1/3"
+                title="Time Remaining"
+                headerRightComponent={<Icon name="clock" className="h-6 w-6 text-theo-navy" />}
+              >
+                <div className=" text-3xl font-extrabold">{`${timer.hours}:${timer.minutes}:${timer.seconds}`}</div>
+              </Card>
+              <Card
+                className="basis-2/3"
+                title="Assets Accepted"
+                headerRightComponent={<Icon name="clock" className="h-6 w-6 text-theo-navy" />}
+              >
+                <div className=" text-3xl font-extrabold">
+                  <div className="flex">
+                    <div className="border- mr-3 flex items-center border-r-2 border-[#2f455c] p-3 text-[#2776cb]">
+                      <img src={UdcIcon.src} alt="" className="w-10" /> USDC
+                    </div>
+                    <div className="flex items-center  text-[#262626]">
+                      <img src={EthIcon.src} alt="" className="w-8" /> ETHER
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
             {groupedBondMarkets.length ? (
               <CardList>
                 {groupedBondMarkets.map((groupedBondMarket, i) => {

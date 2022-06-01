@@ -1,3 +1,4 @@
+import DynamicText from '@/components/DynamicText';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 import { useTable, useSortBy } from 'react-table';
 
@@ -82,6 +83,7 @@ const PurchasesTable = ({ columns, data }) => {
           }
         </tbody>
       </table>
+      <div className='bg-black rounded-b-md'>{data.length === 0 && <DynamicText height="10px" loadingLines={10} />}</div>
     </div>
   );
 };

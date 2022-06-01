@@ -1,4 +1,5 @@
 import Card from '@/components/Card';
+import DynamicText from '@/components/DynamicText';
 import Icon from '@/components/Icons';
 import { TokenInfo } from '@/components/TokenName';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
@@ -39,26 +40,11 @@ const MarketCard = ({ bondMarkets }) => {
             {bondMarkets.markets?.map((market, i) => {
               const token = TokenInfo(market?.marketData?.quoteToken);
               return (
-                <div
+                <DynamicText
                   key={i}
-                  className="flex items-center justify-between  rounded-lg bg-[#e3e3e3] p-5 dark:bg-[#262626]"
-                >
-                  {token?.symbol && (
-                    <>
-                      <img
-                        src={iconMap[token?.symbol]?.src}
-                        alt={`${token?.symbol} icon`}
-                        className="mr-2 w-8"
-                      />{' '}
-                    </>
-                  )}
-                  <div className="text-2xl font-bold">
-                    {WhitelistTokenPrice({
-                      marketId: market.id,
-                      quoteToken: market.marketData.quoteToken,
-                    })}
-                  </div>
-                </div>
+                  height="40px"
+         
+                />
               );
             })}
           </div>

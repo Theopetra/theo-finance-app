@@ -11,6 +11,7 @@ import {
 } from '@ngneat/falso';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
+import DynamicText from '@/components/DynamicText';
 
 const YourPurchases = () => {
   const data = useMemo(() => {
@@ -94,13 +95,10 @@ const YourPurchases = () => {
 
   return (
     <PageContainer>
+   
       <PurchasesTable
         columns={columns}
-        data={data.map((x) => ({
-          ...x,
-          status:
-            x.status === 'unclaimed' ? <button className="border-button">Claim</button> : x.status,
-        }))}
+        data={[]}
       />
     </PageContainer>
   );
