@@ -98,11 +98,7 @@ const YourPurchases = () => {
    
       <PurchasesTable
         columns={columns}
-        data={data.map((x) => ({
-          ...x,
-          status:
-            x.status === 'unclaimed' ? <button className="border-button">Claim</button> : x.status,
-        }))}
+        data={[]}
       />
     </PageContainer>
   );
