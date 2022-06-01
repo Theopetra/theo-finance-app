@@ -1,5 +1,6 @@
 import Card from '@/components/Card';
 import CardList from '@/components/CardList';
+import DynamicText from '@/components/DynamicText';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
@@ -66,11 +67,13 @@ const Dashboard = () => {
               className="basis-1/3"
             >
               <Fragment>
-                <div className="mb-24 flex-1 md:m-0 pb-10">
-                  <div className='flex-1 h-full'>
+                <div className="mb-24 flex-1 pb-10 md:m-0">
+                  <div className="h-full flex-1">
                     <div className="sr-only">Total Wallets Graph</div>
                   </div>
-                  <div className="font-bold text-3xl">{currentMetrics?.uniqueWallets}</div>
+                  <div className="text-3xl font-bold">
+                    <DynamicText value={currentMetrics?.uniqueWallets} />
+                  </div>
                 </div>
               </Fragment>
             </Card>
