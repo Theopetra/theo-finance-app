@@ -1,6 +1,7 @@
 import Card from '@/components/Card';
 import Tooltip from '@/components/Tooltip';
 import { ReactElement } from 'react';
+import DynamicText from '../DynamicText';
 
 type StatCardProps = {
   name?: string | ReactElement;
@@ -12,7 +13,9 @@ type StatCardProps = {
 const StatCard = ({ name, value, tooltip, tooltipIcon }: StatCardProps) => {
   return (
     <Card title={name} headerRightComponent={<Tooltip icon={tooltipIcon}>{tooltip}</Tooltip>}>
-      <div className="text-2xl font-extrabold sm:text-3xl">{value}</div>
+      <div className="text-2xl font-extrabold sm:text-3xl">
+        <DynamicText value={value} />
+      </div>
     </Card>
   );
 };
