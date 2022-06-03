@@ -11,8 +11,8 @@ import ConfirmBuy from './ConfirmBuy';
 const DiscountBuyForm = () => {
   const [, { openModal, closeModal }] = useModal();
   const [
-    { purchasePrice, purchaseAmount, purchaseToken, selection, selectedMarket, bondMarkets },
-    { handleUpdate, getSelectedMarketPrice },
+    { purchaseCost, purchaseAmount, purchaseToken, selection, selectedMarket, bondMarkets },
+    { handleUpdate, getSelectedMarketPrice, handleTokenInput },
   ] = useBuyForm();
 
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
@@ -21,9 +21,8 @@ const DiscountBuyForm = () => {
     isError: balanceIsError,
     isLoading: balanceIsLoading,
   } = useBalance({ addressOrName: account?.address });
-  console.log(bondMarkets);
 
-  const initialToken = TokenInfo(bondMarkets.markets[0].marketData.quoteToken);
+  const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
 
   useEffect(() => {
     handleUpdate(
@@ -113,18 +112,19 @@ const DiscountBuyForm = () => {
         <CurrencyInput
           className={'mb-4'}
           selectedToken={{ ...purchaseToken }}
-          options={bondMarkets.markets.map((x) => ({ ...x.marketData }))}
+          options={bondMarkets?.markets.map((x) => ({ ...x.marketData }))}
           balance={balance?.formatted}
-          value={purchasePrice}
+          value={purchaseCost}
           onCurrencyChange={(e: BaseSyntheticEvent) => {
             handleUpdate(e, 'purchaseToken');
+            handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
           }}
-          onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchasePrice')}
+          onChange={(e: BaseSyntheticEvent) => handleTokenInput(e, 'purchaseCost')}
         />
         <CurrencyInput
           selectedToken={{ symbol: 'THEO' }}
           value={purchaseAmount}
-          onChange={(e: BaseSyntheticEvent) => handleUpdate(e, 'purchaseAmount')}
+          onChange={(e: BaseSyntheticEvent) => handleTokenInput(e, 'purchaseAmount')}
         />
       </div>
 

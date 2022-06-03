@@ -10,6 +10,7 @@ type formStateType = {
   theoPrice: number;
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount;
+  purchaseCost;
 };
 
 type Selection = {
@@ -34,6 +35,7 @@ export const BuyFormProvider: React.FC = (props) => {
     theoPrice: 100,
     purchaseToken: null,
     purchaseAmount: 0,
+    purchaseCost: 0,
   });
   const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);
   const provider = useProvider();
@@ -57,6 +59,17 @@ export const BuyFormProvider: React.FC = (props) => {
     contractInterface: abi,
     signerOrProvider: provider,
   });
+  const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
+    useContractInfo('WhitelistTheopetraBondDepository', 1);
+
+  const { data: priceInfo } = useContractRead(
+    {
+      addressOrName: WhitelistBondDepositoryAddress,
+      contractInterface: WhitelistBondDepositoryAbi,
+    },
+    'calculatePrice',
+    { args: selectedMarket?.id }
+  );
 
   useEffect(() => {
     const termsMap = {};
@@ -100,16 +113,27 @@ export const BuyFormProvider: React.FC = (props) => {
     setFormState({ ...formState, [fieldName]: value });
   };
 
-  const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useContractInfo('WhitelistTheopetraBondDepository', 1);
-  const { data: priceInfo } = useContractRead(
-    {
-      addressOrName: WhitelistBondDepositoryAddress,
-      contractInterface: WhitelistBondDepositoryAbi,
-    },
-    'calculatePrice',
-    { args: selectedMarket?.id }
-  );
+  const handleTokenInput: any = (e: BaseSyntheticEvent, fieldName: string) => {
+    const value = e.target.value;
+    const quotePrice = BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9);
+    if (fieldName === 'purchaseAmount') {
+      setFormState((prevState) => ({
+        ...prevState,
+        purchaseCost: Number(value * quotePrice).toFixed(
+          token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 5 : 2
+        ),
+        [fieldName]: value,
+      }));
+      return;
+    }
+    setFormState((prevState) => ({
+      ...prevState,
+      purchaseAmount: Number(value / quotePrice).toFixed(
+        token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 5 : 2
+      ),
+      [fieldName]: value,
+    }));
+  };
 
   const getSelectedMarketPrice = () => {
     if (!selectedMarket?.id) return;
@@ -128,7 +152,7 @@ export const BuyFormProvider: React.FC = (props) => {
           groupedBondMarketsMap,
           selection,
         },
-        { setSelection, handleUpdate, getSelectedMarketPrice },
+        { setSelection, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}
     >
       {props.children}
