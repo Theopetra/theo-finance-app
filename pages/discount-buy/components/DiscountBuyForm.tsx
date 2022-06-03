@@ -8,7 +8,7 @@ import { useAccount, useBalance } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import ConfirmBuy from './ConfirmBuy';
 
-const DiscountBuyForm = () => {
+const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
   const [, { openModal, closeModal }] = useModal();
   const [
     { purchaseCost, purchaseAmount, purchaseToken, selection, selectedMarket, bondMarkets },
@@ -59,7 +59,9 @@ const DiscountBuyForm = () => {
           className="mb-8 text-center text-theo-navy dark:text-white"
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
-          <div className="mb-4 text-3xl font-bold sm:text-4xl">Discount Buy</div>
+          <div className="mb-4 text-3xl font-bold sm:text-4xl">
+            {title ? title : 'Discount Buy'}
+          </div>
           <div>Review carefully, this purchase is final</div>
         </div>
         <div>
@@ -128,10 +130,7 @@ const DiscountBuyForm = () => {
         />
       </div>
 
-      <div className="flex w-full flex-col items-center sm:flex-row">
-        <div className="mb-4 underline dark:text-white sm:mb-0 sm:w-1/2">
-          Learn about Discount Buy
-        </div>
+      <div className="flex w-full flex-col items-center justify-end sm:flex-row">
         <div className="w-full sm:w-1/2">
           <button className="border-button w-full " onClick={() => openModal(<ConfirmBuy />)}>
             Buy Theo

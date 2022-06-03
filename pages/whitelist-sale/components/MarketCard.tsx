@@ -70,7 +70,7 @@ const MarketCard = ({ bondMarkets }) => {
             className="border-button mb-3 w-full"
             onClick={() => {
               setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: 'WhiteList' });
-              openModal(<DiscountBuyForm />);
+              openModal(<DiscountBuyForm title="Whitelist Buy"/>);
             }}
           >
             Buy THEO
