@@ -46,7 +46,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
         <div className="flex min-h-[40px] items-center rounded-lg bg-white dark:bg-[#262626]">
           {balance ? (
             <div className="hidden p-2 text-xs sm:block">
-              Balance: {balance}
+              Balance: {Number(balance).toFixed(5)}
               {selectedToken?.symbol}
               <span
                 onClick={() => onChange({ target: { value: balance } }, 'purchasePrice')}
@@ -58,11 +58,18 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
           ) : (
             <></>
           )}
+          {/*  */}
           <input
-            type="text"
+            type="number"
+            step={
+              selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH'
+                ? '0.00001'
+                : '0.01'
+            }
+            min="0"
             value={value}
             onChange={onChange}
-            className="w-full flex-1 bg-transparent text-right focus:outline-none"
+            className="w-full flex-1 bg-transparent pr-2 text-right focus:outline-none"
             placeholder="00.00"
             onKeyPress={(event) => {
               if (!/^\d*\.?\d*$/.test(event.key)) {
