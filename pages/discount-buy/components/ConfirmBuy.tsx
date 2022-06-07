@@ -20,23 +20,13 @@ export const Price = () => {
   );
 };
 export const MarketDiscountRow = () => {
-  return (
-    <ConfirmRow
-      title="Market Discount"
-      value={'5% (??)'}
-      subtext={
-        <>
-          Current market price = <Price />
-        </>
-      }
-    />
-  );
+  return <ConfirmRow title="Purchase Type" value="Whitelist" subtext=" 24-Hour Event" />;
 };
 
 export const PurchaseAmountRow = () => {
-  const [{ purchaseAmount }] = useBuyForm();
+  const [{ purchaseAmount, purchaseCost }] = useBuyForm();
 
-  return <ConfirmRow title="Purchase Amount" value={purchaseAmount} />;
+  return <ConfirmRow title="Purchase Amount" value={purchaseAmount} subtext={purchaseCost} />;
 };
 
 export const TheoPurchasePriceRow = () => {
@@ -106,7 +96,7 @@ const ConfirmBuy = () => {
         <PurchaseAmountRow />
         <LockDurationRow />
         {/* TODO: calc time remaining */}
-        <ConfirmRow title="Offer Valid For" value="10:00 (??)" subtext={'18:14 pm EST'} />
+        {/* <ConfirmRow title="Offer Valid For" value="10:00 (??)" subtext={'18:14 pm EST'} /> */}
       </div>
       <div className="flex w-full items-center justify-center">
         <button className="border-button w-60" onClick={() => openModal(<Failed />)}>
