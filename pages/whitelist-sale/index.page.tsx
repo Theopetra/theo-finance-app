@@ -2,7 +2,7 @@ import Card from '@/components/Card';
 import CardList from '@/components/CardList';
 import Icon from '@/components/Icons';
 import PageContainer from '@/components/PageContainer';
-import { addDays, intervalToDuration } from 'date-fns';
+import {  addMinutes, intervalToDuration } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
@@ -12,7 +12,8 @@ import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 
-const startDate = addDays(new Date(), 1);
+// TODO: Replace with env vars
+const startDate = addMinutes(new Date(), 9);
 const endDate = new Date();
 
 const Whitelist = () => {
@@ -45,22 +46,27 @@ const Whitelist = () => {
               <Card
                 className="basis-1/3"
                 title="Time Remaining"
-                headerRightComponent={<Icon name="clock" className="h-6 w-6 text-theo-navy" />}
+                headerRightComponent={<Icon name="clock2" className="h-6 w-6 text-theo-navy" />}
               >
-                <div className=" text-3xl font-extrabold">{`${timer.hours}:${timer.minutes}:${timer.seconds}`}</div>
+                <div className=" text-3xl font-extrabold">
+                  {!timer.hours ? '00' : timer.hours < 10 ? `0${timer.hours}` : timer.hours}:
+                  {!timer.minutes ? '00' : timer.minutes < 10 ? `0${timer.minutes}` : timer.minutes}
+                  :
+                  {!timer.seconds ? '00' : timer.seconds < 10 ? `0${timer.seconds}` : timer.seconds}
+                </div>
               </Card>
               <Card
                 className="basis-2/3"
                 title="Assets Accepted"
-                headerRightComponent={<Icon name="clock" className="h-6 w-6 text-theo-navy" />}
+                headerRightComponent={<Icon name="check" className="h-6 w-6 text-theo-navy" />}
               >
                 <div className=" text-3xl font-extrabold">
                   <div className="flex">
                     <div className="border- mr-3 flex items-center border-r-2 border-[#2f455c] p-3 text-[#2776cb]">
-                      <img src={UdcIcon.src} alt="" className="w-10" /> USDC
+                      <img src={UdcIcon.src} alt="" className="mr-2 w-10" /> USDC
                     </div>
                     <div className="flex items-center  text-[#262626]">
-                      <img src={EthIcon.src} alt="" className="w-8" /> ETHER
+                      <img src={EthIcon.src} alt="" className="mr-2 w-6" /> ETHER
                     </div>
                   </div>
                 </div>
