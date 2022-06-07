@@ -2,7 +2,7 @@ import Card from '@/components/Card';
 import CardList from '@/components/CardList';
 import Icon from '@/components/Icons';
 import PageContainer from '@/components/PageContainer';
-import { addDays, addMinutes, intervalToDuration } from 'date-fns';
+import {  addMinutes, intervalToDuration } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
@@ -11,7 +11,6 @@ import MarketCard from './components/MarketCard';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
-import { time } from 'console';
 
 // TODO: Replace with env vars
 const startDate = addMinutes(new Date(), 9);

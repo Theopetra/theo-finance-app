@@ -6,8 +6,13 @@ import { WhitelistTokenPrice } from '@/components/TokenPrice';
 import DiscountBuyForm from '@/pages/discount-buy/components/DiscountBuyForm';
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import useModal from '@/state/ui/theme/hooks/use-modal';
+import { zeroPad } from 'ethers/lib/utils';
+import { useMemo } from 'react';
 import EthIcon from '../../../public/assets/icons/eth.svg';
 import UdcIcon from '../../../public/assets/icons/usdc.svg';
+
+const usdcAddress = process.env.USDC_ADDRESS || '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b';
+const ethAddress = process.env.ETH_ADDRESS || '0xc778417E063141139Fce010982780140Aa0cD5Ab';
 const MarketCard = ({ bondMarkets }) => {
   const [{}, { openModal }] = useModal();
   const [{}, { setSelection }] = useBuyForm();
@@ -16,6 +21,13 @@ const MarketCard = ({ bondMarkets }) => {
     WETH: EthIcon,
     USDC: UdcIcon,
   };
+
+  const orderedMarkets = useMemo(() => {
+    const usdcMarket = bondMarkets?.markets.find((x) => x.marketData.quoteToken === usdcAddress);
+    const ethMarket = bondMarkets?.markets.find((x) => x.marketData.quoteToken === ethAddress);
+    return [usdcMarket, ethMarket];
+  }, [bondMarkets]);
+
   return (
     <>
       <Card
@@ -37,7 +49,8 @@ const MarketCard = ({ bondMarkets }) => {
               <div>Asset</div>
               <div>Price / THEO</div>
             </div>
-            {bondMarkets.markets?.map((market, i) => {
+
+            {orderedMarkets?.map((market, i) => {
               const token = TokenInfo(market?.marketData?.quoteToken);
               return (
                 <DynamicText

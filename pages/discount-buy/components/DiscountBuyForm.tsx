@@ -21,7 +21,6 @@ const DiscountBuyForm = () => {
     isError: balanceIsError,
     isLoading: balanceIsLoading,
   } = useBalance({ addressOrName: account?.address });
-  console.log(bondMarkets);
 
   const initialToken = TokenInfo(bondMarkets.markets[0].marketData.quoteToken);
 
