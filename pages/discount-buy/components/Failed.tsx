@@ -6,9 +6,8 @@ import ConfirmBuy, {
   PurchaseAmountRow,
   TheoPurchasePriceRow,
 } from './ConfirmBuy';
-import Successfull from './Successful';
 
-const Failed = () => {
+const Failed = ({ error }) => {
   const [, { openModal }] = useModal();
 
   return (
@@ -59,7 +58,7 @@ const Failed = () => {
         <LockDurationRow />
       </div>
       <div className="flex w-full items-center justify-center">
-        <button className="border-button w-60" onClick={() => openModal(<Successfull />)}>
+        <button className="border-button w-60" onClick={() => openModal(<ConfirmBuy />)}>
           Try Again
         </button>
       </div>

@@ -9,6 +9,7 @@ import { useAccount, useContract, useContractWrite, useProvider, useSigner } fro
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
+import Successfull from './Successful';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -66,18 +67,18 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
-  const provider = useProvider();
+  // const provider = useProvider();
   const { data: wallet } = useAccount();
   const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
     useContractInfo('WhitelistTheopetraBondDepository', 1);
   const { data: signer, isError, isLoading } = useSigner();
 
-  const WhitelistBondDepository = useContract({
-    addressOrName: WhitelistBondDepositoryAddress,
-    contractInterface: WhitelistBondDepositoryAbi,
-    signerOrProvider: provider,
-  });
-  const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
+  // const WhitelistBondDepository = useContract({
+  //   addressOrName: WhitelistBondDepositoryAddress,
+  //   contractInterface: WhitelistBondDepositoryAbi,
+  //   signerOrProvider: provider,
+  // });
+  const [{ selectedMarket, purchaseCost }] = useBuyForm();
 
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
@@ -102,29 +103,28 @@ const ConfirmBuy = () => {
     },
     'deposit',
     {
+      onSuccess() {
+        openModal(<Successfull />);
+      },
       onError(error) {
         console.log('Error', error);
+        openModal(<Failed error={error} />);
       },
       args,
     }
   );
   const handleClick = () => {
     console.log(args);
-    
-    try {
-      write();
-      // WhitelistBondDepository.deposit(
-      //   selectedMarket.id,
-      //   purchaseCost,
-      //   maxPrice,
-      //   wallet?.address,
-      //   wallet?.address,
-      //   signer
-      // );
-    } catch (err) {
-      console.log(writeErr);
-      console.log(err);
-    }
+
+    write();
+    // WhitelistBondDepository.deposit(
+    //   selectedMarket.id,
+    //   purchaseCost,
+    //   maxPrice,
+    //   wallet?.address,
+    //   wallet?.address,
+    //   signer
+    // );
   };
 
   return (
