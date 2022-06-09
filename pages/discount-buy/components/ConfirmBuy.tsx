@@ -1,13 +1,17 @@
 import Icon from '@/components/Icons';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
+import { useContractInfo } from '@/hooks/useContractInfo';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
+import { ethers } from 'ethers';
+import { parseEther } from 'ethers/lib/utils';
+import { useAccount, useContract, useContractWrite, useProvider, useSigner } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
 
 export const Price = () => {
-  const [{ selectedMarket, purchaseToken }] = useBuyForm();
+  const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
 
   return (
     <>
@@ -62,6 +66,67 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
+  const provider = useProvider();
+  const { data: wallet } = useAccount();
+  const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
+    useContractInfo('WhitelistTheopetraBondDepository', 1);
+  const { data: signer, isError, isLoading } = useSigner();
+
+  const WhitelistBondDepository = useContract({
+    addressOrName: WhitelistBondDepositoryAddress,
+    contractInterface: WhitelistBondDepositoryAbi,
+    signerOrProvider: provider,
+  });
+  const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
+
+  const maxPrice = parseEther('25');
+  const depositAmount = parseEther(purchaseCost);
+  const args = [
+    selectedMarket.id,
+    depositAmount._hex,
+    maxPrice._hex,
+    wallet?.address,
+    wallet?.address,
+    signer,
+  ];
+  const {
+    data,
+    isError: writeErr,
+    isLoading: writeLoading,
+    write,
+  } = useContractWrite(
+    {
+      addressOrName: WhitelistBondDepositoryAddress,
+      contractInterface: WhitelistBondDepositoryAbi,
+      signerOrProvider: signer,
+    },
+    'deposit',
+    {
+      onError(error) {
+        console.log('Error', error);
+      },
+      args,
+    }
+  );
+  const handleClick = () => {
+    console.log(args);
+    
+    try {
+      write();
+      // WhitelistBondDepository.deposit(
+      //   selectedMarket.id,
+      //   purchaseCost,
+      //   maxPrice,
+      //   wallet?.address,
+      //   wallet?.address,
+      //   signer
+      // );
+    } catch (err) {
+      console.log(writeErr);
+      console.log(err);
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between">
@@ -99,7 +164,7 @@ const ConfirmBuy = () => {
         {/* <ConfirmRow title="Offer Valid For" value="10:00 (??)" subtext={'18:14 pm EST'} /> */}
       </div>
       <div className="flex w-full items-center justify-center">
-        <button className="border-button w-60" onClick={() => openModal(<Failed />)}>
+        <button className="border-button w-60" onClick={handleClick}>
           Confirm Purchase
         </button>
       </div>
