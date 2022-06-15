@@ -25,7 +25,7 @@ const Card = ({
 
   return (
     <div
-      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl pt-2 text-theo-navy dark:text-white sm:pt-4 `}
+      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl mt-2 text-theo-navy dark:text-white sm:mt-4 `}
     >
       {(title || cardHeader) && (
         <div
