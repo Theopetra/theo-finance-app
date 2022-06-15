@@ -10,7 +10,9 @@ import { Fragment } from 'react';
 
 const Dashboard = () => {
   const [{ theme }] = useTheme();
-  const { currentMetrics } = useMetrics();
+  const { currentMetrics, groupedBondMarketsMap } = useMetrics();
+  console.log(groupedBondMarketsMap);
+
   const STATS = [
     {
       name: (
@@ -53,11 +55,25 @@ const Dashboard = () => {
       </div>
       <PageContainer>
         <CardList horizontalScroll>
-          {STATS.map((props, i) => (
-            <Fragment key={i}>
-              <StatCard {...props} />
-            </Fragment>
-          ))}
+          {Object.values(groupedBondMarketsMap).map((term: any, i) => {
+            let totalSold = term.markets.reduce((accumulator, item) => {
+              return accumulator + item.sold;
+            }, 0);
+            return (
+              <Fragment key={i}>
+                <StatCard
+                  name={
+                    <>
+                      THEO Locked - <strong>{term.header} Months</strong>
+                    </>
+                  }
+                  value={String(totalSold)}
+                  tooltip="Lorem ipsum dolor sit amet, consectetur.."
+                  tooltipIcon="lock-laminated"
+                />
+              </Fragment>
+            );
+          })}
         </CardList>
         <div className="mt-4">
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2 sm:space-y-0 md:flex-row">
