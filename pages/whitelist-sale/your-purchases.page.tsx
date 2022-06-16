@@ -7,5 +7,7 @@ const YourPurchasesWL = () => {
     </>
   );
 };
-
+YourPurchasesWL.PageHead = () => {
+  return <div>Your Purchases</div>;
+};
 export default YourPurchasesWL;

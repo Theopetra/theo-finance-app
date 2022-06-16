@@ -21,8 +21,9 @@ const NavItem = ({ item }: NavItem) => {
   const router = useRouter();
   const [{ activeSubNav }, { setActiveSubNav, setNavigationOpen }] = useTheme();
   const { name, href, icon, disabled, subNav } = item;
+
   const activeClass =
-    href && router.asPath.includes(href)
+    href === router.pathname || activeSubNav  === name
       ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
       : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white';
 
