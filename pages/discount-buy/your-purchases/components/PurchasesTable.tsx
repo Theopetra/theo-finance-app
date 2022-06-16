@@ -83,7 +83,7 @@ const PurchasesTable = ({ columns, data }) => {
           }
         </tbody>
       </table>
-      <div className='bg-black rounded-b-md'>{data.length === 0 && <DynamicText height="10px" loadingLines={10} />}</div>
+      <div className='dark:bg-black p-2 bg-theo-light rounded-b-md'>{data.length === 0 && <DynamicText height="10px" loadingLines={10} />}</div>
     </div>
   );
 };
