@@ -6,7 +6,7 @@ import Icon from '../Icons';
 
 type CurrrencyInputProps = {
   className?: string;
-  selectedToken?: CurrencySelectOptionType | null;
+  selectedToken?: CurrencySelectOptionType;
   balance?: string;
   value?: number;
   onChange?: any;
@@ -35,8 +35,8 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
         />
       ) : (
         <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
-          {selectedToken && (
-            <Icon name={selectedToken?.symbol.toLowerCase()} className="mr-2 w-8" />
+          {selectedToken?.symbol && (
+            <Icon name={selectedToken.symbol.toLowerCase()} className="mr-2 w-8" />
           )}
 
           {selectedToken?.symbol}
