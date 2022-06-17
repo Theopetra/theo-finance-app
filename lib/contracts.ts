@@ -1,17 +1,26 @@
-import stakingDistributorArtifact from '../artifacts/StakingDistributor.json'
-import sTheopetraArtifact from '../artifacts/sTheopetra.json'
-import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json'
-import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepository.json'
-import theopetraFounderVestingArtifact from '../artifacts/TheopetraFounderVesting.json'
-import theopetraStakingArtifact from '../artifacts/TheopetraStaking.json'
-import theopetraTreasuryArtifact from '../artifacts/TheopetraTreasury.json'
-import yieldReporterArtifact from '../artifacts/TheopetraYieldReporter.json'
-import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json'
+import stakingDistributorArtifact from '../artifacts/StakingDistributor.json';
+import sTheopetraArtifact from '../artifacts/sTheopetra.json';
+import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json';
+import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepository.json';
+import theopetraFounderVestingArtifact from '../artifacts/TheopetraFounderVesting.json';
+import theopetraStakingArtifact from '../artifacts/TheopetraStaking.json';
+import theopetraTreasuryArtifact from '../artifacts/TheopetraTreasury.json';
+import yieldReporterArtifact from '../artifacts/TheopetraYieldReporter.json';
+import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
+import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
 
 // address 1 = mainnet, address 4 = rinkeby
 // TODO: update mainnet addresses for launch
 
 export const contractMetadata = {
+  // TODO: change these contract addresses to the real ones (copies of TheopetraBondDepository for now)
+  PublicPreListBondDepository: {
+    address: {
+      1: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
+      4: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
+    },
+    abi: PublicPreListBondDepositoryArtifact.abi,
+  },
   StakingDistributor: {
     address: {
       1: '0x0ee54Aa3fE9695Eff297582080Bd9766D09FBD9A',
@@ -75,4 +84,4 @@ export const contractMetadata = {
     },
     abi: whitelistBondDepArtifact.abi,
   },
-}
+};

@@ -11,8 +11,17 @@ import { useTheme } from '@/state/ui/theme';
 import { Fragment, useEffect, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 
+const verbose = process.env.NODE_ENV !== 'production';
+
+function log(msg, val) {
+  if (verbose) {
+    console.log(msg);
+    console.log(val);
+  }
+}
+
 function useLockedTheoByContract(contractName) {
-  const { address, abi } = useContractInfo(contractName, 1);
+  const { address, abi } = useContractInfo(contractName, 4);
   const provider = useProvider();
   const { data, isSuccess } = useContractRead(
     {
@@ -22,6 +31,8 @@ function useLockedTheoByContract(contractName) {
     'liveMarkets'
   );
   const [locked, setLocked] = useState([BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)]);
+
+  log('markets for ' + contractName, data);
 
   useEffect(() => {
     // TODO: verify this works once there is test data
@@ -33,11 +44,14 @@ function useLockedTheoByContract(contractName) {
         const merged = await Promise.all(
           data.map(async (b) => {
             return {
+              marketId: b,
               market: await contract.markets(b),
               term: await contract.terms(b),
             };
           })
         );
+
+        log('merged for ' + contractName, merged);
 
         // 15768000 - 6 months
         // 31536000 - 12 months
@@ -45,15 +59,17 @@ function useLockedTheoByContract(contractName) {
 
         const locked = [15768000, 31536000, 47304000].map((v) => {
           return merged
-            .filter((e: any) => e.fixedTerm && e.vesting === v)
+            .filter((e: any) => e.term.fixedTerm && e.term.vesting === v)
             .reduce((prev, cur: any) => prev.add(cur.market.sold), BigNumber.from(0));
         });
+
+        log('locked for ' + contractName, locked);
 
         setLocked(locked);
       }
     }
     getData();
-  }, [data, provider, abi, address]);
+  }, [data, provider, abi, address, contractName]);
 
   return locked;
 }
@@ -61,10 +77,9 @@ function useLockedTheoByContract(contractName) {
 function useLockedTheo() {
   const whitelistRepo = useLockedTheoByContract('WhitelistTheopetraBondDepository');
   const bondRepo = useLockedTheoByContract('TheopetraBondDepository');
+  const publicPreListRepo = useLockedTheoByContract('PublicPreListBondDepository');
 
-  // TODO: PublicPreListBondDepository?
-
-  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i])]);
+  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i])]);
 }
 
 const Dashboard = () => {
