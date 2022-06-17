@@ -8,10 +8,15 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { chain, createClient, WagmiProvider } from 'wagmi';
 import { useTheme } from '../ui/theme';
+import { infuraProvider } from 'wagmi/providers/infura';
+import { publicProvider } from 'wagmi/providers/public';
+
+const localChains = [chain.rinkeby];
+const prodChains = [chain.mainnet, ...localChains];
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.rinkeby],
-  [apiProvider.infura(process.env.INFURA_ID), apiProvider.fallback()]
+  process.env.NODE_ENV === 'production' ? prodChains : localChains,
+  [infuraProvider({ infuraId: process.env.INFURA_ID }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
