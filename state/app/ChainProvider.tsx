@@ -10,7 +10,7 @@ import { chain, createClient, WagmiProvider } from 'wagmi';
 import { useTheme } from '../ui/theme';
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.rinkeby],
+  [chain.mainnet, chain.rinkeby, chain.ropsten],
   [apiProvider.infura(process.env.INFURA_ID), apiProvider.fallback()]
 );
 

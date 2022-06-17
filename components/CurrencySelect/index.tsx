@@ -5,7 +5,11 @@ import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import { TokenInfo } from '../TokenName';
 
-export type CurrencySelectOptionType = { symbol: string; address?: string; quoteToken?: string };
+export type CurrencySelectOptionType = {
+  symbol?: string | undefined;
+  address?: string | undefined;
+  quoteToken?: string | undefined;
+};
 export type CurrencySelectOptionsType = CurrencySelectOptionType[];
 
 export type CurrencySelectProps = {
@@ -29,7 +33,7 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
             <img
               src={iconMap[selected]?.src}
               alt={`${selected?.symbol} icon`}
-              className="mr-2 w-8 max-h-8"
+              className="mr-2 max-h-8 w-8"
             />
             {selected}
           </span>

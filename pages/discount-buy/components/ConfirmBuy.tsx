@@ -10,6 +10,9 @@ import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
 import Successfull from './Successful';
+import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages';
+import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
+import { useMemo } from 'react';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -20,7 +23,7 @@ export const Price = () => {
         marketId={selectedMarket.id}
         quoteToken={selectedMarket.marketData.quoteToken}
       />{' '}
-      {purchaseToken.symbol}
+      {purchaseToken?.symbol}
     </>
   );
 };
@@ -67,29 +70,49 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
+  const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
+
   // const provider = useProvider();
   const { data: wallet } = useAccount();
   const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
     useContractInfo('WhitelistTheopetraBondDepository', 1);
+  const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper', 1);
   const { data: signer, isError, isLoading } = useSigner();
-
-  // const WhitelistBondDepository = useContract({
-  //   addressOrName: WhitelistBondDepositoryAddress,
-  //   contractInterface: WhitelistBondDepositoryAbi,
-  //   signerOrProvider: provider,
-  // });
-  const [{ selectedMarket, purchaseCost }] = useBuyForm();
+  // autostake
+  const signature: any = useMemo(() => {
+    if (purchaseToken?.symbol === 'weth') {
+      return wethHelperSignedMessages.find((sig) => {
+        return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
+      });
+    }
+    return wlBondDepoSignedMessages.find((sig) => {
+      return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
+    });
+  }, [wallet, purchaseToken?.symbol]);
+  console.log(signature.wlDepoSignature);
 
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
+
+  // // await bob.BondDepository.deposit(
+  // ✅ bid,
+  // ✅ depositAmount,
+  // ✅ initialPrice,
+  // bob.address,
+  // carol.address,
+  // autoStake);
+
   const args = [
     selectedMarket.id,
     depositAmount._hex,
     maxPrice._hex,
     wallet?.address,
     wallet?.address,
-    signer,
+    signature?.wlDepoSignature,
   ];
+
+  // my address
+  // 0xAd72dEd03A5110c1807E68022D25c75E79B50eC5
   const {
     data,
     isError: writeErr,
@@ -114,7 +137,7 @@ const ConfirmBuy = () => {
     }
   );
   const handleClick = () => {
-    console.log(args);
+    console.log({ args });
 
     write();
     // WhitelistBondDepository.deposit(

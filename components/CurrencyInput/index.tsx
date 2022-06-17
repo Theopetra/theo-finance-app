@@ -6,7 +6,7 @@ import Icon from '../Icons';
 
 type CurrrencyInputProps = {
   className?: string;
-  selectedToken?: CurrencySelectOptionType;
+  selectedToken?: CurrencySelectOptionType | null;
   balance?: string;
   value?: number;
   onChange?: any;
