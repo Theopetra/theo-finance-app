@@ -2,6 +2,7 @@ import stakingDistributorArtifact from '../artifacts/StakingDistributor.json';
 import sTheopetraArtifact from '../artifacts/sTheopetra.json';
 import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json';
 import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepository.json';
+import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
 
@@ -13,7 +14,7 @@ export const contractMetadata = {
   PublicPreListBondDepository: {
     address: {
       1: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
-      4: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
+      4: '0xbCF05b9993B5241C9F46F8a4C3459d42artifacts/TheopetraAuthority.json3299D57D',
     },
     abi: PublicPreListBondDepositoryArtifact.abi,
   },
@@ -51,5 +52,13 @@ export const contractMetadata = {
       4: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
     },
     abi: whitelistBondDepArtifact.abi,
+  },
+  WethHelper: {
+    address: {
+      // waiting on contract to be deployed.
+      1: '',
+      4: '',
+    },
+    abi: wethHelper.abi,
   },
 };
