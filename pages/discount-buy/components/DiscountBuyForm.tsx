@@ -3,13 +3,14 @@ import Icon from '@/components/Icons';
 import { TokenInfo } from '@/components/TokenName';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
-import { BaseSyntheticEvent, useEffect } from 'react';
+import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import ConfirmBuy from './ConfirmBuy';
 
 const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
   const [, { openModal, closeModal }] = useModal();
+  const [errorMessage, setErrorMessage] = useState('');
   const [
     { purchaseCost, purchaseAmount, purchaseToken, selection, selectedMarket, bondMarkets },
     { handleUpdate, getSelectedMarketPrice, handleTokenInput },
@@ -23,7 +24,15 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
   } = useBalance({ addressOrName: account?.address });
 
   const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
+  const handleClick = () => {
+    console.log(purchaseAmount);
 
+    if (Number(purchaseAmount) <= 0 || Number(purchaseCost) <= 0) {
+      setErrorMessage('Purchase amount is required.');
+      return;
+    }
+    openModal(<ConfirmBuy />);
+  };
   useEffect(() => {
     handleUpdate(
       {
@@ -128,11 +137,12 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
           value={purchaseAmount}
           onChange={(e: BaseSyntheticEvent) => handleTokenInput(e, 'purchaseAmount')}
         />
+        <div className="text-right text-red-500 text-sm"> {errorMessage}</div>
       </div>
 
       <div className="flex w-full flex-col items-center justify-end sm:flex-row">
         <div className="w-full sm:w-1/2">
-          <button className="border-button w-full " onClick={() => openModal(<ConfirmBuy />)}>
+          <button className="border-button w-full " onClick={handleClick}>
             Buy Theo
           </button>
         </div>

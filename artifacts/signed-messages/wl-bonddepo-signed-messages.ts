@@ -1,0 +1,39 @@
+const json = [
+  {
+    address: '0x474627714EC7cE9CF185c2a42d15D99c218555f1',
+    wlDepoSignature:
+      '0x427790a218220aefec0d24c476651341144b6f261ea203f7d4226140c05f8b88787d91b6327783272cda473ac2eaeaa16135ce933e500eb6b89d91a840141e371b',
+  },
+  {
+    address: '0x06f3a31e675ddFEBafC87435686E63C156E2236C',
+    wlDepoSignature:
+      '0x34d5c55142109018bac4f6abe18fb81f943b46d24d7f485d06da8514bc7f5ae80d1ea3c10a03fc4a72ee60cc94aa5388b883df109b772a43e676eb3507bda1051b',
+  },
+  {
+    address: '0xEd75Eb99ffD5f1ca9Ada7315c4fDE8622504C7c9',
+    wlDepoSignature:
+      '0xbfb524c72a594bbf2a64e609ae8740c9ce493a27df6f5c79573e705586ccb6ea3fd962b1dd7c94288e0ea4226be1e0f01435078dbdc5ae8602f4fca8296d023c1c',
+  },
+  {
+    address: '0xAd72dEd03A5110c1807E68022D25c75E79B50eC5',
+    wlDepoSignature:
+      '0x7a3f0462be30025f4c6e7cb829f6660fb105d24df17d3c6ec74041178fd64abf11224eef692409f32e99678674a9931890eb4146bd98abc37774de70cb769b171b',
+  },
+  {
+    address: '0x2C9a73387726496623428e91EC4F3be5BE3F0001',
+    wlDepoSignature:
+      '0xcabf49921496c379d9e0ec130c187f6eb43802baa0dfc4ffe42c8c5cd283bbd93fced49e6dbcc4d01af399bc12a3a574f400d8632f619fb5692e9ecf3b1014ab1b',
+  },
+  {
+    address: '0x66d8519A8070e76f3D33BdF4f36C9DbcF3bF4723',
+    wlDepoSignature:
+      '0xb7880dc3a60f6f9a81a14a29bfef96aa7351c7f13e8e3afc2a75ec880d5a216b2c1f76f504b252dc3b2e6e4cad3deaa65bd34e456b43e0afb15ee98c549de8b31b',
+  },
+  {
+    address: '0x023893b26DEe6A41233787Bf8F0a36e92A41980C',
+    wlDepoSignature:
+      '0x1b5925dc447eca9a11853d5614a3e8136c5de6c994adc8fc3a82b37e02edfe97406f214fe86fa7ed308f0601f222574fd20ed88cf3bcb83bc7478983c842bd811b',
+  },
+];
+
+export default json;

@@ -2,10 +2,7 @@ import stakingDistributorArtifact from '../artifacts/StakingDistributor.json';
 import sTheopetraArtifact from '../artifacts/sTheopetra.json';
 import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json';
 import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepository.json';
-import theopetraFounderVestingArtifact from '../artifacts/TheopetraFounderVesting.json';
-import theopetraStakingArtifact from '../artifacts/TheopetraStaking.json';
-import theopetraTreasuryArtifact from '../artifacts/TheopetraTreasury.json';
-import yieldReporterArtifact from '../artifacts/TheopetraYieldReporter.json';
+import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
 
@@ -17,7 +14,7 @@ export const contractMetadata = {
   PublicPreListBondDepository: {
     address: {
       1: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
-      4: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
+      4: '0xbCF05b9993B5241C9F46F8a4C3459d42artifacts/TheopetraAuthority.json3299D57D',
     },
     abi: PublicPreListBondDepositoryArtifact.abi,
   },
@@ -49,39 +46,19 @@ export const contractMetadata = {
     },
     abi: theopetraBondRepositoryArtifact.abi,
   },
-  TheopetraFounderVesting: {
-    address: {
-      1: '0x9140dE89f6Ab27647B96773E818196AC242E890b',
-      4: '0x9140dE89f6Ab27647B96773E818196AC242E890b',
-    },
-    abi: theopetraFounderVestingArtifact.abi,
-  },
-  TheopetraStaking: {
-    address: {
-      1: '0x79b4882B3121061C054EEFEBcB05B2b3fFcf59Dd',
-      4: '0x79b4882B3121061C054EEFEBcB05B2b3fFcf59Dd',
-    },
-    abi: theopetraStakingArtifact.abi,
-  },
-  TheopetraTreasury: {
-    address: {
-      1: '0x6640C3FD53e4Cf446B4139f478A199147d663a44',
-      4: '0x6640C3FD53e4Cf446B4139f478A199147d663a44',
-    },
-    abi: theopetraTreasuryArtifact.abi,
-  },
-  TheopetraYieldReporter: {
-    address: {
-      1: '0xe0EC926a2Cba5d5118Eb6d7A4BFE97c08Bd812C0',
-      4: '0xe0EC926a2Cba5d5118Eb6d7A4BFE97c08Bd812C0',
-    },
-    abi: yieldReporterArtifact.abi,
-  },
   WhitelistTheopetraBondDepository: {
     address: {
       1: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
       4: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
     },
     abi: whitelistBondDepArtifact.abi,
+  },
+  WethHelper: {
+    address: {
+      // waiting on contract to be deployed.
+      1: '',
+      4: '',
+    },
+    abi: wethHelper.abi,
   },
 };

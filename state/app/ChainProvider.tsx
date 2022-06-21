@@ -1,5 +1,4 @@
 import {
-  apiProvider,
   configureChains,
   getDefaultWallets,
   RainbowKitProvider,
