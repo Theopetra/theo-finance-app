@@ -4,13 +4,89 @@ import DynamicText from '@/components/DynamicText';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
+import { useContractInfo } from '@/hooks/useContractInfo';
+import { useContractRead, useProvider } from 'wagmi';
 import useMetrics from '@/hooks/useMetrics';
 import { useTheme } from '@/state/ui/theme';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import { BigNumber, ethers } from 'ethers';
+
+const verbose = process.env.NODE_ENV !== 'production';
+
+function log(msg, val) {
+  if (verbose) {
+    console.log(msg);
+    console.log(val);
+  }
+}
+
+function useLockedTheoByContract(contractName) {
+  const { address, abi } = useContractInfo(contractName, 4);
+  const provider = useProvider();
+  const { data, isSuccess } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'liveMarkets'
+  );
+  const [locked, setLocked] = useState([BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)]);
+
+  log('markets for ' + contractName, data);
+
+  useEffect(() => {
+    // TODO: verify this works once there is test data
+
+    async function getData() {
+      if (data && provider) {
+        const contract = new ethers.Contract(address, abi, provider);
+
+        const merged = await Promise.all(
+          data.map(async (b) => {
+            return {
+              marketId: b,
+              market: await contract.markets(b),
+              term: await contract.terms(b),
+            };
+          })
+        );
+
+        log('merged for ' + contractName, merged);
+
+        // 15768000 - 6 months
+        // 31536000 - 12 months
+        // 47304000 - 18 months
+
+        const locked = [15768000, 31536000, 47304000].map((v) => {
+          return merged
+            .filter((e: any) => e.term.fixedTerm && e.term.vesting === v)
+            .reduce((prev, cur: any) => prev.add(cur.market.sold), BigNumber.from(0));
+        });
+
+        log('locked for ' + contractName, locked);
+
+        setLocked(locked);
+      }
+    }
+    getData();
+  }, [data, provider, abi, address, contractName]);
+
+  return locked;
+}
+
+function useLockedTheo() {
+  const whitelistRepo = useLockedTheoByContract('WhitelistTheopetraBondDepository');
+  const bondRepo = useLockedTheoByContract('TheopetraBondDepository');
+  const publicPreListRepo = useLockedTheoByContract('PublicPreListBondDepository');
+
+  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i])]);
+}
 
 const Dashboard = () => {
   const [{ theme }] = useTheme();
   const { currentMetrics } = useMetrics();
+  const locked = useLockedTheo();
+
   const STATS = [
     {
       name: (
@@ -18,7 +94,7 @@ const Dashboard = () => {
           THEO Locked - <strong>6 Months</strong>
         </>
       ),
-      value: currentMetrics?.lockedTheo,
+      value: locked?.[0]?.toString(),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
       tooltipIcon: 'lock-laminated',
     },
@@ -28,7 +104,7 @@ const Dashboard = () => {
           THEO Locked - <strong>12 Months</strong>
         </>
       ),
-      value: currentMetrics?.lockedTheo,
+      value: locked?.[1]?.toString(),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
       tooltipIcon: 'lock-laminated',
     },
@@ -38,7 +114,7 @@ const Dashboard = () => {
           THEO Locked - <strong>18 Months</strong>
         </>
       ),
-      value: currentMetrics?.lockedTheo,
+      value: locked?.[2]?.toString(),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
       tooltipIcon: 'lock-laminated',
     },
