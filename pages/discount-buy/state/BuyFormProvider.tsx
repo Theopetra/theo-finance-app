@@ -37,7 +37,7 @@ export const BuyFormProvider: React.FC = (props) => {
     purchaseAmount: 0,
     purchaseCost: 0,
   });
-  const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);
+  const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository');
   const provider = useProvider();
   const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
 
@@ -60,7 +60,7 @@ export const BuyFormProvider: React.FC = (props) => {
     signerOrProvider: provider,
   });
   const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useContractInfo('WhitelistTheopetraBondDepository', 1);
+    useContractInfo('WhitelistTheopetraBondDepository');
 
   const { data: priceInfo } = useContractRead(
     {
@@ -71,6 +71,7 @@ export const BuyFormProvider: React.FC = (props) => {
     { args: selectedMarket?.id }
   );
 
+  // TODO: expand to other bond markets?
   useEffect(() => {
     const termsMap = {};
     if (WhitelistBondMarketsSuccess) {

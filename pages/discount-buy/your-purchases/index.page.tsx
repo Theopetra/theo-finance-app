@@ -9,13 +9,22 @@ import {
   randMask,
   randNumber,
 } from '@ngneat/falso';
-import { format } from 'date-fns';
+import { addSeconds, format } from 'date-fns';
 import { useMemo } from 'react';
 import DynamicText from '@/components/DynamicText';
+import { useContractInfo } from '@/hooks/useContractInfo';
 
 const YourPurchases = () => {
   const data = useMemo(() => {
     const statuses = ['locked', 'claimed', 'unclaimed'];
+
+    // TODO:
+    // check wallet is connected
+    // add notekeeper artifact and contract metadata
+    // useContractInfo to get address and abi
+    // useContractRead for indexesFor
+    // useContractRead for pendingFor
+    // pendingFor -> map to table items
 
     return [
       {
@@ -95,11 +104,7 @@ const YourPurchases = () => {
 
   return (
     <PageContainer>
-   
-      <PurchasesTable
-        columns={columns}
-        data={[]}
-      />
+      <PurchasesTable columns={columns} data={data} />
     </PageContainer>
   );
 };

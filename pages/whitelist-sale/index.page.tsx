@@ -2,7 +2,7 @@ import Card from '@/components/Card';
 import CardList from '@/components/CardList';
 import Icon from '@/components/Icons';
 import PageContainer from '@/components/PageContainer';
-import { addMinutes, intervalToDuration } from 'date-fns';
+import { addMinutes, addSeconds, intervalToDuration } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
@@ -12,8 +12,8 @@ import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 
-// TODO: Replace with env vars
-const startDate = addMinutes(new Date(), 9);
+// TODO: replace with "whitelistEndTimestamp" environment variable
+const startDate = addMinutes(new Date(), 2);
 const endDate = new Date();
 
 const Whitelist = () => {
@@ -27,7 +27,9 @@ const Whitelist = () => {
         start: new Date(),
         end: startDate,
       });
-      setTimer(duration);
+      if (new Date() <= startDate) {
+        setTimer(duration);
+      }
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
@@ -43,6 +45,7 @@ const Whitelist = () => {
         {account?.address ? (
           <>
             <CardList>
+              {/* TODO: change to ending time instead of counter */}
               <Card
                 title="Time Remaining"
                 headerRightComponent={<Icon name="clock2" className="h-6 w-6 text-theo-navy" />}

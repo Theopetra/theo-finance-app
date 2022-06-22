@@ -5,7 +5,7 @@ import { useContractRead, useToken } from 'wagmi';
 export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
   const { data: token } = useToken({ address: quoteToken });
 
-  const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);
+  const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository');
   const {
     data: priceInfo,
     isError,

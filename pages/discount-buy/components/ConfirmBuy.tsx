@@ -75,8 +75,8 @@ const ConfirmBuy = () => {
   // const provider = useProvider();
   const { data: wallet } = useAccount();
   const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useContractInfo('WhitelistTheopetraBondDepository', 1);
-  const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper', 1);
+    useContractInfo('WhitelistTheopetraBondDepository');
+  const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
   // autostake
   const signature: any = useMemo(() => {
@@ -120,6 +120,7 @@ const ConfirmBuy = () => {
     write,
   } = useContractWrite(
     {
+      // TODO: adjust active contract
       addressOrName: WhitelistBondDepositoryAddress,
       contractInterface: WhitelistBondDepositoryAbi,
       signerOrProvider: signer,

@@ -1,656 +1,907 @@
 {
-    "_format": "hh-sol-artifact-1",
-    "contractName": "TheopetraAuthority",
-    "sourceName": "src/Theopetra/TheopetraAuthority.sol",
-    "abi": [
+  "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_governor",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_guardian",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_policy",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_manager",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_vault",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_whitelistSigner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "contract ITheopetraAuthority",
+          "name": "authority",
+          "type": "address"
+        }
+      ],
+      "name": "AuthorityUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "GovernorPulled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "GovernorPushed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "GuardianPulled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "GuardianPushed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "ManagerPulled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "ManagerPushed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "PolicyPulled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "PolicyPushed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "SignerPulled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "SignerPushed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "VaultPulled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "VaultPushed",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "authority",
+      "outputs": [
+        {
+          "internalType": "contract ITheopetraAuthority",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "governor",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "guardian",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "manager",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "newGovernor",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "newGuardian",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "newManager",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "newPolicy",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "newVault",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "newWhitelistSigner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "policy",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pullGovernor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pullGuardian",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pullManager",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pullPolicy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pullVault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pullWhitelistSigner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newGovernor",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "pushGovernor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newGuardian",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "pushGuardian",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newManager",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "pushManager",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newPolicy",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "pushPolicy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newVault",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "pushVault",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newWhitelistSigner",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_effectiveImmediately",
+          "type": "bool"
+        }
+      ],
+      "name": "pushWhitelistSigner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract ITheopetraAuthority",
+          "name": "_newAuthority",
+          "type": "address"
+        }
+      ],
+      "name": "setAuthority",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "vault",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "whitelistSigner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+  "receipt": {
+    "to": null,
+    "from": "0x0a4B56B375aEAfB5A02ACaeEc5Ca0F6a6efb0025",
+    "contractAddress": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+    "transactionIndex": 3,
+    "gasUsed": "1357388",
+    "logsBloom": "0x00000000010000000080000000000000000000000400000000000000000000000000000100004000000000000000000000000000000000000000000000000000008000000000800000000000000000000004000800000000100000800100000000400000020000000000004000000810000000000200020004000000000000000000000001000000000000000000000008000000000008000000000000000000000000000000000200000400000000001000000000000000000000000000000002000000000000000000100000000000000000000000020000000000000020000000000000000000000108000010000000000000000000000000000000000000",
+    "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953",
+    "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+    "logs": [
       {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_governor",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_guardian",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_policy",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_manager",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_vault",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_whitelistSigner",
-            "type": "address"
-          }
+        "transactionIndex": 3,
+        "blockNumber": 12432376,
+        "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+        "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+        "topics": [
+          "0x2f658b440c35314f52658ea8a740e05b284cdc84dc9ae01e891f21b8933e7cad",
+          "0x000000000000000000000000d19e2973068657e68f4344bcb82e233864d302d7"
         ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
+        "data": "0x",
+        "logIndex": 0,
+        "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953"
       },
       {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "contract ITheopetraAuthority",
-            "name": "authority",
-            "type": "address"
-          }
+        "transactionIndex": 3,
+        "blockNumber": 12432376,
+        "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+        "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+        "topics": [
+          "0x4f337dcbb2512f18373c1f72d990a2f0a6ee5024b04007c52afd01eb73374a89",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000000a4b56b375aeafb5a02acaeec5ca0f6a6efb0025"
         ],
-        "name": "AuthorityUpdated",
-        "type": "event"
+        "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "logIndex": 1,
+        "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953"
       },
       {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          }
+        "transactionIndex": 3,
+        "blockNumber": 12432376,
+        "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+        "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+        "topics": [
+          "0xde655975891e8f09671597b37bd4d663bcc5c21dc6d7641b33cdf85fbe15d08b",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000000a4b56b375aeafb5a02acaeec5ca0f6a6efb0025"
         ],
-        "name": "GovernorPulled",
-        "type": "event"
+        "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "logIndex": 2,
+        "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953"
       },
       {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
+        "transactionIndex": 3,
+        "blockNumber": 12432376,
+        "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+        "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+        "topics": [
+          "0x90a5902a45c24aae553d5aff384ca16d6560f08d74c9784a4fbd2796d9e13f2b",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000000a4b56b375aeafb5a02acaeec5ca0f6a6efb0025"
         ],
-        "name": "GovernorPushed",
-        "type": "event"
+        "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "logIndex": 3,
+        "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953"
       },
       {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          }
+        "transactionIndex": 3,
+        "blockNumber": 12432376,
+        "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+        "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+        "topics": [
+          "0x6619bbcc1746ac62c94db62467b4f8905756386db587aee0e6ce9a39ccca7ed7",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000000a4b56b375aeafb5a02acaeec5ca0f6a6efb0025"
         ],
-        "name": "GuardianPulled",
-        "type": "event"
+        "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "logIndex": 4,
+        "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953"
       },
       {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
+        "transactionIndex": 3,
+        "blockNumber": 12432376,
+        "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+        "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+        "topics": [
+          "0x05a80f5053574d6a62733e1692e8cbcfaf927dc82df0a7267ea2e489a7cc18ff",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000000a4b56b375aeafb5a02acaeec5ca0f6a6efb0025"
         ],
-        "name": "GuardianPushed",
-        "type": "event"
+        "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "logIndex": 5,
+        "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953"
       },
       {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          }
+        "transactionIndex": 3,
+        "blockNumber": 12432376,
+        "transactionHash": "0x7bee206167c46d2d487c1b81c47fe0640616cfe16ffaac730cf2e81f0a603ba5",
+        "address": "0xD19E2973068657E68f4344bCB82E233864d302d7",
+        "topics": [
+          "0x2e586d201448deaf1ad22a6ecedfd556485e3f43ac20bb37df274ac48703d65c",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000000a4b56b375aeafb5a02acaeec5ca0f6a6efb0025"
         ],
-        "name": "ManagerPulled",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "ManagerPushed",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          }
-        ],
-        "name": "PolicyPulled",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "PolicyPushed",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          }
-        ],
-        "name": "SignerPulled",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "SignerPushed",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          }
-        ],
-        "name": "VaultPulled",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "VaultPushed",
-        "type": "event"
-      },
-      {
-        "inputs": [],
-        "name": "authority",
-        "outputs": [
-          {
-            "internalType": "contract ITheopetraAuthority",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "governor",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "guardian",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "manager",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "newGovernor",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "newGuardian",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "newManager",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "newPolicy",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "newVault",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "newWhitelistSigner",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "policy",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "pullGovernor",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "pullGuardian",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "pullManager",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "pullPolicy",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "pullVault",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "pullWhitelistSigner",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_newGovernor",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "pushGovernor",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_newGuardian",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "pushGuardian",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_newManager",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "pushManager",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_newPolicy",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "pushPolicy",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_newVault",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "pushVault",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_newWhitelistSigner",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "_effectiveImmediately",
-            "type": "bool"
-          }
-        ],
-        "name": "pushWhitelistSigner",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "contract ITheopetraAuthority",
-            "name": "_newAuthority",
-            "type": "address"
-          }
-        ],
-        "name": "setAuthority",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "vault",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "whitelistSigner",
-        "outputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "logIndex": 6,
+        "blockHash": "0xd1020db9fbfb2e77538bf0ce0ab7301c15d051f6f803ab1eb47dd5a97d0a4953"
       }
     ],
-    "bytecode": "0x60c0604052600c60808190526b15539055551213d49256915160a21b60a09081526200002f9160009190620002ab565b503480156200003d57600080fd5b50604051620015be380380620015be83398101604081905262000060916200036e565b600180546001600160a01b0319163090811790915560405181907f2f658b440c35314f52658ea8a740e05b284cdc84dc9ae01e891f21b8933e7cad90600090a250600280546001600160a01b0319166001600160a01b038816908117909155604051600181526000907f4f337dcbb2512f18373c1f72d990a2f0a6ee5024b04007c52afd01eb73374a899060200160405180910390a3600380546001600160a01b0319166001600160a01b038716908117909155604051600181526000907fde655975891e8f09671597b37bd4d663bcc5c21dc6d7641b33cdf85fbe15d08b9060200160405180910390a3600480546001600160a01b0319166001600160a01b038616908117909155604051600181526000907f90a5902a45c24aae553d5aff384ca16d6560f08d74c9784a4fbd2796d9e13f2b9060200160405180910390a3600580546001600160a01b0319166001600160a01b038516908117909155604051600181526000907f6619bbcc1746ac62c94db62467b4f8905756386db587aee0e6ce9a39ccca7ed79060200160405180910390a3600680546001600160a01b0319166001600160a01b038416908117909155604051600181526000907f05a80f5053574d6a62733e1692e8cbcfaf927dc82df0a7267ea2e489a7cc18ff9060200160405180910390a3600780546001600160a01b0319166001600160a01b038316908117909155604051600181526000907f2e586d201448deaf1ad22a6ecedfd556485e3f43ac20bb37df274ac48703d65c9060200160405180910390a35050505050506200042c565b828054620002b990620003ef565b90600052602060002090601f016020900481019282620002dd576000855562000328565b82601f10620002f857805160ff191683800117855562000328565b8280016001018555821562000328579182015b82811115620003285782518255916020019190600101906200030b565b50620003369291506200033a565b5090565b5b808211156200033657600081556001016200033b565b80516001600160a01b03811681146200036957600080fd5b919050565b60008060008060008060c087890312156200038857600080fd5b620003938762000351565b9550620003a36020880162000351565b9450620003b36040880162000351565b9350620003c36060880162000351565b9250620003d36080880162000351565b9150620003e360a0880162000351565b90509295509295509295565b600181811c908216806200040457607f821691505b602082108114156200042657634e487b7160e01b600052602260045260246000fd5b50919050565b611182806200043c6000396000f3fe608060405234801561001057600080fd5b50600436106101ae5760003560e01c806352759694116100ee5780638fd2057711610097578063bf7e214f11610071578063bf7e214f1461033c578063d8a042121461034f578063ef81b4d414610357578063fbfa77cf1461036a57600080fd5b80638fd2057714610319578063b78aa12b1461032c578063be11f1dd1461033457600080fd5b80636fe72c14116100c85780636fe72c14146102e05780637a9e5e4b146102f357806388aaf0c81461030657600080fd5b806352759694146102b257806354e3d703146102c55780635beede08146102d857600080fd5b8063368ffd701161015b57806342906029116101355780634290602914610266578063452a932014610279578063481c6a751461028c5780634e9156581461029f57600080fd5b8063368ffd70146102385780633bf90c28146102405780633e289b971461025357600080fd5b8063198598471161018c578063198598471461020a5780631afe87141461021d578063215e92bc1461023057600080fd5b80630505c8c9146101b35780630c340a24146101e257806312a1c518146101f5575b600080fd5b6004546101c6906001600160a01b031681565b6040516001600160a01b03909116815260200160405180910390f35b6002546101c6906001600160a01b031681565b610208610203366004610fee565b61037d565b005b6009546101c6906001600160a01b031681565b61020861022b366004610fee565b6104b4565b6102086105da565b610208610697565b600a546101c6906001600160a01b031681565b610208610261366004610fee565b610754565b600b546101c6906001600160a01b031681565b6003546101c6906001600160a01b031681565b6005546101c6906001600160a01b031681565b600d546101c6906001600160a01b031681565b6102086102c0366004610fee565b61087a565b6102086102d3366004610fee565b6109a0565b610208610ac6565b6102086102ee366004610fee565b610b83565b61020861030136600461102c565b610ca9565b600c546101c6906001600160a01b031681565b6008546101c6906001600160a01b031681565b610208610d9f565b610208610e5c565b6001546101c6906001600160a01b031681565b610208610f19565b6007546101c6906001600160a01b031681565b6006546101c6906001600160a01b031681565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156103d0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103f49190611050565b6001600160a01b0316336001600160a01b0316146000906104315760405162461bcd60e51b8152600401610428919061106d565b60405180910390fd5b50801561045457600780546001600160a01b0319166001600160a01b0384161790555b600d80546001600160a01b0319166001600160a01b038481169182179092556007546040518415158152919216907f2e586d201448deaf1ad22a6ecedfd556485e3f43ac20bb37df274ac48703d65c906020015b60405180910390a35050565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610507573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061052b9190611050565b6001600160a01b0316336001600160a01b03161460009061055f5760405162461bcd60e51b8152600401610428919061106d565b50801561058257600380546001600160a01b0319166001600160a01b0384161790555b600980546001600160a01b0319166001600160a01b038481169182179092556003546040518415158152919216907fde655975891e8f09671597b37bd4d663bcc5c21dc6d7641b33cdf85fbe15d08b906020016104a8565b600c546001600160a01b031633146106345760405162461bcd60e51b815260206004820152600960248201527f216e65775661756c7400000000000000000000000000000000000000000000006044820152606401610428565b600c546006546040516001600160a01b0392831692909116907f3d08e01e3b8340be6ca709db7a9321448661a1f490da4d7f3eb03d84fe73095390600090a3600c54600680546001600160a01b0319166001600160a01b03909216919091179055565b600b546001600160a01b031633146106f15760405162461bcd60e51b815260206004820152600b60248201527f216e65774d616e616765720000000000000000000000000000000000000000006044820152606401610428565b600b546005546040516001600160a01b0392831692909116907fa976d47ee1d21e4e2d6cf31207af5f1ecce7d21250412b3e796e0096f82d971d90600090a3600b54600580546001600160a01b0319166001600160a01b03909216919091179055565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156107a7573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107cb9190611050565b6001600160a01b0316336001600160a01b0316146000906107ff5760405162461bcd60e51b8152600401610428919061106d565b50801561082257600580546001600160a01b0319166001600160a01b0384161790555b600b80546001600160a01b0319166001600160a01b038481169182179092556005546040518415158152919216907f6619bbcc1746ac62c94db62467b4f8905756386db587aee0e6ce9a39ccca7ed7906020016104a8565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156108cd573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108f19190611050565b6001600160a01b0316336001600160a01b0316146000906109255760405162461bcd60e51b8152600401610428919061106d565b50801561094857600280546001600160a01b0319166001600160a01b0384161790555b600880546001600160a01b0319166001600160a01b038481169182179092556002546040518415158152919216907f4f337dcbb2512f18373c1f72d990a2f0a6ee5024b04007c52afd01eb73374a89906020016104a8565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156109f3573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a179190611050565b6001600160a01b0316336001600160a01b031614600090610a4b5760405162461bcd60e51b8152600401610428919061106d565b508015610a6e57600480546001600160a01b0319166001600160a01b0384161790555b600a80546001600160a01b0319166001600160a01b038481169182179092556004546040518415158152919216907f90a5902a45c24aae553d5aff384ca16d6560f08d74c9784a4fbd2796d9e13f2b906020016104a8565b600a546001600160a01b03163314610b205760405162461bcd60e51b815260206004820152600a60248201527f216e6577506f6c696379000000000000000000000000000000000000000000006044820152606401610428565b600a546004546040516001600160a01b0392831692909116907f64d2fa522b403ca222efff0c7ad07d2ef45472a45e5770918bdfa9a2845d29a890600090a3600a54600480546001600160a01b0319166001600160a01b03909216919091179055565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610bd6573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bfa9190611050565b6001600160a01b0316336001600160a01b031614600090610c2e5760405162461bcd60e51b8152600401610428919061106d565b508015610c5157600680546001600160a01b0319166001600160a01b0384161790555b600c80546001600160a01b0319166001600160a01b038481169182179092556006546040518415158152919216907f05a80f5053574d6a62733e1692e8cbcfaf927dc82df0a7267ea2e489a7cc18ff906020016104a8565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610cfc573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610d209190611050565b6001600160a01b0316336001600160a01b031614600090610d545760405162461bcd60e51b8152600401610428919061106d565b50600180546001600160a01b0319166001600160a01b0383169081179091556040517f2f658b440c35314f52658ea8a740e05b284cdc84dc9ae01e891f21b8933e7cad90600090a250565b600d546001600160a01b03163314610df95760405162461bcd60e51b815260206004820152601360248201527f216e657757686974656c6973745369676e6572000000000000000000000000006044820152606401610428565b600d546007546040516001600160a01b0392831692909116907fdb833ab8eb1d011130a88081d5bcd677c787d7618f2a28f7e92832a182fc49b290600090a3600d54600780546001600160a01b0319166001600160a01b03909216919091179055565b6009546001600160a01b03163314610eb65760405162461bcd60e51b815260206004820152600960248201527f216e6577477561726400000000000000000000000000000000000000000000006044820152606401610428565b6009546003546040516001600160a01b0392831692909116907f0960fb9900fb8096216606c4f7fc2fce5d08cc0c82da55cec8619b66b523848190600090a3600954600380546001600160a01b0319166001600160a01b03909216919091179055565b6008546001600160a01b03163314610f735760405162461bcd60e51b815260206004820152600c60248201527f216e6577476f7665726e6f7200000000000000000000000000000000000000006044820152606401610428565b6008546002546040516001600160a01b0392831692909116907fffd6fed33fe8ec1016718bdd5d04ae6fecd9aba0da6578807daaaa7fc3d1682690600090a3600854600280546001600160a01b0319166001600160a01b03909216919091179055565b6001600160a01b0381168114610feb57600080fd5b50565b6000806040838503121561100157600080fd5b823561100c81610fd6565b91506020830135801515811461102157600080fd5b809150509250929050565b60006020828403121561103e57600080fd5b813561104981610fd6565b9392505050565b60006020828403121561106257600080fd5b815161104981610fd6565b600060208083526000845481600182811c91508083168061108f57607f831692505b8583108114156110c6577f4e487b710000000000000000000000000000000000000000000000000000000085526022600452602485fd5b8786018381526020018180156110e357600181146111125761113d565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0086168252878201965061113d565b60008b81526020902060005b868110156111375781548482015290850190890161111e565b83019750505b5094999850505050505050505056fea2646970667358221220accea5473ceb721efddd14f91ba7486abb23d5423ea684bd6f7b7f88aacd7d4c64736f6c634300080a0033",
-    "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101ae5760003560e01c806352759694116100ee5780638fd2057711610097578063bf7e214f11610071578063bf7e214f1461033c578063d8a042121461034f578063ef81b4d414610357578063fbfa77cf1461036a57600080fd5b80638fd2057714610319578063b78aa12b1461032c578063be11f1dd1461033457600080fd5b80636fe72c14116100c85780636fe72c14146102e05780637a9e5e4b146102f357806388aaf0c81461030657600080fd5b806352759694146102b257806354e3d703146102c55780635beede08146102d857600080fd5b8063368ffd701161015b57806342906029116101355780634290602914610266578063452a932014610279578063481c6a751461028c5780634e9156581461029f57600080fd5b8063368ffd70146102385780633bf90c28146102405780633e289b971461025357600080fd5b8063198598471161018c578063198598471461020a5780631afe87141461021d578063215e92bc1461023057600080fd5b80630505c8c9146101b35780630c340a24146101e257806312a1c518146101f5575b600080fd5b6004546101c6906001600160a01b031681565b6040516001600160a01b03909116815260200160405180910390f35b6002546101c6906001600160a01b031681565b610208610203366004610fee565b61037d565b005b6009546101c6906001600160a01b031681565b61020861022b366004610fee565b6104b4565b6102086105da565b610208610697565b600a546101c6906001600160a01b031681565b610208610261366004610fee565b610754565b600b546101c6906001600160a01b031681565b6003546101c6906001600160a01b031681565b6005546101c6906001600160a01b031681565b600d546101c6906001600160a01b031681565b6102086102c0366004610fee565b61087a565b6102086102d3366004610fee565b6109a0565b610208610ac6565b6102086102ee366004610fee565b610b83565b61020861030136600461102c565b610ca9565b600c546101c6906001600160a01b031681565b6008546101c6906001600160a01b031681565b610208610d9f565b610208610e5c565b6001546101c6906001600160a01b031681565b610208610f19565b6007546101c6906001600160a01b031681565b6006546101c6906001600160a01b031681565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156103d0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103f49190611050565b6001600160a01b0316336001600160a01b0316146000906104315760405162461bcd60e51b8152600401610428919061106d565b60405180910390fd5b50801561045457600780546001600160a01b0319166001600160a01b0384161790555b600d80546001600160a01b0319166001600160a01b038481169182179092556007546040518415158152919216907f2e586d201448deaf1ad22a6ecedfd556485e3f43ac20bb37df274ac48703d65c906020015b60405180910390a35050565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610507573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061052b9190611050565b6001600160a01b0316336001600160a01b03161460009061055f5760405162461bcd60e51b8152600401610428919061106d565b50801561058257600380546001600160a01b0319166001600160a01b0384161790555b600980546001600160a01b0319166001600160a01b038481169182179092556003546040518415158152919216907fde655975891e8f09671597b37bd4d663bcc5c21dc6d7641b33cdf85fbe15d08b906020016104a8565b600c546001600160a01b031633146106345760405162461bcd60e51b815260206004820152600960248201527f216e65775661756c7400000000000000000000000000000000000000000000006044820152606401610428565b600c546006546040516001600160a01b0392831692909116907f3d08e01e3b8340be6ca709db7a9321448661a1f490da4d7f3eb03d84fe73095390600090a3600c54600680546001600160a01b0319166001600160a01b03909216919091179055565b600b546001600160a01b031633146106f15760405162461bcd60e51b815260206004820152600b60248201527f216e65774d616e616765720000000000000000000000000000000000000000006044820152606401610428565b600b546005546040516001600160a01b0392831692909116907fa976d47ee1d21e4e2d6cf31207af5f1ecce7d21250412b3e796e0096f82d971d90600090a3600b54600580546001600160a01b0319166001600160a01b03909216919091179055565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156107a7573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107cb9190611050565b6001600160a01b0316336001600160a01b0316146000906107ff5760405162461bcd60e51b8152600401610428919061106d565b50801561082257600580546001600160a01b0319166001600160a01b0384161790555b600b80546001600160a01b0319166001600160a01b038481169182179092556005546040518415158152919216907f6619bbcc1746ac62c94db62467b4f8905756386db587aee0e6ce9a39ccca7ed7906020016104a8565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156108cd573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108f19190611050565b6001600160a01b0316336001600160a01b0316146000906109255760405162461bcd60e51b8152600401610428919061106d565b50801561094857600280546001600160a01b0319166001600160a01b0384161790555b600880546001600160a01b0319166001600160a01b038481169182179092556002546040518415158152919216907f4f337dcbb2512f18373c1f72d990a2f0a6ee5024b04007c52afd01eb73374a89906020016104a8565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156109f3573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a179190611050565b6001600160a01b0316336001600160a01b031614600090610a4b5760405162461bcd60e51b8152600401610428919061106d565b508015610a6e57600480546001600160a01b0319166001600160a01b0384161790555b600a80546001600160a01b0319166001600160a01b038481169182179092556004546040518415158152919216907f90a5902a45c24aae553d5aff384ca16d6560f08d74c9784a4fbd2796d9e13f2b906020016104a8565b600a546001600160a01b03163314610b205760405162461bcd60e51b815260206004820152600a60248201527f216e6577506f6c696379000000000000000000000000000000000000000000006044820152606401610428565b600a546004546040516001600160a01b0392831692909116907f64d2fa522b403ca222efff0c7ad07d2ef45472a45e5770918bdfa9a2845d29a890600090a3600a54600480546001600160a01b0319166001600160a01b03909216919091179055565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610bd6573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bfa9190611050565b6001600160a01b0316336001600160a01b031614600090610c2e5760405162461bcd60e51b8152600401610428919061106d565b508015610c5157600680546001600160a01b0319166001600160a01b0384161790555b600c80546001600160a01b0319166001600160a01b038481169182179092556006546040518415158152919216907f05a80f5053574d6a62733e1692e8cbcfaf927dc82df0a7267ea2e489a7cc18ff906020016104a8565b600160009054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610cfc573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610d209190611050565b6001600160a01b0316336001600160a01b031614600090610d545760405162461bcd60e51b8152600401610428919061106d565b50600180546001600160a01b0319166001600160a01b0383169081179091556040517f2f658b440c35314f52658ea8a740e05b284cdc84dc9ae01e891f21b8933e7cad90600090a250565b600d546001600160a01b03163314610df95760405162461bcd60e51b815260206004820152601360248201527f216e657757686974656c6973745369676e6572000000000000000000000000006044820152606401610428565b600d546007546040516001600160a01b0392831692909116907fdb833ab8eb1d011130a88081d5bcd677c787d7618f2a28f7e92832a182fc49b290600090a3600d54600780546001600160a01b0319166001600160a01b03909216919091179055565b6009546001600160a01b03163314610eb65760405162461bcd60e51b815260206004820152600960248201527f216e6577477561726400000000000000000000000000000000000000000000006044820152606401610428565b6009546003546040516001600160a01b0392831692909116907f0960fb9900fb8096216606c4f7fc2fce5d08cc0c82da55cec8619b66b523848190600090a3600954600380546001600160a01b0319166001600160a01b03909216919091179055565b6008546001600160a01b03163314610f735760405162461bcd60e51b815260206004820152600c60248201527f216e6577476f7665726e6f7200000000000000000000000000000000000000006044820152606401610428565b6008546002546040516001600160a01b0392831692909116907fffd6fed33fe8ec1016718bdd5d04ae6fecd9aba0da6578807daaaa7fc3d1682690600090a3600854600280546001600160a01b0319166001600160a01b03909216919091179055565b6001600160a01b0381168114610feb57600080fd5b50565b6000806040838503121561100157600080fd5b823561100c81610fd6565b91506020830135801515811461102157600080fd5b809150509250929050565b60006020828403121561103e57600080fd5b813561104981610fd6565b9392505050565b60006020828403121561106257600080fd5b815161104981610fd6565b600060208083526000845481600182811c91508083168061108f57607f831692505b8583108114156110c6577f4e487b710000000000000000000000000000000000000000000000000000000085526022600452602485fd5b8786018381526020018180156110e357600181146111125761113d565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0086168252878201965061113d565b60008b81526020902060005b868110156111375781548482015290850190890161111e565b83019750505b5094999850505050505050505056fea2646970667358221220accea5473ceb721efddd14f91ba7486abb23d5423ea684bd6f7b7f88aacd7d4c64736f6c634300080a0033",
-    "linkReferences": {},
-    "deployedLinkReferences": {}
+    "blockNumber": 12432376,
+    "cumulativeGasUsed": "1533520",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x0a4B56B375aEAfB5A02ACaeEc5Ca0F6a6efb0025",
+    "0x0a4B56B375aEAfB5A02ACaeEc5Ca0F6a6efb0025",
+    "0x0a4B56B375aEAfB5A02ACaeEc5Ca0F6a6efb0025",
+    "0x0a4B56B375aEAfB5A02ACaeEc5Ca0F6a6efb0025",
+    "0x0a4B56B375aEAfB5A02ACaeEc5Ca0F6a6efb0025",
+    "0x0a4B56B375aEAfB5A02ACaeEc5Ca0F6a6efb0025"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "682d6eb6b0e1e7c1737c9e46435be681",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_governor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_guardian\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_policy\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_manager\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_vault\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_whitelistSigner\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"contract ITheopetraAuthority\",\"name\":\"authority\",\"type\":\"address\"}],\"name\":\"AuthorityUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"GovernorPulled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"GovernorPushed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"GuardianPulled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"GuardianPushed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"ManagerPulled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"ManagerPushed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"PolicyPulled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"PolicyPushed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"SignerPulled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"SignerPushed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"VaultPulled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"VaultPushed\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"authority\",\"outputs\":[{\"internalType\":\"contract ITheopetraAuthority\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"governor\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"guardian\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"manager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"newGovernor\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"newGuardian\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"newManager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"newPolicy\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"newVault\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"newWhitelistSigner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"policy\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pullGovernor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pullGuardian\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pullManager\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pullPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pullVault\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pullWhitelistSigner\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newGovernor\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"pushGovernor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newGuardian\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"pushGuardian\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newManager\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"pushManager\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newPolicy\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"pushPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newVault\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"pushVault\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newWhitelistSigner\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_effectiveImmediately\",\"type\":\"bool\"}],\"name\":\"pushWhitelistSigner\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract ITheopetraAuthority\",\"name\":\"_newAuthority\",\"type\":\"address\"}],\"name\":\"setAuthority\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vault\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"whitelistSigner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/Theopetra/TheopetraAuthority.sol\":\"TheopetraAuthority\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":2000},\"remappings\":[]},\"sources\":{\"src/Interfaces/ITheopetraAuthority.sol\":{\"content\":\"// SPDX-License-Identifier: AGPL-3.0\\npragma solidity >=0.7.5;\\n\\ninterface ITheopetraAuthority {\\n    /* ========== EVENTS ========== */\\n\\n    event GovernorPushed(address indexed from, address indexed to, bool _effectiveImmediately);\\n    event GuardianPushed(address indexed from, address indexed to, bool _effectiveImmediately);\\n    event PolicyPushed(address indexed from, address indexed to, bool _effectiveImmediately);\\n    event ManagerPushed(address indexed from, address indexed to, bool _effectiveImmediately);\\n    event VaultPushed(address indexed from, address indexed to, bool _effectiveImmediately);\\n    event SignerPushed(address indexed from, address indexed to, bool _effectiveImmediately);\\n\\n    event GovernorPulled(address indexed from, address indexed to);\\n    event GuardianPulled(address indexed from, address indexed to);\\n    event PolicyPulled(address indexed from, address indexed to);\\n    event ManagerPulled(address indexed from, address indexed to);\\n    event VaultPulled(address indexed from, address indexed to);\\n    event SignerPulled(address indexed from, address indexed to);\\n\\n    /* ========== VIEW ========== */\\n\\n    function governor() external view returns (address);\\n\\n    function guardian() external view returns (address);\\n\\n    function policy() external view returns (address);\\n\\n    function manager() external view returns (address);\\n\\n    function vault() external view returns (address);\\n\\n    function whitelistSigner() external view returns (address);\\n}\\n\",\"keccak256\":\"0xb2878b057ac95bafe9f359c26c4e7b470dcd6d00df5797f992a576d79182b287\",\"license\":\"AGPL-3.0\"},\"src/Theopetra/TheopetraAuthority.sol\":{\"content\":\"// SPDX-License-Identifier: AGPL-3.0\\npragma solidity >=0.7.5;\\n\\nimport \\\"../Interfaces/ITheopetraAuthority.sol\\\";\\nimport \\\"../Types/TheopetraAccessControlled.sol\\\";\\n\\ncontract TheopetraAuthority is ITheopetraAuthority, TheopetraAccessControlled {\\n    /* ========== STATE VARIABLES ========== */\\n\\n    address public override governor;\\n\\n    address public override guardian;\\n\\n    address public override policy;\\n\\n    address public override manager;\\n\\n    address public override vault;\\n\\n    address public override whitelistSigner;\\n\\n    address public newGovernor;\\n\\n    address public newGuardian;\\n\\n    address public newPolicy;\\n\\n    address public newManager;\\n\\n    address public newVault;\\n\\n    address public newWhitelistSigner;\\n\\n    string private constant REQUIRE_ERROR = \\\"Address cannot be zero address\\\";\\n\\n    /* ========== Constructor ========== */\\n\\n    constructor(\\n        address _governor,\\n        address _guardian,\\n        address _policy,\\n        address _manager,\\n        address _vault,\\n        address _whitelistSigner\\n    ) TheopetraAccessControlled(ITheopetraAuthority(address(this))) {\\n        require(_governor != address(0), REQUIRE_ERROR);\\n        governor = _governor;\\n        emit GovernorPushed(address(0), governor, true);\\n        require(_guardian != address(0), REQUIRE_ERROR);\\n        guardian = _guardian;\\n        emit GuardianPushed(address(0), guardian, true);\\n        require(_policy != address(0), REQUIRE_ERROR);\\n        policy = _policy;\\n        emit PolicyPushed(address(0), policy, true);\\n        require(_manager != address(0), REQUIRE_ERROR);\\n        manager = _manager;\\n        emit ManagerPushed(address(0), manager, true);\\n        require(_vault != address(0), REQUIRE_ERROR);\\n        vault = _vault;\\n        emit VaultPushed(address(0), vault, true);\\n        require(_whitelistSigner != address(0), REQUIRE_ERROR);\\n        whitelistSigner = _whitelistSigner;\\n        emit SignerPushed(address(0), whitelistSigner, true);\\n    }\\n\\n    /* ========== GOV ONLY ========== */\\n\\n    function pushGovernor(address _newGovernor, bool _effectiveImmediately) external onlyGovernor {\\n        require(_newGovernor != address(0), REQUIRE_ERROR);\\n        if (_effectiveImmediately) governor = _newGovernor;\\n        newGovernor = _newGovernor;\\n        emit GovernorPushed(governor, newGovernor, _effectiveImmediately);\\n    }\\n\\n    function pushGuardian(address _newGuardian, bool _effectiveImmediately) external onlyGovernor {\\n        require(_newGuardian != address(0), REQUIRE_ERROR);\\n        if (_effectiveImmediately) guardian = _newGuardian;\\n        newGuardian = _newGuardian;\\n        emit GuardianPushed(guardian, newGuardian, _effectiveImmediately);\\n    }\\n\\n    function pushPolicy(address _newPolicy, bool _effectiveImmediately) external onlyGovernor {\\n        require(_newPolicy != address(0), REQUIRE_ERROR);\\n        if (_effectiveImmediately) policy = _newPolicy;\\n        newPolicy = _newPolicy;\\n        emit PolicyPushed(policy, newPolicy, _effectiveImmediately);\\n    }\\n\\n    function pushManager(address _newManager, bool _effectiveImmediately) external onlyGovernor {\\n        require(_newManager != address(0), REQUIRE_ERROR);\\n        if (_effectiveImmediately) manager = _newManager;\\n        newManager = _newManager;\\n        emit ManagerPushed(manager, newManager, _effectiveImmediately);\\n    }\\n\\n    function pushVault(address _newVault, bool _effectiveImmediately) external onlyGovernor {\\n        require(_newVault != address(0), REQUIRE_ERROR);\\n        if (_effectiveImmediately) vault = _newVault;\\n        newVault = _newVault;\\n        emit VaultPushed(vault, newVault, _effectiveImmediately);\\n    }\\n\\n    function pushWhitelistSigner(address _newWhitelistSigner, bool _effectiveImmediately) external onlyGovernor {\\n        require(_newWhitelistSigner != address(0), REQUIRE_ERROR);\\n        if (_effectiveImmediately) whitelistSigner = _newWhitelistSigner;\\n        newWhitelistSigner = _newWhitelistSigner;\\n        emit SignerPushed(whitelistSigner, newWhitelistSigner, _effectiveImmediately);\\n    }\\n\\n    /* ========== PENDING ROLE ONLY ========== */\\n\\n    function pullGovernor() external {\\n        require(msg.sender == newGovernor, \\\"!newGovernor\\\");\\n        emit GovernorPulled(governor, newGovernor);\\n        governor = newGovernor;\\n    }\\n\\n    function pullGuardian() external {\\n        require(msg.sender == newGuardian, \\\"!newGuard\\\");\\n        emit GuardianPulled(guardian, newGuardian);\\n        guardian = newGuardian;\\n    }\\n\\n    function pullPolicy() external {\\n        require(msg.sender == newPolicy, \\\"!newPolicy\\\");\\n        emit PolicyPulled(policy, newPolicy);\\n        policy = newPolicy;\\n    }\\n\\n    function pullManager() external {\\n        require(msg.sender == newManager, \\\"!newManager\\\");\\n        emit ManagerPulled(manager, newManager);\\n        manager = newManager;\\n    }\\n\\n    function pullVault() external {\\n        require(msg.sender == newVault, \\\"!newVault\\\");\\n        emit VaultPulled(vault, newVault);\\n        vault = newVault;\\n    }\\n\\n    function pullWhitelistSigner() external {\\n        require(msg.sender == newWhitelistSigner, \\\"!newWhitelistSigner\\\");\\n        emit SignerPulled(whitelistSigner, newWhitelistSigner);\\n        whitelistSigner = newWhitelistSigner;\\n    }\\n}\\n\",\"keccak256\":\"0x6ddf7d5dfff5acc4ad7b62e4582ac5b37e103bc89bed32cd7ad6fd66135d956d\",\"license\":\"AGPL-3.0\"},\"src/Types/TheopetraAccessControlled.sol\":{\"content\":\"// SPDX-License-Identifier: AGPL-3.0-only\\npragma solidity >=0.7.5;\\n\\nimport \\\"../Interfaces/ITheopetraAuthority.sol\\\";\\n\\nabstract contract TheopetraAccessControlled {\\n    /* ========== EVENTS ========== */\\n\\n    event AuthorityUpdated(ITheopetraAuthority indexed authority);\\n\\n    string constant UNAUTHORIZED = \\\"UNAUTHORIZED\\\"; // save gas\\n\\n    /* ========== STATE VARIABLES ========== */\\n\\n    ITheopetraAuthority public authority;\\n\\n    /* ========== Constructor ========== */\\n\\n    constructor(ITheopetraAuthority _authority) {\\n        authority = _authority;\\n        emit AuthorityUpdated(_authority);\\n    }\\n\\n    /* ========== MODIFIERS ========== */\\n\\n    modifier onlyGovernor() {\\n        require(msg.sender == authority.governor(), UNAUTHORIZED);\\n        _;\\n    }\\n\\n    modifier onlyGuardian() {\\n        require(msg.sender == authority.guardian(), UNAUTHORIZED);\\n        _;\\n    }\\n\\n    modifier onlyPolicy() {\\n        require(msg.sender == authority.policy(), UNAUTHORIZED);\\n        _;\\n    }\\n\\n    modifier onlyManager() {\\n        require(msg.sender == authority.manager(), UNAUTHORIZED);\\n        _;\\n    }\\n\\n    modifier onlyVault() {\\n        require(msg.sender == authority.vault(), UNAUTHORIZED);\\n        _;\\n    }\\n\\n    /* ========== GOV ONLY ========== */\\n\\n    function setAuthority(ITheopetraAuthority _newAuthority) external onlyGovernor {\\n        authority = _newAuthority;\\n        emit AuthorityUpdated(_newAuthority);\\n    }\\n}\\n\",\"keccak256\":\"0x335437cea6c94c4fdc75340f25a13dc97094825f30d71c36993a94a2724ebf3c\",\"license\":\"AGPL-3.0-only\"}},\"version\":1}",
+  "bytecode": "0x60806040523480156200001157600080fd5b50604051620019a3380380620019a3833981016040819052620000349162000477565b600080546001600160a01b031916309081178255604051909182917f2f658b440c35314f52658ea8a740e05b284cdc84dc9ae01e891f21b8933e7cad9190a25060408051808201909152601e81526000805160206200198383398151915260208201526001600160a01b038716620000ca5760405162461bcd60e51b8152600401620000c19190620004f8565b60405180910390fd5b50600180546001600160a01b0319166001600160a01b0388169081178255604051918252906000907f4f337dcbb2512f18373c1f72d990a2f0a6ee5024b04007c52afd01eb73374a899060200160405180910390a360408051808201909152601e81526000805160206200198383398151915260208201526001600160a01b0386166200016c5760405162461bcd60e51b8152600401620000c19190620004f8565b50600280546001600160a01b0319166001600160a01b038716908117909155604051600181526000907fde655975891e8f09671597b37bd4d663bcc5c21dc6d7641b33cdf85fbe15d08b9060200160405180910390a360408051808201909152601e81526000805160206200198383398151915260208201526001600160a01b0385166200020f5760405162461bcd60e51b8152600401620000c19190620004f8565b50600380546001600160a01b0319166001600160a01b038616908117909155604051600181526000907f90a5902a45c24aae553d5aff384ca16d6560f08d74c9784a4fbd2796d9e13f2b9060200160405180910390a360408051808201909152601e81526000805160206200198383398151915260208201526001600160a01b038416620002b25760405162461bcd60e51b8152600401620000c19190620004f8565b50600480546001600160a01b0319166001600160a01b038516908117909155604051600181526000907f6619bbcc1746ac62c94db62467b4f8905756386db587aee0e6ce9a39ccca7ed79060200160405180910390a360408051808201909152601e81526000805160206200198383398151915260208201526001600160a01b038316620003555760405162461bcd60e51b8152600401620000c19190620004f8565b50600580546001600160a01b0319166001600160a01b038416908117909155604051600181526000907f05a80f5053574d6a62733e1692e8cbcfaf927dc82df0a7267ea2e489a7cc18ff9060200160405180910390a360408051808201909152601e81526000805160206200198383398151915260208201526001600160a01b038216620003f85760405162461bcd60e51b8152600401620000c19190620004f8565b50600680546001600160a01b0319166001600160a01b038316908117909155604051600181526000907f2e586d201448deaf1ad22a6ecedfd556485e3f43ac20bb37df274ac48703d65c9060200160405180910390a350505050505062000550565b80516001600160a01b03811681146200047257600080fd5b919050565b60008060008060008060c087890312156200049157600080fd5b6200049c876200045a565b9550620004ac602088016200045a565b9450620004bc604088016200045a565b9350620004cc606088016200045a565b9250620004dc608088016200045a565b9150620004ec60a088016200045a565b90509295509295509295565b600060208083528351808285015260005b81811015620005275785810183015185820160400152820162000509565b818111156200053a576000604083870101525b50601f01601f1916929092016040019392505050565b61142380620005606000396000f3fe608060405234801561001057600080fd5b50600436106101ae5760003560e01c806352759694116100ee5780638fd2057711610097578063bf7e214f11610071578063bf7e214f1461033c578063d8a042121461034f578063ef81b4d414610357578063fbfa77cf1461036a57600080fd5b80638fd2057714610319578063b78aa12b1461032c578063be11f1dd1461033457600080fd5b80636fe72c14116100c85780636fe72c14146102e05780637a9e5e4b146102f357806388aaf0c81461030657600080fd5b806352759694146102b257806354e3d703146102c55780635beede08146102d857600080fd5b8063368ffd701161015b57806342906029116101355780634290602914610266578063452a932014610279578063481c6a751461028c5780634e9156581461029f57600080fd5b8063368ffd70146102385780633bf90c28146102405780633e289b971461025357600080fd5b8063198598471161018c578063198598471461020a5780631afe87141461021d578063215e92bc1461023057600080fd5b80630505c8c9146101b35780630c340a24146101e257806312a1c518146101f5575b600080fd5b6003546101c6906001600160a01b031681565b6040516001600160a01b03909116815260200160405180910390f35b6001546101c6906001600160a01b031681565b6102086102033660046112fb565b61037d565b005b6008546101c6906001600160a01b031681565b61020861022b3660046112fb565b610531565b6102086106d4565b610208610791565b6009546101c6906001600160a01b031681565b6102086102613660046112fb565b61084e565b600a546101c6906001600160a01b031681565b6002546101c6906001600160a01b031681565b6004546101c6906001600160a01b031681565b600c546101c6906001600160a01b031681565b6102086102c03660046112fb565b6109f1565b6102086102d33660046112fb565b610b94565b610208610d37565b6102086102ee3660046112fb565b610df4565b610208610301366004611339565b610f97565b600b546101c6906001600160a01b031681565b6007546101c6906001600160a01b031681565b6102086110ac565b610208611169565b6000546101c6906001600160a01b031681565b610208611226565b6006546101c6906001600160a01b031681565b6005546101c6906001600160a01b031681565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156103ce573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103f2919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b815250906104525760405162461bcd60e51b8152600401610449919061137a565b60405180910390fd5b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b0383166104ae5760405162461bcd60e51b8152600401610449919061137a565b5080156104d157600680546001600160a01b0319166001600160a01b0384161790555b600c80546001600160a01b0319166001600160a01b038481169182179092556006546040518415158152919216907f2e586d201448deaf1ad22a6ecedfd556485e3f43ac20bb37df274ac48703d65c906020015b60405180910390a35050565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610582573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105a6919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b815250906105fd5760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b0383166106595760405162461bcd60e51b8152600401610449919061137a565b50801561067c57600280546001600160a01b0319166001600160a01b0384161790555b600880546001600160a01b0319166001600160a01b038481169182179092556002546040518415158152919216907fde655975891e8f09671597b37bd4d663bcc5c21dc6d7641b33cdf85fbe15d08b90602001610525565b600b546001600160a01b0316331461072e5760405162461bcd60e51b815260206004820152600960248201527f216e65775661756c7400000000000000000000000000000000000000000000006044820152606401610449565b600b546005546040516001600160a01b0392831692909116907f3d08e01e3b8340be6ca709db7a9321448661a1f490da4d7f3eb03d84fe73095390600090a3600b54600580546001600160a01b0319166001600160a01b03909216919091179055565b600a546001600160a01b031633146107eb5760405162461bcd60e51b815260206004820152600b60248201527f216e65774d616e616765720000000000000000000000000000000000000000006044820152606401610449565b600a546004546040516001600160a01b0392831692909116907fa976d47ee1d21e4e2d6cf31207af5f1ecce7d21250412b3e796e0096f82d971d90600090a3600a54600480546001600160a01b0319166001600160a01b03909216919091179055565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa15801561089f573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108c3919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b8152509061091a5760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b0383166109765760405162461bcd60e51b8152600401610449919061137a565b50801561099957600480546001600160a01b0319166001600160a01b0384161790555b600a80546001600160a01b0319166001600160a01b038481169182179092556004546040518415158152919216907f6619bbcc1746ac62c94db62467b4f8905756386db587aee0e6ce9a39ccca7ed790602001610525565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610a42573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a66919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b81525090610abd5760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b038316610b195760405162461bcd60e51b8152600401610449919061137a565b508015610b3c57600180546001600160a01b0319166001600160a01b0384161790555b600780546001600160a01b0319166001600160a01b038481169182179092556001546040518415158152919216907f4f337dcbb2512f18373c1f72d990a2f0a6ee5024b04007c52afd01eb73374a8990602001610525565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610be5573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610c09919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b81525090610c605760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b038316610cbc5760405162461bcd60e51b8152600401610449919061137a565b508015610cdf57600380546001600160a01b0319166001600160a01b0384161790555b600980546001600160a01b0319166001600160a01b038481169182179092556003546040518415158152919216907f90a5902a45c24aae553d5aff384ca16d6560f08d74c9784a4fbd2796d9e13f2b90602001610525565b6009546001600160a01b03163314610d915760405162461bcd60e51b815260206004820152600a60248201527f216e6577506f6c696379000000000000000000000000000000000000000000006044820152606401610449565b6009546003546040516001600160a01b0392831692909116907f64d2fa522b403ca222efff0c7ad07d2ef45472a45e5770918bdfa9a2845d29a890600090a3600954600380546001600160a01b0319166001600160a01b03909216919091179055565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610e45573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610e69919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b81525090610ec05760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b038316610f1c5760405162461bcd60e51b8152600401610449919061137a565b508015610f3f57600580546001600160a01b0319166001600160a01b0384161790555b600b80546001600160a01b0319166001600160a01b038481169182179092556005546040518415158152919216907f05a80f5053574d6a62733e1692e8cbcfaf927dc82df0a7267ea2e489a7cc18ff90602001610525565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610fe8573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061100c919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b815250906110635760405162461bcd60e51b8152600401610449919061137a565b50600080546001600160a01b0319166001600160a01b038316908117825560405190917f2f658b440c35314f52658ea8a740e05b284cdc84dc9ae01e891f21b8933e7cad91a250565b600c546001600160a01b031633146111065760405162461bcd60e51b815260206004820152601360248201527f216e657757686974656c6973745369676e6572000000000000000000000000006044820152606401610449565b600c546006546040516001600160a01b0392831692909116907fdb833ab8eb1d011130a88081d5bcd677c787d7618f2a28f7e92832a182fc49b290600090a3600c54600680546001600160a01b0319166001600160a01b03909216919091179055565b6008546001600160a01b031633146111c35760405162461bcd60e51b815260206004820152600960248201527f216e6577477561726400000000000000000000000000000000000000000000006044820152606401610449565b6008546002546040516001600160a01b0392831692909116907f0960fb9900fb8096216606c4f7fc2fce5d08cc0c82da55cec8619b66b523848190600090a3600854600280546001600160a01b0319166001600160a01b03909216919091179055565b6007546001600160a01b031633146112805760405162461bcd60e51b815260206004820152600c60248201527f216e6577476f7665726e6f7200000000000000000000000000000000000000006044820152606401610449565b6007546001546040516001600160a01b0392831692909116907fffd6fed33fe8ec1016718bdd5d04ae6fecd9aba0da6578807daaaa7fc3d1682690600090a3600754600180546001600160a01b0319166001600160a01b03909216919091179055565b6001600160a01b03811681146112f857600080fd5b50565b6000806040838503121561130e57600080fd5b8235611319816112e3565b91506020830135801515811461132e57600080fd5b809150509250929050565b60006020828403121561134b57600080fd5b8135611356816112e3565b9392505050565b60006020828403121561136f57600080fd5b8151611356816112e3565b600060208083528351808285015260005b818110156113a75785810183015185820160400152820161138b565b818111156113b9576000604083870101525b50601f017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe01692909201604001939250505056fea2646970667358221220e3253c10c4d9837c2852eaf14da0743a1b0654f6f3855411c3d71b2da611121464736f6c634300080a0033416464726573732063616e6e6f74206265207a65726f20616464726573730000",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101ae5760003560e01c806352759694116100ee5780638fd2057711610097578063bf7e214f11610071578063bf7e214f1461033c578063d8a042121461034f578063ef81b4d414610357578063fbfa77cf1461036a57600080fd5b80638fd2057714610319578063b78aa12b1461032c578063be11f1dd1461033457600080fd5b80636fe72c14116100c85780636fe72c14146102e05780637a9e5e4b146102f357806388aaf0c81461030657600080fd5b806352759694146102b257806354e3d703146102c55780635beede08146102d857600080fd5b8063368ffd701161015b57806342906029116101355780634290602914610266578063452a932014610279578063481c6a751461028c5780634e9156581461029f57600080fd5b8063368ffd70146102385780633bf90c28146102405780633e289b971461025357600080fd5b8063198598471161018c578063198598471461020a5780631afe87141461021d578063215e92bc1461023057600080fd5b80630505c8c9146101b35780630c340a24146101e257806312a1c518146101f5575b600080fd5b6003546101c6906001600160a01b031681565b6040516001600160a01b03909116815260200160405180910390f35b6001546101c6906001600160a01b031681565b6102086102033660046112fb565b61037d565b005b6008546101c6906001600160a01b031681565b61020861022b3660046112fb565b610531565b6102086106d4565b610208610791565b6009546101c6906001600160a01b031681565b6102086102613660046112fb565b61084e565b600a546101c6906001600160a01b031681565b6002546101c6906001600160a01b031681565b6004546101c6906001600160a01b031681565b600c546101c6906001600160a01b031681565b6102086102c03660046112fb565b6109f1565b6102086102d33660046112fb565b610b94565b610208610d37565b6102086102ee3660046112fb565b610df4565b610208610301366004611339565b610f97565b600b546101c6906001600160a01b031681565b6007546101c6906001600160a01b031681565b6102086110ac565b610208611169565b6000546101c6906001600160a01b031681565b610208611226565b6006546101c6906001600160a01b031681565b6005546101c6906001600160a01b031681565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa1580156103ce573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103f2919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b815250906104525760405162461bcd60e51b8152600401610449919061137a565b60405180910390fd5b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b0383166104ae5760405162461bcd60e51b8152600401610449919061137a565b5080156104d157600680546001600160a01b0319166001600160a01b0384161790555b600c80546001600160a01b0319166001600160a01b038481169182179092556006546040518415158152919216907f2e586d201448deaf1ad22a6ecedfd556485e3f43ac20bb37df274ac48703d65c906020015b60405180910390a35050565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610582573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105a6919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b815250906105fd5760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b0383166106595760405162461bcd60e51b8152600401610449919061137a565b50801561067c57600280546001600160a01b0319166001600160a01b0384161790555b600880546001600160a01b0319166001600160a01b038481169182179092556002546040518415158152919216907fde655975891e8f09671597b37bd4d663bcc5c21dc6d7641b33cdf85fbe15d08b90602001610525565b600b546001600160a01b0316331461072e5760405162461bcd60e51b815260206004820152600960248201527f216e65775661756c7400000000000000000000000000000000000000000000006044820152606401610449565b600b546005546040516001600160a01b0392831692909116907f3d08e01e3b8340be6ca709db7a9321448661a1f490da4d7f3eb03d84fe73095390600090a3600b54600580546001600160a01b0319166001600160a01b03909216919091179055565b600a546001600160a01b031633146107eb5760405162461bcd60e51b815260206004820152600b60248201527f216e65774d616e616765720000000000000000000000000000000000000000006044820152606401610449565b600a546004546040516001600160a01b0392831692909116907fa976d47ee1d21e4e2d6cf31207af5f1ecce7d21250412b3e796e0096f82d971d90600090a3600a54600480546001600160a01b0319166001600160a01b03909216919091179055565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa15801561089f573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108c3919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b8152509061091a5760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b0383166109765760405162461bcd60e51b8152600401610449919061137a565b50801561099957600480546001600160a01b0319166001600160a01b0384161790555b600a80546001600160a01b0319166001600160a01b038481169182179092556004546040518415158152919216907f6619bbcc1746ac62c94db62467b4f8905756386db587aee0e6ce9a39ccca7ed790602001610525565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610a42573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a66919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b81525090610abd5760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b038316610b195760405162461bcd60e51b8152600401610449919061137a565b508015610b3c57600180546001600160a01b0319166001600160a01b0384161790555b600780546001600160a01b0319166001600160a01b038481169182179092556001546040518415158152919216907f4f337dcbb2512f18373c1f72d990a2f0a6ee5024b04007c52afd01eb73374a8990602001610525565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610be5573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610c09919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b81525090610c605760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b038316610cbc5760405162461bcd60e51b8152600401610449919061137a565b508015610cdf57600380546001600160a01b0319166001600160a01b0384161790555b600980546001600160a01b0319166001600160a01b038481169182179092556003546040518415158152919216907f90a5902a45c24aae553d5aff384ca16d6560f08d74c9784a4fbd2796d9e13f2b90602001610525565b6009546001600160a01b03163314610d915760405162461bcd60e51b815260206004820152600a60248201527f216e6577506f6c696379000000000000000000000000000000000000000000006044820152606401610449565b6009546003546040516001600160a01b0392831692909116907f64d2fa522b403ca222efff0c7ad07d2ef45472a45e5770918bdfa9a2845d29a890600090a3600954600380546001600160a01b0319166001600160a01b03909216919091179055565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610e45573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610e69919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b81525090610ec05760405162461bcd60e51b8152600401610449919061137a565b5060408051808201909152601e81527f416464726573732063616e6e6f74206265207a65726f2061646472657373000060208201526001600160a01b038316610f1c5760405162461bcd60e51b8152600401610449919061137a565b508015610f3f57600580546001600160a01b0319166001600160a01b0384161790555b600b80546001600160a01b0319166001600160a01b038481169182179092556005546040518415158152919216907f05a80f5053574d6a62733e1692e8cbcfaf927dc82df0a7267ea2e489a7cc18ff90602001610525565b60008054906101000a90046001600160a01b03166001600160a01b0316630c340a246040518163ffffffff1660e01b8152600401602060405180830381865afa158015610fe8573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061100c919061135d565b6001600160a01b0316336001600160a01b0316146040518060400160405280600c81526020016b15539055551213d49256915160a21b815250906110635760405162461bcd60e51b8152600401610449919061137a565b50600080546001600160a01b0319166001600160a01b038316908117825560405190917f2f658b440c35314f52658ea8a740e05b284cdc84dc9ae01e891f21b8933e7cad91a250565b600c546001600160a01b031633146111065760405162461bcd60e51b815260206004820152601360248201527f216e657757686974656c6973745369676e6572000000000000000000000000006044820152606401610449565b600c546006546040516001600160a01b0392831692909116907fdb833ab8eb1d011130a88081d5bcd677c787d7618f2a28f7e92832a182fc49b290600090a3600c54600680546001600160a01b0319166001600160a01b03909216919091179055565b6008546001600160a01b031633146111c35760405162461bcd60e51b815260206004820152600960248201527f216e6577477561726400000000000000000000000000000000000000000000006044820152606401610449565b6008546002546040516001600160a01b0392831692909116907f0960fb9900fb8096216606c4f7fc2fce5d08cc0c82da55cec8619b66b523848190600090a3600854600280546001600160a01b0319166001600160a01b03909216919091179055565b6007546001600160a01b031633146112805760405162461bcd60e51b815260206004820152600c60248201527f216e6577476f7665726e6f7200000000000000000000000000000000000000006044820152606401610449565b6007546001546040516001600160a01b0392831692909116907fffd6fed33fe8ec1016718bdd5d04ae6fecd9aba0da6578807daaaa7fc3d1682690600090a3600754600180546001600160a01b0319166001600160a01b03909216919091179055565b6001600160a01b03811681146112f857600080fd5b50565b6000806040838503121561130e57600080fd5b8235611319816112e3565b91506020830135801515811461132e57600080fd5b809150509250929050565b60006020828403121561134b57600080fd5b8135611356816112e3565b9392505050565b60006020828403121561136f57600080fd5b8151611356816112e3565b600060208083528351808285015260005b818110156113a75785810183015185820160400152820161138b565b818111156113b9576000604083870101525b50601f017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe01692909201604001939250505056fea2646970667358221220e3253c10c4d9837c2852eaf14da0743a1b0654f6f3855411c3d71b2da611121464736f6c634300080a0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 14683,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "authority",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(ITheopetraAuthority)2818"
+      },
+      {
+        "astId": 11840,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "governor",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 11843,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "guardian",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_address"
+      },
+      {
+        "astId": 11846,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "policy",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_address"
+      },
+      {
+        "astId": 11849,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "manager",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_address"
+      },
+      {
+        "astId": 11852,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "vault",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_address"
+      },
+      {
+        "astId": 11855,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "whitelistSigner",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_address"
+      },
+      {
+        "astId": 11857,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "newGovernor",
+        "offset": 0,
+        "slot": "7",
+        "type": "t_address"
+      },
+      {
+        "astId": 11859,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "newGuardian",
+        "offset": 0,
+        "slot": "8",
+        "type": "t_address"
+      },
+      {
+        "astId": 11861,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "newPolicy",
+        "offset": 0,
+        "slot": "9",
+        "type": "t_address"
+      },
+      {
+        "astId": 11863,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "newManager",
+        "offset": 0,
+        "slot": "10",
+        "type": "t_address"
+      },
+      {
+        "astId": 11865,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "newVault",
+        "offset": 0,
+        "slot": "11",
+        "type": "t_address"
+      },
+      {
+        "astId": 11867,
+        "contract": "src/Theopetra/TheopetraAuthority.sol:TheopetraAuthority",
+        "label": "newWhitelistSigner",
+        "offset": 0,
+        "slot": "12",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_contract(ITheopetraAuthority)2818": {
+        "encoding": "inplace",
+        "label": "contract ITheopetraAuthority",
+        "numberOfBytes": "20"
+      }
+    }
   }
+}
