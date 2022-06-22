@@ -12,6 +12,7 @@ import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import { useRouter } from 'next/router';
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 
 const whitelistExpiry =
   parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0') * 1000;
@@ -31,7 +32,7 @@ const Whitelist = () => {
       if (Date.now() <= whitelistExpiry) {
         setTimer(duration);
       } else {
-        router.replace('/discount-buy');
+        router.replace('/whitelist-sale');
       }
     }, 1000);
     return () => clearTimeout(timer);
@@ -48,18 +49,27 @@ const Whitelist = () => {
         {account?.address ? (
           <>
             <CardList>
-              {/* TODO: change to ending time instead of counter */}
-              <Card
-                title="Time Remaining"
-                headerRightComponent={<Icon name="clock2" className="h-6 w-6 text-theo-navy" />}
-              >
-                <div className=" text-3xl font-extrabold">
-                  {!timer.hours ? '00' : timer.hours < 10 ? `0${timer.hours}` : timer.hours}:
-                  {!timer.minutes ? '00' : timer.minutes < 10 ? `0${timer.minutes}` : timer.minutes}
-                  :
-                  {!timer.seconds ? '00' : timer.seconds < 10 ? `0${timer.seconds}` : timer.seconds}
-                </div>
-              </Card>
+              {Date.now() <= whitelistExpiry && (
+                <Card
+                  title="Time Remaining"
+                  headerRightComponent={<Icon name="clock2" className="h-6 w-6 text-theo-navy" />}
+                >
+                  <div className=" text-3xl font-extrabold">
+                    {!timer.hours ? '00' : timer.hours < 10 ? `0${timer.hours}` : timer.hours}:
+                    {!timer.minutes
+                      ? '00'
+                      : timer.minutes < 10
+                      ? `0${timer.minutes}`
+                      : timer.minutes}
+                    :
+                    {!timer.seconds
+                      ? '00'
+                      : timer.seconds < 10
+                      ? `0${timer.seconds}`
+                      : timer.seconds}
+                  </div>
+                </Card>
+              )}
               <Card
                 title="Assets Accepted"
                 headerRightComponent={<Icon name="check" className="h-6 w-6 text-theo-navy" />}
@@ -98,7 +108,14 @@ const Whitelist = () => {
   );
 };
 Whitelist.PageHead = () => {
-  return <div>Whitelist Sale!</div>;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { activeContractName } = useActiveBondDepo();
+
+  return (
+    <div>
+      {activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'} Sale!
+    </div>
+  );
 };
 Whitelist.PageStateProvider = (props) => <BuyFormProvider {...props} />;
 

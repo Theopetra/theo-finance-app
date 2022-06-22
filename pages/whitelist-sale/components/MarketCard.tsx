@@ -3,6 +3,7 @@ import DynamicText from '@/components/DynamicText';
 import Icon from '@/components/Icons';
 import { TokenInfo } from '@/components/TokenName';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import DiscountBuyForm from '@/pages/discount-buy/components/DiscountBuyForm';
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import useModal from '@/state/ui/theme/hooks/use-modal';
@@ -30,6 +31,11 @@ const MarketCard = ({ bondMarkets }) => {
     const ethMarket = bondMarkets?.markets.find((x) => x.marketData.quoteToken === ethAddress);
     return [usdcMarket, ethMarket];
   }, [bondMarkets]);
+
+  const { activeContractName } = useActiveBondDepo();
+
+  const txnType =
+    activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market';
 
   return (
     <>
@@ -85,8 +91,8 @@ const MarketCard = ({ bondMarkets }) => {
           <button
             className="border-button mb-3 w-full"
             onClick={() => {
-              setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: 'WhiteList' });
-              openModal(<DiscountBuyForm title="Whitelist Buy" />);
+              setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: txnType });
+              openModal(<DiscountBuyForm title={`${txnType} Buy`} />);
             }}
           >
             Buy THEO

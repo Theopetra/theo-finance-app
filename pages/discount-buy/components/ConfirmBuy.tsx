@@ -13,6 +13,7 @@ import Successfull from './Successful';
 import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages';
 import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
 import { useMemo } from 'react';
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -75,7 +76,7 @@ const ConfirmBuy = () => {
   // const provider = useProvider();
   const { data: wallet } = useAccount();
   const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useContractInfo('WhitelistTheopetraBondDepository');
+    useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
   // autostake
