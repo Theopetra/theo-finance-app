@@ -4,8 +4,7 @@ import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json';
 import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepository.json';
 import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
-// TODO: change once this is deployed
-import PublicPreListBondDepositoryArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
+import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
 
 // address 1 = mainnet, address 3 = ropsten
 // TODO: update mainnet addresses for launch
