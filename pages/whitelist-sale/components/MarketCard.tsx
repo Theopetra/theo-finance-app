@@ -12,7 +12,6 @@ import { useMemo } from 'react';
 import EthIcon from '../../../public/assets/icons/eth.svg';
 import UdcIcon from '../../../public/assets/icons/usdc.svg';
 
-// TODO: add env variables
 const usdcAddress =
   process.env.NEXT_PUBLIC_USDC_ADDRESS || '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
 const ethAddress =

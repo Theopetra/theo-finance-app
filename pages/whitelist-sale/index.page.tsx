@@ -24,18 +24,21 @@ const Whitelist = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      const duration = intervalToDuration({
-        start: new Date(),
-        end: new Date(whitelistExpiry),
-      });
-      if (Date.now() <= whitelistExpiry) {
-        setTimer(duration);
-      } else {
-        router.replace('/whitelist-sale');
-      }
-    }, 1000);
-    return () => clearTimeout(timer);
+    if (Date.now() <= whitelistExpiry) {
+      const timer = setInterval(() => {
+        const duration = intervalToDuration({
+          start: new Date(),
+          end: new Date(whitelistExpiry),
+        });
+        if (Date.now() <= whitelistExpiry) {
+          setTimer(duration);
+        } else {
+          clearTimeout(timer);
+          router.replace('/whitelist-sale');
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   return (

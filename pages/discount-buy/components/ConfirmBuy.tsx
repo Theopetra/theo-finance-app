@@ -29,7 +29,15 @@ export const Price = () => {
   );
 };
 export const MarketDiscountRow = () => {
-  return <ConfirmRow title="Purchase Type" value="Whitelist" subtext=" 24-Hour Event" />;
+  const { activeContractName } = useActiveBondDepo();
+
+  return (
+    <ConfirmRow
+      title="Purchase Type"
+      value={activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'}
+      subtext={activeContractName === 'WhitelistTheopetraBondDepository' ? '24-Hour Event' : ''}
+    />
+  );
 };
 
 export const PurchaseAmountRow = () => {
