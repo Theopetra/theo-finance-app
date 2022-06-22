@@ -70,9 +70,10 @@ function useLockedTheoByContract(contractName) {
 function useLockedTheo() {
   const whitelistRepo = useLockedTheoByContract('WhitelistTheopetraBondDepository');
   const bondRepo = useLockedTheoByContract('TheopetraBondDepository');
-  const publicPreListRepo = useLockedTheoByContract('PublicPreListBondDepository');
+  // TODO: re-enable when released
+  // const publicPreListRepo = useLockedTheoByContract('PublicPreListBondDepository');
 
-  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i])]);
+  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i])]);
 }
 
 const Dashboard = () => {

@@ -11,8 +11,11 @@ import { useMemo } from 'react';
 import EthIcon from '../../../public/assets/icons/eth.svg';
 import UdcIcon from '../../../public/assets/icons/usdc.svg';
 
-const usdcAddress = process.env.USDC_ADDRESS || '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b';
-const ethAddress = process.env.ETH_ADDRESS || '0xc778417E063141139Fce010982780140Aa0cD5Ab';
+// TODO: add env variables
+const usdcAddress =
+  process.env.NEXT_PUBLIC_USDC_ADDRESS || '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
+const ethAddress =
+  process.env.NEXT_PUBLIC_ETH_ADDRESS || '0xc778417E063141139Fce010982780140Aa0cD5Ab';
 const MarketCard = ({ bondMarkets }) => {
   const [{}, { openModal }] = useModal();
   const [{}, { setSelection }] = useBuyForm();
@@ -69,8 +72,8 @@ const MarketCard = ({ bondMarkets }) => {
                       )}
                       <div className="text-2xl font-bold">
                         {WhitelistTokenPrice({
-                          marketId: market.id,
-                          quoteToken: market.marketData.quoteToken,
+                          marketId: market?.id,
+                          quoteToken: market?.marketData?.quoteToken,
                         })}
                       </div>
                     </div>
@@ -83,7 +86,7 @@ const MarketCard = ({ bondMarkets }) => {
             className="border-button mb-3 w-full"
             onClick={() => {
               setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: 'WhiteList' });
-              openModal(<DiscountBuyForm title="Whitelist Buy"/>);
+              openModal(<DiscountBuyForm title="Whitelist Buy" />);
             }}
           >
             Buy THEO

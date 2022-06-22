@@ -1,8 +1,8 @@
-import { navigation } from '../../pages/nav-config';
 import NavItem from './NavItem';
 import Logo from './Logo';
 import Icon from '../Icons';
 import { Fragment } from 'react';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const socialLinks = [
   { icon: 'twitter-logo', href: 'https://twitter.com/TheopetraLabs' },
@@ -17,6 +17,7 @@ const classes = {
 };
 
 const Navigation = () => {
+  const navigation = useNavigation();
   return (
     <div className=" flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
       <div className="flex flex-1 flex-col overflow-y-auto pt-5">

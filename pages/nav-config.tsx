@@ -12,6 +12,17 @@ export const navigation = [
     ],
   },
   {
+    name: 'Pre-Market Sale',
+    href: '/discount-buy',
+    icon: 'intersect',
+    subNav: [
+      {
+        name: 'Your Purchases',
+        href: '/discount-buy/your-purchases',
+      },
+    ],
+  },
+  {
     name: 'Memberships',
     href: '/memberships',
     icon: 'lock-laminated',

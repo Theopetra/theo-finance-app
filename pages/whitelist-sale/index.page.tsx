@@ -11,24 +11,27 @@ import MarketCard from './components/MarketCard';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
+import { useRouter } from 'next/router';
 
-// TODO: replace with "whitelistEndTimestamp" environment variable
-const startDate = addMinutes(new Date(), 2);
-const endDate = new Date();
+const whitelistExpiry =
+  parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0') * 1000;
 
 const Whitelist = () => {
   const [timer, setTimer] = useState<Duration>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [{ groupedBondMarkets }] = useBuyForm();
   const { data: account, isError, isLoading } = useAccount();
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setInterval(() => {
       const duration = intervalToDuration({
         start: new Date(),
-        end: startDate,
+        end: new Date(whitelistExpiry),
       });
-      if (new Date() <= startDate) {
+      if (Date.now() <= whitelistExpiry) {
         setTimer(duration);
+      } else {
+        router.replace('/discount-buy');
       }
     }, 1000);
     return () => clearTimeout(timer);
