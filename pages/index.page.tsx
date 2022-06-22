@@ -5,7 +5,7 @@ import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import { useContractInfo } from '@/hooks/useContractInfo';
-import { useContractRead, useNetwork, useProvider } from 'wagmi';
+import { useProvider } from 'wagmi';
 import useMetrics from '@/hooks/useMetrics';
 import { useTheme } from '@/state/ui/theme';
 import { Fragment, useEffect, useState } from 'react';
@@ -70,10 +70,9 @@ function useLockedTheoByContract(contractName) {
 function useLockedTheo() {
   const whitelistRepo = useLockedTheoByContract('WhitelistTheopetraBondDepository');
   const bondRepo = useLockedTheoByContract('TheopetraBondDepository');
-  // TODO: re-enable when released
-  // const publicPreListRepo = useLockedTheoByContract('PublicPreListBondDepository');
+  const publicPreListRepo = useLockedTheoByContract('PublicPreListBondDepository');
 
-  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i])]);
+  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i])]);
 }
 
 const Dashboard = () => {

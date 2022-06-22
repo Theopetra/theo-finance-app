@@ -11,11 +11,10 @@ import PublicPreListBondDepositoryArtifact from '../artifacts/WhitelistTheopetra
 // TODO: update mainnet addresses for launch
 
 export const contractMetadata = {
-  // TODO: change these contract addresses to the real ones (copies of WhitelistBondDepository for now)
   PublicPreListBondDepository: {
     address: {
-      1: '0x4805Ea3b3D3f6eDf4f632FD02e53c2aD53422356',
-      3: '0x4805Ea3b3D3f6eDf4f632FD02e53c2aD53422356',
+      1: '0xb9eB84B937f4B79a4D2DDE68e348440792F6A7Fc',
+      3: '0xb9eB84B937f4B79a4D2DDE68e348440792F6A7Fc',
     },
     abi: PublicPreListBondDepositoryArtifact.abi,
   },
@@ -56,8 +55,8 @@ export const contractMetadata = {
   },
   WethHelper: {
     address: {
-      1: '0x4805Ea3b3D3f6eDf4f632FD02e53c2aD53422356',
-      3: '0x4805Ea3b3D3f6eDf4f632FD02e53c2aD53422356',
+      1: '0x7f48bBa5a7755acF6E9881ef8e86Ae5db2Ec2e67',
+      3: '0x7f48bBa5a7755acF6E9881ef8e86Ae5db2Ec2e67',
     },
     abi: wethHelper.abi,
   },
