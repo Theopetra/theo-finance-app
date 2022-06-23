@@ -87,6 +87,7 @@ const ConfirmBuy = () => {
     useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
+
   // autostake
   const signature: any = useMemo(() => {
     if (purchaseToken?.symbol === 'weth') {
@@ -98,18 +99,9 @@ const ConfirmBuy = () => {
       return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
     });
   }, [wallet, purchaseToken?.symbol]);
-  console.log(signature.wlDepoSignature);
 
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
-
-  // // await bob.BondDepository.deposit(
-  // ✅ bid,
-  // ✅ depositAmount,
-  // ✅ initialPrice,
-  // bob.address,
-  // carol.address,
-  // autoStake);
 
   const args = [
     selectedMarket.id,

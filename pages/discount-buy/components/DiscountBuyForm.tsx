@@ -17,6 +17,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
   ] = useBuyForm();
 
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
+  // TODO: fix balance for quote token
   const {
     data: balance,
     isError: balanceIsError,

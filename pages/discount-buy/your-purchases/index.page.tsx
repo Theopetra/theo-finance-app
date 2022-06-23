@@ -10,21 +10,48 @@ import {
   randNumber,
 } from '@ngneat/falso';
 import { addSeconds, format } from 'date-fns';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import DynamicText from '@/components/DynamicText';
 import { useContractInfo } from '@/hooks/useContractInfo';
+import { useAccount, useContract, useProvider } from 'wagmi';
+
+const usePurchasesByContract = (contractName) => {
+  const { data, status } = useAccount();
+  const { address, abi } = useContractInfo(contractName);
+  const provider = useProvider();
+  const contract = useContract({
+    addressOrName: address,
+    contractInterface: abi,
+    signerOrProvider: provider,
+  });
+
+  useEffect(() => {
+    async function callContract() {
+      if (contract) {
+        const indexes = await contract.indexesFor(data?.address);
+        console.log(indexes);
+      }
+    }
+    callContract();
+  }, [contract, data?.address]);
+
+  // TODO:
+  // useContractRead for pendingFor
+  // pendingFor -> map to table items
+
+  return [];
+};
 
 const YourPurchases = () => {
-  const data = useMemo(() => {
-    const statuses = ['locked', 'claimed', 'unclaimed'];
+  // TODO: verify connected
+  const { data, status } = useAccount();
+  const purchases = [
+    ...usePurchasesByContract('WhitelistTheopetraBondDepository'),
+    ...usePurchasesByContract('PublicPreListBondDepository'),
+  ];
 
-    // TODO:
-    // check wallet is connected
-    // add notekeeper artifact and contract metadata
-    // useContractInfo to get address and abi
-    // useContractRead for indexesFor
-    // useContractRead for pendingFor
-    // pendingFor -> map to table items
+  const txData = useMemo(() => {
+    const statuses = ['locked', 'claimed', 'unclaimed'];
 
     return [
       {
@@ -104,7 +131,7 @@ const YourPurchases = () => {
 
   return (
     <PageContainer>
-      <PurchasesTable columns={columns} data={data} />
+      <PurchasesTable columns={columns} data={txData} />
     </PageContainer>
   );
 };

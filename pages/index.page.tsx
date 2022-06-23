@@ -30,7 +30,8 @@ function useLockedTheoByContract(contractName) {
     // TODO: verify this works once there is test data
     async function getData() {
       const contract = new ethers.Contract(address, abi, provider);
-      const data = await contract.getMarkets();
+      const data = await contract.liveMarkets();
+      // const data = await contract.getMarkets();
       log('markets for ' + contractName, data);
 
       if (data) {

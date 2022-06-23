@@ -72,6 +72,8 @@ export const BuyFormProvider: React.FC = (props) => {
     { args: selectedMarket?.id }
   );
 
+  console.log(selection);
+
   // TODO: expand to other bond markets?
   useEffect(() => {
     const termsMap = {};
