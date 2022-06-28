@@ -17,6 +17,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
   ] = useBuyForm();
 
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
+  // TODO: fix balance for quote token
   const {
     data: balance,
     isError: balanceIsError,
@@ -38,14 +39,14 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
       {
         target: {
           value: {
-            ...bondMarkets.markets[0].marketData,
+            ...bondMarkets?.markets?.[0].marketData,
             ...initialToken,
           },
         },
       },
       'purchaseToken'
     );
-  }, [initialToken]);
+  }, [initialToken, bondMarkets?.markets?.[0].marketData]);
 
   return (
     <div>
@@ -137,7 +138,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
           value={purchaseAmount}
           onChange={(e: BaseSyntheticEvent) => handleTokenInput(e, 'purchaseAmount')}
         />
-        <div className="text-right text-red-500 text-sm"> {errorMessage}</div>
+        <div className="text-right text-sm text-red-500"> {errorMessage}</div>
       </div>
 
       <div className="flex w-full flex-col items-center justify-end sm:flex-row">

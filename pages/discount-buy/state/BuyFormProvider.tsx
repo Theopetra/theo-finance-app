@@ -1,4 +1,5 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { BigNumber } from 'ethers';
 import React, { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
@@ -37,7 +38,7 @@ export const BuyFormProvider: React.FC = (props) => {
     purchaseAmount: 0,
     purchaseCost: 0,
   });
-  const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);
+  const { address, abi } = useActiveBondDepo();
   const provider = useProvider();
   const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
 
@@ -60,7 +61,7 @@ export const BuyFormProvider: React.FC = (props) => {
     signerOrProvider: provider,
   });
   const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useContractInfo('WhitelistTheopetraBondDepository', 1);
+    useActiveBondDepo();
 
   const { data: priceInfo } = useContractRead(
     {
@@ -71,6 +72,9 @@ export const BuyFormProvider: React.FC = (props) => {
     { args: selectedMarket?.id }
   );
 
+  console.log(selection);
+
+  // TODO: expand to other bond markets?
   useEffect(() => {
     const termsMap = {};
     if (WhitelistBondMarketsSuccess) {

@@ -1,11 +1,12 @@
 import { Fragment } from 'react';
 import { Transition } from '@headlessui/react';
-import { navigation } from '../../../pages/nav-config';
 import Logo from '../Logo';
 import NavItem from '../NavItem';
 import { useTheme } from '@/state/ui/theme';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const MobileNav = () => {
+  const navigation = useNavigation();
   const [{ navigationOpen }] = useTheme();
   return (
     <Transition.Root show={navigationOpen} as={Fragment}>
@@ -19,9 +20,9 @@ const MobileNav = () => {
           leaveFrom="translate-y-0"
           leaveTo="translate-y-full"
         >
-          <div className=" pt-12 relative flex w-full flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
+          <div className=" relative flex w-full flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] pt-12 dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
             <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
-              <div className="flex flex-shrink-0 items-center px-4 w-64 mx-auto mb-10">
+              <div className="mx-auto mb-10 flex w-64 flex-shrink-0 items-center px-4">
                 <Logo altLogo />
               </div>
               <nav className="mt-5 space-y-1 px-2">

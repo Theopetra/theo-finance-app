@@ -1,3 +1,4 @@
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { BigNumber } from 'ethers';
 import { useContractRead, useToken } from 'wagmi';
@@ -5,7 +6,7 @@ import { useContractRead, useToken } from 'wagmi';
 export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
   const { data: token } = useToken({ address: quoteToken });
 
-  const { address, abi } = useContractInfo('WhitelistTheopetraBondDepository', 1);
+  const { address, abi } = useActiveBondDepo();
   const {
     data: priceInfo,
     isError,

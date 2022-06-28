@@ -5,7 +5,7 @@ import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import { useContractInfo } from '@/hooks/useContractInfo';
-import { useContractRead, useProvider } from 'wagmi';
+import { useProvider } from 'wagmi';
 import useMetrics from '@/hooks/useMetrics';
 import { useTheme } from '@/state/ui/theme';
 import { Fragment, useEffect, useState } from 'react';
@@ -21,26 +21,20 @@ function log(msg, val) {
 }
 
 function useLockedTheoByContract(contractName) {
-  const { address, abi } = useContractInfo(contractName, 4);
+  const { address, abi } = useContractInfo(contractName);
   const provider = useProvider();
-  const { data, isSuccess } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'liveMarkets'
-  );
-  const [locked, setLocked] = useState([BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)]);
 
-  log('markets for ' + contractName, data);
+  const [locked, setLocked] = useState([BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)]);
 
   useEffect(() => {
     // TODO: verify this works once there is test data
-
     async function getData() {
-      if (data && provider) {
-        const contract = new ethers.Contract(address, abi, provider);
+      const contract = new ethers.Contract(address, abi, provider);
+      const data = await contract.liveMarkets();
+      // const data = await contract.getMarkets();
+      log('markets for ' + contractName, data);
 
+      if (data) {
         const merged = await Promise.all(
           data.map(async (b) => {
             return {
@@ -69,7 +63,7 @@ function useLockedTheoByContract(contractName) {
       }
     }
     getData();
-  }, [data, provider, abi, address, contractName]);
+  }, [provider, abi, address, contractName]);
 
   return locked;
 }

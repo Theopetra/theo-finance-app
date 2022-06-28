@@ -73,6 +73,9 @@ const DiscountBuy = () => {
     },
   ];
 
+  // TODO: remove this line when we are ready for GA.
+  return <p>Coming soon.</p>;
+
   return (
     <>
       <div className="pt-4">

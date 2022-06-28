@@ -14,7 +14,7 @@ export const contractMetadata = {
   PublicPreListBondDepository: {
     address: {
       1: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
-      4: '0xbCF05b9993B5241C9F46F8a4C3459d42artifacts/TheopetraAuthority.json3299D57D',
+      4: '0xbCF05b9993B5241C9F46F8a4C3459d423299D57D',
     },
     abi: PublicPreListBondDepositoryArtifact.abi,
   },
@@ -55,9 +55,8 @@ export const contractMetadata = {
   },
   WethHelper: {
     address: {
-      // waiting on contract to be deployed.
-      1: '',
-      4: '',
+      1: '0x2E48f1E6C53ace80BA34F4f138d9b4A7488ca9E9',
+      4: '0x2E48f1E6C53ace80BA34F4f138d9b4A7488ca9E9',
     },
     abi: wethHelper.abi,
   },

@@ -13,6 +13,7 @@ import Successfull from './Successful';
 import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages';
 import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
 import { useMemo } from 'react';
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -28,7 +29,15 @@ export const Price = () => {
   );
 };
 export const MarketDiscountRow = () => {
-  return <ConfirmRow title="Purchase Type" value="Whitelist" subtext=" 24-Hour Event" />;
+  const { activeContractName } = useActiveBondDepo();
+
+  return (
+    <ConfirmRow
+      title="Purchase Type"
+      value={activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'}
+      subtext={activeContractName === 'WhitelistTheopetraBondDepository' ? '24-Hour Event' : ''}
+    />
+  );
 };
 
 export const PurchaseAmountRow = () => {
@@ -75,9 +84,10 @@ const ConfirmBuy = () => {
   // const provider = useProvider();
   const { data: wallet } = useAccount();
   const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useContractInfo('WhitelistTheopetraBondDepository', 1);
-  const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper', 1);
+    useActiveBondDepo();
+  const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
+
   // autostake
   const signature: any = useMemo(() => {
     if (purchaseToken?.symbol === 'weth') {
@@ -89,18 +99,9 @@ const ConfirmBuy = () => {
       return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
     });
   }, [wallet, purchaseToken?.symbol]);
-  console.log(signature.wlDepoSignature);
 
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
-
-  // // await bob.BondDepository.deposit(
-  // ✅ bid,
-  // ✅ depositAmount,
-  // ✅ initialPrice,
-  // bob.address,
-  // carol.address,
-  // autoStake);
 
   const args = [
     selectedMarket.id,
@@ -120,6 +121,7 @@ const ConfirmBuy = () => {
     write,
   } = useContractWrite(
     {
+      // TODO: adjust active contract
       addressOrName: WhitelistBondDepositoryAddress,
       contractInterface: WhitelistBondDepositoryAbi,
       signerOrProvider: signer,

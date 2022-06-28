@@ -2,7 +2,7 @@ import Card from '@/components/Card';
 import CardList from '@/components/CardList';
 import Icon from '@/components/Icons';
 import PageContainer from '@/components/PageContainer';
-import { addMinutes, intervalToDuration } from 'date-fns';
+import { addMinutes, addSeconds, intervalToDuration } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
@@ -11,25 +11,34 @@ import MarketCard from './components/MarketCard';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
+import { useRouter } from 'next/router';
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 
-// TODO: Replace with env vars
-const startDate = addMinutes(new Date(), 9);
-const endDate = new Date();
+const whitelistExpiry =
+  parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0') * 1000;
 
 const Whitelist = () => {
   const [timer, setTimer] = useState<Duration>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [{ groupedBondMarkets }] = useBuyForm();
   const { data: account, isError, isLoading } = useAccount();
+  const router = useRouter();
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      const duration = intervalToDuration({
-        start: new Date(),
-        end: startDate,
-      });
-      setTimer(duration);
-    }, 1000);
-    return () => clearTimeout(timer);
+    if (Date.now() <= whitelistExpiry) {
+      const timer = setInterval(() => {
+        const duration = intervalToDuration({
+          start: new Date(),
+          end: new Date(whitelistExpiry),
+        });
+        if (Date.now() <= whitelistExpiry) {
+          setTimer(duration);
+        } else {
+          clearTimeout(timer);
+          router.replace('/whitelist-sale');
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   return (
@@ -43,17 +52,27 @@ const Whitelist = () => {
         {account?.address ? (
           <>
             <CardList>
-              <Card
-                title="Time Remaining"
-                headerRightComponent={<Icon name="clock2" className="h-6 w-6 text-theo-navy" />}
-              >
-                <div className=" text-3xl font-extrabold">
-                  {!timer.hours ? '00' : timer.hours < 10 ? `0${timer.hours}` : timer.hours}:
-                  {!timer.minutes ? '00' : timer.minutes < 10 ? `0${timer.minutes}` : timer.minutes}
-                  :
-                  {!timer.seconds ? '00' : timer.seconds < 10 ? `0${timer.seconds}` : timer.seconds}
-                </div>
-              </Card>
+              {Date.now() <= whitelistExpiry && (
+                <Card
+                  title="Time Remaining"
+                  headerRightComponent={<Icon name="clock2" className="h-6 w-6 text-theo-navy" />}
+                >
+                  <div className=" text-3xl font-extrabold">
+                    {!timer.hours ? '00' : timer.hours < 10 ? `0${timer.hours}` : timer.hours}:
+                    {!timer.minutes
+                      ? '00'
+                      : timer.minutes < 10
+                      ? `0${timer.minutes}`
+                      : timer.minutes}
+                    :
+                    {!timer.seconds
+                      ? '00'
+                      : timer.seconds < 10
+                      ? `0${timer.seconds}`
+                      : timer.seconds}
+                  </div>
+                </Card>
+              )}
               <Card
                 title="Assets Accepted"
                 headerRightComponent={<Icon name="check" className="h-6 w-6 text-theo-navy" />}
@@ -92,7 +111,14 @@ const Whitelist = () => {
   );
 };
 Whitelist.PageHead = () => {
-  return <div>Whitelist Sale!</div>;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { activeContractName } = useActiveBondDepo();
+
+  return (
+    <div>
+      {activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'} Sale!
+    </div>
+  );
 };
 Whitelist.PageStateProvider = (props) => <BuyFormProvider {...props} />;
 
