@@ -10,7 +10,7 @@ import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
 
-const localChains = [chain.rinkeby];
+const localChains = [chain.goerli];
 const prodChains = [chain.mainnet, ...localChains];
 
 const { chains, provider } = configureChains(
