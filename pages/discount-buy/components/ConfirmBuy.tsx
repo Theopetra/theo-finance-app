@@ -169,8 +169,8 @@ const ConfirmBuy = () => {
 
   const handleClick = async () => {
     console.log({ args });
-    //approve();
-    write()
+    approve();
+    //write()
     // WhitelistBondDepository.deposit(
     //   selectedMarket.id,
     //   purchaseCost,
