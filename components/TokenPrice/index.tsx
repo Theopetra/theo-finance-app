@@ -18,7 +18,7 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
       contractInterface: abi,
     },
     'calculatePrice',
-    { args: id }
+    { args: id || BigNumber.from(0) }
   );
 
   if (isSuccess) {

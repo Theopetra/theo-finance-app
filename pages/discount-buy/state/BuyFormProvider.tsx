@@ -69,10 +69,10 @@ export const BuyFormProvider: React.FC = (props) => {
       contractInterface: WhitelistBondDepositoryAbi,
     },
     'calculatePrice',
-    { args: selectedMarket?.id }
+    { args: selectedMarket?.id || BigNumber.from(0) }
   );
 
-  console.log(selection);
+  console.log(groupedBondMarketsMap);
 
   // TODO: expand to other bond markets?
   useEffect(() => {

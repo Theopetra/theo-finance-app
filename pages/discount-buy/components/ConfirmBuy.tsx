@@ -103,6 +103,9 @@ const ConfirmBuy = () => {
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
 
+  console.log('selected')
+  console.log(selectedMarket)
+
   const args = [
     selectedMarket.id,
     depositAmount._hex,
@@ -138,10 +141,36 @@ const ConfirmBuy = () => {
       args,
     }
   );
-  const handleClick = () => {
-    console.log({ args });
 
-    write();
+  const {
+    data: approveData,
+    isError: approveErr,
+    isLoading: approveLoading,
+    write: approve,
+  } = useContractWrite(
+    {
+      // TODO: adjust active contract
+      addressOrName: process.env.NEXT_PUBLIC_ETH_ADDRESS || '',
+      contractInterface: ['function approve(address _spender, uint256 _value) public returns (bool success)'],
+      signerOrProvider: signer,
+    },
+    'approve',
+    {
+      onSuccess() {
+        console.log('success')
+        write()
+      },
+      onError(error) {
+        console.log('error')
+      },
+      args: [wallet?.address, depositAmount.mul(100)],
+    }
+  );
+
+  const handleClick = async () => {
+    console.log({ args });
+    //approve();
+    write()
     // WhitelistBondDepository.deposit(
     //   selectedMarket.id,
     //   purchaseCost,

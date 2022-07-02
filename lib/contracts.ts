@@ -7,7 +7,6 @@ import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDeposit
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
 
 // address 1 = mainnet, address 4 = rinkeby, address 5 = goerli
-// TODO: add goerli addresses for chain id 5
 // TODO: update mainnet addresses for launch
 
 export const contractMetadata = {
