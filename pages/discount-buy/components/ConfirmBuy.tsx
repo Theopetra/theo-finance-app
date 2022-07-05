@@ -166,7 +166,7 @@ const ConfirmBuy = () => {
       onError(error) {
         console.log('error')
       },
-      args: [wallet?.address, 100000],
+      args: [wallet?.address, parseEther('1000')],
     }
   );
 
