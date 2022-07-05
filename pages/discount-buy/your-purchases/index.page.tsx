@@ -16,7 +16,7 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import { useAccount, useContract, useProvider } from 'wagmi';
 
 const usePurchasesByContract = (contractName) => {
-  const { data, status } = useAccount();
+  const { data } = useAccount();
   const { address, abi } = useContractInfo(contractName);
   const [pendingNotes, setPendingNotes] = useState<any[]>([]);
   const provider = useProvider();
@@ -28,7 +28,7 @@ const usePurchasesByContract = (contractName) => {
 
   useEffect(() => {
     async function callContract() {
-      if (contract) {
+      if (contract && data?.address) {
         const indexes = await contract.indexesFor(data?.address);
         const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
         const pn = await Promise.all(pnPromises);
@@ -50,7 +50,6 @@ const usePurchasesByContract = (contractName) => {
 };
 
 const YourPurchases = () => {
-  // TODO: verify connected
   const { data, status } = useAccount();
   const purchases = [
     ...usePurchasesByContract('WhitelistTheopetraBondDepository'),
@@ -90,6 +89,7 @@ const YourPurchases = () => {
   //   ];
   // }, []);
 
+  // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(
     () => [
       {
@@ -126,7 +126,11 @@ const YourPurchases = () => {
 
   return (
     <PageContainer>
-      <PurchasesTable columns={columns} data={purchases} />
+      {data?.address ? (
+        <PurchasesTable columns={columns} data={purchases} />
+      ) : (
+        <p>Please connect your wallet.</p>
+      )}
     </PageContainer>
   );
 };
