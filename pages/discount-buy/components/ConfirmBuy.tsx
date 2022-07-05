@@ -80,6 +80,7 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
+  const { address } = useActiveBondDepo()
 
   // const provider = useProvider();
   const { data: wallet } = useAccount();
@@ -166,7 +167,7 @@ const ConfirmBuy = () => {
       onError(error) {
         console.log('error')
       },
-      args: [wallet?.address, parseEther('1000')],
+      args: [address, parseEther('1000')],
     }
   );
 
