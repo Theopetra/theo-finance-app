@@ -139,6 +139,9 @@ const ConfirmBuy = () => {
         openModal(<Failed error={error} />);
       },
       args,
+      overrides: {
+        gasLimit: 4300000
+      }
     }
   );
 
@@ -156,21 +159,20 @@ const ConfirmBuy = () => {
     },
     'approve',
     {
-      onSuccess() {
-        console.log('success')
+      onSettled() {
+        console.log('settled')
         write()
       },
       onError(error) {
         console.log('error')
       },
-      args: [wallet?.address, depositAmount.mul(100)],
+      args: [wallet?.address, 100000],
     }
   );
 
   const handleClick = async () => {
     console.log({ args });
     approve();
-    //write()
     // WhitelistBondDepository.deposit(
     //   selectedMarket.id,
     //   purchaseCost,
