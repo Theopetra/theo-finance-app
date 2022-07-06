@@ -6,7 +6,11 @@ export function useContractInfo(name: keyof typeof contractMetadata, chainId: nu
   // fall back to mainnet in prod, else goerli
   const defaultChainId = process.env.NODE_ENV === 'production' ? 1 : 5;
   // parameter id > connected wallet chain id > environment default
-  chainId = chainId || activeChain?.id || defaultChainId;
+  chainId =
+    chainId ||
+    activeChain?.id ||
+    parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '') ||
+    defaultChainId;
   const address = contractMetadata[name].address[chainId as 1 | 5];
   const abi = contractMetadata[name].abi;
   return { address, abi };
