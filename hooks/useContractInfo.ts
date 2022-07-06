@@ -11,6 +11,9 @@ export function useContractInfo(name: keyof typeof contractMetadata, chainId: nu
     activeChain?.id ||
     parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '') ||
     defaultChainId;
+
+  console.log('chain id');
+  console.log(chainId);
   const address = contractMetadata[name].address[chainId as 1 | 5];
   const abi = contractMetadata[name].abi;
   return { address, abi };
