@@ -13,9 +13,14 @@ import EthIcon from '../../../public/assets/icons/eth.svg';
 import UdcIcon from '../../../public/assets/icons/usdc.svg';
 
 const usdcAddress =
-  process.env.NEXT_PUBLIC_USDC_ADDRESS || '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b';
+  process.env.NEXT_PUBLIC_USDC_ADDRESS;
 const ethAddress =
-  process.env.NEXT_PUBLIC_ETH_ADDRESS || '0xc778417E063141139Fce010982780140Aa0cD5Ab';
+  process.env.NEXT_PUBLIC_ETH_ADDRESS;
+
+if (!usdcAddress || !ethAddress) {
+  console.log('WARNING: quote token contract addresses not set in env vars')
+}
+
 const MarketCard = ({ bondMarkets }) => {
   const [{}, { openModal }] = useModal();
   const [{}, { setSelection }] = useBuyForm();
@@ -24,6 +29,11 @@ const MarketCard = ({ bondMarkets }) => {
     WETH: EthIcon,
     USDC: UdcIcon,
   };
+
+  // console.log('market card')
+  // console.log(bondMarkets)
+  // console.log(usdcAddress)
+  // console.log(ethAddress)
 
   const orderedMarkets = useMemo(() => {
     const usdcMarket = bondMarkets?.markets.find((x) => x.marketData.quoteToken === usdcAddress);

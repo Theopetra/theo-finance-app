@@ -10,14 +10,15 @@ import {
   randNumber,
 } from '@ngneat/falso';
 import { addSeconds, format } from 'date-fns';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DynamicText from '@/components/DynamicText';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { useAccount, useContract, useProvider } from 'wagmi';
 
 const usePurchasesByContract = (contractName) => {
-  const { data, status } = useAccount();
+  const { data } = useAccount();
   const { address, abi } = useContractInfo(contractName);
+  const [pendingNotes, setPendingNotes] = useState<any[]>([]);
   const provider = useProvider();
   const contract = useContract({
     addressOrName: address,
@@ -27,74 +28,74 @@ const usePurchasesByContract = (contractName) => {
 
   useEffect(() => {
     async function callContract() {
-      if (contract) {
+      if (contract && data?.address) {
         const indexes = await contract.indexesFor(data?.address);
-        console.log(indexes);
+        const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
+        const pn = await Promise.all(pnPromises);
+        setPendingNotes(pn);
       }
     }
     callContract();
   }, [contract, data?.address]);
 
-  // TODO:
-  // useContractRead for pendingFor
-  // pendingFor -> map to table items
-
-  return [];
+  return pendingNotes.map((n) => {
+    return {
+      date: new Date(n.created_ * 1000),
+      amount: `${n.payout_}`,
+      discount: `${n.discount_}%`,
+      unlockDate: new Date(n.expiry_ * 1000),
+      status: 'Locked',
+    };
+  });
 };
 
 const YourPurchases = () => {
-  // TODO: verify connected
   const { data, status } = useAccount();
   const purchases = [
     ...usePurchasesByContract('WhitelistTheopetraBondDepository'),
     ...usePurchasesByContract('PublicPreListBondDepository'),
   ];
 
-  const txData = useMemo(() => {
-    const statuses = ['locked', 'claimed', 'unclaimed'];
+  // const txData = useMemo(() => {
+  //   const statuses = ['locked', 'claimed', 'unclaimed'];
 
-    return [
-      {
-        date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
-        txId: randMask({ mask: 'B####' }),
-        amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
-        discount: `${randNumber({ min: 6, max: 12 })}%`,
-        unlockDate: randFutureDate(),
-        status: rand(statuses),
-        etherscan: (
-          <a href="https://etherscan.io/" className="text-center">
-            <LinkIcon className="inline w-5 text-theo-cyan" />
-          </a>
-        ),
-      },
-      {
-        date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
-        txId: randMask({ mask: 'B####' }),
-        amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
-        discount: `${randNumber({ min: 6, max: 12 })}%`,
-        unlockDate: randFutureDate(),
-        status: rand(statuses),
-        etherscan: (
-          <a href="https://etherscan.io/" className="text-center">
-            <LinkIcon className="inline w-5 text-theo-cyan" />
-          </a>
-        ),
-      },
-    ];
-  }, []);
+  //   return [
+  //     {
+  //       date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
+  //       txId: randMask({ mask: 'B####' }),
+  //       amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
+  //       discount: `${randNumber({ min: 6, max: 12 })}%`,
+  //       unlockDate: randFutureDate(),
+  //       status: rand(statuses),
+  //       etherscan: (
+  //         <a href="https://etherscan.io/" className="text-center">
+  //           <LinkIcon className="inline w-5 text-theo-cyan" />
+  //         </a>
+  //       ),
+  //     },
+  //     {
+  //       date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
+  //       txId: randMask({ mask: 'B####' }),
+  //       amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
+  //       discount: `${randNumber({ min: 6, max: 12 })}%`,
+  //       unlockDate: randFutureDate(),
+  //       status: rand(statuses),
+  //       etherscan: (
+  //         <a href="https://etherscan.io/" className="text-center">
+  //           <LinkIcon className="inline w-5 text-theo-cyan" />
+  //         </a>
+  //       ),
+  //     },
+  //   ];
+  // }, []);
 
+  // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(
     () => [
       {
         Header: 'Date',
         accessor: 'date',
         Cell: ({ value }) => format(value, 'MMM-dd-yy'),
-        width: '10%',
-      },
-      {
-        Header: 'Tx ID',
-        accessor: 'txId',
-        disableSortBy: true,
         width: '10%',
       },
       {
@@ -119,19 +120,17 @@ const YourPurchases = () => {
         width: '10%',
         Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
       },
-      {
-        Header: 'Etherscan',
-        accessor: 'etherscan',
-        disableSortBy: true,
-        width: '15%',
-      },
     ],
     []
   );
 
   return (
     <PageContainer>
-      <PurchasesTable columns={columns} data={txData} />
+      {data?.address ? (
+        <PurchasesTable columns={columns} data={purchases} />
+      ) : (
+        <p>Please connect your wallet.</p>
+      )}
     </PageContainer>
   );
 };
