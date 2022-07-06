@@ -104,7 +104,7 @@ const Whitelist = () => {
             )}
           </>
         ) : (
-          'Please connect your wallet'
+          <p className="font-bold dark:text-white">Please connect your wallet</p>
         )}
       </PageContainer>
     </>

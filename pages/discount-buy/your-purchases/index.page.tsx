@@ -129,7 +129,7 @@ const YourPurchases = () => {
       {data?.address ? (
         <PurchasesTable columns={columns} data={purchases} />
       ) : (
-        <p>Please connect your wallet.</p>
+        <p className="font-bold dark:text-white">Please connect your wallet.</p>
       )}
     </PageContainer>
   );
