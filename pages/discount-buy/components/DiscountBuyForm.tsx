@@ -22,7 +22,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
     data: balance,
     isError: balanceIsError,
     isLoading: balanceIsLoading,
-  } = useBalance({ addressOrName: account?.address });
+  } = useBalance({ addressOrName: account?.address, token: purchaseToken?.quoteToken });
 
   const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
   const handleClick = () => {
