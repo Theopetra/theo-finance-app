@@ -80,12 +80,11 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
-  const { address } = useActiveBondDepo()
+  const { address } = useActiveBondDepo();
 
   // const provider = useProvider();
   const { data: wallet } = useAccount();
-  const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useActiveBondDepo();
+  const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
 
@@ -104,9 +103,6 @@ const ConfirmBuy = () => {
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
 
-  console.log('selected')
-  console.log(selectedMarket)
-
   const args = [
     selectedMarket.id,
     depositAmount._hex,
@@ -116,23 +112,20 @@ const ConfirmBuy = () => {
     signature?.wlDepoSignature,
   ];
 
-  // my address
-  // 0xAd72dEd03A5110c1807E68022D25c75E79B50eC5
   const {
     data,
     isError: writeErr,
     isLoading: writeLoading,
-    write,
+    write: deposit,
   } = useContractWrite(
     {
-      // TODO: adjust active contract
-      addressOrName: WhitelistBondDepositoryAddress,
-      contractInterface: WhitelistBondDepositoryAbi,
+      addressOrName: activeBondDepoAddress,
+      contractInterface: activeBondDepoAbi,
       signerOrProvider: signer,
     },
     'deposit',
     {
-      onSuccess() {
+      onSettled() {
         openModal(<Successfull />);
       },
       onError(error) {
@@ -140,9 +133,6 @@ const ConfirmBuy = () => {
         openModal(<Failed error={error} />);
       },
       args,
-      overrides: {
-        gasLimit: 4300000
-      }
     }
   );
 
@@ -153,35 +143,28 @@ const ConfirmBuy = () => {
     write: approve,
   } = useContractWrite(
     {
-      // TODO: adjust active contract
-      addressOrName: process.env.NEXT_PUBLIC_ETH_ADDRESS || '',
-      contractInterface: ['function approve(address _spender, uint256 _value) public returns (bool success)'],
+      addressOrName: purchaseToken?.quoteToken!,
+      contractInterface: [
+        'function approve(address _spender, uint256 _value) public returns (bool success)',
+      ],
       signerOrProvider: signer,
     },
     'approve',
     {
-      onSettled() {
-        console.log('settled')
-        write()
+      async onSuccess(data) {
+        console.log(data);
+        await data.wait();
+        deposit();
       },
       onError(error) {
-        console.log('error')
+        console.log('error');
       },
-      args: [address, parseEther('1000')],
+      args: [address, depositAmount],
     }
   );
 
   const handleClick = async () => {
-    console.log({ args });
     approve();
-    // WhitelistBondDepository.deposit(
-    //   selectedMarket.id,
-    //   purchaseCost,
-    //   maxPrice,
-    //   wallet?.address,
-    //   wallet?.address,
-    //   signer
-    // );
   };
 
   return (
