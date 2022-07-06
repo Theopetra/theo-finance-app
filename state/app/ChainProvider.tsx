@@ -14,7 +14,9 @@ const localChains = [chain.goerli];
 const prodChains = [chain.mainnet, ...localChains];
 
 const { chains, provider } = configureChains(
-  process.env.NODE_ENV === 'production' ? prodChains : localChains,
+  // TODO: uncomment for release
+  // process.env.NODE_ENV === 'production' ? prodChains : localChains,
+  localChains,
   [infuraProvider({ infuraId: process.env.INFURA_ID }), publicProvider()]
 );
 
