@@ -76,9 +76,8 @@ function useLockedTheo() {
   return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i])]);
 }
 
-const Dashboard = () => {
+const Dashboard = ({ currentMetrics }) => {
   const [{ theme }] = useTheme();
-  const { currentMetrics } = useMetrics();
   const locked = useLockedTheo();
 
   const STATS = [
@@ -166,5 +165,19 @@ const Dashboard = () => {
 Dashboard.PageHead = () => {
   return <div>Welcome Home</div>;
 };
+
+export async function getStaticProps() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/api/metrics`);
+
+  if (!response.ok) {
+    console.log(`An error has occured: ${response}`);
+  }
+
+  const metricsData = await response.json();
+
+  return {
+    props: { currentMetrics: metricsData?.[0] },
+  };
+}
 
 export default Dashboard;
