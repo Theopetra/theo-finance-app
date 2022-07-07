@@ -100,6 +100,12 @@ const ConfirmBuy = () => {
     });
   }, [wallet, purchaseToken?.symbol]);
 
+  //Bond depo target for the WethHelper contract
+  let isWhitelist = false;
+    const { activeContractName } = useActiveBondDepo() 
+      if ( activeContractName == "WhitelistTheopetraBondDepository" )
+        isWhitelist = true;
+
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
 
@@ -109,6 +115,16 @@ const ConfirmBuy = () => {
     maxPrice._hex,
     wallet?.address,
     wallet?.address,
+    signature?.wlDepoSignature,
+  ];
+
+  const WethArgs = [
+    selectedMarket.id,
+    depositAmount._hex,
+    maxPrice._hex,
+    wallet?.address,
+    wallet?.address,
+    isWhitelist, 
     signature?.wlDepoSignature,
   ];
 
@@ -135,6 +151,34 @@ const ConfirmBuy = () => {
       args,
     }
   );
+
+  //wETH Helper Deposit Function
+  //TODO: Add toggle to choose between both deposit functions
+  if ( purchaseToken?.symbol === 'eth' ) {
+  const {
+    data,
+    isError: writeErr,
+    isLoading: writeLoading,
+    write: deposit,
+  } = useContractWrite(
+    {
+      addressOrName: WethHelperAddress,
+      contractInterface: WethHelperAbi,
+      signerOrProvider: signer,
+    },
+    'deposit',
+    {
+      onSettled() {
+        openModal(<Successfull />);
+      },
+      onError(error) {
+        console.log('Error', error);
+        openModal(<Failed error={error} />);
+      },
+      args: [WethArgs],
+    }
+  );
+  }
 
   const {
     data: approveData,
