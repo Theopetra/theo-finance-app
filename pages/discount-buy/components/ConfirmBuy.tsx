@@ -80,17 +80,18 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
-  const { address } = useActiveBondDepo();
 
-  // const provider = useProvider();
   const { data: wallet } = useAccount();
-  const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
+  const {
+    address: activeBondDepoAddress,
+    abi: activeBondDepoAbi,
+    activeContractName,
+  } = useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
 
-  // autostake
   const signature: any = useMemo(() => {
-    if (purchaseToken?.symbol === 'weth') {
+    if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
       return wethHelperSignedMessages.find((sig) => {
         return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
       });
@@ -99,12 +100,6 @@ const ConfirmBuy = () => {
       return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
     });
   }, [wallet, purchaseToken?.symbol]);
-
-  //Bond depo target for the WethHelper contract
-  let isWhitelist = false;
-    const { activeContractName } = useActiveBondDepo() 
-      if ( activeContractName == "WhitelistTheopetraBondDepository" )
-        isWhitelist = true;
 
   const maxPrice = parseEther('25');
   const depositAmount = parseEther(purchaseCost);
@@ -120,12 +115,13 @@ const ConfirmBuy = () => {
 
   const WethArgs = [
     selectedMarket.id,
-    depositAmount._hex,
     maxPrice._hex,
     wallet?.address,
     wallet?.address,
-    isWhitelist, 
-    signature?.wlDepoSignature,
+    // TODO: autostake
+    true,
+    activeContractName === 'WhitelistTheopetraBondDepository',
+    signature?.wethHelperSignature,
   ];
 
   const {
@@ -153,13 +149,11 @@ const ConfirmBuy = () => {
   );
 
   //wETH Helper Deposit Function
-  //TODO: Add toggle to choose between both deposit functions
-  if ( purchaseToken?.symbol === 'eth' ) {
   const {
-    data,
-    isError: writeErr,
-    isLoading: writeLoading,
-    write: deposit,
+    data: wethData,
+    isError: wethWriteErr,
+    isLoading: wethWriteLoading,
+    write: wethDeposit,
   } = useContractWrite(
     {
       addressOrName: WethHelperAddress,
@@ -168,17 +162,20 @@ const ConfirmBuy = () => {
     },
     'deposit',
     {
-      onSettled() {
+      onSuccess() {
         openModal(<Successfull />);
       },
       onError(error) {
         console.log('Error', error);
         openModal(<Failed error={error} />);
       },
-      args: [WethArgs],
+      args: WethArgs,
+      overrides: {
+        value: depositAmount,
+        gasLimit: 1000000,
+      },
     }
   );
-  }
 
   const {
     data: approveData,
@@ -203,12 +200,17 @@ const ConfirmBuy = () => {
       onError(error) {
         console.log('error');
       },
-      args: [address, depositAmount],
+      args: [activeBondDepoAbi, depositAmount],
     }
   );
 
   const handleClick = async () => {
-    approve();
+    if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
+      console.log(WethArgs);
+      wethDeposit();
+    } else {
+      approve();
+    }
   };
 
   return (

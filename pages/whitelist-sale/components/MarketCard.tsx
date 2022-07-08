@@ -12,13 +12,11 @@ import { useMemo } from 'react';
 import EthIcon from '../../../public/assets/icons/eth.svg';
 import UdcIcon from '../../../public/assets/icons/usdc.svg';
 
-const usdcAddress =
-  process.env.NEXT_PUBLIC_USDC_ADDRESS;
-const ethAddress =
-  process.env.NEXT_PUBLIC_ETH_ADDRESS;
+const usdcAddress = process.env.NEXT_PUBLIC_USDC_ADDRESS;
+const ethAddress = process.env.NEXT_PUBLIC_ETH_ADDRESS;
 
 if (!usdcAddress || !ethAddress) {
-  console.log('WARNING: quote token contract addresses not set in env vars')
+  console.log('WARNING: quote token contract addresses not set in env vars');
 }
 
 const MarketCard = ({ bondMarkets }) => {
@@ -29,11 +27,6 @@ const MarketCard = ({ bondMarkets }) => {
     WETH: EthIcon,
     USDC: UdcIcon,
   };
-
-  // console.log('market card')
-  // console.log(bondMarkets)
-  // console.log(usdcAddress)
-  // console.log(ethAddress)
 
   const orderedMarkets = useMemo(() => {
     const usdcMarket = bondMarkets?.markets.find((x) => x.marketData.quoteToken === usdcAddress);
