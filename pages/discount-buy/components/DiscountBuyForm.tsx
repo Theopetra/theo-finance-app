@@ -26,7 +26,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
 
   const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
   const handleClick = () => {
-    console.log(purchaseAmount);
+    // console.log(purchaseAmount);
 
     if (Number(purchaseAmount) <= 0 || Number(purchaseCost) <= 0) {
       setErrorMessage('Purchase amount is required.');
@@ -124,7 +124,13 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
         <CurrencyInput
           className={'mb-4'}
           selectedToken={{ ...purchaseToken }}
-          options={bondMarkets?.markets.map((x) => ({ ...x.marketData }))}
+          options={bondMarkets?.markets
+            .filter((m) =>
+              [process.env.NEXT_PUBLIC_USDC_ADDRESS, process.env.NEXT_PUBLIC_ETH_ADDRESS].includes(
+                m.marketData.quoteToken
+              )
+            )
+            .map((x) => ({ ...x.marketData }))}
           balance={balance?.formatted}
           value={purchaseCost}
           onCurrencyChange={(e: BaseSyntheticEvent) => {

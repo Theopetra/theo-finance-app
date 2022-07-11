@@ -1,3 +1,4 @@
+import { cleanSymbol } from '@/lib/clean_symbol';
 import CurrencySelect, {
   CurrencySelectOptionsType,
   CurrencySelectOptionType,
@@ -77,7 +78,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
               }
             }}
           />
-          <div className="pr-4 pl-2">{selectedToken?.symbol}</div>
+          <div className="pr-4 pl-2">{cleanSymbol(selectedToken?.symbol)}</div>
         </div>
         <div className="p-2 text-right text-xs sm:hidden">
           Balance: {balance}

@@ -4,7 +4,7 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
 import { ethers } from 'ethers';
-import { parseEther } from 'ethers/lib/utils';
+import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { useAccount, useContract, useContractWrite, useProvider, useSigner } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
@@ -14,6 +14,8 @@ import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-si
 import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
 import { useMemo } from 'react';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { cleanSymbol } from '@/lib/clean_symbol';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -24,7 +26,7 @@ export const Price = () => {
         marketId={selectedMarket.id}
         quoteToken={selectedMarket.marketData.quoteToken}
       />{' '}
-      {purchaseToken?.symbol}
+      {cleanSymbol(purchaseToken?.symbol)}
     </>
   );
 };
@@ -80,17 +82,18 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
-  const { address } = useActiveBondDepo();
 
-  // const provider = useProvider();
   const { data: wallet } = useAccount();
-  const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
+  const {
+    address: activeBondDepoAddress,
+    abi: activeBondDepoAbi,
+    activeContractName,
+  } = useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
 
-  // autostake
   const signature: any = useMemo(() => {
-    if (purchaseToken?.symbol === 'weth') {
+    if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
       return wethHelperSignedMessages.find((sig) => {
         return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
       });
@@ -101,15 +104,29 @@ const ConfirmBuy = () => {
   }, [wallet, purchaseToken?.symbol]);
 
   const maxPrice = parseEther('25');
-  const depositAmount = parseEther(purchaseCost);
+  const depositAmount =
+    purchaseToken?.symbol?.toLowerCase() === 'usdc'
+      ? parseUnits(purchaseCost, 6)
+      : parseEther(purchaseCost);
 
   const args = [
     selectedMarket.id,
-    depositAmount._hex,
+    depositAmount,
     maxPrice._hex,
     wallet?.address,
     wallet?.address,
     signature?.wlDepoSignature,
+  ];
+
+  const WethArgs = [
+    selectedMarket.id,
+    maxPrice._hex,
+    wallet?.address,
+    wallet?.address,
+    // TODO: autostake
+    false,
+    activeContractName === 'WhitelistTheopetraBondDepository',
+    signature?.wethHelperSignature,
   ];
 
   const {
@@ -137,6 +154,33 @@ const ConfirmBuy = () => {
   );
 
   const {
+    data: wethData,
+    isError: wethWriteErr,
+    isLoading: wethWriteLoading,
+    write: wethDeposit,
+  } = useContractWrite(
+    {
+      addressOrName: WethHelperAddress,
+      contractInterface: WethHelperAbi,
+      signerOrProvider: signer,
+    },
+    'deposit',
+    {
+      onSuccess() {
+        openModal(<Successfull />);
+      },
+      onError(error) {
+        console.log('Error', error);
+        openModal(<Failed error={error} />);
+      },
+      args: WethArgs,
+      overrides: {
+        value: depositAmount,
+      },
+    }
+  );
+
+  const {
     data: approveData,
     isError: approveErr,
     isLoading: approveLoading,
@@ -157,14 +201,22 @@ const ConfirmBuy = () => {
         deposit();
       },
       onError(error) {
+        console.log(purchaseCost);
+        console.log(depositAmount);
+        console.log(purchaseToken);
         console.log('error');
+        console.log(error);
       },
-      args: [address, depositAmount],
+      args: [activeBondDepoAddress, depositAmount],
     }
   );
 
   const handleClick = async () => {
-    approve();
+    if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
+      wethDeposit();
+    } else {
+      approve();
+    }
   };
 
   return (

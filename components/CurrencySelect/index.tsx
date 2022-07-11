@@ -4,6 +4,7 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import { TokenInfo } from '../TokenName';
+import { cleanSymbol } from '@/lib/clean_symbol';
 
 export type CurrencySelectOptionType = {
   symbol?: string | undefined;
@@ -32,10 +33,10 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
           <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
             <img
               src={iconMap[selected]?.src}
-              alt={`${selected?.symbol} icon`}
+              alt={`${cleanSymbol(selected?.symbol)} icon`}
               className="mr-2 max-h-8 w-8"
             />
-            {selected}
+            {cleanSymbol(selected)}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center sm:pr-6">
             <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -67,7 +68,7 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
                         <span
                           className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}
                         >
-                          {token?.symbol}
+                          {cleanSymbol(token?.symbol)}
                         </span>
                         {selected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
