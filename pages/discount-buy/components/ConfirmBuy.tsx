@@ -15,6 +15,7 @@ import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-si
 import { useMemo } from 'react';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { cleanSymbol } from '@/lib/clean_symbol';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -25,7 +26,7 @@ export const Price = () => {
         marketId={selectedMarket.id}
         quoteToken={selectedMarket.marketData.quoteToken}
       />{' '}
-      {purchaseToken?.symbol}
+      {cleanSymbol(purchaseToken?.symbol)}
     </>
   );
 };
@@ -152,7 +153,6 @@ const ConfirmBuy = () => {
     }
   );
 
-  //wETH Helper Deposit Function
   const {
     data: wethData,
     isError: wethWriteErr,
@@ -207,14 +207,12 @@ const ConfirmBuy = () => {
         console.log('error');
         console.log(error);
       },
-      // TODO: adapt to other ERC-20
       args: [activeBondDepoAddress, depositAmount],
     }
   );
 
   const handleClick = async () => {
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
-      console.log(WethArgs);
       wethDeposit();
     } else {
       approve();
