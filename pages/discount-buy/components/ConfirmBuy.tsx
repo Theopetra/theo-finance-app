@@ -4,7 +4,7 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
 import { ethers } from 'ethers';
-import { parseEther } from 'ethers/lib/utils';
+import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { useAccount, useContract, useContractWrite, useProvider, useSigner } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
@@ -14,6 +14,7 @@ import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-si
 import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
 import { useMemo } from 'react';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -102,11 +103,14 @@ const ConfirmBuy = () => {
   }, [wallet, purchaseToken?.symbol]);
 
   const maxPrice = parseEther('25');
-  const depositAmount = parseEther(purchaseCost);
+  const depositAmount =
+    purchaseToken?.symbol?.toLowerCase() === 'usdc'
+      ? parseUnits(purchaseCost, 6)
+      : parseEther(purchaseCost);
 
   const args = [
     selectedMarket.id,
-    depositAmount._hex,
+    depositAmount,
     maxPrice._hex,
     wallet?.address,
     wallet?.address,
@@ -172,7 +176,6 @@ const ConfirmBuy = () => {
       args: WethArgs,
       overrides: {
         value: depositAmount,
-        gasLimit: 1000000,
       },
     }
   );
@@ -198,9 +201,14 @@ const ConfirmBuy = () => {
         deposit();
       },
       onError(error) {
+        console.log(purchaseCost);
+        console.log(depositAmount);
+        console.log(purchaseToken);
         console.log('error');
+        console.log(error);
       },
-      args: [activeBondDepoAbi, depositAmount],
+      // TODO: adapt to other ERC-20
+      args: [activeBondDepoAddress, depositAmount],
     }
   );
 
