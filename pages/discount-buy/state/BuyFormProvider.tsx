@@ -72,7 +72,7 @@ export const BuyFormProvider: React.FC = (props) => {
     { args: selectedMarket?.id || BigNumber.from(0) }
   );
 
-  console.log(groupedBondMarketsMap);
+  // console.log(groupedBondMarketsMap);
 
   // TODO: expand to other bond markets?
   useEffect(() => {
@@ -141,7 +141,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const getSelectedMarketPrice = () => {
     if (!selectedMarket?.id) return;
-    const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(5);
+    const output = (BigNumber.from(priceInfo || 0).toNumber() / Math.pow(10, 9)).toFixed(5);
     return token?.symbol === 'USDC' ? Number(output).toFixed(2) : output;
   };
 
