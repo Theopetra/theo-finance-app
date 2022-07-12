@@ -14,6 +14,8 @@ import { useEffect, useMemo, useState } from 'react';
 import DynamicText from '@/components/DynamicText';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { useAccount, useContract, useProvider } from 'wagmi';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { formatTheo } from '@/lib/format_theo';
 
 const usePurchasesByContract = (contractName) => {
   const { data } = useAccount();
@@ -41,7 +43,7 @@ const usePurchasesByContract = (contractName) => {
   return pendingNotes.map((n) => {
     return {
       date: new Date(n.created_ * 1000),
-      amount: `${n.payout_}`,
+      amount: `${formatTheo(n.payout_)}`,
       discount: `${n.discount_}%`,
       unlockDate: new Date(n.expiry_ * 1000),
       status: 'Locked',
