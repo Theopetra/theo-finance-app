@@ -1,21 +1,10 @@
 import PageContainer from '@/components/PageContainer';
-import PurchasesTable from './components/PurchasesTable';
-import { LinkIcon } from '@heroicons/react/solid';
-import {
-  rand,
-  randBetweenDate,
-  randFloat,
-  randFutureDate,
-  randMask,
-  randNumber,
-} from '@ngneat/falso';
-import { addSeconds, format, formatISO } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
-import DynamicText from '@/components/DynamicText';
 import { useContractInfo } from '@/hooks/useContractInfo';
-import { useAccount, useContract, useProvider } from 'wagmi';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { formatTheo } from '@/lib/format_theo';
+import { format } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
+import { useAccount, useContract, useProvider } from 'wagmi';
+import PurchasesTable from './components/PurchasesTable';
 
 const usePurchasesByContract = (contractName) => {
   const { data } = useAccount();
