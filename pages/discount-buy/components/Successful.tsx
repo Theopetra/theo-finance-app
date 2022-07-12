@@ -1,9 +1,11 @@
 import Icon from '@/components/Icons';
+import { useEtherscanTxId } from '@/hooks/useEtherscanTxId';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import useBuyForm from '../state/use-buy-form';
 import { ConfirmRow, LockDurationRow, MarketDiscountRow, TheoPurchasePriceRow } from './ConfirmBuy';
 
-const Successfull = () => {
+const Successfull = ({ txId }) => {
+  const etherscanUrl = useEtherscanTxId(txId);
   const [, { closeModal }] = useModal();
   const [{ purchaseAmount }] = useBuyForm();
   return (
@@ -28,7 +30,11 @@ const Successfull = () => {
         <LockDurationRow />
       </div>
       <div className="flex w-full flex-col items-center justify-center sm:flex-row">
-        <button className="border-button mr-2 mb-4 w-72 sm:mb-0">View Etherscan Transaction</button>
+        <button disabled={!txId} className="border-button mr-2 mb-4 w-72 sm:mb-0">
+          <a href={etherscanUrl} target="_blank" rel="noreferrer">
+            View Etherscan Transaction
+          </a>
+        </button>
         <button className="border-button w-72" onClick={closeModal}>
           Finish
         </button>
