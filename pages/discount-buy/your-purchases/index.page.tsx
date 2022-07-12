@@ -40,23 +40,26 @@ const usePurchasesByContract = (contractName) => {
     callContract();
   }, [contract, data?.address]);
 
-  return pendingNotes.map((n) => {
-    return {
-      date: new Date(n.created_ * 1000),
-      amount: `${formatTheo(n.payout_)}`,
-      discount: `${n.discount_}%`,
-      unlockDate: new Date(n.expiry_ * 1000),
-      status: 'Locked',
-    };
-  });
+  return pendingNotes;
 };
+
+export const useUserPurchases = () => [
+  ...usePurchasesByContract('WhitelistTheopetraBondDepository'),
+  ...usePurchasesByContract('PublicPreListBondDepository'),
+];
 
 const YourPurchases = () => {
   const { data, status } = useAccount();
-  const purchases = [
-    ...usePurchasesByContract('WhitelistTheopetraBondDepository'),
-    ...usePurchasesByContract('PublicPreListBondDepository'),
-  ];
+  const purchases = useUserPurchases();
+  const formattedPurchases = purchases.map((p) => {
+    return {
+      date: new Date(p.created_ * 1000),
+      amount: `${formatTheo(p.payout_)}`,
+      discount: `${p.discount_}%`,
+      unlockDate: new Date(p.expiry_ * 1000),
+      status: 'Locked',
+    };
+  });
 
   // const txData = useMemo(() => {
   //   const statuses = ['locked', 'claimed', 'unclaimed'];
@@ -129,7 +132,7 @@ const YourPurchases = () => {
   return (
     <PageContainer>
       {data?.address ? (
-        <PurchasesTable columns={columns} data={purchases} />
+        <PurchasesTable columns={columns} data={formattedPurchases} />
       ) : (
         <p className="font-bold dark:text-white">Please connect your wallet.</p>
       )}

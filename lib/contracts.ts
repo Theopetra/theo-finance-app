@@ -5,6 +5,7 @@ import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepositor
 import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
+import { erc20ABI } from 'wagmi';
 
 // address 1 = mainnet, address 4 = rinkeby, address 5 = goerli
 // TODO: update mainnet addresses for launch
@@ -66,5 +67,12 @@ export const contractMetadata = {
       5: '0x1B8f83f219e89b33c09c0222aB95622D40d5481F',
     },
     abi: wethHelper.abi,
+  },
+  TheopetraERC20Token: {
+    address: {
+      1: '0xc48beb3d230c54805be1c7a2310b6ac6ae62797a',
+      5: '0xc48beb3d230c54805be1c7a2310b6ac6ae62797a',
+    },
+    abi: erc20ABI,
   },
 };

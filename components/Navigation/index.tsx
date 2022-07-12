@@ -1,8 +1,13 @@
-import NavItem from './NavItem';
-import Logo from './Logo';
-import Icon from '../Icons';
-import { Fragment } from 'react';
+import { useContractInfo } from '@/hooks/useContractInfo';
 import { useNavigation } from '@/hooks/useNavigation';
+import { formatTheo } from '@/lib/format_theo';
+import { useUserPurchases } from '@/pages/discount-buy/your-purchases/index.page';
+import { BigNumber } from 'ethers';
+import { Fragment } from 'react';
+import { useAccount, useBalance } from 'wagmi';
+import Icon from '../Icons';
+import Logo from './Logo';
+import NavItem from './NavItem';
 
 const socialLinks = [
   { icon: 'twitter-logo', href: 'https://twitter.com/TheopetraLabs' },
@@ -17,6 +22,7 @@ const classes = {
 };
 
 const Navigation = () => {
+  const purchases = useUserPurchases();
   const navigation = useNavigation();
   return (
     <div className=" flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
@@ -45,8 +51,14 @@ const Navigation = () => {
         </div>
         <div className=" flex h-16 w-full justify-between bg-white p-1 dark:bg-black sm:p-5">
           <div className={classes.statContainer}>
-            <div className={classes.number}>101,221,000</div>
-            <div className={classes.label}>Your $THEO</div>
+            <div className={classes.number}>
+              {formatTheo(
+                purchases
+                  .reduce((prev, curr, i) => prev.add(curr.payout_), BigNumber.from(0))
+                  .toString()
+              )}
+            </div>
+            <div className={classes.label}>Your Purchased $THEO</div>
           </div>
         </div>
       </div>
