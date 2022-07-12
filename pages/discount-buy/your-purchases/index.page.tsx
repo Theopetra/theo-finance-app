@@ -1,21 +1,10 @@
 import PageContainer from '@/components/PageContainer';
-import PurchasesTable from './components/PurchasesTable';
-import { LinkIcon } from '@heroicons/react/solid';
-import {
-  rand,
-  randBetweenDate,
-  randFloat,
-  randFutureDate,
-  randMask,
-  randNumber,
-} from '@ngneat/falso';
-import { addSeconds, format } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
-import DynamicText from '@/components/DynamicText';
 import { useContractInfo } from '@/hooks/useContractInfo';
-import { useAccount, useContract, useProvider } from 'wagmi';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { formatTheo } from '@/lib/format_theo';
+import { format } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
+import { useAccount, useContract, useProvider } from 'wagmi';
+import PurchasesTable from './components/PurchasesTable';
 
 const usePurchasesByContract = (contractName) => {
   const { data } = useAccount();
@@ -55,44 +44,12 @@ const YourPurchases = () => {
     return {
       date: new Date(p.created_ * 1000),
       amount: `${formatTheo(p.payout_)}`,
-      discount: `${p.discount_}%`,
+      // POST-LAUNCH TODO: show pre-market for purchases before public bond depo, else discount_
+      discount: `Pre-Market`,
       unlockDate: new Date(p.expiry_ * 1000),
       status: 'Locked',
     };
   });
-
-  // const txData = useMemo(() => {
-  //   const statuses = ['locked', 'claimed', 'unclaimed'];
-
-  //   return [
-  //     {
-  //       date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
-  //       txId: randMask({ mask: 'B####' }),
-  //       amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
-  //       discount: `${randNumber({ min: 6, max: 12 })}%`,
-  //       unlockDate: randFutureDate(),
-  //       status: rand(statuses),
-  //       etherscan: (
-  //         <a href="https://etherscan.io/" className="text-center">
-  //           <LinkIcon className="inline w-5 text-theo-cyan" />
-  //         </a>
-  //       ),
-  //     },
-  //     {
-  //       date: randBetweenDate({ from: new Date('10/07/2020'), to: new Date() }),
-  //       txId: randMask({ mask: 'B####' }),
-  //       amount: `${randFloat({ min: 800, max: 2000, fraction: 2 }).toLocaleString()}`,
-  //       discount: `${randNumber({ min: 6, max: 12 })}%`,
-  //       unlockDate: randFutureDate(),
-  //       status: rand(statuses),
-  //       etherscan: (
-  //         <a href="https://etherscan.io/" className="text-center">
-  //           <LinkIcon className="inline w-5 text-theo-cyan" />
-  //         </a>
-  //       ),
-  //     },
-  //   ];
-  // }, []);
 
   // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(
@@ -100,11 +57,11 @@ const YourPurchases = () => {
       {
         Header: 'Date',
         accessor: 'date',
-        Cell: ({ value }) => format(value, 'MMM-dd-yy'),
+        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
         width: '10%',
       },
       {
-        Header: 'Amount Purchased',
+        Header: '$THEO Purchased',
         accessor: 'amount',
         width: '20%',
       },
@@ -116,7 +73,7 @@ const YourPurchases = () => {
       {
         Header: 'Unlock Date',
         accessor: 'unlockDate',
-        Cell: ({ value }) => format(value, 'MMM-dd-yy'),
+        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
         width: '15%',
       },
       {
