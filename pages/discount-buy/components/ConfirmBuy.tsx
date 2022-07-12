@@ -1,21 +1,19 @@
+import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages';
+import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
 import Icon from '@/components/Icons';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
+import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
+import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
-import { ethers } from 'ethers';
 import { parseEther, parseUnits } from 'ethers/lib/utils';
-import { useAccount, useContract, useContractWrite, useProvider, useSigner } from 'wagmi';
+import { useMemo } from 'react';
+import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
 import Successfull from './Successful';
-import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages';
-import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
-import { useMemo } from 'react';
-import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
-import { connectorsForWallets } from '@rainbow-me/rainbowkit';
-import { cleanSymbol } from '@/lib/clean_symbol';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -142,8 +140,8 @@ const ConfirmBuy = () => {
     },
     'deposit',
     {
-      onSettled() {
-        openModal(<Successfull />);
+      onSuccess(data, variables, context) {
+        openModal(<Successfull txId={data.hash} />);
       },
       onError(error) {
         console.log('Error', error);
@@ -166,8 +164,8 @@ const ConfirmBuy = () => {
     },
     'deposit',
     {
-      onSuccess() {
-        openModal(<Successfull />);
+      onSuccess(data) {
+        openModal(<Successfull txId={data.hash} />);
       },
       onError(error) {
         console.log('Error', error);
