@@ -10,6 +10,7 @@ import useMetrics from '@/hooks/useMetrics';
 import { useTheme } from '@/state/ui/theme';
 import { Fragment, useEffect, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
+import { formatTheo } from '@/lib/format_theo';
 
 const verbose = process.env.NODE_ENV !== 'production';
 
@@ -87,7 +88,7 @@ const Dashboard = ({ currentMetrics }) => {
           THEO Locked - <strong>6 Months</strong>
         </>
       ),
-      value: locked?.[0]?.toString(),
+      value: formatTheo(locked?.[0].toString()),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
       tooltipIcon: 'lock-laminated',
     },
@@ -97,7 +98,7 @@ const Dashboard = ({ currentMetrics }) => {
           THEO Locked - <strong>12 Months</strong>
         </>
       ),
-      value: locked?.[1]?.toString(),
+      value: formatTheo(locked?.[1]?.toString()),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
       tooltipIcon: 'lock-laminated',
     },
@@ -107,7 +108,7 @@ const Dashboard = ({ currentMetrics }) => {
           THEO Locked - <strong>18 Months</strong>
         </>
       ),
-      value: locked?.[2]?.toString(),
+      value: formatTheo(locked?.[2]?.toString()),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
       tooltipIcon: 'lock-laminated',
     },
