@@ -41,9 +41,15 @@ export const MarketDiscountRow = () => {
 };
 
 export const PurchaseAmountRow = () => {
-  const [{ purchaseAmount, purchaseCost }] = useBuyForm();
+  const [{ purchaseAmount, purchaseCost, purchaseToken }] = useBuyForm();
 
-  return <ConfirmRow title="Purchase Amount" value={purchaseAmount} subtext={purchaseCost} />;
+  return (
+    <ConfirmRow
+      title="Purchase Amount"
+      value={purchaseAmount}
+      subtext={`${purchaseCost}${purchaseToken?.symbol}`}
+    />
+  );
 };
 
 export const TheoPurchasePriceRow = () => {
