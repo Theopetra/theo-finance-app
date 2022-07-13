@@ -1,6 +1,7 @@
 import Icon from '@/components/Icons';
 import { useEtherscanTxId } from '@/hooks/useEtherscanTxId';
 import useModal from '@/state/ui/theme/hooks/use-modal';
+import { useRouter } from 'next/router';
 import useBuyForm from '../state/use-buy-form';
 import { ConfirmRow, LockDurationRow, MarketDiscountRow, TheoPurchasePriceRow } from './ConfirmBuy';
 
@@ -8,6 +9,13 @@ const Successfull = ({ txId }) => {
   const etherscanUrl = useEtherscanTxId(txId);
   const [, { closeModal }] = useModal();
   const [{ purchaseAmount }] = useBuyForm();
+  const router = useRouter();
+
+  const handleClick = () => {
+    closeModal();
+    router.push('/your-purchases');
+  };
+
   return (
     <div>
       <div className="flex justify-between">
@@ -35,7 +43,7 @@ const Successfull = ({ txId }) => {
             View Etherscan Transaction
           </a>
         </button>
-        <button className="border-button w-72" onClick={closeModal}>
+        <button className="border-button w-72" onClick={handleClick}>
           Finish
         </button>
       </div>
