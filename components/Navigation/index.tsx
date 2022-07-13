@@ -11,9 +11,8 @@ import NavItem from './NavItem';
 
 const socialLinks = [
   { icon: 'twitter-logo', href: 'https://twitter.com/TheopetraLabs' },
-  { icon: 'telegram-logo', href: '#' },
-  { icon: 'discord-logo', href: 'https://discord.gg/Y5wzSGhg37' },
-  { icon: 'youtube-logo', href: '#' },
+  { icon: 'discord-logo', href: 'https://discord.gg/kUUeyPkwSv' },
+  { icon: 'substack-logo', href: 'https://theopetra.substack.com/' },
 ];
 const classes = {
   statContainer: 'flex flex-row-reverse items-center justify-between flex-1  ',
