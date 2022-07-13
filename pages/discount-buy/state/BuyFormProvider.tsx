@@ -1,6 +1,7 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
+import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BigNumber } from 'ethers';
 import React, { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useContract, useContractRead, useProvider, useToken } from 'wagmi';
@@ -28,16 +29,19 @@ type SelectionType = {
   selectedBondDuration?;
 };
 
+const initialFormState: formStateType = {
+  theoPrice: 100,
+  purchaseToken: null,
+  purchaseAmount: 0,
+  purchaseCost: 0,
+};
+
 export const BuyFormProvider: React.FC = (props) => {
   const [selection, setSelection] = useState<SelectionType>();
   const [groupedBondMarketsMap, setGroupedBondMarketsMap] = useState({});
+  const [{ isOpen }] = useModal();
 
-  const [formState, setFormState] = useState<formStateType>({
-    theoPrice: 100,
-    purchaseToken: null,
-    purchaseAmount: 0,
-    purchaseCost: 0,
-  });
+  const [formState, setFormState] = useState<formStateType>(initialFormState);
   const { address, abi } = useActiveBondDepo();
   const provider = useProvider();
   const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
@@ -145,6 +149,10 @@ export const BuyFormProvider: React.FC = (props) => {
     return token?.symbol === 'USDC' ? Number(output).toFixed(2) : output;
   };
 
+  useEffect(() => {
+    if (!isOpen) setFormState(initialFormState);
+  }, [isOpen]);
+  
   return (
     <BuyFormContext.Provider
       value={[
