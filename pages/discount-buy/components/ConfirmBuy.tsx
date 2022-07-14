@@ -13,7 +13,7 @@ import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
-import Successfull from './Successful';
+import Successful from './Successful';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -119,7 +119,7 @@ const ConfirmBuy = () => {
     maxPrice._hex,
     wallet?.address,
     wallet?.address,
-    signature?.wlDepoSignature,
+    signature?.wlDepoSignature || '0x00',
   ];
 
   const WethArgs = [
@@ -130,7 +130,7 @@ const ConfirmBuy = () => {
     // TODO: autostake
     false,
     activeContractName === 'WhitelistTheopetraBondDepository',
-    signature?.wethHelperSignature,
+    signature?.wethHelperSignature || '0x00',
   ];
 
   const {
@@ -146,11 +146,16 @@ const ConfirmBuy = () => {
     },
     'deposit',
     {
-      onSuccess(data, variables, context) {
-        openModal(<Successfull txId={data.hash} />);
+      async onSuccess(data) {
+        const receipt = await data.wait();
+        if (receipt.status === 1) {
+          openModal(<Successful txId={data.hash} />);
+        } else {
+          openModal(<Failed error={{ code: 'Something went wrong.' }} />);
+        }
       },
       onError(error) {
-        console.log('Error', error);
+        console.log(error);
         openModal(<Failed error={error} />);
       },
       args,
@@ -170,11 +175,16 @@ const ConfirmBuy = () => {
     },
     'deposit',
     {
-      onSuccess(data) {
-        openModal(<Successfull txId={data.hash} />);
+      async onSuccess(data) {
+        // TODO: show entertainment modal here
+        const receipt = await data.wait();
+        if (receipt.status === 1) {
+          openModal(<Successful txId={data.hash} />);
+        } else {
+          openModal(<Failed error={{ code: 'Something went wrong.' }} />);
+        }
       },
       onError(error) {
-        console.log('Error', error);
         openModal(<Failed error={error} />);
       },
       args: WethArgs,
@@ -200,16 +210,16 @@ const ConfirmBuy = () => {
     'approve',
     {
       async onSuccess(data) {
-        console.log(data);
-        await data.wait();
-        deposit();
+        // TODO: show entertainment modal here
+        const receipt = await data.wait();
+        if (receipt.status === 1) {
+          deposit();
+        } else {
+          openModal(<Failed error={{ code: 'Something went wrong.' }} />);
+        }
       },
       onError(error) {
-        console.log(purchaseCost);
-        console.log(depositAmount);
-        console.log(purchaseToken);
-        console.log('error');
-        console.log(error);
+        openModal(<Failed error={error} />);
       },
       args: [activeBondDepoAddress, depositAmount],
     }
