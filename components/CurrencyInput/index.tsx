@@ -68,8 +68,12 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
                 : '0.01'
             }
             min="0"
+            max={balance ? balance : 0}
             value={value}
-            onChange={onChange}
+            onChange={(e) => {
+              if (balance && e.target.value > balance) return;
+              onChange(e);
+            }}
             className="w-full flex-1 bg-transparent pr-2 text-right focus:outline-none"
             placeholder="00.00"
             onKeyPress={(event) => {
