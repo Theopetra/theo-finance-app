@@ -1,11 +1,13 @@
 import Icon from '@/components/Icons';
 import { useEtherscanTxId } from '@/hooks/useEtherscanTxId';
 import useModal from '@/state/ui/theme/hooks/use-modal';
+import { useRouter } from 'next/router';
 import useBuyForm from '../state/use-buy-form';
 import { ConfirmRow, LockDurationRow, MarketDiscountRow, TheoPurchasePriceRow } from './ConfirmBuy';
 
 const Successfull = ({ txId }) => {
   const etherscanUrl = useEtherscanTxId(txId);
+  const router = useRouter();
   const [, { closeModal }] = useModal();
   const [{ purchaseAmount }] = useBuyForm();
   return (
@@ -35,7 +37,10 @@ const Successfull = ({ txId }) => {
             View Etherscan Transaction
           </a>
         </button>
-        <button className="border-button w-72" onClick={closeModal}>
+        <button
+          className="border-button w-72"
+          onClick={() => router.push('/whitelist-sale/your-purchases')}
+        >
           Finish
         </button>
       </div>

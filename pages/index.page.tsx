@@ -85,7 +85,7 @@ const Dashboard = ({ currentMetrics }) => {
     {
       name: (
         <>
-          THEO Locked - <strong>6 Months</strong>
+          $THEO Locked - <strong>6 Months</strong>
         </>
       ),
       value: formatTheo(locked?.[0].toString()),
@@ -95,7 +95,7 @@ const Dashboard = ({ currentMetrics }) => {
     {
       name: (
         <>
-          THEO Locked - <strong>12 Months</strong>
+          $THEO Locked - <strong>12 Months</strong>
         </>
       ),
       value: formatTheo(locked?.[1]?.toString()),
@@ -105,7 +105,7 @@ const Dashboard = ({ currentMetrics }) => {
     {
       name: (
         <>
-          THEO Locked - <strong>18 Months</strong>
+          $THEO Locked - <strong>18 Months</strong>
         </>
       ),
       value: formatTheo(locked?.[2]?.toString()),
