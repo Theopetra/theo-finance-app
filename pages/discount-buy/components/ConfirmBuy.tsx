@@ -41,14 +41,20 @@ export const MarketDiscountRow = () => {
 };
 
 export const PurchaseAmountRow = () => {
-  const [{ purchaseAmount, purchaseCost }] = useBuyForm();
+  const [{ purchaseAmount, purchaseCost, purchaseToken }] = useBuyForm();
 
-  return <ConfirmRow title="Purchase Amount" value={purchaseAmount} subtext={purchaseCost} />;
+  return (
+    <ConfirmRow
+      title="Purchase Amount"
+      value={`${purchaseAmount} $THEO`}
+      subtext={`${purchaseCost} ${cleanSymbol(purchaseToken?.symbol)}`}
+    />
+  );
 };
 
 export const TheoPurchasePriceRow = () => {
   const [{ purchaseToken }] = useBuyForm();
-  return <ConfirmRow title="THEO Purchase Price" value={<Price />} />;
+  return <ConfirmRow title="$THEO Purchase Price" value={<Price />} />;
 };
 
 export const LockDurationRow = () => {
