@@ -11,7 +11,7 @@ const STATS = [
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
   {
-    name: 'THEO Staked',
+    name: '$THEO Staked',
     value: '78%',
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
