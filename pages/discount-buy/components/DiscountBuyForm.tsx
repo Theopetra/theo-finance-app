@@ -22,12 +22,14 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
     data: balance,
     isError: balanceIsError,
     isLoading: balanceIsLoading,
-  } = useBalance({ addressOrName: account?.address, token: purchaseToken?.quoteToken });
+  } = useBalance({
+    addressOrName: account?.address,
+    ...(purchaseToken?.symbol === 'USDC' && { formatUnits: 'mwei' }),
+    token: purchaseToken?.quoteToken,
+  });
 
   const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
   const handleClick = () => {
-    // console.log(purchaseAmount);
-
     if (Number(purchaseAmount) <= 0 || Number(purchaseCost) <= 0) {
       setErrorMessage('Purchase amount is required.');
       return;
@@ -131,7 +133,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
               )
             )
             .map((x) => ({ ...x.marketData }))}
-          balance={balance?.formatted}
+          balance={Number(balance?.formatted).toFixed(2)}
           value={purchaseCost}
           onCurrencyChange={(e: BaseSyntheticEvent) => {
             handleUpdate(e, 'purchaseToken');

@@ -76,8 +76,6 @@ export const BuyFormProvider: React.FC = (props) => {
     { args: selectedMarket?.id || BigNumber.from(0) }
   );
 
-  // console.log(groupedBondMarketsMap);
-
   // TODO: expand to other bond markets?
   useEffect(() => {
     const termsMap = {};
