@@ -4,7 +4,7 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BigNumber } from 'ethers';
 import React, { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
-import { useContract, useContractRead, useProvider, useToken } from 'wagmi';
+import { useBalance, useContract, useContractRead, useProvider, useToken } from 'wagmi';
 
 export const BuyFormContext = React.createContext<any>(null);
 
