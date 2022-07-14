@@ -21,8 +21,8 @@ export const Price = () => {
   return (
     <>
       <WhitelistTokenPrice
-        marketId={selectedMarket.id}
-        quoteToken={selectedMarket.marketData.quoteToken}
+        marketId={selectedMarket?.id}
+        quoteToken={selectedMarket?.marketData.quoteToken}
       />{' '}
       {cleanSymbol(purchaseToken?.symbol)}
     </>
