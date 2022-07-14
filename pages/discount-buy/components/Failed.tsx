@@ -9,6 +9,18 @@ import ConfirmBuy, {
 
 const Failed = ({ error }) => {
   const [, { openModal }] = useModal();
+  let errorMsg;
+
+  // this is some rudimentary error mapping, we can make this richer if desired
+  if (error.code === 'UNPREDICTABLE_GAS_LIMIT') {
+    if (error?.reason.includes('signature')) {
+      errorMsg = 'Your current wallet is not on the whitelist. Come back soon!';
+    } else {
+      errorMsg = error.reason;
+    }
+  } else {
+    errorMsg = error.code || error.message;
+  }
 
   return (
     <div>
@@ -46,6 +58,7 @@ const Failed = ({ error }) => {
               />
             </svg>
           </div>
+          <div className="text">Reason: {errorMsg}</div>
         </div>
         <div>
           <Icon name="intersect" className="h-12 w-12 dark:text-white" />

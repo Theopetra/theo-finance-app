@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import useBuyForm from '../state/use-buy-form';
 import { ConfirmRow, LockDurationRow, MarketDiscountRow, TheoPurchasePriceRow } from './ConfirmBuy';
 
-const Successfull = ({ txId }) => {
+const Successful = ({ txId }) => {
   const etherscanUrl = useEtherscanTxId(txId);
   const router = useRouter();
   const [, { closeModal }] = useModal();
@@ -19,7 +19,7 @@ const Successfull = ({ txId }) => {
           className="mb-8 w-full text-center text-theo-navy dark:text-white"
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
-          <div className="mb-4 text-3xl font-bold sm:text-4xl">Buy Successfull!</div>
+          <div className="mb-4 text-3xl font-bold sm:text-4xl">Buy Successful!</div>
         </div>
         <div className=" hidden sm:block">
           <Icon name="intersect" className=" w-12 dark:text-white" />
@@ -48,4 +48,4 @@ const Successfull = ({ txId }) => {
   );
 };
 
-export default Successfull;
+export default Successful;
