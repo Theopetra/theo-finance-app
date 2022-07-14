@@ -50,6 +50,14 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
     );
   }, [initialToken, bondMarkets?.markets?.[0].marketData]);
 
+  useEffect(() => {
+    if (balance && Number(purchaseCost) > Number(balance?.formatted)) {
+      setErrorMessage('Insufficient balance.');
+      return;
+    }
+    setErrorMessage('');
+  }, [balance, purchaseCost]);
+
   return (
     <div>
       <div className="flex w-full justify-between">
@@ -151,7 +159,11 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
 
       <div className="flex w-full flex-col items-center justify-end sm:flex-row">
         <div className="w-full sm:w-1/2">
-          <button className="border-button w-full " onClick={handleClick}>
+          <button
+            className="border-button w-full disabled:pointer-events-none disabled:opacity-50 "
+            disabled={Boolean(errorMessage)}
+            onClick={handleClick}
+          >
             Buy Theo
           </button>
         </div>
