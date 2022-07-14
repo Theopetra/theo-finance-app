@@ -10,6 +10,12 @@ const Successful = ({ txId }) => {
   const router = useRouter();
   const [, { closeModal }] = useModal();
   const [{ purchaseAmount }] = useBuyForm();
+
+  const handleClick = () => {
+    closeModal();
+    router.push('/whitelist-sale/your-purchases');
+  };
+
   return (
     <div>
       <div className="flex justify-between">
@@ -37,10 +43,7 @@ const Successful = ({ txId }) => {
             View Etherscan Transaction
           </a>
         </button>
-        <button
-          className="border-button w-72"
-          onClick={() => router.push('/whitelist-sale/your-purchases')}
-        >
+        <button className="border-button w-72" onClick={handleClick}>
           Finish
         </button>
       </div>

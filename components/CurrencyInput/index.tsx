@@ -40,15 +40,15 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
             <Icon name={selectedToken.symbol.toLowerCase()} className="mr-2 w-8" />
           )}
 
-          {selectedToken?.symbol}
+          {cleanSymbol(selectedToken?.symbol)}
         </span>
       )}
       <div className="flex-1 p-2">
         <div className="flex min-h-[40px] items-center rounded-lg bg-white dark:bg-[#262626]">
           {balance ? (
             <div className="hidden p-2 text-xs sm:block">
-              Balance: {Number(balance).toFixed(5)}
-              {selectedToken?.symbol}
+              Balance: {Number(balance).toFixed(selectedToken?.symbol === 'USDC' ? 2 : 6)}
+              {cleanSymbol(selectedToken?.symbol)}
               <span
                 onClick={() => onChange({ target: { value: balance } }, 'purchasePrice')}
                 className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white"

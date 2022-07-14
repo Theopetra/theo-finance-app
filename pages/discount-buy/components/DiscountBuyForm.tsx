@@ -22,12 +22,14 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
     data: balance,
     isError: balanceIsError,
     isLoading: balanceIsLoading,
-  } = useBalance({ addressOrName: account?.address, token: purchaseToken?.quoteToken });
+  } = useBalance({
+    addressOrName: account?.address,
+    ...(purchaseToken?.symbol === 'USDC' && { formatUnits: 'mwei' }),
+    token: purchaseToken?.quoteToken,
+  });
 
   const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
   const handleClick = () => {
-    // console.log(purchaseAmount);
-
     if (Number(purchaseAmount) <= 0 || Number(purchaseCost) <= 0) {
       setErrorMessage('Purchase amount is required.');
       return;
@@ -47,6 +49,14 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
       'purchaseToken'
     );
   }, [initialToken, bondMarkets?.markets?.[0].marketData]);
+
+  useEffect(() => {
+    if (balance && Number(purchaseCost) > Number(balance?.formatted)) {
+      setErrorMessage('Insufficient balance.');
+      return;
+    }
+    setErrorMessage('');
+  }, [balance, purchaseCost]);
 
   return (
     <div>
@@ -131,7 +141,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
               )
             )
             .map((x) => ({ ...x.marketData }))}
-          balance={balance?.formatted}
+          balance={Number(balance?.formatted).toFixed(2)}
           value={purchaseCost}
           onCurrencyChange={(e: BaseSyntheticEvent) => {
             handleUpdate(e, 'purchaseToken');
@@ -149,7 +159,11 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
 
       <div className="flex w-full flex-col items-center justify-end sm:flex-row">
         <div className="w-full sm:w-1/2">
-          <button className="border-button w-full " onClick={handleClick}>
+          <button
+            className="border-button w-full disabled:pointer-events-none disabled:opacity-50 "
+            disabled={Boolean(errorMessage)}
+            onClick={handleClick}
+          >
             Buy Theo
           </button>
         </div>

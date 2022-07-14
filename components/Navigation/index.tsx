@@ -39,9 +39,9 @@ const Navigation = () => {
             <Fragment key={x.icon}>
               <a
                 href={x.href}
-                className="block rounded p-4 transition hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
+                className=" w-20 h-20  flex items-center rounded p-4 transition hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
               >
-                <Icon name={x.icon} />
+                <Icon name={x.icon} className="w-full" />
               </a>
             </Fragment>
           ))}
