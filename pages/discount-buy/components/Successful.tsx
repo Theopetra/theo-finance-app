@@ -13,7 +13,7 @@ const Successful = ({ txId }) => {
 
   const handleClick = () => {
     closeModal();
-    router.push('/your-purchases');
+    router.push('/whitelist-sale/your-purchases');
   };
 
   return (
