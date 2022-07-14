@@ -29,5 +29,5 @@ export const navigation = [
     disabled: true,
   },
   { name: 'T-Homes', href: '/t-homes', disabled: true, icon: 'door' },
-  { name: 'Learn More', href: '/#', icon: 'file' },
+  { name: 'Learn More', href: 'https://docs.theopetralabs.com/', icon: 'file', target: '_blank' },
 ];

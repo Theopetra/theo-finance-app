@@ -11,6 +11,7 @@ type NavItemProps = {
   disabled?: boolean;
   icon?: string;
   subNav?: NavItemProps[];
+  target?: string;
 };
 
 type NavItem = {
@@ -20,10 +21,10 @@ type NavItem = {
 const NavItem = ({ item }: NavItem) => {
   const router = useRouter();
   const [{ activeSubNav }, { setActiveSubNav, setNavigationOpen }] = useTheme();
-  const { name, href, icon, disabled, subNav } = item;
+  const { name, href, icon, disabled, target, subNav } = item;
 
   const activeClass =
-    href === router.pathname || activeSubNav  === name
+    href === router.pathname || activeSubNav === name
       ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
       : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white';
 
@@ -43,6 +44,7 @@ const NavItem = ({ item }: NavItem) => {
             disabled && 'cursor-not-allowed opacity-50',
             !disabled && hoverClasses
           )}
+          target={target}
         >
           <div>
             <div className={`flex items-center`}>

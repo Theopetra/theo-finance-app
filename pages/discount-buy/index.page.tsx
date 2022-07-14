@@ -16,7 +16,7 @@ const STATS = [
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
   {
-    name: 'THEO Price',
+    name: '$THEO Price',
     value: '$35.42',
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },

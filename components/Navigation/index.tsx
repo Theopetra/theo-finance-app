@@ -1,10 +1,8 @@
-import { useContractInfo } from '@/hooks/useContractInfo';
 import { useNavigation } from '@/hooks/useNavigation';
 import { formatTheo } from '@/lib/format_theo';
 import { useUserPurchases } from '@/pages/discount-buy/your-purchases/index.page';
 import { BigNumber } from 'ethers';
 import { Fragment } from 'react';
-import { useAccount, useBalance } from 'wagmi';
 import Icon from '../Icons';
 import Logo from './Logo';
 import NavItem from './NavItem';
