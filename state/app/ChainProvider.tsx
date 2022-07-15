@@ -13,11 +13,17 @@ import { publicProvider } from 'wagmi/providers/public';
 const localChains = [chain.goerli];
 const prodChains = [chain.mainnet, ...localChains];
 
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID
+
+if (!infuraId) {
+  console.log('WARNING: No infura id specified!')
+}
+
 const { chains, provider } = configureChains(
   // TODO: uncomment for release
   // process.env.NODE_ENV === 'production' ? prodChains : localChains,
   localChains,
-  [infuraProvider({ infuraId: process.env.INFURA_ID })]
+  [infuraProvider({ infuraId })]
 );
 
 const { connectors } = getDefaultWallets({
