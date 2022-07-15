@@ -1,6 +1,7 @@
 import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages';
 import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
 import Icon from '@/components/Icons';
+import PendingTransaction from '@/components/PendingTransaction';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
@@ -177,6 +178,8 @@ const ConfirmBuy = () => {
     {
       async onSuccess(data) {
         // TODO: show entertainment modal here
+        openModal(<PendingTransaction />);
+
         const receipt = await data.wait();
         if (receipt.status === 1) {
           openModal(<Successful txId={data.hash} />);
@@ -210,7 +213,7 @@ const ConfirmBuy = () => {
     'approve',
     {
       async onSuccess(data) {
-        // TODO: show entertainment modal here
+        openModal(<PendingTransaction />);
         const receipt = await data.wait();
         if (receipt.status === 1) {
           deposit();
