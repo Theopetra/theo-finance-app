@@ -177,8 +177,7 @@ const ConfirmBuy = () => {
     'deposit',
     {
       async onSuccess(data) {
-        // TODO: show entertainment modal here
-        openModal(<PendingTransaction />);
+        openModal(<PendingTransaction message="2 of 2 transactions..." />);
 
         const receipt = await data.wait();
         if (receipt.status === 1) {
@@ -213,7 +212,7 @@ const ConfirmBuy = () => {
     'approve',
     {
       async onSuccess(data) {
-        openModal(<PendingTransaction />);
+        openModal(<PendingTransaction message="1 of 2 transactions..." />);
         const receipt = await data.wait();
         if (receipt.status === 1) {
           deposit();
