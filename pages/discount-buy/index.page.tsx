@@ -84,7 +84,7 @@ const DiscountBuy = () => {
         />
       </div>
       <PageContainer>
-        <CardList className={'sm:mb-4'} horizontalScroll>
+        <CardList className={'sm:mb-4'}>
           {STATS.map((props) => (
             <Fragment key={props.name}>
               <StatCard {...props} />
