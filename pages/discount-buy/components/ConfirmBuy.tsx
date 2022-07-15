@@ -177,8 +177,12 @@ const ConfirmBuy = () => {
     'deposit',
     {
       async onSuccess(data) {
-        // TODO: show entertainment modal here
-        openModal(<PendingTransaction />);
+        openModal(
+          <PendingTransaction
+            message="2 of 2 transactions..."
+            secondaryMessage="Submitting transaction..."
+          />
+        );
 
         const receipt = await data.wait();
         if (receipt.status === 1) {
@@ -213,9 +217,21 @@ const ConfirmBuy = () => {
     'approve',
     {
       async onSuccess(data) {
-        openModal(<PendingTransaction />);
+        openModal(
+          <PendingTransaction
+            message="1 of 2 transactions..."
+            secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} transfer...`}
+          />
+        );
         const receipt = await data.wait();
         if (receipt.status === 1) {
+          openModal(
+            <PendingTransaction
+              message="2 of 2 transactions..."
+              secondaryMessage="Submitting transaction..."
+            />
+          );
+
           deposit();
         } else {
           openModal(<Failed error={{ code: 'Something went wrong.' }} />);

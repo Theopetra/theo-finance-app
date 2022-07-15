@@ -1,8 +1,15 @@
+import { title } from 'process';
 import React from 'react';
 import LottieAnimation from 'react-lottie';
 import animationData from './animation-data.json';
 
-const PendingTransaction = () => {
+const PendingTransaction = ({
+  message,
+  secondaryMessage,
+}: {
+  message?: string;
+  secondaryMessage?: string;
+}) => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -14,7 +21,9 @@ const PendingTransaction = () => {
 
   return (
     <div>
+      <div className="text-center">{message}</div>
       <LottieAnimation options={defaultOptions} />
+      <div className="text-center">{secondaryMessage}</div>
     </div>
   );
 };
