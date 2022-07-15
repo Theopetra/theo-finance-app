@@ -17,15 +17,16 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
   ] = useBuyForm();
 
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
-  // TODO: fix balance for quote token
   const {
     data: balance,
     isError: balanceIsError,
     isLoading: balanceIsLoading,
   } = useBalance({
     addressOrName: account?.address,
-    ...(purchaseToken?.symbol === 'USDC' && { formatUnits: 'mwei' }),
-    token: purchaseToken?.quoteToken,
+    ...(purchaseToken?.symbol === 'USDC' && {
+      formatUnits: 'mwei',
+      token: purchaseToken?.quoteToken,
+    }),
   });
 
   const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
@@ -141,7 +142,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
               )
             )
             .map((x) => ({ ...x.marketData }))}
-          balance={Number(balance?.formatted).toFixed(2)}
+          balance={balance?.formatted}
           value={purchaseCost}
           onCurrencyChange={(e: BaseSyntheticEvent) => {
             handleUpdate(e, 'purchaseToken');
