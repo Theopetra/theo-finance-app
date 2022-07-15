@@ -122,7 +122,7 @@ const Dashboard = ({ currentMetrics }) => {
         />
       </div>
       <PageContainer>
-        <CardList horizontalScroll>
+        <CardList >
           {STATS.map((props, i) => (
             <Fragment key={i}>
               <StatCard {...props} />
