@@ -35,6 +35,7 @@ const NavItem = ({ item }: NavItem) => {
       <Link key={name} href={!disabled ? (href as any) : '#'} passHref={true}>
         <a
           onClick={() => {
+            if (disabled) return;
             setNavigationOpen(false);
             setActiveSubNav(name);
           }}

@@ -28,6 +28,6 @@ export const navigation = [
     icon: 'lock-laminated',
     disabled: true,
   },
-  { name: 'T-Homes', href: '/t-homes', disabled: true, icon: 'door' },
+  // { name: 'T-Homes', href: '/t-homes', disabled: true, icon: 'door' },
   { name: 'Learn More', href: 'https://docs.theopetralabs.com/', icon: 'file', target: '_blank' },
 ];
