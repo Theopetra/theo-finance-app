@@ -13,10 +13,10 @@ import { publicProvider } from 'wagmi/providers/public';
 const localChains = [chain.goerli];
 const prodChains = [chain.mainnet, ...localChains];
 
-const infuraId = process.env.NEXT_PUBLIC_INFURA_ID
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 
 if (!infuraId) {
-  console.log('WARNING: No infura id specified!')
+  console.log('WARNING: No infura id specified!');
 }
 
 const { chains, provider } = configureChains(
@@ -30,7 +30,7 @@ const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
   chains,
 });
-const wagmiClient = createClient({
+export const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,

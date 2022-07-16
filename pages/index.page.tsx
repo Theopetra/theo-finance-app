@@ -4,13 +4,14 @@ import DynamicText from '@/components/DynamicText';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
-import { useContractInfo } from '@/hooks/useContractInfo';
+import { getContractInfo, useContractInfo } from '@/hooks/useContractInfo';
 import { useProvider } from 'wagmi';
 import useMetrics from '@/hooks/useMetrics';
 import { useTheme } from '@/state/ui/theme';
 import { Fragment, useEffect, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { formatTheo } from '@/lib/format_theo';
+import { wagmiClient } from '@/state/app/ChainProvider';
 
 const verbose = process.env.NODE_ENV !== 'production';
 
@@ -21,65 +22,58 @@ function log(msg, val) {
   }
 }
 
-function useLockedTheoByContract(contractName) {
-  const { address, abi } = useContractInfo(contractName);
-  const provider = useProvider();
+// TODO: verify this works once there is test data
+async function getLockedTheoByContract(contractName) {
+  const { address, abi } = getContractInfo(contractName);
+  const contract = new ethers.Contract(address, abi, wagmiClient.provider);
 
-  const [locked, setLocked] = useState([BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)]);
+  // const data = await contract.getMarkets();
+  const data = await contract.liveMarkets();
 
-  useEffect(() => {
-    // TODO: verify this works once there is test data
-    async function getData() {
-      const contract = new ethers.Contract(address, abi, provider);
-      const data = await contract.liveMarkets();
-      // const data = await contract.getMarkets();
-      log('markets for ' + contractName, data);
+  let locked = [BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)];
+  //log('markets for ' + contractName, data);
 
-      if (data) {
-        const merged = await Promise.all(
-          data.map(async (b) => {
-            return {
-              marketId: b,
-              market: await contract.markets(b),
-              term: await contract.terms(b),
-            };
-          })
-        );
+  if (data) {
+    const merged = await Promise.all(
+      data.map(async (b) => {
+        return {
+          marketId: b,
+          market: await contract.markets(b),
+          term: await contract.terms(b),
+        };
+      })
+    );
 
-        log('merged for ' + contractName, merged);
+    //log('merged for ' + contractName, merged);
 
-        // 15768000 - 6 months
-        // 31536000 - 12 months
-        // 47304000 - 18 months
+    // 15768000 - 6 months
+    // 31536000 - 12 months
+    // 47304000 - 18 months
 
-        const locked = [15768000, 31536000, 47304000].map((v) => {
-          return merged
-            .filter((e: any) => e.term.fixedTerm && e.term.vesting === v)
-            .reduce((prev, cur: any) => prev.add(cur.market.sold), BigNumber.from(0));
-        });
+    locked = [15768000, 31536000, 47304000].map((v) => {
+      return merged
+        .filter((e: any) => e.term.fixedTerm && e.term.vesting === v)
+        .reduce((prev, cur: any) => prev.add(cur.market.sold), BigNumber.from(0));
+    });
 
-        log('locked for ' + contractName, locked);
-
-        setLocked(locked);
-      }
-    }
-    getData();
-  }, [provider, abi, address, contractName]);
+    //log('locked for ' + contractName, locked);
+  }
 
   return locked;
 }
 
-function useLockedTheo() {
-  const whitelistRepo = useLockedTheoByContract('WhitelistTheopetraBondDepository');
-  const bondRepo = useLockedTheoByContract('TheopetraBondDepository');
-  const publicPreListRepo = useLockedTheoByContract('PublicPreListBondDepository');
+async function getLockedTheo() {
+  const whitelistRepo = await getLockedTheoByContract('WhitelistTheopetraBondDepository');
+  const bondRepo = await getLockedTheoByContract('TheopetraBondDepository');
+  const publicPreListRepo = await getLockedTheoByContract('PublicPreListBondDepository');
 
-  return [0, 1, 2].map((i) => [whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i])]);
+  return [0, 1, 2].map((i) => [
+    whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i]).toString(),
+  ]);
 }
 
-const Dashboard = ({ currentMetrics }) => {
+const Dashboard = ({ locked }) => {
   const [{ theme }] = useTheme();
-  const locked = useLockedTheo();
 
   const STATS = [
     {
@@ -88,7 +82,7 @@ const Dashboard = ({ currentMetrics }) => {
           $THEO Locked - <strong>6 Months</strong>
         </>
       ),
-      value: formatTheo(locked?.[0].toString()),
+      value: formatTheo(locked?.[0]?.toString()),
       tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
       tooltipIcon: 'lock-laminated',
     },
@@ -122,7 +116,7 @@ const Dashboard = ({ currentMetrics }) => {
         />
       </div>
       <PageContainer>
-        <CardList >
+        <CardList>
           {STATS.map((props, i) => (
             <Fragment key={i}>
               <StatCard {...props} />
@@ -132,7 +126,7 @@ const Dashboard = ({ currentMetrics }) => {
         <div className="mt-4">
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
             <Card
-              title={'Total Unique Wallets'}
+              title={'TBD New Metric'}
               darkModeBgColor={'bg-black dark:bg-none'}
               className="basis-1/3"
             >
@@ -140,7 +134,7 @@ const Dashboard = ({ currentMetrics }) => {
                 <div className="h-full flex-1">
                   <div className="sr-only">Total Wallets Graph</div>
                   <div className="text-3xl font-bold">
-                    <DynamicText value={currentMetrics?.uniqueWallets} />
+                    <DynamicText value={'TBD'} />
                   </div>
                 </div>
               </div>
@@ -168,16 +162,22 @@ Dashboard.PageHead = () => {
 };
 
 export async function getStaticProps() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/api/metrics`);
+  // TODO: uncomment if we ever need the metrics backend again
+  // const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/api/metrics`);
+  // if (!response.ok) {
+  //   console.log(`An error has occured: ${response}`);
+  // }
+  // const metricsData = await response.json();
+  // return {
+  //   props: { currentMetrics: metricsData?.[0] },
+  // };
 
-  if (!response.ok) {
-    console.log(`An error has occured: ${response}`);
-  }
-
-  const metricsData = await response.json();
+  const locked = await getLockedTheo();
 
   return {
-    props: { currentMetrics: metricsData?.[0] },
+    props: {
+      locked,
+    },
   };
 }
 
