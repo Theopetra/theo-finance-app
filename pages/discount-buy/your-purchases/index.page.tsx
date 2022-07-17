@@ -55,7 +55,7 @@ const YourPurchases = () => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Date',
+        Header: 'Purchased Date',
         accessor: 'date',
         Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
         width: '10%',
@@ -71,16 +71,16 @@ const YourPurchases = () => {
         width: '10%',
       },
       {
-        Header: 'Unlock Date',
-        accessor: 'unlockDate',
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
-        width: '15%',
-      },
-      {
         Header: 'Status',
         accessor: 'status',
         width: '10%',
         Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
+      },
+      {
+        Header: 'Unlock Date',
+        accessor: 'unlockDate',
+        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
+        width: '15%',
       },
     ],
     []
