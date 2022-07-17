@@ -79,32 +79,35 @@ const Dashboard = ({ locked }) => {
     {
       name: (
         <>
-          $THEO Locked - <strong>6 Months</strong>
+          TOTAL $THEO Locked -<br/>
+          <strong>6 Months</strong>
         </>
       ),
       value: formatTheo(locked?.[0]?.toString()),
-      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-      tooltipIcon: 'lock-laminated',
+      tooltip: 'This is the total amount of $THEO locked in the 6 Month contract',
+      tooltipIcon: 'info',
     },
     {
       name: (
         <>
-          $THEO Locked - <strong>12 Months</strong>
+          TOTAL $THEO Locked -<br/>
+          <strong>12 Months</strong>
         </>
       ),
       value: formatTheo(locked?.[1]?.toString()),
-      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-      tooltipIcon: 'lock-laminated',
+      tooltip: 'This is the total amount of $THEO locked in the 12 Month contract',
+      tooltipIcon: 'info',
     },
     {
       name: (
         <>
-          $THEO Locked - <strong>18 Months</strong>
+          TOTAL $THEO Locked -<br/>
+          <strong>18 Months</strong>
         </>
       ),
       value: formatTheo(locked?.[2]?.toString()),
-      tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-      tooltipIcon: 'lock-laminated',
+      tooltip: 'This is the total amount of $THEO locked in the 18 Month contract',
+      tooltipIcon: 'info',
     },
   ];
 
