@@ -25,7 +25,7 @@ const MobileNav = () => {
               <div className="mx-auto mb-10 flex w-64 flex-shrink-0 items-center px-4">
                 <Logo altLogo />
               </div>
-              <nav className="mt-5 space-y-1 px-2">
+              <nav className="mt-5 space-y-1 px-2 max-w-[350px] mx-auto">
                 {navigation.map((item) => (
                   <Fragment key={`${item.name}_mobile`}>
                     <NavItem item={item} />
