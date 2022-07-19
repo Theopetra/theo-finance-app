@@ -149,7 +149,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
             handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
           }}
           onChange={(e: BaseSyntheticEvent) => {
-            if (Number(e.target.value) < 0) return;
+            if (Number(e.target.value) <= 0) return;
             handleTokenInput(e, 'purchaseCost');
           }}
         />
