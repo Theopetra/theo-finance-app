@@ -37,7 +37,8 @@ const NavItem = ({ item }: NavItem) => {
           onClick={() => {
             if (disabled) return;
             setNavigationOpen(false);
-            setActiveSubNav(name);
+
+            !target && setActiveSubNav(name);
           }}
           key={name}
           className={classNames(
