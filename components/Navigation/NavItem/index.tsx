@@ -32,12 +32,13 @@ const NavItem = ({ item }: NavItem) => {
     'hover:bg-theo-cyan hover:text-white dark:hover:bg-theo-gray dark:hover:text-white';
   return (
     <div className={classNames(activeClass, 'rounded-md')}>
-      <Link key={name} href={!disabled ? (href as any) : '#'} passHref={true}>
+      <Link key={name} href={!disabled ? (href as any) : '#'} passHref>
         <a
           onClick={() => {
             if (disabled) return;
             setNavigationOpen(false);
-            setActiveSubNav(name);
+
+            !target && setActiveSubNav(name);
           }}
           key={name}
           className={classNames(

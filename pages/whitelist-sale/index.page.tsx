@@ -80,10 +80,12 @@ const Whitelist = () => {
                 <div className="text-2xl font-extrabold">
                   <div className="flex">
                     <div className="border- mr-3 flex items-center border-r-2 border-[#2f455c] p-3 text-[#2776cb]">
-                      <img src={UdcIcon.src} alt="" className="mr-2 w-8" /> USDC
+                      <img src={UdcIcon.src} alt="" className="mr-2 w-8" />
+                      <span className=" sm:block lg:hidden xl:block">USDC</span>
                     </div>
                     <div className="flex items-center  text-[#262626]">
-                      <img src={EthIcon.src} alt="" className="mr-2 w-5" /> ETHER
+                      <img src={EthIcon.src} alt="" className="mr-2 w-8" />{' '}
+                      <span className=" sm:block lg:hidden xl:block">ETHER</span>
                     </div>
                   </div>
                 </div>
