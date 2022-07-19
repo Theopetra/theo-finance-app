@@ -1,6 +1,7 @@
 import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
 import { TokenInfo } from '@/components/TokenName';
+import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
@@ -97,7 +98,9 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
           <div className="text-xs">Purchase Type</div>
         </div>
         <div>
-          <div className="text-lg font-bold leading-8 sm:text-xl ">{getSelectedMarketPrice()}</div>
+          <div className="text-lg font-bold leading-8 sm:text-xl ">
+            {getSelectedMarketPrice()} {cleanSymbol(purchaseToken?.symbol)}
+          </div>
           <div className="text-xs">Discounted Price </div>
         </div>
         <div>
