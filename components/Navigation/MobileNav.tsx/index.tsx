@@ -22,7 +22,7 @@ const MobileNav = () => {
         >
           <div className=" relative flex w-full flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] pt-12 dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
             <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
-              <div className="mx-auto mb-10 flex w-64 flex-shrink-0 items-center px-4">
+              <div className="mx-auto  flex w-64 flex-shrink-0 items-center px-4">
                 <Logo altLogo />
               </div>
               <nav className="mt-5 space-y-1 px-2 max-w-[350px] mx-auto">
