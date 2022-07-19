@@ -148,7 +148,10 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
             handleUpdate(e, 'purchaseToken');
             handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
           }}
-          onChange={(e: BaseSyntheticEvent) => handleTokenInput(e, 'purchaseCost')}
+          onChange={(e: BaseSyntheticEvent) => {
+            if (Number(e.target.value) < 0) return;
+            handleTokenInput(e, 'purchaseCost');
+          }}
         />
         <CurrencyInput
           selectedToken={{ symbol: 'THEO' }}
