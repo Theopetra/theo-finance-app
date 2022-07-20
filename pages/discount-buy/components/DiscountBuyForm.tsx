@@ -133,7 +133,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
           THEO
         </div>
         <p className="mb-8 text-xs">
-          Important: New bonds are auto-staked (accrue rebase rewards) and no longer vest linearly
+          Once unlocked, $THEO purchased need to be staked into the Premium Pool for $ETH rebates.
         </p>
         <CurrencyInput
           className={'mb-4'}
