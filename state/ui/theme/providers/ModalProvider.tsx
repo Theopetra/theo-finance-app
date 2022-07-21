@@ -12,7 +12,7 @@ export const ModalProvider: React.FC = (props) => {
   useEffect(() => {
     const handleRouteChange = (url, { shallow }) => {
       // because of the way the modal is designed, we close modal if route changes
-      closeModal();
+      if (!(url as string).endsWith('#')) closeModal();
     };
 
     router.events.on('routeChangeStart', handleRouteChange);
@@ -37,7 +37,6 @@ export const ModalProvider: React.FC = (props) => {
         { openModal, closeModal, setTransitioning },
       ]}
     >
-
       {props.children}
     </ModalContext.Provider>
   );
