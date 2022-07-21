@@ -6,13 +6,21 @@ type BuyFormStateType = {
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount;
   purchaseCost;
+  transactionPending;
   bondMarkets;
   selectedMarket;
   groupedBondMarkets;
   groupedBondMarketsMap;
   selection;
+  formState;
 };
-type BuyFormDispatchType = { setSelection; handleUpdate; getSelectedMarketPrice; handleTokenInput };
+type BuyFormDispatchType = {
+  setSelection;
+  handleUpdate;
+  getSelectedMarketPrice;
+  handleTokenInput;
+  setFormState;
+};
 type BuyFormType = [BuyFormStateType, BuyFormDispatchType];
 export const useBuyForm = () => {
   const [state, dispatch] = useContext(BuyFormContext);
