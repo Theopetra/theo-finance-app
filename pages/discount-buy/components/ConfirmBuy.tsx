@@ -188,6 +188,7 @@ const ConfirmBuy = () => {
 
         const receipt = await data.wait();
         if (receipt.status === 1) {
+          setRender(!render);
           openModal(<Successful txId={data.hash} />);
         } else {
           openModal(<Failed error={{ code: 'Something went wrong.' }} />);
