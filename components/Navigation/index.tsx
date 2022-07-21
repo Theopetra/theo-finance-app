@@ -1,6 +1,6 @@
 import { useNavigation } from '@/hooks/useNavigation';
 import { formatTheo } from '@/lib/format_theo';
-import { useUserPurchases } from '@/pages/discount-buy/your-purchases/index.page';
+import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { Fragment } from 'react';
@@ -20,8 +20,9 @@ const classes = {
 };
 
 const Navigation = () => {
-  const purchases = useUserPurchases();
   const navigation = useNavigation();
+  const [{ purchases }]: any = useUserPurchases();
+
   return (
     <div className=" flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
       <div className="flex flex-1 flex-col overflow-y-auto pt-5">

@@ -12,6 +12,7 @@ import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
+import { useUserPurchases } from '../state/use-user-purchases';
 import DiscountBuyForm from './DiscountBuyForm';
 import Failed from './Failed';
 import Successful from './Successful';
@@ -87,7 +88,7 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
-
+  const [{ render }, { setRender }] = useUserPurchases();
   const { data: wallet } = useAccount();
   const {
     address: activeBondDepoAddress,
@@ -151,6 +152,7 @@ const ConfirmBuy = () => {
         const receipt = await data.wait();
         if (receipt.status === 1) {
           openModal(<Successful txId={data.hash} />);
+          setRender(!render);
         } else {
           openModal(<Failed error={{ code: 'Something went wrong.' }} />);
         }
@@ -186,6 +188,7 @@ const ConfirmBuy = () => {
 
         const receipt = await data.wait();
         if (receipt.status === 1) {
+          setRender(!render);
           openModal(<Successful txId={data.hash} />);
         } else {
           openModal(<Failed error={{ code: 'Something went wrong.' }} />);

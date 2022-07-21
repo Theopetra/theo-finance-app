@@ -1,46 +1,16 @@
 import PageContainer from '@/components/PageContainer';
-import { useContractInfo } from '@/hooks/useContractInfo';
 import { formatTheo } from '@/lib/format_theo';
 import { format } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
-import { useAccount, useContract, useProvider } from 'wagmi';
+import React, { useMemo } from 'react';
+import { useAccount } from 'wagmi';
+import { useUserPurchases } from '../state/use-user-purchases';
 import PurchasesTable from './components/PurchasesTable';
-
-const usePurchasesByContract = (contractName) => {
-  const { data } = useAccount();
-  const { address, abi } = useContractInfo(contractName);
-  const [pendingNotes, setPendingNotes] = useState<any[]>([]);
-  const provider = useProvider();
-  const contract = useContract({
-    addressOrName: address,
-    contractInterface: abi,
-    signerOrProvider: provider,
-  });
-
-  useEffect(() => {
-    async function callContract() {
-      if (contract && data?.address) {
-        const indexes = await contract.indexesFor(data?.address);
-        const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
-        const pn = await Promise.all(pnPromises);
-        setPendingNotes(pn);
-      }
-    }
-    callContract();
-  }, [contract, data?.address]);
-
-  return pendingNotes;
-};
-
-export const useUserPurchases = () => [
-  ...usePurchasesByContract('WhitelistTheopetraBondDepository'),
-  ...usePurchasesByContract('PublicPreListBondDepository'),
-];
 
 const YourPurchases = () => {
   const { data, status } = useAccount();
-  const purchases = useUserPurchases();
-  const formattedPurchases = purchases.map((p) => {
+  const [{ purchases }] = useUserPurchases();
+
+  const formattedPurchases = purchases?.map((p) => {
     return {
       date: new Date(p.created_ * 1000),
       amount: `${formatTheo(p.payout_)}`,
@@ -88,7 +58,7 @@ const YourPurchases = () => {
 
   return (
     <PageContainer>
-      {data?.address ? (
+      {data?.address && formattedPurchases?.length > 0 ? (
         <PurchasesTable columns={columns} data={formattedPurchases} />
       ) : (
         <p className="font-bold dark:text-white">Please connect your wallet.</p>
@@ -100,5 +70,4 @@ const YourPurchases = () => {
 YourPurchases.PageHead = () => {
   return <div>Your Purchases</div>;
 };
-
 export default YourPurchases;
