@@ -274,7 +274,8 @@ const ConfirmBuy = () => {
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
           <div className="mb-4 text-3xl font-bold sm:text-4xl">Confirm Buy</div>
-          <div>This purchase is final, click <strong>Confirm Purchase</strong> below to confirm.</div>
+          <div>Please review carefully, this purchase is final.<br/>
+          Click <strong>Confirm Purchase</strong> below to confirm.</div>
         </div>
         <div>
           <Icon name="intersect" className="h-12 w-12 dark:text-white" />
