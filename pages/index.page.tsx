@@ -79,7 +79,7 @@ const Dashboard = ({ locked }) => {
     {
       name: (
         <>
-          TOTAL $THEO Locked -<br/>
+          TOTAL $THEO Locked<br/>
           <strong>6 Months</strong>
         </>
       ),
@@ -90,7 +90,7 @@ const Dashboard = ({ locked }) => {
     {
       name: (
         <>
-          TOTAL $THEO Locked -<br/>
+          TOTAL $THEO Locked<br/>
           <strong>12 Months</strong>
         </>
       ),
@@ -101,7 +101,7 @@ const Dashboard = ({ locked }) => {
     {
       name: (
         <>
-          TOTAL $THEO Locked -<br/>
+          TOTAL $THEO Locked<br/>
           <strong>18 Months</strong>
         </>
       ),
