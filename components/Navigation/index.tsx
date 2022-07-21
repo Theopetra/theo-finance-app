@@ -1,5 +1,6 @@
 import { useNavigation } from '@/hooks/useNavigation';
 import { formatTheo } from '@/lib/format_theo';
+import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
@@ -22,6 +23,7 @@ const classes = {
 const Navigation = () => {
   const navigation = useNavigation();
   const [{ purchases }]: any = useUserPurchases();
+  const [{ transactionPending }] = useBuyForm();
 
   return (
     <div className=" flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
@@ -34,7 +36,7 @@ const Navigation = () => {
         <nav className="mt-5 flex-1 space-y-2 px-2 pr-8 pl-8">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
-              <NavItem item={item} />
+              <NavItem item={{ ...item, disabled: transactionPending }} />
             </Fragment>
           ))}
         </nav>

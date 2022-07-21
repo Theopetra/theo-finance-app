@@ -13,6 +13,7 @@ type formStateType = {
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount;
   purchaseCost;
+  transactionPending: boolean;
 };
 
 type Selection = {
@@ -34,6 +35,7 @@ const initialFormState: formStateType = {
   purchaseToken: null,
   purchaseAmount: 0,
   purchaseCost: 0,
+  transactionPending: false,
 };
 
 export const BuyFormProvider: React.FC = (props) => {
@@ -150,7 +152,7 @@ export const BuyFormProvider: React.FC = (props) => {
   useEffect(() => {
     if (!isOpen) setFormState(initialFormState);
   }, [isOpen]);
-  
+
   return (
     <BuyFormContext.Provider
       value={[
@@ -162,7 +164,7 @@ export const BuyFormProvider: React.FC = (props) => {
           groupedBondMarketsMap,
           selection,
         },
-        { setSelection, handleUpdate, getSelectedMarketPrice, handleTokenInput },
+        { setSelection, setFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}
     >
       {props.children}

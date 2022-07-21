@@ -118,8 +118,6 @@ const DiscountBuy = () => {
   );
 };
 
-DiscountBuy.PageStateProvider = (props) => <BuyFormProvider {...props} />;
-
 DiscountBuy.PageHead = () => {
   return <div>Discount Buy</div>;
 };
