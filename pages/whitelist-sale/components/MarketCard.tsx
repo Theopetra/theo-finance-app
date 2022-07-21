@@ -58,7 +58,7 @@ const MarketCard = ({ bondMarkets }) => {
           <div className="mb-8 flex-1 space-y-4">
             <div className="flex justify-between text-lg text-theo-navy dark:text-theo-cyan">
               <div>Asset</div>
-              <div>Price / THEO</div>
+              <div>Price / $THEO</div>
             </div>
 
             {orderedMarkets?.map((market, i) => {
@@ -97,11 +97,11 @@ const MarketCard = ({ bondMarkets }) => {
               openModal(<DiscountBuyForm title={`${txnType} Buy`} />);
             }}
           >
-            Buy THEO
+            Buy $THEO
           </button>
 
           <div className="text-center  text-xs dark:text-[#ffffffb3]">
-            Important: New buys are auto-locked until completion of the term
+            Once unlocked, $THEO purchased need to be staked into the Premium Pool for $ETH rebates.
           </div>
         </div>
       </Card>

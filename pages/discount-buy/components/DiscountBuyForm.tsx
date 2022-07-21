@@ -84,7 +84,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
           <div className="mb-4 text-3xl font-bold sm:text-4xl">
             {title ? title : 'Discount Buy'}
           </div>
-          <div>Review carefully, this purchase is final</div>
+          <div>Review purchase details below, you will be asked to confirm on the next screen.</div>
         </div>
         <div>
           <Icon name="intersect" className="w-8  dark:text-white sm:w-12" />
@@ -130,7 +130,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
               d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          THEO
+          $THEO
         </div>
         <p className="mb-8 text-xs">
           Once unlocked, $THEO purchased need to be staked into the Premium Pool for $ETH rebates.
@@ -171,7 +171,7 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
             disabled={Boolean(errorMessage)}
             onClick={handleClick}
           >
-            Buy Theo
+            Buy $THEO
           </button>
         </div>
       </div>

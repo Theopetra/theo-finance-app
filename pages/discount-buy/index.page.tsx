@@ -101,7 +101,7 @@ const DiscountBuy = () => {
                   {...props}
                   data={Object.values(listData)}
                   actionButton={{
-                    label: 'Buy Theo',
+                    label: 'Buy $THEO',
                     onClick: () => {
                       setSelection(props.data);
                       openModal(<DiscountBuyForm />);
