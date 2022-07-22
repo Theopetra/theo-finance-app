@@ -11,15 +11,18 @@ const Failed = ({ error }) => {
   const [, { openModal }] = useModal();
   let errorMsg;
 
+  console.log('Please send this to support if requested', error);
+
   // this is some rudimentary error mapping, we can make this richer if desired
   if (error?.code === 'UNPREDICTABLE_GAS_LIMIT') {
     if (error?.reason.includes('signature')) {
       errorMsg = 'Your current wallet is not on the whitelist. Come back soon!';
-    } else {
-      errorMsg = error.reason;
+    } else if (error?.reason.includes('TRANSFER_FROM_FAILED')) {
+      errorMsg =
+        'There was a problem executing the transfer. Common reasons include missing token approval or insufficient funds.';
     }
   } else {
-    errorMsg = error.message || error.code;
+    errorMsg = 'There was a problem executing the transfer. Please try again.';
   }
 
   return (
