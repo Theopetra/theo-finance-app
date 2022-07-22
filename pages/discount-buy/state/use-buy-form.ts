@@ -12,14 +12,13 @@ type BuyFormStateType = {
   groupedBondMarkets;
   groupedBondMarketsMap;
   selection;
-  formState;
 };
 type BuyFormDispatchType = {
   setSelection;
   handleUpdate;
   getSelectedMarketPrice;
   handleTokenInput;
-  setFormState;
+  updateFormState;
 };
 type BuyFormType = [BuyFormStateType, BuyFormDispatchType];
 export const useBuyForm = () => {

@@ -20,12 +20,12 @@ const PendingTransaction = ({
     },
   };
 
-  const [{ transactionPending, formState }, { setFormState }] = useBuyForm();
+  const [, { updateFormState }] = useBuyForm();
 
   useEffect(() => {
-    setFormState({ ...formState, transactionPending: true });
+    updateFormState({ transactionPending: true });
 
-    return () => setFormState({ ...formState, transactionPending: false });
+    return () => updateFormState({ transactionPending: false });
   }, []);
 
   return (
