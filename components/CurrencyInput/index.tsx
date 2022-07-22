@@ -61,16 +61,9 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
           )}
           {/*  */}
           <input
-            type="number"
-            step={
-              selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH'
-                ? '0.00001'
-                : '0.01'
-            }
-            min="0"
             value={value}
             onChange={onChange}
-            className="w-full flex-1 bg-transparent pr-2 text-right focus:outline-none"
+            className="hover:appearance-none w-full flex-1 bg-transparent pr-2 text-right focus:outline-none"
             placeholder="00.00"
             onKeyPress={(event) => {
               if (!/^\d*\.?\d*$/.test(event.key)) {
