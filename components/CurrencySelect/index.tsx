@@ -29,7 +29,7 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
   return (
     <Listbox value={selected} onChange={(value) => onChange({ target: { value } })}>
       <div className="relative mt-1">
-        <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-transparent pl-1 pr-4 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:pl-3 sm:pr-10 sm:text-sm">
+        <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-transparent pl-1 pr-4 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-orange-300 sm:pl-3 sm:pr-10 sm:text-sm">
           <span className=" flex items-center truncate py-2 text-lg font-bold uppercase sm:py-3 sm:text-2xl">
             <img
               src={iconMap[selected]?.src}
