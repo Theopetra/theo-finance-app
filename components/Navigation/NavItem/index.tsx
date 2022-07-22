@@ -46,7 +46,7 @@ const NavItem = ({ item }: NavItem) => {
             disabled && 'cursor-not-allowed opacity-50',
             !disabled && hoverClasses
           )}
-          target={!disabled ? target : null}
+          target={!disabled ? target : undefined}
         >
           <div>
             <div className={`flex items-center`}>
