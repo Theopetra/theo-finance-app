@@ -153,6 +153,10 @@ export const BuyFormProvider: React.FC = (props) => {
     if (!isOpen) setFormState(initialFormState);
   }, [isOpen]);
 
+  const updateFormState = (vals: any) => {
+    setFormState({ ...formState, ...vals });
+  };
+
   return (
     <BuyFormContext.Provider
       value={[
@@ -164,7 +168,7 @@ export const BuyFormProvider: React.FC = (props) => {
           groupedBondMarketsMap,
           selection,
         },
-        { setSelection, setFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
+        { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}
     >
       {props.children}
