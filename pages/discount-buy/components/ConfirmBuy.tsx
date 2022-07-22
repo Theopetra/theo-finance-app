@@ -111,7 +111,7 @@ const ConfirmBuy = () => {
 
   const maxPrice = parseEther('25');
   const depositAmount =
-    purchaseCost && purchaseToken?.symbol?.toLowerCase() === 'usdc'
+    purchaseToken?.symbol?.toLowerCase() === 'usdc'
       ? parseUnits(purchaseCost, 6)
       : parseEther(purchaseCost);
 
@@ -220,6 +220,12 @@ const ConfirmBuy = () => {
     'approve',
     {
       async onSuccess(data) {
+        openModal(
+          <PendingTransaction
+            message="1 of 2 transactions..."
+            secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} transfer...`}
+          />
+        );
         const receipt = await data.wait();
         if (receipt.status === 1) {
           openModal(
@@ -245,12 +251,6 @@ const ConfirmBuy = () => {
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
       wethDeposit();
     } else {
-      openModal(
-        <PendingTransaction
-          message="1 of 2 transactions..."
-          secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} transfer...`}
-        />
-      );
       approve();
     }
   };
@@ -277,11 +277,8 @@ const ConfirmBuy = () => {
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
           <div className="mb-4 text-3xl font-bold sm:text-4xl">Confirm Buy</div>
-          <div>
-            Please review carefully, this purchase is final.
-            <br />
-            Click <strong>Confirm Purchase</strong> below to confirm.
-          </div>
+          <div>Please review carefully, this purchase is final.<br/>
+          Click <strong>Confirm Purchase</strong> below to confirm.</div>
         </div>
         <div>
           <Icon name="intersect" className="h-12 w-12 dark:text-white" />
