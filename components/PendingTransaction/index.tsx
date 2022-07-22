@@ -30,9 +30,9 @@ const PendingTransaction = ({
 
   return (
     <div>
-      <div className="text-center">{message}</div>
+      <div className="text-center dark:text-white text-xl">{message}</div>
       <LottieAnimation options={defaultOptions} />
-      <div className="text-center">{secondaryMessage}</div>
+      <div className="text-center dark:text-white text-xl">{secondaryMessage}</div>
     </div>
   );
 };
