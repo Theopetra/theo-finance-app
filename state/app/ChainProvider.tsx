@@ -8,22 +8,28 @@ import {
 import { chain, createClient, WagmiProvider } from 'wagmi';
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
 const localChains = [chain.goerli];
 const prodChains = [chain.mainnet, ...localChains];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
+const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 
 if (!infuraId) {
   console.log('WARNING: No infura id specified!');
+}
+
+if (!alchemyId) {
+  console.log('WARNING: No alchemy id specified!');
 }
 
 const { chains, provider } = configureChains(
   // TODO: uncomment for release
   // process.env.NODE_ENV === 'production' ? prodChains : localChains,
   localChains,
-  [infuraProvider({ infuraId })]
+  [infuraProvider({ infuraId }), alchemyProvider({ alchemyId }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
