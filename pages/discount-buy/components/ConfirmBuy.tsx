@@ -5,6 +5,7 @@ import PendingTransaction from '@/components/PendingTransaction';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
+import { cache } from '@/lib/cache';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
@@ -152,6 +153,7 @@ const ConfirmBuy = () => {
         const receipt = await data.wait();
         if (receipt.status === 1) {
           openModal(<Successful txId={data.hash} />);
+          cache.clear();
           setRender(!render);
         } else {
           openModal(<Failed error={{ code: 'Something went wrong.' }} />);
@@ -188,6 +190,7 @@ const ConfirmBuy = () => {
 
         const receipt = await data.wait();
         if (receipt.status === 1) {
+          cache.clear();
           setRender(!render);
           openModal(<Successful txId={data.hash} />);
         } else {

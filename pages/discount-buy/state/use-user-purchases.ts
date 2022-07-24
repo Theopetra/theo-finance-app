@@ -1,4 +1,6 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
+import { cache } from '@/lib/cache';
+import { add } from 'date-fns';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useContract, useProvider } from 'wagmi';
 import { UserPurchasesContext } from './UserPurchasesProvider';
@@ -19,15 +21,21 @@ export const usePurchasesByContract = (contractName) => {
 
   useEffect(() => {
     async function callContract() {
-      if (contract && data?.address) {
+      const cached = cache.getItem(`purchases-${contractName}`);
+
+      if (cached) {
+        setPendingNotes(cached);
+      } else if (contract && data?.address) {
         const indexes = await contract.indexesFor(data?.address);
         const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
         const pn = await Promise.all(pnPromises);
-        setPendingNotes(pn);
+        const pnObjs = pn.map((p) => Object.assign({}, p));
+        setPendingNotes(pnObjs);
+        cache.setItem(`purchases-${contractName}`, pnObjs, add(new Date(), { days: 1 }));
       }
     }
     callContract();
-  }, [contract, data?.address, render]);
+  }, [contract, data?.address, render, contractName]);
 
   return { pendingNotes, setRender };
 };
