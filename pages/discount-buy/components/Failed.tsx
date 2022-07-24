@@ -1,14 +1,18 @@
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
+import { initialFormState } from '../state/BuyFormProvider';
+import useBuyForm from '../state/use-buy-form';
 import ConfirmBuy, {
   LockDurationRow,
   MarketDiscountRow,
   PurchaseAmountRow,
   TheoPurchasePriceRow,
 } from './ConfirmBuy';
+import DiscountBuyForm from './DiscountBuyForm';
 
 const Failed = ({ error }) => {
   const [, { openModal }] = useModal();
+  const [{}, { setFormState }] = useBuyForm();
   let errorMsg;
 
   console.log('Please send this to support if requested', error);
@@ -74,7 +78,12 @@ const Failed = ({ error }) => {
         <LockDurationRow />
       </div>
       <div className="flex w-full items-center justify-center">
-        <button className="border-button w-60" onClick={() => openModal(<ConfirmBuy />)}>
+        <button
+          className="border-button w-60"
+          onClick={() => {
+            openModal(<DiscountBuyForm />);
+          }}
+        >
           Try Again
         </button>
       </div>
