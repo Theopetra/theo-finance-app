@@ -1,5 +1,6 @@
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
+import { cache } from '@/lib/cache';
 import { BigNumber } from 'ethers';
 import { useContractRead, useToken } from 'wagmi';
 
@@ -18,7 +19,7 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
       contractInterface: abi,
     },
     'calculatePrice',
-    { args: id || BigNumber.from(0) }
+    { args: id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
   );
 
   if (isSuccess) {

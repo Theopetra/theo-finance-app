@@ -1,7 +1,9 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
+import { cache } from '@/lib/cache';
 import useModal from '@/state/ui/theme/hooks/use-modal';
+import { add } from 'date-fns';
 import { BigNumber } from 'ethers';
 import React, { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useBalance, useContract, useContractRead, useProvider, useToken } from 'wagmi';
@@ -53,63 +55,71 @@ export const BuyFormProvider: React.FC = (props) => {
     (x) => x.marketData.quoteToken === formState.purchaseToken?.address
   );
 
-  const { data: WhitelistBondMarkets, isSuccess: WhitelistBondMarketsSuccess } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'liveMarkets'
-  );
-
   const contract = useContract({
     addressOrName: address,
     contractInterface: abi,
     signerOrProvider: provider,
   });
-  const { address: WhitelistBondDepositoryAddress, abi: WhitelistBondDepositoryAbi } =
-    useActiveBondDepo();
 
   const { data: priceInfo } = useContractRead(
     {
-      addressOrName: WhitelistBondDepositoryAddress,
-      contractInterface: WhitelistBondDepositoryAbi,
+      addressOrName: address,
+      contractInterface: abi,
     },
     'calculatePrice',
-    { args: selectedMarket?.id || BigNumber.from(0) }
+    { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
   );
 
-  // TODO: expand to other bond markets?
   useEffect(() => {
-    const termsMap = {};
-    if (WhitelistBondMarketsSuccess) {
-      const setTerms =
-        WhitelistBondMarkets?.map(
-          async (bondMarket) =>
-            await contract
-              .terms(bondMarket)
-              .then(async (terms) => {
-                const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
-                const mapKey = vestingInMonths;
+    async function callContract() {
+      const cachedMkts = cache.getItem('groupedBondMarketsMap');
+      if (cachedMkts) {
+        setGroupedBondMarketsMap(cachedMkts);
+      } else {
+        const WhitelistBondMarkets = await contract.liveMarkets();
 
-                const market = await contract.markets(bondMarket).then((market) => market);
+        const termsMap = {};
+        if (WhitelistBondMarkets) {
+          const setTerms =
+            WhitelistBondMarkets?.map(
+              async (bondMarket) =>
+                await contract
+                  .terms(bondMarket)
+                  .then(async (terms) => {
+                    const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
+                    const mapKey = vestingInMonths;
 
-                return (termsMap[mapKey] = {
-                  header: mapKey,
-                  highlight: vestingInMonths === 18,
-                  markets: [
-                    ...(termsMap?.[mapKey] ? termsMap?.[mapKey].markets : []),
-                    { ...terms, marketData: market, id: bondMarket.toString() },
-                  ],
-                });
-              })
-              .catch((err) => console.log(err.stack))
-        ) || [];
+                    const market = await contract.markets(bondMarket).then((market) => market);
 
-      Promise.allSettled(setTerms).then(([result]) => {
-        setGroupedBondMarketsMap(termsMap);
-      });
+                    return (termsMap[mapKey] = {
+                      header: mapKey,
+                      highlight: vestingInMonths === 18,
+                      markets: [
+                        ...(termsMap?.[mapKey] ? termsMap?.[mapKey].markets : []),
+                        {
+                          ...terms,
+                          marketData: Object.assign({}, market),
+                          id: bondMarket.toString(),
+                        },
+                      ],
+                    });
+                  })
+                  .catch((err) => console.log(err.stack))
+            ) || [];
+
+          Promise.allSettled(setTerms).then(([result]) => {
+            setGroupedBondMarketsMap(termsMap);
+            cache.setItem(
+              'groupedBondMarketsMap',
+              Object.assign({}, termsMap),
+              process.env.NEXT_PUBLIC_GROUPED_BOND_MKTS_CACHE_SECS
+            );
+          });
+        }
+      }
     }
-  }, [contract, WhitelistBondMarkets, WhitelistBondMarketsSuccess]);
+    callContract();
+  }, [contract]);
 
   const groupedBondMarkets = useMemo(() => {
     return Object.values(groupedBondMarketsMap).sort((a: any, b: any) => a.header - b.header);

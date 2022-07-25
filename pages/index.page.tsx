@@ -13,16 +13,6 @@ import { BigNumber, ethers } from 'ethers';
 import { formatTheo } from '@/lib/format_theo';
 import { wagmiClient } from '@/state/app/ChainProvider';
 
-const verbose = process.env.NODE_ENV !== 'production';
-
-function log(msg, val) {
-  if (verbose) {
-    console.log(msg);
-    console.log(val);
-  }
-}
-
-// TODO: verify this works once there is test data
 async function getLockedTheoByContract(contractName) {
   const { address, abi } = getContractInfo(contractName);
   const contract = new ethers.Contract(address, abi, wagmiClient.provider);
@@ -31,7 +21,6 @@ async function getLockedTheoByContract(contractName) {
   const data = await contract.liveMarkets();
 
   let locked = [BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)];
-  //log('markets for ' + contractName, data);
 
   if (data) {
     const merged = await Promise.all(
@@ -44,8 +33,6 @@ async function getLockedTheoByContract(contractName) {
       })
     );
 
-    //log('merged for ' + contractName, merged);
-
     // 15768000 - 6 months
     // 31536000 - 12 months
     // 47304000 - 18 months
@@ -55,8 +42,6 @@ async function getLockedTheoByContract(contractName) {
         .filter((e: any) => e.term.fixedTerm && e.term.vesting === v)
         .reduce((prev, cur: any) => prev.add(cur.market.sold), BigNumber.from(0));
     });
-
-    //log('locked for ' + contractName, locked);
   }
 
   return locked;
@@ -79,7 +64,8 @@ const Dashboard = ({ locked }) => {
     {
       name: (
         <>
-          TOTAL $THEO Locked<br/>
+          TOTAL $THEO Locked
+          <br />
           <strong>6 Months</strong>
         </>
       ),
@@ -90,7 +76,8 @@ const Dashboard = ({ locked }) => {
     {
       name: (
         <>
-          TOTAL $THEO Locked<br/>
+          TOTAL $THEO Locked
+          <br />
           <strong>12 Months</strong>
         </>
       ),
@@ -101,7 +88,8 @@ const Dashboard = ({ locked }) => {
     {
       name: (
         <>
-          TOTAL $THEO Locked<br/>
+          TOTAL $THEO Locked
+          <br />
           <strong>18 Months</strong>
         </>
       ),
