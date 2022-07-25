@@ -112,7 +112,7 @@ export const BuyFormProvider: React.FC = (props) => {
             cache.setItem(
               'groupedBondMarketsMap',
               Object.assign({}, termsMap),
-              add(new Date(), { minutes: 15 })
+              process.env.NEXT_PUBLIC_GROUPED_BOND_MKTS_CACHE_SECS
             );
           });
         }

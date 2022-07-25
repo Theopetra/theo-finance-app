@@ -31,7 +31,11 @@ export const usePurchasesByContract = (contractName) => {
         const pn = await Promise.all(pnPromises);
         const pnObjs = pn.map((p) => Object.assign({}, p));
         setPendingNotes(pnObjs);
-        cache.setItem(`purchases-${contractName}`, pnObjs, add(new Date(), { days: 1 }));
+        cache.setItem(
+          `purchases-${contractName}`,
+          pnObjs,
+          process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
+        );
       }
     }
     callContract();
