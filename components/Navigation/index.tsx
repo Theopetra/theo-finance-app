@@ -36,7 +36,7 @@ const Navigation = () => {
         <nav className="mt-5 flex-1 space-y-2 px-2 pr-8 pl-8">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
-              <NavItem item={{ ...item, disabled: transactionPending }} />
+              <NavItem item={{ ...item, disabled: item.disabled || transactionPending }} />
             </Fragment>
           ))}
         </nav>
