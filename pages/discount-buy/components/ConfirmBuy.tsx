@@ -89,7 +89,7 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 const ConfirmBuy = () => {
   const [, { openModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
-  const [{ render }, { setRender }] = useUserPurchases();
+  const [, { reRender }] = useUserPurchases();
   const { data: wallet } = useAccount();
   const {
     address: activeBondDepoAddress,
@@ -152,9 +152,9 @@ const ConfirmBuy = () => {
       async onSuccess(data) {
         const receipt = await data.wait();
         if (receipt.status === 1) {
-          openModal(<Successful txId={data.hash} />);
           cache.clear();
-          setRender(!render);
+          reRender();
+          openModal(<Successful txId={data.hash} />);
         } else {
           openModal(<Failed error={{ code: 'Something went wrong.' }} />);
         }
@@ -191,7 +191,7 @@ const ConfirmBuy = () => {
         const receipt = await data.wait();
         if (receipt.status === 1) {
           cache.clear();
-          setRender(!render);
+          reRender();
           openModal(<Successful txId={data.hash} />);
         } else {
           openModal(<Failed error={{ code: 'Something went wrong.' }} />);

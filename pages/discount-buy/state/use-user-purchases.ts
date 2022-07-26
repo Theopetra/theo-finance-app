@@ -12,6 +12,10 @@ export const usePurchasesByContract = (contractName) => {
   // This is a piece of state to trigger a re-render when the contract is updated.
   const [render, setRender] = useState(false);
 
+  const reRender = function () {
+    setRender(!render);
+  };
+
   const provider = useProvider();
   const contract = useContract({
     addressOrName: address,
@@ -41,7 +45,7 @@ export const usePurchasesByContract = (contractName) => {
     callContract();
   }, [contract, data?.address, render, contractName]);
 
-  return { pendingNotes, setRender };
+  return { pendingNotes, reRender };
 };
 
 export const useUserPurchases = () => {
