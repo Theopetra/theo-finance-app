@@ -23,7 +23,7 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
   );
 
   if (isSuccess) {
-    const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(5);
+    const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(9);
     return <>{token?.symbol === 'USDC' ? Number(output).toFixed(2) : output}</>;
   }
 
