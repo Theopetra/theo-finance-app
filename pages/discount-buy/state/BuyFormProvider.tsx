@@ -138,7 +138,7 @@ export const BuyFormProvider: React.FC = (props) => {
       setFormState((prevState) => ({
         ...prevState,
         purchaseCost: Number(value * quotePrice).toFixed(
-          token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 5 : 2
+          token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2
         ),
         [fieldName]: value,
       }));
@@ -147,7 +147,7 @@ export const BuyFormProvider: React.FC = (props) => {
     setFormState((prevState) => ({
       ...prevState,
       purchaseAmount: Number(value / quotePrice).toFixed(
-        token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 5 : 2
+        token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2
       ),
       [fieldName]: value,
     }));
@@ -155,7 +155,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const getSelectedMarketPrice = () => {
     if (!selectedMarket?.id) return;
-    const output = (BigNumber.from(priceInfo || 0).toNumber() / Math.pow(10, 9)).toFixed(5);
+    const output = (BigNumber.from(priceInfo || 0).toNumber() / Math.pow(10, 9)).toFixed(9);
     return token?.symbol === 'USDC' ? Number(output).toFixed(2) : output;
   };
 
