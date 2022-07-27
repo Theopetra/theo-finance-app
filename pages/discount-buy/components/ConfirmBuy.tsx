@@ -57,7 +57,12 @@ export const PurchaseAmountRow = () => {
 
 export const TheoPurchasePriceRow = () => {
   const [{ purchaseToken }] = useBuyForm();
-  return <ConfirmRow title="$THEO Purchase Price" value={<Price />} />;
+  return ( 
+    <ConfirmRow 
+      title="$THEO Purchase Price" 
+      value={<Price />} 
+      subtext={`Per $THEO`}/>
+  );
 };
 
 export const LockDurationRow = () => {
