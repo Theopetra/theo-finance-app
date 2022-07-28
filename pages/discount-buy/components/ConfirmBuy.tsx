@@ -57,12 +57,7 @@ export const PurchaseAmountRow = () => {
 
 export const TheoPurchasePriceRow = () => {
   const [{ purchaseToken }] = useBuyForm();
-  return ( 
-    <ConfirmRow 
-      title="$THEO Purchase Price" 
-      value={<Price />} 
-      subtext={`Per $THEO`}/>
-  );
+  return <ConfirmRow title="$THEO Purchase Price" value={<Price />} subtext={`Per $THEO`} />;
 };
 
 export const LockDurationRow = () => {
@@ -251,6 +246,13 @@ const ConfirmBuy = () => {
 
   const handleClick = async () => {
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
+      openModal(
+        <PendingTransaction
+          message="1 of 2 transactions..."
+          secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} transfer...`}
+        />
+      );
+
       wethDeposit();
     } else {
       openModal(
