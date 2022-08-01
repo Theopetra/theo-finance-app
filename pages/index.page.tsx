@@ -136,7 +136,7 @@ const Dashboard = ({ locked }) => {
                 id="ytplayer"
                 width="720"
                 height="405"
-                src="https://www.youtube.com/embed/M7lc1UVf-VE?modestbranding=1&color=white"
+                src="https://www.youtube.com/embed/YDsKambUAR8?modestbranding=1&color=white"
                 frameBorder="0"
                 allowFullScreen
               />
