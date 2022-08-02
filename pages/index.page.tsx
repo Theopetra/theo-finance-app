@@ -17,8 +17,7 @@ async function getLockedTheoByContract(contractName) {
   const { address, abi } = getContractInfo(contractName);
   const contract = new ethers.Contract(address, abi, wagmiClient.provider);
 
-  // const data = await contract.getMarkets();
-  const data = await contract.liveMarkets();
+  const data = await contract.getMarkets();
 
   let locked = [BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)];
 
