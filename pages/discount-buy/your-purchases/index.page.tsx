@@ -26,13 +26,17 @@ const YourPurchases = () => {
     () => [
       {
         Header: 'Purchased Date',
-        accessor: 'date',
+        accessor: (c) => c.date,
         Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
         width: '10%',
       },
       {
         Header: '$THEO Purchased',
-        accessor: 'amount',
+        accessor: ({ amount }) => {
+          const string = amount.replace(/[^\d\.\-]/g, '');
+          return parseFloat(string);
+        },
+        Cell: ({ value }) => value.toLocaleString(),
         width: '20%',
       },
       {
@@ -48,8 +52,9 @@ const YourPurchases = () => {
       },
       {
         Header: 'Unlock Date',
-        accessor: 'unlockDate',
+        accessor: (c) => c.unlockDate,
         Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
+
         width: '15%',
       },
     ],
