@@ -4,6 +4,7 @@ import Icon from '@/components/Icons';
 import PendingTransaction from '@/components/PendingTransaction';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
 import { cleanSymbol } from '@/lib/clean_symbol';
@@ -98,6 +99,7 @@ const ConfirmBuy = () => {
   } = useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
+  const { logEvent } = useAnalytics();
 
   const signature: any = useMemo(() => {
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
@@ -152,6 +154,7 @@ const ConfirmBuy = () => {
       async onSuccess(data) {
         const receipt = await data.wait();
         if (receipt.status === 1) {
+          logEvent({ name: 'purchase_completed' });
           cache.clear();
           reRender();
           openModal(<Successful txId={data.hash} />);
@@ -190,6 +193,7 @@ const ConfirmBuy = () => {
 
         const receipt = await data.wait();
         if (receipt.status === 1) {
+          logEvent({ name: 'purchase_completed' });
           cache.clear();
           reRender();
           openModal(<Successful txId={data.hash} />);
@@ -225,6 +229,7 @@ const ConfirmBuy = () => {
       async onSuccess(data) {
         const receipt = await data.wait();
         if (receipt.status === 1) {
+          logEvent({ name: 'erc20_approved' });
           openModal(
             <PendingTransaction
               message="2 of 2 transactions..."
@@ -245,6 +250,7 @@ const ConfirmBuy = () => {
   );
 
   const handleClick = async () => {
+    logEvent({ name: 'purchase_submitted' });
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
       openModal(
         <PendingTransaction

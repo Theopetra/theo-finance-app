@@ -1,6 +1,7 @@
 import CurrencyInput from '@/components/CurrencyInput';
 import Icon from '@/components/Icons';
 import { TokenInfo } from '@/components/TokenName';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
@@ -30,12 +31,15 @@ const DiscountBuyForm: React.FC<{ title? }> = ({ title }) => {
     }),
   });
 
+  const { logEvent } = useAnalytics();
+
   const initialToken = TokenInfo(bondMarkets?.markets[0].marketData.quoteToken);
   const handleClick = () => {
     if (Number(purchaseAmount) <= 0 || Number(purchaseCost) <= 0) {
       setErrorMessage('Purchase amount is required.');
       return;
     }
+    logEvent({ name: 'purchase_amount_selected' });
     openModal(<ConfirmBuy />);
   };
   useEffect(() => {

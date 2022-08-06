@@ -4,6 +4,7 @@ import Icon from '@/components/Icons';
 import { TokenInfo } from '@/components/TokenName';
 import { WhitelistTokenPrice } from '@/components/TokenPrice';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import DiscountBuyForm from '@/pages/discount-buy/components/DiscountBuyForm';
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import useModal from '@/state/ui/theme/hooks/use-modal';
@@ -35,6 +36,7 @@ const MarketCard = ({ bondMarkets }) => {
   }, [bondMarkets]);
 
   const { activeContractName } = useActiveBondDepo();
+  const { logEvent } = useAnalytics();
 
   const txnType =
     activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market';
@@ -94,6 +96,7 @@ const MarketCard = ({ bondMarkets }) => {
             className="border-button mb-3 w-full"
             onClick={() => {
               setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: txnType });
+              logEvent({ name: 'purchase_started' });
               openModal(<DiscountBuyForm title={`${txnType} Buy`} />);
             }}
           >
