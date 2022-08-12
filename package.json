@@ -23,6 +23,7 @@
     "react-lottie": "^1.2.3",
     "react-svg": "^14.1.12",
     "react-table": "^7.7.0",
+    "uuid": "^8.3.2",
     "wagmi": "^0.4.3"
   },
   "devDependencies": {
