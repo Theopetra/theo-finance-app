@@ -134,7 +134,7 @@ const ConfirmBuy = () => {
     wallet?.address,
     // TODO: autostake
     true,
-    activeContractName === 'WhitelistTheopetraBondDepository',
+    activeContractName === 'PublicPreListBondDepository',
     signature?.wethHelperSignature || '0x00',
   ];
 
