@@ -115,21 +115,7 @@ const Dashboard = ({ locked }) => {
         </CardList>
         <div className="mt-4">
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
-            <Card
-              title={'TBD New Metric'}
-              darkModeBgColor={'bg-black dark:bg-none'}
-              className="basis-1/3"
-            >
-              <div className="mb-24 flex-1 pb-10 md:m-0">
-                <div className="h-full flex-1">
-                  <div className="sr-only">Total Wallets Graph</div>
-                  <div className="text-3xl font-bold">
-                    <DynamicText value={'TBD'} />
-                  </div>
-                </div>
-              </div>
-            </Card>
-            <Card className="basis-2/3">
+            <Card>
               <iframe
                 className="mt-4 w-full"
                 id="ytplayer"
