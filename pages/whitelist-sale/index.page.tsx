@@ -22,6 +22,7 @@ const Whitelist = () => {
   const [{ groupedBondMarkets }] = useBuyForm();
   const { data: account, isError, isLoading } = useAccount();
   const router = useRouter();
+  const hours = (timer?.days || 0) * 24 + (timer?.hours || 0);
 
   useEffect(() => {
     if (Date.now() <= whitelistExpiry) {
@@ -31,6 +32,7 @@ const Whitelist = () => {
           end: new Date(whitelistExpiry),
         });
         if (Date.now() <= whitelistExpiry) {
+          console.log('duration', duration);
           setTimer(duration);
         } else {
           clearTimeout(timer);
@@ -58,7 +60,7 @@ const Whitelist = () => {
                   headerRightComponent={<Icon name="clock2" className="h-6 w-6 text-theo-navy" />}
                 >
                   <div className=" text-3xl font-extrabold">
-                    {!timer.hours ? '00' : timer.hours < 10 ? `0${timer.hours}` : timer.hours}:
+                    {!hours ? '00' : hours < 10 ? `0${hours}` : hours}:
                     {!timer.minutes
                       ? '00'
                       : timer.minutes < 10
