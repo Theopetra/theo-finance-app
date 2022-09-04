@@ -12,7 +12,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
 const localChains = [chain.goerli];
-const prodChains = [chain.mainnet, ...localChains];
+const prodChains = [chain.mainnet];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;

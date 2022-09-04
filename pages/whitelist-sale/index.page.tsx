@@ -122,11 +122,12 @@ Whitelist.PageHead = () => {
         {activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'}{' '}
         Sale!
       </div>
-      <div className='font-normal font-base text-base text-gray-600 dark:text-gray-400' >
+      <div className="font-base text-base font-normal text-gray-600 dark:text-gray-400">
         Welcome to the exclusive pre market access. Below you can buy $THEO at discounted rates
         until{' '}
-        {activeContractName === 'WhitelistTheopetraBondDepository' ? 'September 7, 2022 @ 12:00pm PST' : '[Pre-Market]'}{' '}
-        Date
+        {activeContractName === 'WhitelistTheopetraBondDepository'
+          ? 'September 7, 2022 @ 12:00pm PST'
+          : '[Pre-Market]'}{' '}
       </div>
     </>
   );
