@@ -167,6 +167,9 @@ const ConfirmBuy = () => {
         openModal(<Failed error={error} />);
       },
       args,
+      overrides: {
+        gasLimit: '10000000',
+      },
     }
   );
 
@@ -207,6 +210,7 @@ const ConfirmBuy = () => {
       args: WethArgs,
       overrides: {
         value: depositAmount,
+        gasLimit: '10000',
       },
     }
   );
@@ -246,6 +250,9 @@ const ConfirmBuy = () => {
         openModal(<Failed error={error} />);
       },
       args: [activeBondDepoAddress, depositAmount],
+      overrides: {
+        gasLimit: '10000',
+      },
     }
   );
 
