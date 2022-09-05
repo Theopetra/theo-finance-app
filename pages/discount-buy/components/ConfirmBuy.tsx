@@ -210,7 +210,7 @@ const ConfirmBuy = () => {
       args: WethArgs,
       overrides: {
         value: depositAmount,
-        gasLimit: '10000',
+        gasLimit: '1000000',
       },
     }
   );
@@ -251,7 +251,7 @@ const ConfirmBuy = () => {
       },
       args: [activeBondDepoAddress, depositAmount],
       overrides: {
-        gasLimit: '10000',
+        gasLimit: '1000000',
       },
     }
   );
