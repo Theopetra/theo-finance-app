@@ -1,34 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## About
+
+This is the source code for https://app.theopetralabs.comhttps://github.com/Schniz/fnm
+
+It serves as the client for onboarding USDC and ETH into the project treasury.
+
+Primary contributors are @RedGorilla, @GlassCloud, and @BowTiedAztec.
 
 ## Getting Started
 
-First, run the development server:
+### Install fnm
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+https://github.com/Schniz/fnm
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run `fnm use` to install and switch to the project's nodejs version.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Install yarn
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+`npm i -g yarn`
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Install dependencies
 
-## Learn More
+`yarn`
 
-To learn more about Next.js, take a look at the following resources:
+### Environment variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Copy .env.example to .env and optionally supply values for your infura or alchemy nodes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+There is another variable for whitelist expiry you can set to simulate pre- and post-whitelist states.
 
-## Deploy on Vercel
+### Run
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`yarn dev`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Switch to Goerli
+
+In dev, the app currently only talks to Goerli.
+
+If you get a gnarly error on startup, make sure you switch to Goerli.
