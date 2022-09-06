@@ -4,14 +4,7 @@ This is the source code for https://app.theopetralabs.com
 
 It serves as the client for onboarding USDC and ETH into the project treasury.
 
-Primary contributors are https://github.com/rojogorilla, https://github.com/GlassCloud, and  https://github.com/
-@BowTiedAztec
-BowTiedAztec Adding readme
-b5dd3fd
-2 minutes ago
-Git stats
-
-342 coBowTiedAztec.
+Primary contributors are https://github.com/rojogorilla, https://github.com/GlassCloud, and  https://github.com/BowTiedAztec
 
 ## Getting Started
 
