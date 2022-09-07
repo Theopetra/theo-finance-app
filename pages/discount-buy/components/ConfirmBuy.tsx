@@ -187,7 +187,7 @@ const ConfirmBuy = () => {
         openModal(
           <PendingTransaction
             message="2 of 2 transactions..."
-            secondaryMessage="Submitting transaction..."
+            secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
           />
         );
 
@@ -233,7 +233,7 @@ const ConfirmBuy = () => {
           openModal(
             <PendingTransaction
               message="2 of 2 transactions..."
-              secondaryMessage="Submitting transaction..."
+              secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
             />
           );
 
@@ -255,7 +255,7 @@ const ConfirmBuy = () => {
       openModal(
         <PendingTransaction
           message="1 of 2 transactions..."
-          secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} transfer...`}
+          secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
 
@@ -264,7 +264,7 @@ const ConfirmBuy = () => {
       openModal(
         <PendingTransaction
           message="1 of 2 transactions..."
-          secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} transfer...`}
+          secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
       approve();
@@ -297,6 +297,8 @@ const ConfirmBuy = () => {
             Please review carefully, this purchase is final.
             <br />
             Click <strong>Confirm Purchase</strong> below to confirm.
+            <br />
+            *Note: This purchase includes 10% $THEO inflation to fund exchange listings*
           </div>
         </div>
         <div>
