@@ -6,17 +6,17 @@ type ActionCardProps = {
   header: {
     primary?: string | ReactElement;
     secondary?: string;
+    classes?: string;
   };
   data: { label: string; value: string; info?: string; type?: string }[];
-  actionButton: { label: string; onClick?: () => void; icon?: string };
+  actionButton: { label: string; onClick?: () => void; icon?: ReactElement };
   warning: string;
-  icon: string;
+  icon: ReactElement;
   highlight?: boolean;
 };
 
 const ActionCard = ({ header, data, actionButton, warning, icon, highlight }: ActionCardProps) => {
-  const highlightClasses =
-    'drop-shadow-[4px_4px_4px_rgba(80,174,203,0.75)] border-4 border-double border-theo-cyan';
+  const highlightClasses = 'drop-shadow-[4px_4px_4px_rgba(80,174,203,0.75)]';
   return (
     <Card
       className={highlight ? highlightClasses : ''}
@@ -27,7 +27,8 @@ const ActionCard = ({ header, data, actionButton, warning, icon, highlight }: Ac
           <div className="lead leading-4">{header.secondary}</div>
         </div>
       }
-      headerRightComponent={<Icon name={icon} className="w-10" />}
+      headerClasses={header.classes}
+      headerRightComponent={icon}
     >
       <div className="flex flex-1 flex-col justify-between">
         <div className="mb-8 flex-1 space-y-2 sm:space-y-4">
@@ -46,7 +47,7 @@ const ActionCard = ({ header, data, actionButton, warning, icon, highlight }: Ac
           ))}
         </div>
         <button className="border-button mb-3 w-full" onClick={actionButton.onClick}>
-          {actionButton.icon && <Icon name={actionButton.icon} className="mr-2 w-6" />}
+          {actionButton.icon}
           {actionButton.label}
         </button>
         <div className="text-center  text-xs dark:text-[#ffffffb3]">{warning}</div>

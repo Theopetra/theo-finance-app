@@ -1,9 +1,11 @@
+import { Coin, File, Gauge, Intersect, LockLaminated } from 'phosphor-react';
+
 export const navigation = [
-  { name: 'Dashboard', href: '/', icon: 'gauge' },
+  { name: 'Dashboard', href: '/', icon: <Gauge size={26} className="mr-2 w-8" /> },
   {
     name: 'Whitelist Sale',
     href: '/whitelist-sale',
-    icon: 'intersect',
+    icon: <Intersect size={26} className="mr-2 w-8" />,
     subNav: [
       {
         name: 'Your Purchases',
@@ -23,11 +25,22 @@ export const navigation = [
   //   ],
   // },
   {
+    name: 'Claim Tokens',
+    href: '/claim',
+    icon: <Coin size={26} className="mr-2 w-8" />,
+    disabled: false,
+  },
+  {
     name: 'Memberships',
     href: '/memberships',
-    icon: 'lock-laminated',
-    disabled: true,
+    icon: <LockLaminated size={26} className="mr-2 w-8" />,
+    disabled: false,
   },
   // { name: 'T-Homes', href: '/t-homes', disabled: true, icon: 'door' },
-  { name: 'Learn More', href: 'https://docs.theopetralabs.com/', icon: 'file', target: '_blank' },
+  {
+    name: 'Learn More',
+    href: 'https://docs.theopetralabs.com/',
+    icon: <File size={26} className="mr-2 w-8" />,
+    target: '_blank',
+  },
 ];

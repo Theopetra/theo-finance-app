@@ -9,17 +9,22 @@ import PurchasesTable from './components/PurchasesTable';
 const YourPurchases = () => {
   const { data, status } = useAccount();
   const [{ purchases }] = useUserPurchases();
+  console.log(purchases);
 
-  const formattedPurchases = purchases?.map((p) => {
-    return {
-      date: new Date(p.created_ * 1000),
-      amount: `${formatTheo(p.payout_)}`,
-      // POST-LAUNCH TODO: show pre-market for purchases before public bond depo, else discount_
-      discount: `Pre-Market`,
-      unlockDate: new Date(p.expiry_ * 1000),
-      status: 'Locked',
-    };
-  });
+  const formattedPurchases = useMemo(
+    () =>
+      purchases?.map((p) => {
+        return {
+          date: new Date(p.created_ * 1000),
+          amount: `${formatTheo(p.payout_)}`,
+          // POST-LAUNCH TODO: show pre-market for purchases before public bond depo, else discount_
+          discount: `Pre-Market`,
+          unlockDate: new Date(p.expiry_ * 1000),
+          status: 'Locked',
+        };
+      }),
+    [purchases]
+  );
 
   // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(

@@ -2,16 +2,12 @@ import ActionCard from '@/components/ActionCard';
 import CardList from '@/components/CardList';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
+import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
 import { Fragment } from 'react';
 
 const STATS = [
   {
-    name: 'Staking Yield',
-    value: '5-30% APY',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-  },
-  {
-    name: '$THEO Staked',
+    name: 'Total THEO Staked',
     value: '78%',
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
@@ -24,43 +20,41 @@ const STATS = [
 const ACTION_CARD = [
   {
     header: {
-      primary: 'Standard Stake',
-      secondary: '',
+      primary: 'Standard ',
+      classes: 'bg-theo-navy dark:bg-theo-dark-navy text-white',
     },
-    icon: 'lock-laminated',
+    icon: <LockLaminatedOpen size={24} className="w-10" />,
     data: [
-      { label: 'Assets', value: 'sTHEO' },
+      { label: 'Assets', value: 'THEO' },
       { label: 'APY', value: '5% THEO' },
-      { label: 'Locked for', value: '30 Days' },
     ],
     actionButton: {
-      label: 'Memberships',
+      label: 'Subscribe',
       onClick: () => {},
-      icon: 'lock-laminated',
     },
-    warning: 'Connect your wallet to stake THEO',
+    warning: 'No slashing penalties incurred on standard memberships',
   },
   {
     header: {
-      primary: 'Platinum Stake',
-      secondary: '',
+      primary: 'Premium',
+      classes: 'bg-theo-cyan text-white',
     },
-    icon: 'lock-laminated',
+    icon: <LockLaminated size={24} className="w-10" />,
     data: [
-      { label: 'Assets', value: 'sTHEO' },
+      { label: 'Assets', value: 'THEO' },
       {
         label: 'APY',
         value: '30% THEO',
         info: '+ ETH airdrops to top 4000 holders ',
       },
-      { label: 'Locked for', value: '120 Days' },
+      { label: 'Locked for', value: '365 Days' },
     ],
+    highlight: true,
     actionButton: {
-      label: 'Memberships',
+      label: 'Subscribe',
       onClick: () => {},
-      icon: 'lock-laminated',
     },
-    warning: 'Connect your wallet to stake THEO',
+    warning: 'Rewards and part of principal slashed if unstaked while locked - more info',
   },
 ];
 const Memberships = () => {
@@ -73,7 +67,7 @@ const Memberships = () => {
       </CardList>
       <CardList>
         {ACTION_CARD.map((props, i) => (
-          <Fragment key={`${props.header.secondary}_${i}`}>
+          <Fragment key={i}>
             <ActionCard {...props} />
           </Fragment>
         ))}
