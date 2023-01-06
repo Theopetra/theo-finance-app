@@ -5,7 +5,7 @@ import StatCard from '@/components/StatCard';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
 import { Fragment } from 'react';
-import ConfirmMembership from './components/ConfirmMembership';
+import SubscribeFormModal from './components/SubscribeFormModal';
 import membershipData from './membershipData';
 
 const STATS = [
@@ -75,7 +75,7 @@ const Memberships = () => {
               actionButton={{
                 label: 'Subscribe',
                 onClick: () =>
-                  openModal(<ConfirmMembership membership={membershipData[props.type]} />),
+                  openModal(<SubscribeFormModal membership={membershipData[props.type]} />),
               }}
             />
           </Fragment>
