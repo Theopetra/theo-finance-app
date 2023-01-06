@@ -13,6 +13,7 @@ type CurrrencyInputProps = {
   onChange?: any;
   onCurrencyChange?: any;
   options?: CurrencySelectOptionsType;
+  hideValue?: boolean;
 };
 
 const CurrencyInput: React.FC<CurrrencyInputProps> = ({
@@ -23,6 +24,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
   onChange,
   onCurrencyChange,
   options,
+  hideValue,
 }) => {
   return (
     <div
@@ -47,8 +49,12 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
         <div className="flex min-h-[40px] items-center rounded-lg bg-white dark:bg-[#262626]">
           {balance ? (
             <div className="hidden p-2 text-xs sm:block">
-              Balance: {Number(balance).toFixed(selectedToken?.symbol === 'USDC' ? 2 : 6)}
-              {cleanSymbol(selectedToken?.symbol)}
+              {!hideValue && (
+                <>
+                  Balance: {Number(balance).toFixed(selectedToken?.symbol === 'USDC' ? 2 : 6)}
+                  {cleanSymbol(selectedToken?.symbol)}
+                </>
+              )}
               <span
                 onClick={() => onChange({ target: { value: balance } }, 'purchasePrice')}
                 className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white"
@@ -63,7 +69,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
           <input
             value={value}
             onChange={onChange}
-            className="hover:appearance-none w-full flex-1 bg-transparent pr-2 text-right focus:outline-none"
+            className="w-full flex-1 bg-transparent pr-2 text-right hover:appearance-none focus:outline-none"
             placeholder="00.00"
             onKeyPress={(event) => {
               if (!/^\d*\.?\d*$/.test(event.key)) {

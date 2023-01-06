@@ -17,14 +17,14 @@ export const MarketDiscountRow = () => {
   );
 };
 export const TheoPurchaseDateRow = ({ date }) => {
-  return <ConfirmRow title="Purchase Date" value={format(new Date(date * 1000), 'yyyy-MM-dd')} />;
+  return <ConfirmRow title="Purchase Date" value={format(new Date(date), 'yyyy-MM-dd')} />;
 };
 
 export const TokensToClaimRow = ({ total }) => {
   return <ConfirmRow title="Tokens to Claim" value={total} />;
 };
-export const TokensUnlockedRow = ({ expiry }) => {
-  return <ConfirmRow title="Tokens Unlocked" value={expiry} />;
+export const TokensUnlockedRow = ({ date }) => {
+  return <ConfirmRow title="Tokens Unlocked" value={format(new Date(date), 'yyyy-MM-dd')} />;
 };
 export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, value, subtext }) => {
   return (
@@ -39,7 +39,7 @@ export const ConfirmRow: React.FC<{ title?; value?; subtext? }> = ({ title, valu
 };
 
 const ConfirmClaim = ({ purchase }) => {
-  const [, { openModal }] = useModal();
+  const [, { openModal, closeModal }] = useModal();
 
   const handleClick = async () => {
     // logEvent({ name: 'purchase_claimed' });
@@ -53,9 +53,9 @@ const ConfirmClaim = ({ purchase }) => {
     <div>
       <div className="flex flex-col">
         <div className="mb-12 flex items-center justify-between">
-          <div>
+          <button onClick={closeModal} className="cursor-pointer">
             <ArrowLeft color="rgb(80, 174, 203)" size={50} />
-          </div>
+          </button>
           <div
             className="text-center text-theo-navy dark:text-white"
             style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
@@ -66,9 +66,9 @@ const ConfirmClaim = ({ purchase }) => {
         </div>
         <div className="mb-4 flex flex-col gap-2">
           <MarketDiscountRow />
-          <TheoPurchaseDateRow date={purchase.created_} />
-          <TokensToClaimRow total={purchase.total} />
-          <TokensUnlockedRow expiry={purchase.expiry_} />
+          <TheoPurchaseDateRow date={purchase.date} />
+          <TokensToClaimRow total={purchase.amount} />
+          <TokensUnlockedRow date={purchase.unlockDate} />
         </div>
         <div className="flex w-full items-center justify-center">
           <button className="border-button w-60" onClick={handleClick}>

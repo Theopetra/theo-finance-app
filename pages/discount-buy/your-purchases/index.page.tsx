@@ -5,11 +5,11 @@ import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
 import { useUserPurchases } from '../state/use-user-purchases';
 import PurchasesTable from './components/PurchasesTable';
+const whitelistExpiry = parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0');
 
 const YourPurchases = () => {
   const { data, status } = useAccount();
   const [{ purchases }] = useUserPurchases();
-  console.log(purchases);
 
   const formattedPurchases = useMemo(
     () =>
@@ -17,8 +17,7 @@ const YourPurchases = () => {
         return {
           date: new Date(p.created_ * 1000),
           amount: `${formatTheo(p.payout_)}`,
-          // POST-LAUNCH TODO: show pre-market for purchases before public bond depo, else discount_
-          discount: `Pre-Market`,
+          discount: p.created_ < whitelistExpiry ? `Pre-Market` : p.discount_,
           unlockDate: new Date(p.expiry_ * 1000),
           status: 'Locked',
         };

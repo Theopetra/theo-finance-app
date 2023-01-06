@@ -8,26 +8,27 @@ import ConfirmClaim from './components/ConfirmClaim';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import Icon from '@/components/Icons';
 import { CircleWavyCheck, Clock } from 'phosphor-react';
+import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
+import { formatTheo } from '@/lib/format_theo';
+import { useMemo } from 'react';
 
-const purchases = [
-  {
-    id: 1,
-    type: 'Pre-Market',
-    created_: 1658312882,
-    expiry_: 1674080882,
-    total: 1200000.32,
-    matured_: false,
-  },
-  {
-    id: 2,
-    type: 'Pre-Market',
-    created_: 1658312882,
-    expiry_: 1674080882,
-    total: 1200000.32,
-    matured_: true,
-  },
-];
 const Claim = () => {
+  const [{ purchases }] = useUserPurchases();
+
+  const whitelistExpiry = parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0');
+  const formattedPurchases = useMemo(
+    () =>
+      purchases?.map((p) => {
+        return {
+          date: new Date(p.created_),
+          amount: `${formatTheo(p.payout_)}`,
+          discount: p.created_ < whitelistExpiry ? `Pre-Market` : p.discount_,
+          unlockDate: new Date(p.expiry_),
+          matured: p.matured_,
+        };
+      }),
+    [purchases, whitelistExpiry]
+  );
   const [, { openModal }] = useModal();
   return (
     <>
@@ -38,14 +39,14 @@ const Claim = () => {
       </div>
       <PageContainer>
         <CardList>
-          {purchases.map((purchase) => (
+          {formattedPurchases.map((purchase) => (
             <Card
               key={purchase.id}
               darkModeBgColor="bg-theo-dark-navy"
               title={<div className="pb-3 text-2xl font-bold">Claim Tokens</div>}
               headerRightComponent={
                 <div>
-                  {purchase.matured_ ? (
+                  {purchase.matured ? (
                     <CircleWavyCheck size={28} color="rgb(47, 69, 92)" weight="fill" />
                   ) : (
                     <Clock size={28} color="rgb(47, 69, 92)" weight="regular" />
@@ -56,18 +57,18 @@ const Claim = () => {
               <>
                 <div className="-mt-8 flex justify-between text-lg leading-8 text-theo-navy dark:text-theo-cyan">
                   <div>Type</div>
-                  <div className="font-bold">{purchase.type}</div>
+                  <div className="font-bold">{purchase.discount}</div>
                 </div>
                 <div className="flex justify-between text-lg leading-8 text-theo-navy dark:text-theo-cyan">
                   <div>Purchased</div>
                   <div className="font-bold">
-                    {format(new Date(purchase.created_ * 1000), 'yyyy-MM-dd')}
+                    {format(new Date(purchase.date * 1000), 'yyyy-MM-dd')}
                   </div>
                 </div>
                 <div className="mb-2 flex justify-between text-lg leading-8 text-theo-navy dark:text-theo-cyan">
                   <div>Unlock Date</div>
                   <div className="font-bold">
-                    {format(new Date(purchase.expiry_ * 1000), 'yyyy-MM-dd')}
+                    {format(new Date(purchase.unlockDate * 1000), 'yyyy-MM-dd')}
                   </div>{' '}
                 </div>
                 <DynamicText
@@ -75,12 +76,13 @@ const Claim = () => {
                   value={
                     <div className="flex items-center justify-between  rounded-lg bg-[#e3e3e3] p-5 dark:bg-[#262626]">
                       <Icon name={'theo-sm'} className="w-10" />
-                      <div className="text-2xl font-medium">{purchase.total}</div>
+                      <div className="text-2xl font-medium">{purchase.amount}</div>
                     </div>
                   }
                 />
                 <button
-                  className="border-button mb-3 mt-3 w-full"
+                  className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
+                  disabled={!purchase.matured}
                   onClick={() => {
                     openModal(<ConfirmClaim purchase={purchase} />);
                   }}
