@@ -8,6 +8,8 @@ import { Membership } from '../membershipData';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { useState } from 'react';
 import { formatTheo } from '@/lib/format_theo';
+import { ConfirmRow } from '@/components/ConfirmationModalRow';
+import SubscribeConfirm from './SubscribeConfirm';
 
 export const MembershipType = ({ type }) => {
   return <ConfirmRow title="Type" value={<span className="capitalize">{type}</span>} />;
@@ -45,6 +47,8 @@ export const MembershipDuration = ({ lockDuration }) => {
 };
 const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
   const [commitmentValue, setCommitmentValue] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [, { openModal, closeModal }] = useModal();
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
   const { address } = useContractInfo('TheopetraERC20Token');
@@ -60,11 +64,11 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
   });
 
   const handleClick = async () => {
-    // logEvent({ name: 'purchase_claimed' });
-    openModal(<PendingTransaction message="Claiming..." secondaryMessage={`Approving claim...`} />);
-    // TODO: use useContractWrite to call the claim function on the contract
-    // claim function will handle the success and failure modals
-    // stake();
+    if (commitmentValue > 0) {
+      openModal(<SubscribeConfirm membership={membership} depositAmount={commitmentValue + ''} />);
+    } else {
+      setErrorMessage('Please add THEO to commit');
+    }
   };
 
   return (
@@ -89,15 +93,20 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
         </div>
         <div className="mb-4 flex flex-col gap-2">
           <MembershipType type={membership.type} />
-          <MembershipCommitment
-            balance={balance}
-            value={commitmentValue}
-            onChange={(e) => setCommitmentValue(e.target.value)}
-          />
+          {balance && (
+            <MembershipCommitment
+              balance={balance}
+              value={commitmentValue}
+              onChange={(e) => setCommitmentValue(e.target.value)}
+            />
+          )}
+
           <MembershipAPY apy={`${membership.apy * 100}% THEO`} />
           <MembershipDuration lockDuration={membership?.lockDurationInDays} />
         </div>
-        <div className="flex w-full items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center">
+          <div className="mb-3 text-right text-sm font-bold text-red-500">{errorMessage}</div>
+
           <button className="border-button w-60" onClick={handleClick}>
             Subscribe
           </button>

@@ -4,7 +4,8 @@ import useModal from '@/state/ui/theme/hooks/use-modal';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import { useRouter } from 'next/router';
 import useBuyForm from '../state/use-buy-form';
-import { ConfirmRow, LockDurationRow, MarketDiscountRow, TheoPurchasePriceRow } from './ConfirmBuy';
+import { LockDurationRow, MarketDiscountRow, TheoPurchasePriceRow } from './ConfirmBuy';
+import { ConfirmRow } from '@/components/ConfirmationModalRow';
 
 const Successful = ({ txId }) => {
   const etherscanUrl = useEtherscanTxId(txId);
@@ -35,11 +36,11 @@ const Successful = ({ txId }) => {
       <div className="mb-4 flex flex-col gap-2">
         <MarketDiscountRow />
         <TheoPurchasePriceRow />
-        <ConfirmRow 
-          title="Amount Purchased" 
-          value={`${purchaseAmount} $THEO`} 
-          subtext={`= ${purchaseCost} ${cleanSymbol(purchaseToken?.symbol)}`} 
-          />
+        <ConfirmRow
+          title="Amount Purchased"
+          value={`${purchaseAmount} $THEO`}
+          subtext={`= ${purchaseCost} ${cleanSymbol(purchaseToken?.symbol)}`}
+        />
         <LockDurationRow />
       </div>
       <div className="flex w-full flex-col items-center justify-center sm:flex-row">

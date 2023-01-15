@@ -10,15 +10,24 @@ export const UserPurchasesProvider = ({ children }) => {
   const { pendingNotes: publicPrelistPurchases, reRender: pplReRender } = usePurchasesByContract(
     'PublicPreListBondDepository'
   );
+  const { pendingNotes: standardMemberships, reRender: tsReRender } =
+    usePurchasesByContract('TheopetraStaking');
 
   const reRender = function () {
     wlReRender();
     pplReRender();
+    tsReRender();
   };
 
   return (
     <UserPurchasesContext.Provider
-      value={[{ purchases: [...whitelistPurchases, ...publicPrelistPurchases] }, { reRender }]}
+      value={[
+        {
+          purchases: [...whitelistPurchases, ...publicPrelistPurchases],
+          memberships: [...standardMemberships],
+        },
+        { reRender },
+      ]}
     >
       {children}
     </UserPurchasesContext.Provider>

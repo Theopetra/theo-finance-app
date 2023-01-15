@@ -30,16 +30,32 @@ export const usePurchasesByContract = (contractName) => {
       if (cached) {
         setPendingNotes(cached);
       } else if (contract && data?.address) {
-        const indexes = await contract.indexesFor(data?.address);
-        const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
-        const pn = await Promise.all(pnPromises);
-        const pnObjs = pn.map((p) => Object.assign({}, p));
-        setPendingNotes(pnObjs);
-        cache.setItem(
-          `purchases-${contractName}`,
-          pnObjs,
-          process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
-        );
+        let indexes = [];
+
+        if (contractName === 'TheopetraStaking') {
+          indexes = await contract.indexesFor(data?.address, false);
+          const pnPromises = indexes.map((i) => contract.rewardsFor(data?.address, i));
+          const pn = await Promise.all(pnPromises);
+          const pnObjs = pn.map((p) => Object.assign({}, p));
+          console.log({ pn });
+          setPendingNotes(pnObjs);
+          // cache.setItem(
+          //   `purchases-${contractName}`,
+          //   pnObjs,
+          //   process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
+          // );
+        } else {
+          indexes = await contract.indexesFor(data?.address);
+          const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
+          const pn = await Promise.all(pnPromises);
+          const pnObjs = pn.map((p) => Object.assign({}, p));
+          setPendingNotes(pnObjs);
+          cache.setItem(
+            `purchases-${contractName}`,
+            pnObjs,
+            process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
+          );
+        }
       }
     }
     callContract();

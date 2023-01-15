@@ -4,6 +4,7 @@ import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json';
 import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepository.json';
 import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
+import theopetraStaking from '../artifacts/TheopetraStaking.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
 import { erc20ABI } from 'wagmi';
 
@@ -72,5 +73,19 @@ export const contractMetadata = {
       5: '0xc48beb3d230c54805be1c7a2310b6ac6ae62797a',
     },
     abi: erc20ABI,
+  },
+  TheopetraStaking: {
+    address: {
+      1: '2',
+      5: '0x9fA01b224cd42fD147181E377b08d1a19477b320',
+    },
+    abi: theopetraStaking.abi,
+  },
+  TheopetraStakingLocked: {
+    address: {
+      1: '',
+      5: '0x2e312581C2ce60FBAdaA36e6B6A6b722a1F87b0b',
+    },
+    abi: theopetraStaking.abi,
   },
 };

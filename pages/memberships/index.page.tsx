@@ -1,5 +1,6 @@
 import ActionCard from '@/components/ActionCard';
 import CardList from '@/components/CardList';
+import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import useModal from '@/state/ui/theme/hooks/use-modal';
@@ -62,6 +63,11 @@ const Memberships = () => {
 
   return (
     <PageContainer>
+      <div className="pt-4">
+        <HorizontalSubNav
+          items={[{ href: '/memberships/your-memberships', name: 'Your Memberships' }]}
+        />
+      </div>
       <CardList className={'mb-4'}>
         {STATS.map((props, i) => (
           <StatCard {...props} key={i} />
