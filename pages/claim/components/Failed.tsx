@@ -48,7 +48,7 @@ const Failed = ({ purchase, error }) => {
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
           <div className="mb-4 text-3xl font-bold sm:text-4xl">
-            Buy Failed...
+            Claim Failed...
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="inline-block w-8 text-theo-cyan sm:w-10"
