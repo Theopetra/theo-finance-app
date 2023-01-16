@@ -1,6 +1,5 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
-import { add } from 'date-fns';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useContract, useProvider } from 'wagmi';
 import { UserPurchasesContext } from './UserPurchasesProvider';
@@ -34,21 +33,20 @@ export const usePurchasesByContract = (contractName) => {
 
         if (contractName === 'TheopetraStaking') {
           indexes = await contract.indexesFor(data?.address, false);
-          const pnPromises = indexes.map((i) => contract.rewardsFor(data?.address, i));
-          const pn = await Promise.all(pnPromises);
-          const pnObjs = pn.map((p) => Object.assign({}, p));
-          console.log({ pn });
-          setPendingNotes(pnObjs);
-          // cache.setItem(
-          //   `purchases-${contractName}`,
-          //   pnObjs,
-          //   process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
-          // );
+          setPendingNotes(indexes);
+          cache.setItem(
+            `memberships-${contractName}`,
+            indexes,
+            process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
+          );
         } else {
           indexes = await contract.indexesFor(data?.address);
+
           const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
           const pn = await Promise.all(pnPromises);
-          const pnObjs = pn.map((p) => Object.assign({}, p));
+          const pnObjs = pn.map((p, i) =>
+            Object.assign({}, { ...p, index: indexes[i], contractName })
+          );
           setPendingNotes(pnObjs);
           cache.setItem(
             `purchases-${contractName}`,

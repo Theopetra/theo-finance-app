@@ -11,24 +11,28 @@ import { CircleWavyCheck, Clock } from 'phosphor-react';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import { formatTheo } from '@/lib/format_theo';
 import { useMemo } from 'react';
+import { BigNumber } from 'ethers';
 
 const Claim = () => {
   const [{ purchases }] = useUserPurchases();
 
   const whitelistExpiry = parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0');
+
   const formattedPurchases = useMemo(
     () =>
       purchases?.map((p) => {
         return {
+          ...p,
           date: new Date(p.created_),
           amount: `${formatTheo(p.payout_)}`,
-          discount: p.created_ < whitelistExpiry ? `Pre-Market` : p.discount_,
+          discount: 0,
           unlockDate: new Date(p.expiry_),
-          matured: p.matured_,
+          index: BigNumber.from(p.index).toNumber(),
         };
       }),
-    [purchases, whitelistExpiry]
+    [purchases]
   );
+  console.log(formattedPurchases);
   const [, { openModal }] = useModal();
   return (
     <>
@@ -46,7 +50,7 @@ const Claim = () => {
               title={<div className="pb-3 text-2xl font-bold">Claim Tokens</div>}
               headerRightComponent={
                 <div>
-                  {purchase.matured ? (
+                  {purchase.matured_ ? (
                     <CircleWavyCheck size={28} color="rgb(47, 69, 92)" weight="fill" />
                   ) : (
                     <Clock size={28} color="rgb(47, 69, 92)" weight="regular" />
@@ -82,7 +86,7 @@ const Claim = () => {
                 />
                 <button
                   className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
-                  disabled={!purchase.matured}
+                  disabled={!purchase.matured_}
                   onClick={() => {
                     openModal(<ConfirmClaim purchase={purchase} />);
                   }}

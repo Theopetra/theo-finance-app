@@ -1,6 +1,4 @@
 import PageContainer from '@/components/PageContainer';
-import { formatTheo } from '@/lib/format_theo';
-import { format } from 'date-fns';
 import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
@@ -28,37 +26,10 @@ const YourMemberships = () => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Purchased Date',
-        accessor: (c) => c.date,
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
-        width: '10%',
-      },
-      {
-        Header: '$THEO Purchased',
-        accessor: ({ amount }) => {
-          const string = amount.replace(/[^\d\.\-]/g, '');
-          return parseFloat(string);
-        },
-        Cell: ({ value }) => value.toLocaleString(),
-        width: '20%',
-      },
-      {
-        Header: 'Discount',
-        accessor: 'discount',
-        width: '10%',
-      },
-      {
         Header: 'Status',
         accessor: 'status',
         width: '10%',
         Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
-      },
-      {
-        Header: 'Unlock Date',
-        accessor: (c) => c.unlockDate,
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
-
-        width: '15%',
       },
     ],
     []
@@ -66,12 +37,11 @@ const YourMemberships = () => {
 
   return (
     <PageContainer>
-      ewe
-      {/* {data?.address && formattedPurchases?.length > 0 ? (
-        // <PurchasesTable columns={columns} data={formattedPurchases} />
+      {data?.address && formattedPurchases?.length > 0 ? (
+        <PurchasesTable columns={columns} data={formattedPurchases} />
       ) : (
         <p className="font-bold dark:text-white">Please connect your wallet.</p>
-      )} */}
+      )}
     </PageContainer>
   );
 };

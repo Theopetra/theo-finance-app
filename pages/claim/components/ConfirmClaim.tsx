@@ -1,10 +1,20 @@
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import PendingTransaction from '@/components/PendingTransaction';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
+import { useContractInfo } from '@/hooks/useContractInfo';
+import { logEvent } from '@/lib/analytics';
+import { cache } from '@/lib/cache';
+import Failed from './Failed';
+import Successful from './Successful';
+import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
+import { BigNumber } from 'ethers';
+import { parseUnits } from 'ethers/lib/utils';
 import { ArrowLeft, DownloadSimple } from 'phosphor-react';
+import { useMemo } from 'react';
+import { useAccount, useContract, useContractWrite, useSigner } from 'wagmi';
 
 export const MarketDiscountRow = () => {
   const { activeContractName } = useActiveBondDepo();
@@ -30,13 +40,55 @@ export const TokensUnlockedRow = ({ date }) => {
 
 const ConfirmClaim = ({ purchase }) => {
   const [, { openModal, closeModal }] = useModal();
+  const { data: account } = useAccount();
+  const [, { reRender }] = useUserPurchases();
+
+  const { address: activeContract, abi: activeContractABI } = useContractInfo(
+    purchase.contractName
+  );
+
+  const { data: signer } = useSigner();
+  const claimArgs = [account?.address, [purchase.index]];
+  // CLAIM
+  const {
+    data,
+    isError: writeErr,
+    isLoading: writeLoading,
+    write: redeem,
+  } = useContractWrite(
+    {
+      addressOrName: activeContract,
+      contractInterface: activeContractABI,
+      signerOrProvider: signer,
+    },
+    'redeem',
+    {
+      async onSuccess(data) {
+        const receipt = await data.wait();
+        console.log({ data });
+        if (receipt.status === 1) {
+          logEvent({ name: 'redeem_completed' });
+          cache.clear();
+          reRender();
+          console.log('successs');
+          openModal(<Successful txId={data.hash} purchase={purchase} />);
+        } else {
+          console.log('contract fail');
+        }
+      },
+      onError(error) {
+        console.log(error);
+        openModal(<Failed error={error} purchase={purchase} />);
+      },
+      args: claimArgs,
+    }
+  );
 
   const handleClick = async () => {
-    // logEvent({ name: 'purchase_claimed' });
-    openModal(<PendingTransaction message="Claiming..." secondaryMessage={`Approving claim...`} />);
-    // TODO: use useContractWrite to call the claim function on the contract
-    // claim function will handle the success and failure modals
-    // claim();
+    openModal(
+      <PendingTransaction message="1 of 1 transactions..." secondaryMessage={`Redeeming Bond...`} />
+    );
+    redeem();
   };
 
   return (
