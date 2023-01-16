@@ -15,9 +15,6 @@ import { BigNumber } from 'ethers';
 
 const Claim = () => {
   const [{ purchases }] = useUserPurchases();
-
-  const whitelistExpiry = parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0');
-
   const formattedPurchases = useMemo(
     () =>
       purchases?.map((p) => {

@@ -9,12 +9,9 @@ import Successful from './Successful';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { add, format } from 'date-fns';
-import { BigNumber } from 'ethers';
-import { parseUnits } from 'ethers/lib/utils';
-import { ArrowLeft, DownloadSimple } from 'phosphor-react';
-import { useMemo } from 'react';
-import { useAccount, useContract, useContractWrite, useSigner } from 'wagmi';
+import { format } from 'date-fns';
+import { ArrowLeft } from 'phosphor-react';
+import { useAccount, useContractWrite, useSigner } from 'wagmi';
 
 export const MarketDiscountRow = () => {
   const { activeContractName } = useActiveBondDepo();
