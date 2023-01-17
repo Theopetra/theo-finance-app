@@ -29,7 +29,6 @@ const Claim = () => {
       }),
     [purchases]
   );
-  console.log(formattedPurchases);
   const [, { openModal }] = useModal();
   return (
     <>

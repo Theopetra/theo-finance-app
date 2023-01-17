@@ -32,7 +32,6 @@ const Whitelist = () => {
           end: new Date(whitelistExpiry),
         });
         if (Date.now() <= whitelistExpiry) {
-          console.log('duration', duration);
           setTimer(duration);
         } else {
           clearTimeout(timer);
