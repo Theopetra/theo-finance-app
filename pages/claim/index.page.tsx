@@ -55,10 +55,7 @@ const Claim = () => {
               }
             >
               <>
-                <div className="-mt-8 flex justify-between text-lg leading-8 text-theo-navy dark:text-theo-cyan">
-                  <div>Type</div>
-                  <div className="font-bold">{purchase.discount}</div>
-                </div>
+                <div className="-mt-8 flex justify-between text-lg leading-8 text-theo-navy dark:text-theo-cyan"></div>
                 <div className="flex justify-between text-lg leading-8 text-theo-navy dark:text-theo-cyan">
                   <div>Purchased</div>
                   <div className="font-bold">
