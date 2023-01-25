@@ -31,9 +31,21 @@ export const usePurchasesByContract = (contractName) => {
       } else if (contract && data?.address) {
         let indexes = [];
 
-        if (contractName === 'TheopetraStaking') {
+        if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
           indexes = await contract.indexesFor(data?.address, false);
-          setPendingNotes(indexes);
+
+          const pnPromises = indexes.map(async (i) => {
+            return {
+              rewards: await contract.rewardsFor(data?.address, i),
+              stakingInfo: await contract.stakingInfo(data?.address, i),
+            };
+          });
+          const pn = await Promise.all(pnPromises);
+          const pnObjs = pn.map((p, i) =>
+            Object.assign({}, { ...p, index: indexes[i], contractName })
+          );
+          console.log(pnObjs);
+          setPendingNotes(pnObjs);
           cache.setItem(
             `memberships-${contractName}`,
             indexes,

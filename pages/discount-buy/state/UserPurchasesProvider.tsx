@@ -12,11 +12,14 @@ export const UserPurchasesProvider = ({ children }) => {
   );
   const { pendingNotes: standardMemberships, reRender: tsReRender } =
     usePurchasesByContract('TheopetraStaking');
+  const { pendingNotes: premiumMemberships, reRender: tslReRender } =
+    usePurchasesByContract('TheopetraStakingLocked');
 
   const reRender = function () {
     wlReRender();
     pplReRender();
     tsReRender();
+    tslReRender();
   };
 
   return (
@@ -24,7 +27,7 @@ export const UserPurchasesProvider = ({ children }) => {
       value={[
         {
           purchases: [...whitelistPurchases, ...publicPrelistPurchases],
-          memberships: [...standardMemberships],
+          memberships: [...standardMemberships, ...premiumMemberships],
         },
         { reRender },
       ]}

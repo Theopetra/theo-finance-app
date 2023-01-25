@@ -13,7 +13,7 @@ import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import Failed from '@/pages/discount-buy/components/Failed';
 import Successful from '@/pages/discount-buy/components/Successful';
 import { logEvent } from '@/lib/analytics';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { parseUnits } from 'ethers/lib/utils';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 import { cache } from '@/lib/cache';
 
@@ -33,8 +33,9 @@ const SubscribeConfirm = ({
   const depositAmountFormatted = useMemo(() => parseUnits(depositAmount, 9), [depositAmount]);
   const [, { reRender }] = useUserPurchases();
 
-  const { address: theopetraStakingAddress, abi: theopetraStakingABI } =
-    useContractInfo('TheopetraStaking');
+  const { address: theopetraStakingAddress, abi: theopetraStakingABI } = useContractInfo(
+    membership.contractName
+  );
 
   const { address: theoAddress } = useContractInfo('TheopetraERC20Token');
 
