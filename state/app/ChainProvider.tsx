@@ -26,7 +26,7 @@ if (!alchemyId) {
 }
 
 const { chains, provider } = configureChains(
-  process.env.NODE_ENV === 'production' ? prodChains : localChains,
+  process.env.NEXT_PUBLIC_ENV === 'production' ? prodChains : localChains,
   [infuraProvider({ infuraId }), alchemyProvider({ alchemyId }), publicProvider()]
 );
 
