@@ -1,21 +1,18 @@
-import CurrencyInput from '@/components/CurrencyInput';
 import PendingTransaction from '@/components/PendingTransaction';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { add, format } from 'date-fns';
 import { ArrowLeft, LockLaminated } from 'phosphor-react';
-import { useAccount, useBalance, useContractWrite, useSigner } from 'wagmi';
+import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import { Membership } from '../membershipData';
 import { useContractInfo } from '@/hooks/useContractInfo';
-import { useMemo, useState } from 'react';
-import { formatTheo } from '@/lib/format_theo';
+import { useMemo } from 'react';
 import { MembershipDuration, MembershipType, MembershipAPY } from './SubscribeFormModal';
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
-import Failed from '@/pages/discount-buy/components/Failed';
-import Successful from '@/pages/discount-buy/components/Successful';
 import { logEvent } from '@/lib/analytics';
 import { parseUnits } from 'ethers/lib/utils';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 import { cache } from '@/lib/cache';
+import Failed from './Failed';
+import Successful from './Successful';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="Amount Staked" value={value} />;
@@ -61,14 +58,15 @@ const SubscribeConfirm = ({
           cache.clear();
           reRender();
           console.log('successs');
-          openModal(<Successful txId={data.hash} />);
+          openModal(
+            <Successful txId={data.hash} membership={membership} depositAmount={depositAmount} />
+          );
         } else {
           console.log('contract fail');
         }
       },
       onError(error) {
-        console.log(error);
-        // openModal(<Failed error={error} />);
+        openModal(<Failed error={error} membership={membership} depositAmount={depositAmount} />);
       },
       args: stakeArgs,
     }
@@ -102,11 +100,17 @@ const SubscribeConfirm = ({
 
           stake();
         } else {
-          openModal(<Failed error={{ code: 'Something went wrong.' }} />);
+          openModal(
+            <Failed
+              error={{ code: 'Something went wrong.' }}
+              membership={membership}
+              depositAmount={depositAmount}
+            />
+          );
         }
       },
       onError(error) {
-        openModal(<Failed error={error} />);
+        openModal(<Failed error={error} membership={membership} depositAmount={depositAmount} />);
       },
       args: [theopetraStakingAddress, depositAmountFormatted],
     }

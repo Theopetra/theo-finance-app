@@ -15,7 +15,7 @@ const UnstakeButton = ({ purchase }) => (
   </button>
 );
 const YourMemberships = () => {
-  const { data, status } = useAccount();
+  const { data } = useAccount();
   const [{ memberships }] = useUserPurchases();
   const formattedPurchases = useMemo(
     () =>
@@ -27,7 +27,7 @@ const YourMemberships = () => {
           startDate,
           endDate,
           deposit: BigNumber.from(p.stakingInfo.deposit).toNumber(),
-          rewards: BigNumber.from(p.rewards).toNumber(),
+          rewards: formatTheo(BigNumber.from(p.rewards).toNumber()),
           status: p.contractName === 'TheopetraStaking' ? 'unlocked' : 'locked',
           type: p.contractName,
         };
@@ -52,9 +52,9 @@ const YourMemberships = () => {
       },
       {
         Header: 'APY',
-        accessor: '',
+        accessor: 'type',
         width: '10%',
-        Cell: ({ value }) => '?',
+        Cell: ({ value }) => (value === 'TheopetraStaking' ? '5%' : '30%'),
       },
       {
         Header: 'Unlock Date',
