@@ -1,14 +1,20 @@
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import ConfirmBuy, {
-  LockDurationRow,
-  MarketDiscountRow,
-  PurchaseAmountRow,
-  TheoPurchasePriceRow,
-} from './ConfirmBuy';
-import DiscountBuyForm from './DiscountBuyForm';
+import { LockLaminated } from 'phosphor-react';
+import { Membership } from '../membershipData';
 
-const Failed = ({ error }) => {
+import SubscribeConfirm, { MembershipCommitment } from './SubscribeConfirm';
+import { MembershipAPY, MembershipDuration, MembershipType } from './SubscribeFormModal';
+
+const Failed = ({
+  error,
+  membership,
+  depositAmount,
+}: {
+  error: any;
+  membership: Membership;
+  depositAmount: string;
+}) => {
   const [, { openModal }] = useModal();
   let errorMsg;
 
@@ -29,7 +35,12 @@ const Failed = ({ error }) => {
   return (
     <div>
       <div className="mb-8 flex items-center justify-between ">
-        <button onClick={() => openModal(<ConfirmBuy />)} className="text-theo-cyan">
+        <button
+          onClick={() =>
+            openModal(<SubscribeConfirm membership={membership} depositAmount={depositAmount} />)
+          }
+          className="text-theo-cyan"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-12 w-12"
@@ -65,20 +76,20 @@ const Failed = ({ error }) => {
           <div className="text">Reason: {errorMsg}</div>
         </div>
         <div>
-          <Icon name="intersect" className="h-12 w-12 dark:text-white" />
+          <LockLaminated size={50} className=" w-12 dark:text-white" />
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-2">
-        <MarketDiscountRow />
-        <TheoPurchasePriceRow />
-        <PurchaseAmountRow />
-        <LockDurationRow />
+        <MembershipType type={membership.type} />
+        <MembershipCommitment value={depositAmount} />
+        <MembershipAPY apy={`${membership.apy * 100}% THEO`} />
+        <MembershipDuration lockDuration={membership?.lockDurationInDays} />
       </div>
       <div className="flex w-full items-center justify-center">
         <button
           className="border-button w-60"
           onClick={() => {
-            openModal(<DiscountBuyForm />);
+            openModal(<SubscribeConfirm depositAmount={depositAmount} membership={membership} />);
           }}
         >
           Try Again
