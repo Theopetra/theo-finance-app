@@ -44,7 +44,6 @@ export const usePurchasesByContract = (contractName) => {
           const pnObjs = pn.map((p, i) =>
             Object.assign({}, { ...p, index: indexes[i], contractName })
           );
-          console.log(pnObjs);
           setPendingNotes(pnObjs);
           cache.setItem(
             `memberships-${contractName}`,
