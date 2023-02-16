@@ -3,17 +3,96 @@ import { formatTheo } from '@/lib/format_theo';
 import { add, format } from 'date-fns';
 import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import PurchasesTable from '../discount-buy/your-purchases/components/PurchasesTable';
-const UnstakeButton = ({ purchase }) => (
-  <button
-    className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
-    onClick={() => {}}
-  >
-    Unstake
-  </button>
-);
+import { cache } from '@/lib/cache';
+import { logEvent } from '@/lib/analytics';
+import { useContractInfo } from '@/hooks/useContractInfo';
+import { parseUnits } from 'ethers/lib/utils';
+
+const UnstakeButton = ({ purchase, matured }) => {
+  // STAKE
+  const [, { reRender }] = useUserPurchases();
+  const { data: account } = useAccount();
+  const { address, abi } = useContractInfo(purchase.contractName);
+  const { address: theoAddress } = useContractInfo('sTheopetra');
+
+  const { data: signer } = useSigner();
+
+  const amount = BigNumber.from(purchase.rewards).toNumber();
+  const unstakeArgs = [
+    account?.address,
+    [amount],
+    false,
+    [BigNumber.from(purchase.index).toNumber()],
+  ];
+  // APPROVE
+  const {
+    data: approveData,
+    isLoading: approvalLoading,
+    write: approve,
+  } = useContractWrite(
+    {
+      addressOrName: theoAddress,
+      contractInterface: [
+        'function approve(address _spender, uint256 _value) public returns (bool success)',
+      ],
+      signerOrProvider: signer,
+    },
+    'approve',
+    {
+      async onSuccess(data) {
+        const receipt = await data.wait();
+        if (receipt.status === 1) {
+          logEvent({ name: 'erc20_approved' });
+          unstake();
+        } else {
+          console.log('failed', receipt);
+        }
+      },
+      onError(error) {
+        console.log('failed 22', error);
+      },
+      args: [address, amount],
+    }
+  );
+
+  // unstake
+  const { write: unstake, isLoading: unstakeLoading } = useContractWrite(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+      signerOrProvider: signer,
+    },
+    'unstake',
+    {
+      async onSuccess(data) {
+        const receipt = await data.wait();
+        if (receipt.status === 1) {
+          logEvent({ name: 'unstake_completed' });
+          cache.clear();
+          reRender();
+        }
+      },
+      onError(error) {
+        console.log('error', error);
+      },
+      args: unstakeArgs,
+    }
+  );
+  return (
+    <button
+      className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
+      onClick={() => {
+        approve();
+      }}
+      disabled={!matured || approvalLoading || unstakeLoading}
+    >
+      {approvalLoading ? 'Approving...' : unstakeLoading ? 'Unstaking...' : 'Unstake'}
+    </button>
+  );
+};
 const YourMemberships = () => {
   const { data } = useAccount();
   const [{ memberships }] = useUserPurchases();
@@ -27,9 +106,10 @@ const YourMemberships = () => {
           startDate,
           endDate,
           deposit: BigNumber.from(p.stakingInfo.deposit).toNumber(),
-          rewards: formatTheo(BigNumber.from(p.rewards).toNumber()),
-          status: p.contractName === 'TheopetraStaking' ? 'unlocked' : 'locked',
-          type: p.contractName,
+          rewards: p.rewards,
+          contractName: p.contractName,
+          index: p.index,
+          matured: endDate < new Date(),
         };
       }),
     [memberships]
@@ -52,7 +132,7 @@ const YourMemberships = () => {
       },
       {
         Header: 'APY',
-        accessor: 'type',
+        accessor: 'contractName',
         width: '10%',
         Cell: ({ value }) => (value === 'TheopetraStaking' ? '5%' : '30%'),
       },
@@ -66,19 +146,18 @@ const YourMemberships = () => {
         Header: 'Rewards',
         accessor: 'rewards',
         width: '10%',
-        Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
+        Cell: ({ value }) => (
+          <div className="flex justify-center">{formatTheo(BigNumber.from(value).toNumber())}</div>
+        ),
       },
-      {
-        Header: 'Status',
-        accessor: 'status',
-        width: '10%',
-        Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
-      },
+
       {
         Header: 'Unstake',
-        accessor: '',
+        accessor: 'matured',
         width: '10%',
-        Cell: ({ value: matured, cell }) => <UnstakeButton purchase={cell.row.original} />,
+        Cell: ({ value: matured, cell }) => (
+          <UnstakeButton purchase={cell.row.original} matured={matured} />
+        ),
       },
     ],
     []
