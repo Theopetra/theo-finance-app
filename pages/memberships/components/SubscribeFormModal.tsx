@@ -33,8 +33,15 @@ export const MembershipCommitment = ({ balance, value, onChange }) => {
     />
   );
 };
-export const MembershipAPY = ({ apy }) => {
-  return <ConfirmRow title="APY" value={apy} subtext="Estimated yield of 1,200 THEO" />;
+export const MembershipAPY = ({ apy, value }) => {
+  const estApy = apy ? apy * value : 0;
+  return (
+    <ConfirmRow
+      title="APY"
+      value={`${apy * 100}% THEO`}
+      subtext={`Estimated yield of ${estApy.toFixed(2)} THEO`}
+    />
+  );
 };
 export const MembershipDuration = ({ lockDuration }) => {
   return (
@@ -101,7 +108,7 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
             />
           )}
 
-          <MembershipAPY apy={`${membership.apy * 100}% THEO`} />
+          <MembershipAPY apy={membership.apy} value={commitmentValue} />
           <MembershipDuration lockDuration={membership?.lockDurationInDays} />
         </div>
         <div className="flex w-full flex-col items-center justify-center">
