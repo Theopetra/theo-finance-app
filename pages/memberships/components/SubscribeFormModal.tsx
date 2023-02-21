@@ -1,7 +1,7 @@
 import CurrencyInput from '@/components/CurrencyInput';
 import PendingTransaction from '@/components/PendingTransaction';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { add, format } from 'date-fns';
+import { add, addDays, format } from 'date-fns';
 import { ArrowLeft, LockLaminated } from 'phosphor-react';
 import { useAccount, useBalance } from 'wagmi';
 import { Membership } from '../membershipData';
@@ -48,7 +48,9 @@ export const MembershipDuration = ({ lockDuration }) => {
     <ConfirmRow
       title="Membership Duration"
       value={lockDuration}
-      subtext={lockDuration ? 'Your THEO will unlock on May-01-2023' : 'Unstake anytime'}
+      subtext={
+        lockDuration ? format(addDays(new Date(), lockDuration), 'yyyy-MM-dd') : 'Unstake anytime'
+      }
     />
   );
 };
@@ -92,7 +94,6 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
             <div className="text-3xl font-bold capitalize sm:text-4xl">
               {membership.type} Membership
             </div>
-            Review carefully, this staking is final
           </div>
           <div>
             <LockLaminated color="#2F455C" size={50} />
