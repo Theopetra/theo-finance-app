@@ -47,7 +47,7 @@ export const MembershipDuration = ({ lockDuration }) => {
   return (
     <ConfirmRow
       title="Membership Duration"
-      value={lockDuration}
+      value={`${lockDuration} Days`}
       subtext={
         lockDuration ? format(addDays(new Date(), lockDuration), 'yyyy-MM-dd') : 'Unstake anytime'
       }
@@ -94,6 +94,8 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
             <div className="text-3xl font-bold capitalize sm:text-4xl">
               {membership.type} Membership
             </div>
+            {membership.type === 'premium' &&
+              'Review carefully, your $THEO will be locked once you subscribe'}
           </div>
           <div>
             <LockLaminated color="#2F455C" size={50} />
