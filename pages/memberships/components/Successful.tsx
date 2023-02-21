@@ -34,7 +34,7 @@ const Successful = ({ txId, membership, depositAmount }) => {
       <div className="mb-4 flex flex-col gap-2">
         <MembershipType type={membership.type} />
         <MembershipCommitment value={depositAmount} />
-        <MembershipAPY apy={`${membership.apy * 100}% THEO`} />
+        <MembershipAPY apy={membership.apy} value={depositAmount} />
         <MembershipDuration lockDuration={membership?.lockDurationInDays} />
       </div>
       <div className="flex w-full flex-col items-center justify-center sm:flex-row">
