@@ -2,8 +2,8 @@ import { Popover } from '@headlessui/react';
 import { ReactElement } from 'react';
 import Icon from '../Icons';
 
-const Tooltip: React.FC<{ icon?: string; size: string }> = ({
-  size,
+const Tooltip: React.FC<{ icon?: string; size?: 'small' | 'base' }> = ({
+  size = 'base',
   children = 'No content',
   icon,
 }) => {
