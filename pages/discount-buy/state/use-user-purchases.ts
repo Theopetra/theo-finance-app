@@ -1,5 +1,6 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
+import { BigNumber } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useContract, useProvider } from 'wagmi';
 import { UserPurchasesContext } from './UserPurchasesProvider';
@@ -35,8 +36,15 @@ export const usePurchasesByContract = (contractName) => {
           indexes = await contract.indexesFor(data?.address, false);
 
           const pnPromises = indexes.map(async (i) => {
+            let rewards;
+            try {
+              rewards = await contract.rewardsFor(data?.address, i);
+            } catch (e) {
+              rewards = BigNumber.from(0);
+              console.log(e);
+            }
             return {
-              rewards: await contract.rewardsFor(data?.address, i),
+              rewards,
               stakingInfo: await contract.stakingInfo(data?.address, i),
             };
           });

@@ -10,16 +10,17 @@ import { cache } from '@/lib/cache';
 import { logEvent } from '@/lib/analytics';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
+
 const PenaltyPopover = () => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
       <div className="mx-auto flex whitespace-normal rounded p-1 text-[10px] leading-snug hover:bg-slate-200">
-        10% penalty
+        Rewards slashed
       </div>
     </Popover.Button>
 
-    <Popover.Panel className="trans absolute right-[50%] z-10  translate-x-[50%] rounded-xl bg-theo-navy p-2 text-center text-xs text-gray-300 shadow-xl">
-      Unstaking early incurs a 10% penalty
+    <Popover.Panel className=" absolute right-[100%] z-10 translate-x-[25%] rounded-xl bg-theo-navy p-2 text-center text-xs text-gray-300 shadow-xl">
+      Rewards and part of principal slashed if unstaked while locked.
     </Popover.Panel>
   </Popover>
 );
@@ -49,7 +50,8 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       cacheTime: cache.cacheTimesInMs.prices,
     }
   );
-  const amount = stakingInfo?.gonsRemaining && BigNumber.from(stakingInfo?.gonsRemaining);
+  const amount = stakingInfo?.deposit && BigNumber.from(stakingInfo?.deposit).toNumber();
+
   const unstakeArgs = [
     account?.address,
     [amount],
@@ -72,10 +74,12 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
     'approve',
     {
       async onSuccess(data) {
+        console.log({ amount });
+
         const receipt = await data.wait();
         if (receipt.status === 1) {
           logEvent({ name: 'erc20_approved' });
-          purchase.matured ? unstake() : claim();
+          unstake();
         } else {
           console.log('failed', receipt);
         }

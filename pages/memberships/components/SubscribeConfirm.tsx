@@ -94,7 +94,7 @@ const SubscribeConfirm = ({
           openModal(
             <PendingTransaction
               message="2 of 2 transactions..."
-              secondaryMessage={`Submitting THEO transaction...`}
+              secondaryMessage={`Submitting $THEO transaction...`}
             />
           );
 
@@ -120,7 +120,7 @@ const SubscribeConfirm = ({
     openModal(
       <PendingTransaction
         message="1 of 2 transactions..."
-        secondaryMessage={`Approving THEO spend...`}
+        secondaryMessage={`Approving $THEO spend...`}
       />
     );
     approve();
