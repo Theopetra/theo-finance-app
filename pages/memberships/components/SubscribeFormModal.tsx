@@ -18,7 +18,7 @@ export const MembershipType = ({ type }) => {
 export const MembershipCommitment = ({ balance, value, onChange }) => {
   return (
     <ConfirmRow
-      title="THEO to Commit"
+      title="$THEO to stake"
       subtext={`Maximum Available: ${formatTheo(balance?.value)} THEO`}
       value={
         <>
@@ -74,7 +74,7 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
     if (commitmentValue > 0) {
       openModal(<SubscribeConfirm membership={membership} depositAmount={commitmentValue + ''} />);
     } else {
-      setErrorMessage('Please add THEO to commit');
+      setErrorMessage('Please add $THEO to stake');
     }
   };
 

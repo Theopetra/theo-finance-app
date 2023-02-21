@@ -15,7 +15,7 @@ import Failed from './Failed';
 import Successful from './Successful';
 
 export const MembershipCommitment = ({ value }) => {
-  return <ConfirmRow title="Amount Staked" value={value} />;
+  return <ConfirmRow title="$THEO to stake" value={value} />;
 };
 const SubscribeConfirm = ({
   membership,
@@ -140,7 +140,7 @@ const SubscribeConfirm = ({
             <div className="text-3xl font-bold capitalize sm:text-4xl">
               {membership.type} Membership
             </div>
-            Review carefully, this staking is final
+            You can unstake at any time, but won’t be eligible for ETH rebates.
           </div>
           <div>
             <LockLaminated color="#2F455C" size={50} />
@@ -149,7 +149,7 @@ const SubscribeConfirm = ({
         <div className="mb-4 flex flex-col gap-2">
           <MembershipType type={membership.type} />
           <MembershipCommitment value={depositAmount} />
-          <MembershipAPY apy={`${membership.apy * 100}% THEO`} />
+          <MembershipAPY apy={membership.apy} value={depositAmount} />
           <MembershipDuration lockDuration={membership?.lockDurationInDays} />
         </div>
         <div className="flex w-full items-center justify-center">

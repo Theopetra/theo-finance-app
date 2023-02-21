@@ -246,10 +246,14 @@ const YourMemberships = () => {
 
   return (
     <PageContainer>
-      {data?.address && formattedPurchases?.length > 0 ? (
+      {data?.address && formattedPurchases?.length > 0 && (
         <PurchasesTable columns={columns} data={formattedPurchases} />
-      ) : (
-        <p className="font-bold dark:text-white">Please connect your wallet.</p>
+      )}
+      {data?.address && formattedPurchases?.length === 0 && (
+        <div className="text-center dark:text-white">You have no active memberships.</div>
+      )}
+      {!data?.address && (
+        <div className="text-center dark:text-white">Please connect your wallet.</div>
       )}
     </PageContainer>
   );

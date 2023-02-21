@@ -29,7 +29,7 @@ export const TheoPurchaseDateRow = ({ date }) => {
 };
 
 export const TokensToClaimRow = ({ total }) => {
-  return <ConfirmRow title="Tokens to Claim" value={total} />;
+  return <ConfirmRow title="$THEO claimed" value={total} />;
 };
 export const TokensUnlockedRow = ({ date }) => {
   return <ConfirmRow title="Tokens Unlocked" value={format(new Date(date * 1000), 'yyyy-MM-dd')} />;
