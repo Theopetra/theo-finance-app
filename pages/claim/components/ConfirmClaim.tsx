@@ -62,12 +62,10 @@ const ConfirmClaim = ({ purchase }) => {
     {
       async onSuccess(data) {
         const receipt = await data.wait();
-        console.log({ data });
         if (receipt.status === 1) {
           logEvent({ name: 'redeem_completed' });
           cache.clear();
           reRender();
-          console.log('successs');
           openModal(<Successful txId={data.hash} purchase={purchase} />);
         } else {
           console.log('contract fail');

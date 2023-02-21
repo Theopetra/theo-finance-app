@@ -50,7 +50,6 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
     }
   );
   const amount = stakingInfo?.gonsRemaining && BigNumber.from(stakingInfo?.gonsRemaining);
-  console.log({ amount, stakingInfo });
   const unstakeArgs = [
     account?.address,
     [amount],
@@ -73,7 +72,6 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
     'approve',
     {
       async onSuccess(data) {
-        console.log({ unstakeArgs });
         const receipt = await data.wait();
         if (receipt.status === 1) {
           logEvent({ name: 'erc20_approved' });

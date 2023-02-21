@@ -40,9 +40,7 @@ const Navigation = () => {
     <div className=" flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#ebebeb] to-[#ababab] dark:bg-theo-dark-navy dark:from-theo-dark-navy dark:to-theo-dark-navy">
       <div className="flex flex-1 flex-col overflow-y-auto pt-5">
         <div className="flex items-center px-9">
-          <Link href={'/'} passHref>
-            <Logo />
-          </Link>
+          <Logo />
         </div>
         <nav className="mt-5 flex-1 space-y-2 px-2 pr-8 pl-8">
           {navigation.map((item) => (
