@@ -84,7 +84,7 @@ const Claim = () => {
                     openModal(<ConfirmClaim purchase={purchase} />);
                   }}
                 >
-                  Claim THEO
+                  {purchase.matured_ ? 'Claim THEO' : 'Locked'}
                 </button>
               </>
             </Card>

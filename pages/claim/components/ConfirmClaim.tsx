@@ -83,7 +83,7 @@ const ConfirmClaim = ({ purchase }) => {
 
   const handleClick = async () => {
     openModal(
-      <PendingTransaction message="1 of 1 transactions..." secondaryMessage={`Claiming bond...`} />
+      <PendingTransaction message="1 of 1 transactions..." secondaryMessage={`Claiming $THEO...`} />
     );
     redeem();
   };

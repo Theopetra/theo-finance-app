@@ -28,10 +28,11 @@ const YourPurchases = () => {
     () =>
       purchases?.map((p) => {
         return {
-          date: new Date(p.created_ * 1000),
+          date: new Date(p.created_),
           amount: `${formatTheo(p.payout_)}`,
           discount: p.created_ < whitelistExpiry ? `Pre-Market` : p.discount_,
-          unlockDate: new Date(p.expiry_ * 1000),
+
+          unlockDate: new Date(p.expiry_),
           ...p,
         };
       }),

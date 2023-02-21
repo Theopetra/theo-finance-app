@@ -52,7 +52,7 @@ const Memberships = () => {
         {
           label: 'APY',
           value: `${premium.apy * 100}% THEO`,
-          info: '+ ETH airdrops to top 4000 holders ',
+          info: '+ ETH rebates for top 4000 Premium stakers',
         },
         { label: 'Locked for', value: '365 Days' },
       ],
