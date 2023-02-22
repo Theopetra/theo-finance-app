@@ -14,7 +14,7 @@
     "@ngneat/falso": "^5.0.0",
     "@rainbow-me/rainbowkit": "^0.1.0",
     "date-fns": "^2.28.0",
-    "ethers": "^5.6.6",
+    "ethers": "^6.0.5",
     "next": "12.1.0",
     "phosphor-react": "^1.4.1",
     "prettier-plugin-tailwindcss": "^0.1.8",

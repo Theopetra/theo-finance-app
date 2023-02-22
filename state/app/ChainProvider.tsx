@@ -11,7 +11,7 @@ import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
-const localChains = [chain.goerli];
+const localChains = [chain.sepolia];
 const prodChains = [chain.mainnet];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
