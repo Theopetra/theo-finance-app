@@ -47,7 +47,7 @@ export const MembershipDuration = ({ lockDuration }) => {
   return (
     <ConfirmRow
       title="Membership Duration"
-      value={`${lockDuration} Days`}
+      value={`${lockDuration ? `${lockDuration}  Days` : ''}`}
       subtext={
         lockDuration ? format(addDays(new Date(), lockDuration), 'yyyy-MM-dd') : 'Unstake anytime'
       }

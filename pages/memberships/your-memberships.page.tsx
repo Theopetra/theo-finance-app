@@ -25,18 +25,10 @@ const PenaltyPopover = () => (
   </Popover>
 );
 
-// 100,274.21
-
-// expecting 0.849
-
 const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRender }) => {
   // STAKE
 
   const { address, abi } = useContractInfo(purchase.contractName);
-  const contract = useContract({
-    addressOrName: address,
-    contractInterface: abi,
-  });
 
   // const ad = await contract.stakingInfo(account.address, purchase.index);
   const { data: stakingInfo } = useContractRead(
@@ -58,6 +50,7 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
     false,
     [BigNumber.from(purchase.index).toNumber()],
   ];
+  // TODO: Approval on premium is unnessary
   // APPROVE
   const {
     data: approveData,
@@ -74,7 +67,7 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
     'approve',
     {
       async onSuccess(data) {
-        console.log({ amount });
+        // console.log({ unstakeArgs });
 
         const receipt = await data.wait();
         if (receipt.status === 1) {
@@ -98,7 +91,7 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       contractInterface: abi,
       signerOrProvider: signer,
     },
-    'unstake',
+    'forfeit',
     {
       async onSuccess(data) {
         const receipt = await data.wait();
@@ -111,7 +104,7 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       onError(error) {
         console.log('error', error);
       },
-      args: unstakeArgs,
+      args: [purchase.index],
     }
   );
   // claim
