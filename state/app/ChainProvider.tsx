@@ -6,13 +6,14 @@ import {
   lightTheme,
 } from '@rainbow-me/rainbowkit';
 import { createClient, configureChains, WagmiProvider } from 'wagmi';
-import { sepolia, mainnet } from '@wagmi/chains';
+import { localhost, mainnet } from '@wagmi/chains';
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 
-const localChains = [sepolia];
+const localChains = [localhost]; 
 const prodChains = [mainnet];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
@@ -28,7 +29,7 @@ if (!alchemyId) {
 
 const { chains, provider } = configureChains(
   process.env.NEXT_PUBLIC_ENV === 'production' ? prodChains : localChains,
-  [infuraProvider({ infuraId }), alchemyProvider({ alchemyId }), publicProvider()]
+  [jsonRpcProvider({rpc: () => ({http: 'http://127.0.0.1:8545/'})}), infuraProvider({ infuraId }), alchemyProvider({ alchemyId }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
