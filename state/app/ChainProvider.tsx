@@ -1,18 +1,19 @@
 import {
-  configureChains,
+  Chain,
   getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { chain, createClient, WagmiProvider } from 'wagmi';
+import { createClient, configureChains, WagmiProvider } from 'wagmi';
+import { sepolia, mainnet } from '@wagmi/chains';
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
-const localChains = [chain.sepolia];
-const prodChains = [chain.mainnet];
+const localChains = [sepolia];
+const prodChains = [mainnet];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
