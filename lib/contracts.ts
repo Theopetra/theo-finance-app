@@ -1,4 +1,4 @@
-// import stakingDistributorArtifact from '../artifacts/StakingDistributor.json';
+import stakingDistributorArtifact from '../artifacts/StakingDistributor.json';
 import sTheopetraArtifact from '../artifacts/sTheopetra.json';
 import pTheopetraArtifact from '../artifacts/pTheopetra.json';
 import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json';
@@ -23,15 +23,16 @@ export const contractMetadata = {
     },
     abi: PublicPreListBondDepositoryArtifact.abi,
   },
-  // StakingDistributor: {
-  //   address: {
-  //     1: '0x0ee54Aa3fE9695Eff297582080Bd9766D09FBD9A',
-  //     4: '0x0ee54Aa3fE9695Eff297582080Bd9766D09FBD9A',
-  //     5: '0x699A0bbd94585Cc8207c8B7D1632fa94a078Fa72',
-  //     11155111: '0x22A2a0680258FcE2c5485D24D559a60feb70a25a',
-  //   },
-  //   abi: stakingDistributorArtifact.abi,
-  // },
+  StakingDistributor: {
+    address: {
+      1: '0x0ee54Aa3fE9695Eff297582080Bd9766D09FBD9A',
+      4: '0x0ee54Aa3fE9695Eff297582080Bd9766D09FBD9A',
+      5: '0x699A0bbd94585Cc8207c8B7D1632fa94a078Fa72',
+      31337: '0x5c932424AcBfab036969b3B9D94bA9eCbae7565D',
+      11155111: '0x22A2a0680258FcE2c5485D24D559a60feb70a25a',
+    },
+    abi: stakingDistributorArtifact.abi,
+  },
   TheopetraAuthority: {
     address: {
       1: '0xfe9fab692c951eeb28345b3a22008f4057eaa232',
@@ -57,7 +58,7 @@ export const contractMetadata = {
       1: '',
       4: '0x79b4882B3121061C054EEFEBcB05B2b3fFcf59Dd',
       5: '0x9fA01b224cd42fD147181E377b08d1a19477b320',
-      31337: '',
+      31337: '0xd977422c9eE9B646f64A4C4389a6C98ad356d8C4',
       11155111: '0x888352704E10a2ED0c7781EF54EeEF8F2f7a79e1',
     },
     abi: theopetraStakingArtifact.abi,
@@ -67,7 +68,7 @@ export const contractMetadata = {
       1: '',
       4: '0x79b4882B3121061C054EEFEBcB05B2b3fFcf59Dd',
       5: '0x2e312581C2ce60FBAdaA36e6B6A6b722a1F87b0b',
-      31337: '',
+      31337: '0xeE1eb820BeeCED56657bA74fa8D70748D7A6756C',
       11155111: '0x519A9CA0BdA026CCB7C0c349eAFb27Ae64F572da',
     },
     abi: theopetraStakingLockedArtifact.abi,
