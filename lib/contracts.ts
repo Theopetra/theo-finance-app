@@ -25,10 +25,10 @@ export const contractMetadata = {
   },
   StakingDistributor: {
     address: {
-      1: '0x0ee54Aa3fE9695Eff297582080Bd9766D09FBD9A',
+      1: '0x40F36cdDBF94c3CCcf9F33C55feCEA61cDA32AAC',
       4: '0x0ee54Aa3fE9695Eff297582080Bd9766D09FBD9A',
       5: '0x699A0bbd94585Cc8207c8B7D1632fa94a078Fa72',
-      31337: '0x5c932424AcBfab036969b3B9D94bA9eCbae7565D',
+      31337: '0x40F36cdDBF94c3CCcf9F33C55feCEA61cDA32AAC',
       11155111: '0x22A2a0680258FcE2c5485D24D559a60feb70a25a',
     },
     abi: stakingDistributorArtifact.abi,
@@ -65,10 +65,10 @@ export const contractMetadata = {
   },
   TheopetraStakingLocked: {
     address: {
-      1: '',
+      1: '0x3CdC4fa75e38342f8E2A4c2AcCF35e38721fb793',
       4: '0x79b4882B3121061C054EEFEBcB05B2b3fFcf59Dd',
       5: '0x2e312581C2ce60FBAdaA36e6B6A6b722a1F87b0b',
-      31337: '0xeE1eb820BeeCED56657bA74fa8D70748D7A6756C',
+      31337: '0x3CdC4fa75e38342f8E2A4c2AcCF35e38721fb793',
       11155111: '0x519A9CA0BdA026CCB7C0c349eAFb27Ae64F572da',
     },
     abi: theopetraStakingLockedArtifact.abi,
@@ -114,10 +114,10 @@ export const contractMetadata = {
   },
   pTheopetra: {
     address: {
-      1: '0xE249e013E7AAbCC79726e9d62B0c2d89CdD69f51',
+      1: ' 0xc4B2805Bb463E60235fae3EDc0eC7098D4e7E69d',
       4: '0xCD1a66F06eC36Db3F040C6065e5AAC0866FcD77A',
       5: '0x219E77121E43B8EB13e73f1685C71FeD86f83461',
-      31337: '0xE249e013E7AAbCC79726e9d62B0c2d89CdD69f51',
+      31337: ' 0xc4B2805Bb463E60235fae3EDc0eC7098D4e7E69d',
       11155111: '0x4FDCC3dE1c882Db748f72A3e28117BB3aB643A83',
     },
     abi: pTheopetraArtifact.abi,
