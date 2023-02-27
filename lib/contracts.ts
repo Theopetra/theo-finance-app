@@ -55,10 +55,10 @@ export const contractMetadata = {
   },
   TheopetraStaking: {
     address: {
-      1: '',
+      1: '0x18bba38a6f8427ed2b65b5c6e9532cd80f93aff4',
       4: '0x79b4882B3121061C054EEFEBcB05B2b3fFcf59Dd',
       5: '0x9fA01b224cd42fD147181E377b08d1a19477b320',
-      31337: '0xd977422c9eE9B646f64A4C4389a6C98ad356d8C4',
+      31337: '0x18bba38a6f8427ed2b65b5c6e9532cd80f93aff4',
       11155111: '0x888352704E10a2ED0c7781EF54EeEF8F2f7a79e1',
     },
     abi: theopetraStakingArtifact.abi,
