@@ -57,7 +57,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   //Temporarily hardcoding address for debugging
   const contract = useContract({
-    addressOrName: '0x9CC43eA3688a1D793155aA33DF1C42Af47C393Ed',
+    addressOrName: address,
     contractInterface: abi,
     signerOrProvider: provider,
   });

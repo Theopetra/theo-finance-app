@@ -5,16 +5,16 @@ import {
   darkTheme,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { createClient, configureChains, WagmiProvider } from 'wagmi';
-import { hardhat, mainnet } from '@wagmi/chains';
+import { chain, createClient, configureChains, WagmiProvider } from 'wagmi';
+// import { hardhat, mainnet } from '@wagmi/chains';
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 
-const localChains = [hardhat]; 
-const prodChains = [mainnet];
+const localChains = [chain.hardhat]; 
+const prodChains = [chain.mainnet];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
