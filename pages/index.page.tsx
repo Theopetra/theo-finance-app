@@ -1,26 +1,26 @@
 import Card from '@/components/Card';
 import CardList from '@/components/CardList';
-import DynamicText from '@/components/DynamicText';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
-import { getContractInfo, useContractInfo } from '@/hooks/useContractInfo';
-import { useProvider } from 'wagmi';
-import useMetrics from '@/hooks/useMetrics';
-import { useTheme } from '@/state/ui/theme';
-import { Fragment, useEffect, useState } from 'react';
-import { BigNumber, ethers } from 'ethers';
+import { useContractInfo } from '@/hooks/useContractInfo';
+import { Fragment, useMemo } from 'react';
+import { BigNumber } from 'ethers';
 import { formatTheo } from '@/lib/format_theo';
-import { wagmiClient } from '@/state/app/ChainProvider';
+import { useContract, useContractRead } from 'wagmi';
 
-async function getLockedTheoByContract(contractName) {
-  const { address, abi } = getContractInfo(contractName);
-  const contract = new ethers.Contract(address, abi, wagmiClient.provider);
-
-  const data = await contract.getMarkets();
+const useGetLockedTheoByContract = async (contractName) => {
+  const { address, abi } = useContractInfo(contractName);
+  const contract = useContract({ addressOrName: address, contractInterface: abi });
+  const { data } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'getMarkets'
+  );
 
   let locked = [BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)];
-
   if (data) {
     const merged = await Promise.all(
       data.map(async (b) => {
@@ -44,59 +44,59 @@ async function getLockedTheoByContract(contractName) {
   }
 
   return locked;
-}
+};
 
-async function getLockedTheo() {
-  const whitelistRepo = await getLockedTheoByContract('WhitelistTheopetraBondDepository');
-  const bondRepo = await getLockedTheoByContract('TheopetraBondDepository');
-  const publicPreListRepo = await getLockedTheoByContract('PublicPreListBondDepository');
+const Dashboard = ({}) => {
+  const whitelistRepo = useGetLockedTheoByContract('WhitelistTheopetraBondDepository');
+  const bondRepo = useGetLockedTheoByContract('TheopetraBondDepository');
+  const publicPreListRepo = useGetLockedTheoByContract('PublicPreListBondDepository');
+  const locked = useMemo(() => {
+    return [0, 1, 2].map((i) => [
+      whitelistRepo[i]?.add(bondRepo[i])?.add(publicPreListRepo[i])?.toString(),
+    ]);
+  }, [whitelistRepo, bondRepo, publicPreListRepo]);
 
-  return [0, 1, 2].map((i) => [
-    whitelistRepo[i].add(bondRepo[i]).add(publicPreListRepo[i]).toString(),
-  ]);
-}
-
-const Dashboard = ({ locked }) => {
-  const [{ theme }] = useTheme();
-
-  const STATS = [
-    {
-      name: (
-        <>
-          TOTAL $THEO Locked
-          <br />
-          <strong>6 Months</strong>
-        </>
-      ),
-      value: formatTheo(locked?.[0]?.toString()),
-      tooltip: 'This is the total amount of $THEO locked in the 6 Month contract',
-      tooltipIcon: 'info',
-    },
-    {
-      name: (
-        <>
-          TOTAL $THEO Locked
-          <br />
-          <strong>12 Months</strong>
-        </>
-      ),
-      value: formatTheo(locked?.[1]?.toString()),
-      tooltip: 'This is the total amount of $THEO locked in the 12 Month contract',
-      tooltipIcon: 'info',
-    },
-    {
-      name: (
-        <>
-          TOTAL $THEO Locked
-          <br />
-          <strong>18 Months</strong>
-        </>
-      ),
-      value: formatTheo(locked?.[2]?.toString()),
-      tooltip: 'This is the total amount of $THEO locked in the 18 Month contract',
-      tooltipIcon: 'info',
-    },
-  ];
+  const STATS = useMemo(
+    () => [
+      {
+        name: (
+          <>
+            TOTAL $THEO Locked
+            <br />
+            <strong>6 Months</strong>
+          </>
+        ),
+        value: formatTheo(locked?.[0]?.toString() || 0),
+        tooltip: 'This is the total amount of $THEO locked in the 6 Month contract',
+        tooltipIcon: 'info',
+      },
+      {
+        name: (
+          <>
+            TOTAL $THEO Locked
+            <br />
+            <strong>12 Months</strong>
+          </>
+        ),
+        value: formatTheo(locked?.[1]?.toString() || 0),
+        tooltip: 'This is the total amount of $THEO locked in the 12 Month contract',
+        tooltipIcon: 'info',
+      },
+      {
+        name: (
+          <>
+            TOTAL $THEO Locked
+            <br />
+            <strong>18 Months</strong>
+          </>
+        ),
+        value: formatTheo(locked?.[2]?.toString() || 0),
+        tooltip: 'This is the total amount of $THEO locked in the 18 Month contract',
+        tooltipIcon: 'info',
+      },
+    ],
+    [locked]
+  );
 
   return (
     <>
@@ -136,25 +136,5 @@ const Dashboard = ({ locked }) => {
 Dashboard.PageHead = () => {
   return <div>Welcome Home</div>;
 };
-
-export async function getStaticProps() {
-  // TODO: uncomment if we ever need the metrics backend again
-  // const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/api/metrics`);
-  // if (!response.ok) {
-  //   console.log(`An error has occured: ${response}`);
-  // }
-  // const metricsData = await response.json();
-  // return {
-  //   props: { currentMetrics: metricsData?.[0] },
-  // };
-
-  const locked = await getLockedTheo();
-
-  return {
-    props: {
-      locked,
-    },
-  };
-}
 
 export default Dashboard;
