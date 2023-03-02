@@ -29,7 +29,7 @@ export const sepolia = {
   },
 } as Chain;
 
-const localChains = [chain.localhost, chain.hardhat, sepolia];
+const localChains = [chain.hardhat, chain.localhost, sepolia];
 const prodChains = [chain.mainnet];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
