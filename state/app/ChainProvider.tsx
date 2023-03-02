@@ -1,19 +1,35 @@
 import {
-  Chain,
   getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { chain, createClient, configureChains, WagmiProvider } from 'wagmi';
-// import { hardhat, mainnet } from '@wagmi/chains';
+import { chain, createClient, configureChains, WagmiProvider, WagmiConfig, Chain } from 'wagmi';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+export const sepolia = {
+  id: 11155111,
+  name: 'Sepolia',
+  network: 'sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'sepoliaETH',
+    symbol: 'sepoliaETH',
+  },
+  rpcUrls: {
+    default: 'https://rpc.sepolia.dev',
+  },
+  blockExplorers: {
+    default: { name: 'etherscan', url: 'https://sepolia.etherscan.io' },
+  },
+} as Chain;
 
-const localChains = [chain.hardhat]; 
+const localChains = [chain.localhost, chain.hardhat, sepolia];
 const prodChains = [chain.mainnet];
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
@@ -29,9 +45,18 @@ if (!alchemyId) {
 
 const { chains, provider } = configureChains(
   process.env.NEXT_PUBLIC_ENV === 'production' ? prodChains : localChains,
-  [jsonRpcProvider({rpc: () => ({http: 'http://127.0.0.1:8545/'})}), infuraProvider({ infuraId }), alchemyProvider({ alchemyId }), publicProvider()]
+  [
+    jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
+    infuraProvider({ infuraId }),
+    alchemyProvider({ alchemyId }),
+    publicProvider(),
+  ]
 );
-
+const injectedConectors = [
+  new InjectedConnector({
+    chains,
+  }),
+];
 const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
   chains,
@@ -46,7 +71,7 @@ const ChainProvider = (props) => {
   const [{ theme }] = useTheme();
 
   return (
-    <WagmiProvider client={wagmiClient}>
+    <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
         theme={
           theme === 'dark'
@@ -65,7 +90,7 @@ const ChainProvider = (props) => {
       >
         {props.children}
       </RainbowKitProvider>
-    </WagmiProvider>
+    </WagmiConfig>
   );
 };
 
