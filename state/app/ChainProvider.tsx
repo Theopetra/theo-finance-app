@@ -22,7 +22,7 @@ export const sepolia = {
     symbol: 'sepoliaETH',
   },
   rpcUrls: {
-    default: 'https://rpc.sepolia.dev',
+    default: 'https://sepolia.infura.io/v3/445d2fc9c7b64c7e976ae27a7ac27ae2',
   },
   blockExplorers: {
     default: { name: 'etherscan', url: 'https://sepolia.etherscan.io' },
