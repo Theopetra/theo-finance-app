@@ -8,6 +8,9 @@ import { useRouter } from 'next/router';
 import { setDeviceId, setWallet } from '@/lib/analytics';
 import { useAccount } from 'wagmi';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { useChainId } from '@/hooks/useChainId';
+import { fundConnectedWallet } from '@/hooks/fundConnectedWallet';
+import hre from 'hardhat';
 
 const AppWrapper = (props: JSX.IntrinsicAttributes & CustomAppProps) => (
   <AppProviders>
@@ -66,6 +69,14 @@ function App({ Component, pageProps }: CustomAppProps) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  //If using local mainnet fork, fund connected wallet
+  useEffect(() => {
+    const wallet = data?.address;
+    if (wallet && useChainId() === 31337) { 
+      fundConnectedWallet(wallet); 
+    }
+  }, [data?.address]);
 
   return (
     <AppContainer Header={PageHead} PageStateProvider={PageStateProvider}>
