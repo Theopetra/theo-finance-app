@@ -1,7 +1,9 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
-import { useNavigation } from '@/hooks/useNavigation';
+// import { useNavigation } from '@/hooks/useNavigation';
+
 import { formatTheo } from '@/lib/format_theo';
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
+import { navigation } from '@/pages/nav-config';
 import Link from 'next/link';
 import { Fragment } from 'react';
 import { useAccount, useBalance } from 'wagmi';
@@ -21,7 +23,7 @@ const classes = {
 };
 
 const Navigation = () => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const [{ transactionPending }] = useBuyForm();
   const { data: account } = useAccount();
   const { address } = useContractInfo('TheopetraERC20Token');

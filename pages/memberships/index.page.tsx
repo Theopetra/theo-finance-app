@@ -60,7 +60,7 @@ const Memberships = () => {
       warning: 'Rewards and part of principal slashed if unstaked while locked - more info',
     },
   ];
-
+  if (!process.env.NEXT_PUBLIC_MEMBERSHIPS) return null;
   return (
     <PageContainer>
       <div className="pt-4">
