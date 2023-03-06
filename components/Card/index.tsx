@@ -1,3 +1,4 @@
+import { useTheme } from '@/state/ui/theme';
 import { ReactElement } from 'react';
 
 type CardProps = {
@@ -20,12 +21,15 @@ const Card = ({
   className,
   headerClasses,
 }: CardProps) => {
+  const [{ theme }] = useTheme();
   const LMBGC = lightModeBgColor ? lightModeBgColor : 'bg-gradient-to-b from-white to-[#EDEDED]';
   const DMBGC = darkModeBgColor ? `dark:${darkModeBgColor}` : 'dark:bg-theo-cyan dark:bg-none';
 
   return (
     <div
-      className={`${LMBGC} ${DMBGC} ${className} flex flex-1 flex-col rounded-xl mt-2 text-theo-navy dark:text-white sm:mt-4 `}
+      className={`${
+        theme != 'dark' && LMBGC
+      } ${DMBGC} ${className} mt-2 flex flex-1 flex-col rounded-xl text-theo-navy dark:text-white sm:mt-4 `}
     >
       {(title || cardHeader) && (
         <div

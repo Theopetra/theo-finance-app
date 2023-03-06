@@ -22,6 +22,7 @@ const Whitelist = () => {
   const [{ groupedBondMarkets }] = useBuyForm();
   const { data: account, isError, isLoading } = useAccount();
   const router = useRouter();
+
   const hours = (timer?.days || 0) * 24 + (timer?.hours || 0);
 
   useEffect(() => {
@@ -32,7 +33,6 @@ const Whitelist = () => {
           end: new Date(whitelistExpiry),
         });
         if (Date.now() <= whitelistExpiry) {
-          console.log('duration', duration);
           setTimer(duration);
         } else {
           clearTimeout(timer);
@@ -42,6 +42,7 @@ const Whitelist = () => {
       return () => clearTimeout(timer);
     }
   }, []);
+  // disabling page. enable with page.tsx extension
 
   return (
     <>

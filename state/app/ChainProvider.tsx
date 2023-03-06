@@ -1,18 +1,44 @@
 import {
-  configureChains,
   getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { chain, createClient, WagmiProvider } from 'wagmi';
+import { chain, createClient, configureChains, WagmiProvider, WagmiConfig, Chain } from 'wagmi';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+export const sepolia = {
+  id: 11155111,
+  name: 'Sepolia',
+  network: 'sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'sepoliaETH',
+    symbol: 'sepoliaETH',
+  },
+  rpcUrls: {
+    default: 'https://sepolia.infura.io/v3/445d2fc9c7b64c7e976ae27a7ac27ae2',
+  },
+  blockExplorers: {
+    default: { name: 'etherscan', url: 'https://sepolia.etherscan.io' },
+  },
+} as Chain;
 
-const localChains = [chain.goerli];
-const prodChains = [chain.mainnet];
+const envChains = () => {
+  switch (process.env.NEXT_PUBLIC_ENV) {
+    case 'production':
+      return [chain.mainnet];
+    case 'staging':
+      return [sepolia];
+    default:
+      return [chain.hardhat, chain.localhost, sepolia];
+  }
+};
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
@@ -25,11 +51,17 @@ if (!alchemyId) {
   console.log('WARNING: No alchemy id specified!');
 }
 
-const { chains, provider } = configureChains(
-  process.env.NODE_ENV === 'production' ? prodChains : localChains,
-  [infuraProvider({ infuraId }), alchemyProvider({ alchemyId }), publicProvider()]
-);
-
+const { chains, provider } = configureChains(envChains(), [
+  jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
+  infuraProvider({ infuraId }),
+  alchemyProvider({ alchemyId }),
+  publicProvider(),
+]);
+const injectedConectors = [
+  new InjectedConnector({
+    chains,
+  }),
+];
 const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
   chains,
@@ -44,7 +76,7 @@ const ChainProvider = (props) => {
   const [{ theme }] = useTheme();
 
   return (
-    <WagmiProvider client={wagmiClient}>
+    <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
         theme={
           theme === 'dark'
@@ -63,7 +95,7 @@ const ChainProvider = (props) => {
       >
         {props.children}
       </RainbowKitProvider>
-    </WagmiProvider>
+    </WagmiConfig>
   );
 };
 

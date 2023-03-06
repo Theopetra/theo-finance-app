@@ -1,14 +1,13 @@
 import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import ConfirmBuy, {
-  LockDurationRow,
+import ConfirmClaim, {
   MarketDiscountRow,
-  PurchaseAmountRow,
-  TheoPurchasePriceRow,
-} from './ConfirmBuy';
-import DiscountBuyForm from './DiscountBuyForm';
+  TheoPurchaseDateRow,
+  TokensToClaimRow,
+  TokensUnlockedRow,
+} from './ConfirmClaim';
 
-const Failed = ({ error }) => {
+const Failed = ({ purchase, error }) => {
   const [, { openModal }] = useModal();
   let errorMsg;
 
@@ -29,7 +28,10 @@ const Failed = ({ error }) => {
   return (
     <div>
       <div className="mb-8 flex items-center justify-between ">
-        <button onClick={() => openModal(<ConfirmBuy />)} className="text-theo-cyan">
+        <button
+          onClick={() => openModal(<ConfirmClaim purchase={purchase} />)}
+          className="text-theo-cyan"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-12 w-12"
@@ -46,7 +48,7 @@ const Failed = ({ error }) => {
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
           <div className="mb-4 text-3xl font-bold sm:text-4xl">
-            Buy Failed...
+            Claim Failed...
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="inline-block w-8 text-theo-cyan sm:w-10"
@@ -70,15 +72,15 @@ const Failed = ({ error }) => {
       </div>
       <div className="mb-4 flex flex-col gap-2">
         <MarketDiscountRow />
-        <TheoPurchasePriceRow />
-        <PurchaseAmountRow />
-        <LockDurationRow />
+        <TheoPurchaseDateRow date={purchase.date} />
+        <TokensToClaimRow total={purchase.amount} />
+        <TokensUnlockedRow date={purchase.unlockDate} />
       </div>
       <div className="flex w-full items-center justify-center">
         <button
           className="border-button w-60"
           onClick={() => {
-            openModal(<DiscountBuyForm />);
+            openModal(<ConfirmClaim purchase={purchase} />);
           }}
         >
           Try Again

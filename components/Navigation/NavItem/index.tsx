@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, ReactElement, useState } from 'react';
 import Icon from '@/components/Icons';
 import { useTheme } from '@/state/ui/theme';
 import { classNames } from '@/util/class-names-util';
@@ -9,7 +9,7 @@ type NavItemProps = {
   name?: string;
   href?: string;
   disabled?: boolean;
-  icon?: string;
+  icon?: string | ReactElement;
   subNav?: NavItemProps[];
   target?: string;
 };
@@ -50,7 +50,7 @@ const NavItem = ({ item }: NavItem) => {
         >
           <div>
             <div className={`flex items-center`}>
-              {icon && <Icon name={icon} className="mr-4 w-8" />}
+              {icon}
               <div>{name}</div>
             </div>
           </div>

@@ -8,7 +8,6 @@ import FauxModal from '../FauxModal';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { Transition } from '@headlessui/react';
 import { UserPurchasesProvider } from '@/pages/discount-buy/state/UserPurchasesProvider';
-import BuyFormProvider from '@/pages/discount-buy/state/BuyFormProvider';
 
 const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
   children,
@@ -45,10 +44,10 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
                 beforeLeave={() => setTransitioning(true)}
                 afterLeave={() => setTransitioning(false)}
                 show={isOpen}
-                enter="absolute inset-0 z-40 transition-all duration-250"
+                enter="fixed inset-0 z-40 transition-all duration-250"
                 enterFrom="translate-x-32 opacity-0"
                 enterTo=" translate-x-0 opacitity-1"
-                leave="absolute inset-0 z-40 transition-all duration-250"
+                leave="fixed inset-0 z-40 transition-all duration-250"
                 leaveFrom="translate-x-0 opacity-1"
                 leaveTo="translate-x-32 opacity-0"
               >

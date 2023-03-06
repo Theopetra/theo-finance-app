@@ -8,6 +8,7 @@ import BuyFormProvider from './state/BuyFormProvider';
 import DiscountBuyForm from './components/DiscountBuyForm';
 import useBuyForm from './state/use-buy-form';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
+import { Intersect } from 'phosphor-react';
 
 const STATS = [
   {
@@ -29,7 +30,7 @@ const DiscountBuy = () => {
       header: {
         primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Intro</span>,
       },
-      icon: 'intersect',
+      icon: <Intersect size={26} className="mr-2 w-8" />,
       data: {
         level: { label: 'Intro', value: 'intro' },
         discount: { label: 'Discount', value: '1-4%' },
@@ -44,7 +45,7 @@ const DiscountBuy = () => {
       header: {
         primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Intermediate</span>,
       },
-      icon: 'intersect',
+      icon: <Intersect size={26} className="mr-2 w-8" />,
       data: {
         level: { label: 'Intermediate', value: 'intermediate' },
         discount: { label: 'Discount', value: '3-9%' },
@@ -59,7 +60,7 @@ const DiscountBuy = () => {
       header: {
         primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Pro</span>,
       },
-      icon: 'intersect',
+      icon: <Intersect size={26} className="mr-2 w-8" />,
       highlight: true,
       data: {
         level: { label: 'Pro', value: 'pro' },
@@ -72,9 +73,6 @@ const DiscountBuy = () => {
         'Important: New buys are auto-staked (accrue rebase rewards) and no longer vest linearly',
     },
   ];
-
-  // TODO: remove this line when we are ready for GA.
-  return <p>Coming soon.</p>;
 
   return (
     <>
@@ -106,7 +104,7 @@ const DiscountBuy = () => {
                       setSelection(props.data);
                       openModal(<DiscountBuyForm />);
                     },
-                    icon: 'intersect',
+                    icon: <Intersect size={26} className="mr-2 w-8" />,
                   }}
                 />
               </Fragment>

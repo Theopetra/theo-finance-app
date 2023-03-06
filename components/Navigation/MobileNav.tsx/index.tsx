@@ -4,9 +4,10 @@ import Logo from '../Logo';
 import NavItem from '../NavItem';
 import { useTheme } from '@/state/ui/theme';
 import { useNavigation } from '@/hooks/useNavigation';
+import { navigation } from '@/pages/nav-config';
 
 const MobileNav = () => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const [{ navigationOpen }] = useTheme();
   return (
     <Transition.Root show={navigationOpen} as={Fragment}>

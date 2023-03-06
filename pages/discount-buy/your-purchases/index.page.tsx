@@ -1,25 +1,43 @@
 import PageContainer from '@/components/PageContainer';
 import { formatTheo } from '@/lib/format_theo';
+import ConfirmClaim from '@/pages/claim/components/ConfirmClaim';
+import useModal from '@/state/ui/theme/hooks/use-modal';
 import { format } from 'date-fns';
 import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
 import { useUserPurchases } from '../state/use-user-purchases';
 import PurchasesTable from './components/PurchasesTable';
+const whitelistExpiry = parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0');
 
 const YourPurchases = () => {
   const { data, status } = useAccount();
   const [{ purchases }] = useUserPurchases();
+  const [, { openModal }] = useModal();
+  const ClaimButton = ({ purchase }) => (
+    <button
+      className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
+      disabled={!purchase.matured_}
+      onClick={() => {
+        openModal(<ConfirmClaim purchase={purchase} />);
+      }}
+    >
+      Claim THEO
+    </button>
+  );
+  const formattedPurchases = useMemo(
+    () =>
+      purchases?.map((p) => {
+        return {
+          date: new Date(p.created_),
+          amount: `${formatTheo(p.payout_)}`,
+          discount: p.created_ < whitelistExpiry ? `Pre-Market` : p.discount_,
 
-  const formattedPurchases = purchases?.map((p) => {
-    return {
-      date: new Date(p.created_ * 1000),
-      amount: `${formatTheo(p.payout_)}`,
-      // POST-LAUNCH TODO: show pre-market for purchases before public bond depo, else discount_
-      discount: `Pre-Market`,
-      unlockDate: new Date(p.expiry_ * 1000),
-      status: 'Locked',
-    };
-  });
+          unlockDate: new Date(p.expiry_),
+          ...p,
+        };
+      }),
+    [purchases]
+  );
 
   // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(
@@ -46,9 +64,13 @@ const YourPurchases = () => {
       },
       {
         Header: 'Status',
-        accessor: 'status',
+        accessor: 'matured_',
         width: '10%',
-        Cell: ({ value }) => <div className="flex justify-center">{value}</div>,
+        Cell: ({ value: matured, cell }) => (
+          <div className="flex justify-center">
+            {matured ? <ClaimButton purchase={cell.row.original} /> : 'Locked'}
+          </div>
+        ),
       },
       {
         Header: 'Unlock Date',
@@ -65,8 +87,10 @@ const YourPurchases = () => {
     <PageContainer>
       {data?.address && formattedPurchases?.length > 0 ? (
         <PurchasesTable columns={columns} data={formattedPurchases} />
+      ) : data?.address && formattedPurchases?.length === 0 ? (
+        <div className="text-center font-bold dark:text-white">You have no purchases.</div>
       ) : (
-        <p className="font-bold dark:text-white">Please connect your wallet.</p>
+        <div className="text-center font-bold dark:text-white">Please connect your wallet.</div>
       )}
     </PageContainer>
   );
