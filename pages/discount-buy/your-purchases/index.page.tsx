@@ -3,6 +3,7 @@ import { formatTheo } from '@/lib/format_theo';
 import ConfirmClaim from '@/pages/claim/components/ConfirmClaim';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { format } from 'date-fns';
+import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
 import { useUserPurchases } from '../state/use-user-purchases';
@@ -27,12 +28,14 @@ const YourPurchases = () => {
   const formattedPurchases = useMemo(
     () =>
       purchases?.map((p) => {
+        const unlockDate = new Date(BigNumber.from(p.expiry_).toNumber() * 1000);
+        const created = new Date(BigNumber.from(p.created_).toNumber() * 1000);
+
         return {
-          date: new Date(p.created_),
+          date: created,
           amount: `${formatTheo(p.payout_)}`,
           discount: p.created_ < whitelistExpiry ? `Pre-Market` : p.discount_,
-
-          unlockDate: new Date(p.expiry_),
+          unlockDate,
           ...p,
         };
       }),
@@ -75,7 +78,7 @@ const YourPurchases = () => {
       {
         Header: 'Unlock Date',
         accessor: (c) => c.unlockDate,
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
+        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
 
         width: '15%',
       },
