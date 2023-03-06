@@ -42,7 +42,7 @@ const Whitelist = () => {
       return () => clearTimeout(timer);
     }
   }, []);
-  if (!process.env.NEXT_PUBLIC_MEMBERSHIPS) return null;
+  // disabling page. enable with page.tsx extension
 
   return (
     <>
