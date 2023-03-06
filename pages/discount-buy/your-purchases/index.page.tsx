@@ -87,8 +87,10 @@ const YourPurchases = () => {
     <PageContainer>
       {data?.address && formattedPurchases?.length > 0 ? (
         <PurchasesTable columns={columns} data={formattedPurchases} />
+      ) : data?.address && formattedPurchases?.length === 0 ? (
+        <div className="text-center font-bold dark:text-white">You have no purchases.</div>
       ) : (
-        <p className="font-bold dark:text-white">Please connect your wallet.</p>
+        <div className="text-center font-bold dark:text-white">Please connect your wallet.</div>
       )}
     </PageContainer>
   );
