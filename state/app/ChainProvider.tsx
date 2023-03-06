@@ -29,8 +29,16 @@ export const sepolia = {
   },
 } as Chain;
 
-const localChains = [chain.hardhat, chain.localhost, sepolia];
-const prodChains = [chain.mainnet];
+const envChains = () => {
+  switch (process.env.NEXT_PUBLIC_ENV) {
+    case 'production':
+      return [chain.mainnet];
+    case 'staging':
+      return [sepolia];
+    default:
+      return [chain.hardhat, chain.localhost, sepolia];
+  }
+};
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
@@ -43,15 +51,12 @@ if (!alchemyId) {
   console.log('WARNING: No alchemy id specified!');
 }
 
-const { chains, provider } = configureChains(
-  process.env.NEXT_PUBLIC_ENV === 'production' ? prodChains : localChains,
-  [
-    jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
-    infuraProvider({ infuraId }),
-    alchemyProvider({ alchemyId }),
-    publicProvider(),
-  ]
-);
+const { chains, provider } = configureChains(envChains(), [
+  jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
+  infuraProvider({ infuraId }),
+  alchemyProvider({ alchemyId }),
+  publicProvider(),
+]);
 const injectedConectors = [
   new InjectedConnector({
     chains,
