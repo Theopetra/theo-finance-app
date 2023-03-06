@@ -22,6 +22,7 @@ const Whitelist = () => {
   const [{ groupedBondMarkets }] = useBuyForm();
   const { data: account, isError, isLoading } = useAccount();
   const router = useRouter();
+
   const hours = (timer?.days || 0) * 24 + (timer?.hours || 0);
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const Whitelist = () => {
       return () => clearTimeout(timer);
     }
   }, []);
+  if (!process.env.NEXT_PUBLIC_MEMBERSHIPS) return null;
 
   return (
     <>
