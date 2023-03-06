@@ -77,45 +77,49 @@ export const BuyFormProvider: React.FC = (props) => {
       if (cachedMkts) {
         setGroupedBondMarketsMap(cachedMkts);
       } else {
-        const WhitelistBondMarkets = await contract.liveMarkets();
+        try {
+          const WhitelistBondMarkets = await contract.liveMarkets();
 
-        const termsMap = {};
-        if (WhitelistBondMarkets) {
-          const setTerms =
-            WhitelistBondMarkets?.map(
-              async (bondMarket) =>
-                await contract
-                  .terms(bondMarket)
-                  .then(async (terms) => {
-                    const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
-                    const mapKey = vestingInMonths;
+          const termsMap = {};
+          if (WhitelistBondMarkets) {
+            const setTerms =
+              WhitelistBondMarkets?.map(
+                async (bondMarket) =>
+                  await contract
+                    .terms(bondMarket)
+                    .then(async (terms) => {
+                      const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
+                      const mapKey = vestingInMonths;
 
-                    const market = await contract.markets(bondMarket).then((market) => market);
+                      const market = await contract.markets(bondMarket).then((market) => market);
 
-                    return (termsMap[mapKey] = {
-                      header: mapKey,
-                      highlight: vestingInMonths === 18,
-                      markets: [
-                        ...(termsMap?.[mapKey] ? termsMap?.[mapKey].markets : []),
-                        {
-                          ...terms,
-                          marketData: Object.assign({}, market),
-                          id: bondMarket.toString(),
-                        },
-                      ],
-                    });
-                  })
-                  .catch((err) => console.log(err.stack))
-            ) || [];
+                      return (termsMap[mapKey] = {
+                        header: mapKey,
+                        highlight: vestingInMonths === 18,
+                        markets: [
+                          ...(termsMap?.[mapKey] ? termsMap?.[mapKey].markets : []),
+                          {
+                            ...terms,
+                            marketData: Object.assign({}, market),
+                            id: bondMarket.toString(),
+                          },
+                        ],
+                      });
+                    })
+                    .catch((err) => console.log(err.stack))
+              ) || [];
 
-          Promise.allSettled(setTerms).then(([result]) => {
-            setGroupedBondMarketsMap(termsMap);
-            cache.setItem(
-              'groupedBondMarketsMap',
-              Object.assign({}, termsMap),
-              process.env.NEXT_PUBLIC_GROUPED_BOND_MKTS_CACHE_SECS
-            );
-          });
+            Promise.allSettled(setTerms).then(([result]) => {
+              setGroupedBondMarketsMap(termsMap);
+              cache.setItem(
+                'groupedBondMarketsMap',
+                Object.assign({}, termsMap),
+                process.env.NEXT_PUBLIC_GROUPED_BOND_MKTS_CACHE_SECS
+              );
+            });
+          }
+        } catch (err) {
+          console.log(err);
         }
       }
     }
