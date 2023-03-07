@@ -51,15 +51,12 @@ if (!alchemyId) {
   console.log('WARNING: No alchemy id specified!');
 }
 
-const { chains, provider } = configureChains(
-  envChains(),
-  [
-    jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
-    infuraProvider({ infuraId }),
-    alchemyProvider({ alchemyId }),
-    publicProvider(),
-  ]
-);
+const { chains, provider } = configureChains(envChains(), [
+  // jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
+  infuraProvider({ infuraId }),
+  alchemyProvider({ alchemyId }),
+  publicProvider(),
+]);
 
 const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
