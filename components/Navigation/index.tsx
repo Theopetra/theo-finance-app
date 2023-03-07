@@ -15,7 +15,7 @@ const socialLinks = [
 const classes = {
   statContainer: 'flex flex-row-reverse items-center justify-between flex-1  ',
   number: 'font-bold text-theo-cyan dark:text-white',
-  label: 'font-semibold  text-theo-navy dark:text-theo-cyan',
+  label: 'font-semibold text-sm text-theo-navy dark:text-theo-cyan',
 };
 
 const Navigation = () => {
@@ -59,7 +59,7 @@ const Navigation = () => {
           {balance?.value && (
             <div className={classes.statContainer}>
               <div className={classes.number}>{formatTheo(balance?.value)}</div>
-              <div className={classes.label}>Your Unlocked $THEO</div>
+              <div className={classes.label}>$THEO In Your Wallet</div>
             </div>
           )}
         </div>
