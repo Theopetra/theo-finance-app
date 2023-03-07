@@ -50,7 +50,11 @@ const YourPurchases = () => {
       {
         Header: 'Purchased Date',
         accessor: (c) => c.date,
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd HH:mm:ss zzzz'),
+        Cell: ({ value }) => (
+          <span title={format(value, 'yyyy-MM-dd HH:mm:ss zzzz')}>
+            {format(value, 'yyyy-MM-dd')}
+          </span>
+        ),
         width: '10%',
       },
       {
@@ -80,8 +84,11 @@ const YourPurchases = () => {
       {
         Header: 'Unlock Date',
         accessor: (c) => c.unlockDate,
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
-
+        Cell: ({ value }) => (
+          <span title={format(value, 'yyyy-MM-dd HH:mm:ss zzzz')}>
+            {format(value, 'yyyy-MM-dd')}
+          </span>
+        ),
         width: '15%',
       },
     ],
