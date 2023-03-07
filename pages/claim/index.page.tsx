@@ -12,6 +12,7 @@ import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import { formatTheo } from '@/lib/format_theo';
 import { useMemo } from 'react';
 import { BigNumber } from 'ethers';
+import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 
 const Claim = () => {
   const [{ purchases }] = useUserPurchases();
@@ -98,5 +99,6 @@ const Claim = () => {
 Claim.PageHead = () => {
   return <div>Claim your THEO</div>;
 };
+Claim.PageStateProvider = (props) => <UserPurchasesProvider {...props} />;
 
 export default Claim;

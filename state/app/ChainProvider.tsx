@@ -60,15 +60,12 @@ const { chains, provider } = configureChains(
     publicProvider(),
   ]
 );
-const injectedConectors = [
-  new InjectedConnector({
-    chains,
-  }),
-];
+
 const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
   chains,
 });
+
 export const wagmiClient = createClient({
   autoConnect: true,
   connectors,

@@ -6,14 +6,9 @@ import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import { useRouter } from 'next/router';
 import { setDeviceId, setWallet } from '@/lib/analytics';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
-const AppWrapper = (props: JSX.IntrinsicAttributes & CustomAppProps) => (
-  <AppProviders>
-    <App {...props} />
-  </AppProviders>
-);
 type AppComponentExtensions = {
   PageHead: FC;
   PageStateProvider: any;
@@ -73,5 +68,11 @@ function App({ Component, pageProps }: CustomAppProps) {
     </AppContainer>
   );
 }
+
+const AppWrapper = (props: JSX.IntrinsicAttributes & CustomAppProps) => (
+  <AppProviders>
+    <App {...props} />
+  </AppProviders>
+);
 
 export default AppWrapper;

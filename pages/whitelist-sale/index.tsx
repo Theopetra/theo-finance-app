@@ -128,5 +128,6 @@ Whitelist.PageHead = () => {
     </>
   );
 };
+Whitelist.PageStateProvider = (props) => <BuyFormProvider {...props} />;
 
 export default Whitelist;

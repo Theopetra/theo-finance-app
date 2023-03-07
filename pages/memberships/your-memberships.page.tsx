@@ -10,6 +10,7 @@ import { cache } from '@/lib/cache';
 import { logEvent } from '@/lib/analytics';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
+import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 
 const PenaltyPopover = () => (
   <Popover className="relative -mt-2  ">
@@ -253,6 +254,7 @@ const YourMemberships = () => {
     </PageContainer>
   );
 };
+YourMemberships.PageStateProvider = (props) => <UserPurchasesProvider {...props} />;
 
 YourMemberships.PageHead = () => {
   return <div>Your Memberships</div>;

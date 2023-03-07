@@ -6,7 +6,9 @@ import { format } from 'date-fns';
 import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
+import BuyFormProvider from '../state/BuyFormProvider';
 import { useUserPurchases } from '../state/use-user-purchases';
+import { UserPurchasesProvider } from '../state/UserPurchasesProvider';
 import PurchasesTable from './components/PurchasesTable';
 const whitelistExpiry = parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0');
 
@@ -98,8 +100,10 @@ const YourPurchases = () => {
     </PageContainer>
   );
 };
+YourPurchases.PageStateProvider = (props) => <UserPurchasesProvider {...props} />;
 
 YourPurchases.PageHead = () => {
   return <div>Your Purchases</div>;
 };
+
 export default YourPurchases;
