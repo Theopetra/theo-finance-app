@@ -52,9 +52,9 @@ if (!alchemyId) {
 }
 
 const { chains, provider } = configureChains(
-  [chain.mainnet],
+  envChains(),
   [
-    // jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
+    jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
     infuraProvider({ infuraId }),
     alchemyProvider({ alchemyId }),
     publicProvider(),
