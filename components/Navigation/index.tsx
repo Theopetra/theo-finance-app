@@ -1,10 +1,6 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
-// import { useNavigation } from '@/hooks/useNavigation';
-
 import { formatTheo } from '@/lib/format_theo';
-import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
 import { navigation } from '@/pages/nav-config';
-import Link from 'next/link';
 import { Fragment } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import Icon from '../Icons';
@@ -19,20 +15,14 @@ const socialLinks = [
 const classes = {
   statContainer: 'flex flex-row-reverse items-center justify-between flex-1  ',
   number: 'font-bold text-theo-cyan dark:text-white',
-  label: 'font-semibold  text-theo-navy dark:text-theo-cyan',
+  label: 'font-semibold text-sm text-theo-navy dark:text-theo-cyan',
 };
 
 const Navigation = () => {
-  // const navigation = useNavigation();
-  const [{ transactionPending }] = useBuyForm();
   const { data: account } = useAccount();
   const { address } = useContractInfo('TheopetraERC20Token');
 
-  const {
-    data: balance,
-    isError: balanceIsError,
-    isLoading: balanceIsLoading,
-  } = useBalance({
+  const { data: balance } = useBalance({
     addressOrName: account?.address,
     formatUnits: 9,
     token: address,
@@ -47,7 +37,7 @@ const Navigation = () => {
         <nav className="mt-5 flex-1 space-y-2 px-2 pr-8 pl-8">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
-              <NavItem item={{ ...item, disabled: item.disabled || transactionPending }} />
+              <NavItem item={{ ...item, disabled: item.disabled }} />
             </Fragment>
           ))}
         </nav>
@@ -69,7 +59,7 @@ const Navigation = () => {
           {balance?.value && (
             <div className={classes.statContainer}>
               <div className={classes.number}>{formatTheo(balance?.value)}</div>
-              <div className={classes.label}>Your $THEO</div>
+              <div className={classes.label}>$THEO In Your Wallet</div>
             </div>
           )}
         </div>

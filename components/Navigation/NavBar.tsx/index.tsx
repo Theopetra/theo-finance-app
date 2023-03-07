@@ -25,7 +25,7 @@ const NavBar = () => {
         {balance?.value && (
           <div>
             <div className={classes.number}>{formatTheo(balance?.value)}</div>
-            <div className={classes.label}>Your $THEO</div>
+            <div className={classes.label}>$THEO In Your Wallet</div>
           </div>
         )}
       </div>

@@ -1,7 +1,7 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
 import { BigNumber } from 'ethers';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useAccount, useContract, useProvider } from 'wagmi';
 import { UserPurchasesContext } from './UserPurchasesProvider';
 
@@ -23,10 +23,9 @@ export const usePurchasesByContract = (contractName) => {
     signerOrProvider: provider,
   });
 
-  useEffect(() => {
+  useMemo(() => {
     async function callContract() {
       const cached = cache.getItem(`purchases-${contractName}`);
-
       if (cached) {
         setPendingNotes(cached);
       } else if (contract && data?.address) {
@@ -65,6 +64,7 @@ export const usePurchasesByContract = (contractName) => {
         } else {
           try {
             indexes = await contract.indexesFor(data?.address);
+            console.log(contract);
 
             const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
             const pn = await Promise.all(pnPromises);
