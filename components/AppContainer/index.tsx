@@ -50,9 +50,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
               {isLoading && <div className="  font-bold">Loading</div>}
 
               {activeChain?.id && !allowedChains.includes(activeChain.id) && (
-                <div className=" font-bold">
-                  Please connect to the Ethereum Mainnet. {activeChain.id}
-                </div>
+                <div className=" font-bold">Please connect to the Ethereum Mainnet.</div>
               )}
               {activeChain && allowedChains.includes(activeChain.id) && (
                 <PageStateProvider>
