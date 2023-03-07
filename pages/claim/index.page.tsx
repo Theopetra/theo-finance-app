@@ -80,7 +80,7 @@ const Claim = () => {
                 />
                 <button
                   className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
-                  disabled={!purchase.matured_}
+                  // disabled={!purchase.matured_}
                   onClick={() => {
                     openModal(<ConfirmClaim purchase={purchase} />);
                   }}

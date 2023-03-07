@@ -19,13 +19,13 @@ const PendingTransaction = ({
     },
   };
 
-  const [, { updateFormState }] = useBuyForm();
+  // const [, { updateFormState }] = useBuyForm();
 
-  useEffect(() => {
-    updateFormState({ transactionPending: true });
+  // useEffect(() => {
+  //   updateFormState({ transactionPending: true });
 
-    return () => updateFormState({ transactionPending: false });
-  }, []);
+  //   return () => updateFormState({ transactionPending: false });
+  // }, []);
 
   return (
     <div>

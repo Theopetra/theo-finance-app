@@ -17,7 +17,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
   const [{ theme }] = useTheme();
   const [{ isOpen, transitioning }, { setTransitioning }] = useModal();
   const { activeChain } = useNetwork();
-  console.log(activeChain);
+
   return (
     <div className={`${theme} h-full min-h-screen`}>
       <MobileNav />
