@@ -46,29 +46,35 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
                 <LightSwitch />
               </div>
             </div>
-            {activeChain?.id !== 1 ? (
-              <>Wrong Chain</>
-            ) : (
-              <PageStateProvider>
-                {/* provider */}
-                <Transition
-                  beforeEnter={() => setTransitioning(true)}
-                  afterEnter={() => setTransitioning(false)}
-                  beforeLeave={() => setTransitioning(true)}
-                  afterLeave={() => setTransitioning(false)}
-                  show={isOpen}
-                  enter="fixed inset-0 z-40 transition-all duration-250"
-                  enterFrom="translate-x-32 opacity-0"
-                  enterTo=" translate-x-0 opacitity-1"
-                  leave="fixed inset-0 z-40 transition-all duration-250"
-                  leaveFrom="translate-x-0 opacity-1"
-                  leaveTo="translate-x-32 opacity-0"
-                >
-                  <FauxModal />
-                </Transition>
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
-              </PageStateProvider>
-            )}
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              {!activeChain ? (
+                <div className="mt-20 flex items-center justify-center font-bold">Loading...</div>
+              ) : activeChain?.id !== 1 ? (
+                <div className="mt-20 flex items-center justify-center font-bold">
+                  Please swith to a supported chain.
+                </div>
+              ) : (
+                <PageStateProvider>
+                  {/* provider */}
+                  <Transition
+                    beforeEnter={() => setTransitioning(true)}
+                    afterEnter={() => setTransitioning(false)}
+                    beforeLeave={() => setTransitioning(true)}
+                    afterLeave={() => setTransitioning(false)}
+                    show={isOpen}
+                    enter="fixed inset-0 z-40 transition-all duration-250"
+                    enterFrom="translate-x-32 opacity-0"
+                    enterTo=" translate-x-0 opacitity-1"
+                    leave="fixed inset-0 z-40 transition-all duration-250"
+                    leaveFrom="translate-x-0 opacity-1"
+                    leaveTo="translate-x-32 opacity-0"
+                  >
+                    <FauxModal />
+                  </Transition>
+                  {children}
+                </PageStateProvider>
+              )}
+            </div>
           </div>
         </main>
       </div>
