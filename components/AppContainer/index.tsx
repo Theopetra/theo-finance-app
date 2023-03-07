@@ -8,6 +8,7 @@ import FauxModal from '../FauxModal';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { Transition } from '@headlessui/react';
 import { useNetwork } from 'wagmi';
+import { Fragment } from 'react';
 
 const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
   children,
@@ -16,7 +17,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
 }) => {
   const [{ theme }] = useTheme();
   const [{ isOpen, transitioning }, { setTransitioning }] = useModal();
-  const { activeChain } = useNetwork();
+  const { isLoading, activeChain } = useNetwork();
 
   return (
     <div className={`${theme} h-full min-h-screen`}>
@@ -47,13 +48,12 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
               </div>
             </div>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {!activeChain ? (
-                <div className="mt-20 flex items-center justify-center font-bold">Loading...</div>
-              ) : activeChain?.id !== 1 ? (
-                <div className="mt-20 flex items-center justify-center font-bold">
-                  Please swith to a supported chain.
-                </div>
-              ) : (
+              {isLoading && <div className="  font-bold">Loading</div>}
+
+              {activeChain?.id !== 1 && (
+                <div className=" font-bold">Please connect to the Ethereum Mainnet.</div>
+              )}
+              {activeChain && activeChain.id === 1 && (
                 <PageStateProvider>
                   {/* provider */}
                   <Transition
@@ -62,6 +62,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
                     beforeLeave={() => setTransitioning(true)}
                     afterLeave={() => setTransitioning(false)}
                     show={isOpen}
+                    as={'div'}
                     enter="fixed inset-0 z-40 transition-all duration-250"
                     enterFrom="translate-x-32 opacity-0"
                     enterTo=" translate-x-0 opacitity-1"
