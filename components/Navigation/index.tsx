@@ -59,7 +59,7 @@ const Navigation = () => {
           {balance?.value && (
             <div className={classes.statContainer}>
               <div className={classes.number}>{formatTheo(balance?.value)}</div>
-              <div className={classes.label}>Your $THEO</div>
+              <div className={classes.label}>Your Unlocked $THEO</div>
             </div>
           )}
         </div>
