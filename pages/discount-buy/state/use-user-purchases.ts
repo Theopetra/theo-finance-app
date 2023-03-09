@@ -83,7 +83,7 @@ export const usePurchasesByContract = (contractName) => {
       }
     }
     callContract();
-  }, [contract, data?.address, render, contractName]);
+  }, [contract, data?.address, contractName]);
 
   return { pendingNotes, reRender };
 };

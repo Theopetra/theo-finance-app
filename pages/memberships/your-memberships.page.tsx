@@ -3,11 +3,10 @@ import { formatTheo } from '@/lib/format_theo';
 import { add, format } from 'date-fns';
 import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
-import { useAccount, useContract, useContractRead, useContractWrite, useSigner } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite, useSigner } from 'wagmi';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import PurchasesTable from '../discount-buy/your-purchases/components/PurchasesTable';
 import { cache } from '@/lib/cache';
-import { logEvent } from '@/lib/analytics';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
@@ -26,10 +25,13 @@ const PenaltyPopover = () => (
   </Popover>
 );
 
-const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRender }) => {
+const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
   // STAKE
   const { address, abi } = useContractInfo(purchase.contractName);
-
+  const { address: sTheoAddress, abi: sAbi } = useContractInfo('sTheopetra');
+  const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
+  const theoAddress = purchase.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress;
+  const theoAbi = purchase.contractName === 'TheopetraStaking' ? sAbi : pAbi;
   // const ad = await contract.stakingInfo(account.address, purchase.index);
   const { data: stakingInfo } = useContractRead(
     {
@@ -58,9 +60,7 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
   } = useContractWrite(
     {
       addressOrName: theoAddress,
-      contractInterface: [
-        'function approve(address _spender, uint256 _value) public returns (bool success)',
-      ],
+      contractInterface: theoAbi,
       signerOrProvider: signer,
     },
     'approve',
@@ -68,7 +68,6 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       async onSuccess(data) {
         const receipt = await data.wait();
         if (receipt.status === 1) {
-          logEvent({ name: 'erc20_approved' });
           unstake();
         } else {
           console.log('failed', receipt);
@@ -93,7 +92,6 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       async onSuccess(data) {
         const receipt = await data.wait();
         if (receipt.status === 1) {
-          logEvent({ name: 'unstake_completed' });
           cache.clear();
           reRender();
         }
@@ -110,7 +108,7 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       <button
         className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
         onClick={() => {
-          console.log(purchase.contractName, theoAddress);
+          console.log(purchase.contractName);
 
           approve();
         }}
@@ -149,8 +147,6 @@ const YourMemberships = () => {
 
   const [, { reRender }] = useUserPurchases();
   const { data: account } = useAccount();
-  const { address: sTheoAddress } = useContractInfo('sTheopetra');
-  const { address: pTheoAddress } = useContractInfo('pTheopetra');
 
   const { data: signer } = useSigner();
 
@@ -208,9 +204,6 @@ const YourMemberships = () => {
             reRender={reRender}
             account={account}
             signer={signer}
-            theoAddress={
-              cell.row.original.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress
-            }
           />
         ),
       },
