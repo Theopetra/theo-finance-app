@@ -52,7 +52,10 @@ if (!alchemyId) {
 }
 
 const { chains, provider } = configureChains(envChains(), [
-  // jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
+  ...(process.env.NEXT_PUBLIC_ENV !== 'production' ||
+  (process.env.NEXT_PUBLIC_ENV as any) !== 'staging'
+    ? [jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) })]
+    : []),
   infuraProvider({ infuraId }),
   alchemyProvider({ alchemyId }),
   publicProvider(),
