@@ -3,8 +3,8 @@ import sTheopetraArtifact from '../artifacts/sTheopetra.json';
 import pTheopetraArtifact from '../artifacts/pTheopetra.json';
 import theopetraAuthorityArtifact from '../artifacts/TheopetraAuthority.json';
 import theopetraBondRepositoryArtifact from '../artifacts/TheopetraBondDepository.json';
-import theopetraStakingArtifact from '../artifacts/TheopetraStaking.json'
-import theopetraStakingLockedArtifact from '../artifacts/TheopetraStakingLocked.json'
+import theopetraStakingArtifact from '../artifacts/TheopetraStaking.json';
+import theopetraStakingLockedArtifact from '../artifacts/TheopetraStakingLocked.json';
 import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
@@ -114,10 +114,10 @@ export const contractMetadata = {
   },
   pTheopetra: {
     address: {
-      1: ' 0xc4B2805Bb463E60235fae3EDc0eC7098D4e7E69d',
+      1: '0xc4B2805Bb463E60235fae3EDc0eC7098D4e7E69d',
       4: '0xCD1a66F06eC36Db3F040C6065e5AAC0866FcD77A',
       5: '0x219E77121E43B8EB13e73f1685C71FeD86f83461',
-      31337: ' 0xc4B2805Bb463E60235fae3EDc0eC7098D4e7E69d',
+      31337: '0xc4B2805Bb463E60235fae3EDc0eC7098D4e7E69d',
       11155111: '0x4FDCC3dE1c882Db748f72A3e28117BB3aB643A83',
     },
     abi: pTheopetraArtifact.abi,
