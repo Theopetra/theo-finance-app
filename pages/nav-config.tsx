@@ -1,4 +1,4 @@
-import { Coin, File, Gauge } from 'phosphor-react';
+import { Coin, File, Gauge, LockLaminated } from 'phosphor-react';
 export const navigation = [
   { name: 'Dashboard', href: '/', icon: <Gauge size={26} className="mr-2 w-8" /> },
   // {
@@ -29,12 +29,12 @@ export const navigation = [
     icon: <Coin size={26} className="mr-2 w-8" />,
     disabled: false,
   },
-  // {
-  //   name: 'Memberships',
-  //   href: '/memberships',
-  //   icon: <LockLaminated size={26} className="mr-2 w-8" />,
-  //   disabled: false,
-  // },
+  {
+    name: 'Memberships',
+    href: '/memberships',
+    icon: <LockLaminated size={26} className="mr-2 w-8" />,
+    disabled: false,
+  },
   {
     name: 'Learn More',
     href: 'https://docs.theopetralabs.com/',

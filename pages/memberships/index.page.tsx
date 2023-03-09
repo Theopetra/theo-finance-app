@@ -6,6 +6,7 @@ import StatCard from '@/components/StatCard';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
 import { Fragment } from 'react';
+import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import SubscribeFormModal from './components/SubscribeFormModal';
 import membershipData from './membershipData';
 
@@ -90,7 +91,7 @@ const Memberships = () => {
     </PageContainer>
   );
 };
-
+Memberships.PageStateProvider = (props) => <UserPurchasesProvider {...props} />;
 Memberships.PageHead = () => {
   return <div>Memberships</div>;
 };

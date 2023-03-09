@@ -6,5 +6,5 @@ export function useEtherscanTxId(txId) {
   const chainId = useChainId();
   const networkName = networkNames[chainId];
   const baseUrl = etherscanBlockExplorers[networkName];
-  return `${baseUrl.url}/tx/${txId}`;
+  return `${baseUrl?.url}/tx/${txId}`;
 }

@@ -177,7 +177,6 @@ const YourMemberships = () => {
 
   const { data: signer } = useSigner();
 
-  // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(
     () => [
       {
