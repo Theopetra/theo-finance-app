@@ -64,7 +64,6 @@ export const usePurchasesByContract = (contractName) => {
         } else {
           try {
             indexes = await contract.indexesFor(data?.address);
-            console.log(contract);
 
             const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
             const pn = await Promise.all(pnPromises);
