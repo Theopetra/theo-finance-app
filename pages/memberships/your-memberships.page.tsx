@@ -28,7 +28,6 @@ const PenaltyPopover = () => (
 
 const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRender }) => {
   // STAKE
-
   const { address, abi } = useContractInfo(purchase.contractName);
 
   // const ad = await contract.stakingInfo(account.address, purchase.index);
@@ -51,7 +50,6 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
     false,
     [BigNumber.from(purchase.index).toNumber()],
   ];
-  // TODO: Approval on premium is unnessary
   // APPROVE
   const {
     data: approveData,
@@ -68,8 +66,6 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
     'approve',
     {
       async onSuccess(data) {
-        // console.log({ unstakeArgs });
-
         const receipt = await data.wait();
         if (receipt.status === 1) {
           logEvent({ name: 'erc20_approved' });
@@ -92,7 +88,7 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       contractInterface: abi,
       signerOrProvider: signer,
     },
-    'forfeit',
+    'unstake',
     {
       async onSuccess(data) {
         const receipt = await data.wait();
@@ -105,37 +101,17 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       onError(error) {
         console.log('error', error);
       },
-      args: [purchase.index],
-    }
-  );
-  // claim
-  const { write: claim, isLoading: claimLoading } = useContractWrite(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-      signerOrProvider: signer,
-    },
-    'claim',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'claim_completed' });
-          cache.clear();
-          reRender();
-        }
-      },
-      onError(error) {
-        console.log('error', error);
-      },
       args: unstakeArgs,
     }
   );
+
   return (
     <>
       <button
         className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
         onClick={() => {
+          console.log(purchase.contractName, theoAddress);
+
           approve();
         }}
       >
@@ -173,7 +149,8 @@ const YourMemberships = () => {
 
   const [, { reRender }] = useUserPurchases();
   const { data: account } = useAccount();
-  const { address: theoAddress } = useContractInfo('sTheopetra');
+  const { address: sTheoAddress } = useContractInfo('sTheopetra');
+  const { address: pTheoAddress } = useContractInfo('pTheopetra');
 
   const { data: signer } = useSigner();
 
@@ -231,7 +208,9 @@ const YourMemberships = () => {
             reRender={reRender}
             account={account}
             signer={signer}
-            theoAddress={theoAddress}
+            theoAddress={
+              cell.row.original.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress
+            }
           />
         ),
       },
