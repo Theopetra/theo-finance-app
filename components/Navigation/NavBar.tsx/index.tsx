@@ -18,6 +18,7 @@ const NavBar = () => {
     addressOrName: account?.address,
     formatUnits: 9,
     token: address,
+    watch: true,
   });
   return (
     <div className="fixed bottom-0 z-30 flex h-16 w-full justify-between bg-white pt-1 pl-1 dark:bg-black sm:pl-3 sm:pt-3 lg:hidden">

@@ -32,7 +32,6 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
   const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
   const theoAddress = purchase.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress;
   const theoAbi = purchase.contractName === 'TheopetraStaking' ? sAbi : pAbi;
-  // const ad = await contract.stakingInfo(account.address, purchase.index);
   const { data: stakingInfo } = useContractRead(
     {
       addressOrName: address,
@@ -108,8 +107,6 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
       <button
         className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
         onClick={() => {
-          console.log(purchase.contractName);
-
           approve();
         }}
       >

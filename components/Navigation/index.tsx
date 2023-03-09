@@ -26,6 +26,7 @@ const Navigation = () => {
     addressOrName: account?.address,
     formatUnits: 9,
     token: address,
+    watch: true,
   });
 
   return (
