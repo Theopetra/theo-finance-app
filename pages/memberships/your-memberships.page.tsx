@@ -43,7 +43,8 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
       cacheTime: cache.cacheTimesInMs.prices,
     }
   );
-  const amount = stakingInfo?.deposit && BigNumber.from(stakingInfo?.deposit).toNumber();
+  
+  const amount = BigNumber.from(stakingInfo?.[0]).toNumber() + BigNumber.from(purchase.rewards).toNumber(); 
 
   const unstakeArgs = [
     account?.address,
@@ -51,6 +52,7 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     false,
     [BigNumber.from(purchase.index).toNumber()],
   ];
+  console.log(unstakeArgs);
   // APPROVE
   const {
     data: approveData,

@@ -34,7 +34,7 @@ const SubscribeConfirm = ({
     membership.contractName
   );
 
-  const { address: theoAddress } = useContractInfo('TheopetraERC20Token');
+  const { address: theoAddress, abi: theoAbi } = useContractInfo('TheopetraERC20Token');
 
   const stakeArgs = [account?.address, depositAmountFormatted, true];
   // STAKE
@@ -80,9 +80,10 @@ const SubscribeConfirm = ({
   } = useContractWrite(
     {
       addressOrName: theoAddress,
-      contractInterface: [
-        'function approve(address _spender, uint256 _value) public returns (bool success)',
-      ],
+      contractInterface: theoAbi,
+      // [
+      //   'function approve(address _spender, uint256 _value) public returns (bool success)',
+      // ],
       signerOrProvider: signer,
     },
     'approve',
