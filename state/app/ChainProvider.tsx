@@ -4,8 +4,7 @@ import {
   darkTheme,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { chain, createClient, configureChains, WagmiProvider, WagmiConfig, Chain } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { chain, createClient, configureChains, WagmiConfig, Chain } from 'wagmi';
 
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';

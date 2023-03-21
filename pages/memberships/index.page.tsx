@@ -3,9 +3,13 @@ import CardList from '@/components/CardList';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
+import { useContractInfo } from '@/hooks/useContractInfo';
 import useModal from '@/state/ui/theme/hooks/use-modal';
+import { BigNumber } from 'ethers';
+import { Result } from 'ethers/lib/utils';
 import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
 import { Fragment } from 'react';
+import { useContract, useContractRead } from 'wagmi';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import SubscribeFormModal from './components/SubscribeFormModal';
 import membershipData from './membershipData';
@@ -22,9 +26,35 @@ const STATS = [
     tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
   },
 ];
-
+const rewardAsPercent = (reward: Result) => {
+  return Number(BigNumber.from(reward).toNumber() / 10000).toFixed();
+};
 const Memberships = () => {
   const [, { openModal }] = useModal();
+
+  // StakingDistributor
+  const { address, abi } = useContractInfo('StakingDistributor');
+
+  const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'nextRewardRate',
+    {
+      args: [0],
+    }
+  );
+  const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'nextRewardRate',
+    {
+      args: [1],
+    }
+  );
   const { premium, standard } = membershipData;
   const ACTION_CARD = [
     {
@@ -36,7 +66,12 @@ const Memberships = () => {
       icon: <LockLaminatedOpen size={24} className="w-10" />,
       data: [
         { label: 'Assets', value: 'THEO' },
-        { label: 'APY', value: `${standard.apy * 100}% THEO` },
+        {
+          label: 'APY',
+          value: `${
+            !isLoadingStaking && nextRewardRateStaking && rewardAsPercent(nextRewardRateStaking)
+          }% THEO`,
+        },
       ],
 
       warning: 'No slashing penalties incurred on standard memberships',
@@ -52,7 +87,9 @@ const Memberships = () => {
         { label: 'Assets', value: 'THEO' },
         {
           label: 'APY',
-          value: `${premium.apy * 100}% THEO`,
+          value: `${
+            !isLoadingLocked && nextRewardRateLocked && rewardAsPercent(nextRewardRateLocked)
+          }% THEO`,
           info: '+ ETH rebates for top 4000 Premium stakers',
         },
         { label: 'Locked for', value: '365 Days' },
