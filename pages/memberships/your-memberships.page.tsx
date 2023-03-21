@@ -43,15 +43,19 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
       cacheTime: cache.cacheTimesInMs.prices,
     }
   );
-  
-  const amount = BigNumber.from(stakingInfo?.[0]).toNumber() + BigNumber.from(purchase.rewards).toNumber(); 
 
-  const unstakeArgs = [
-    account?.address,
-    [amount],
-    false,
-    [BigNumber.from(purchase.index).toNumber()],
-  ];
+  const amount = useMemo(() => {
+    if (!stakingInfo) return 0;
+    return (
+      BigNumber.from(stakingInfo?.[0]).toNumber() + BigNumber.from(purchase.rewards).toNumber()
+    );
+  }, [stakingInfo, purchase]);
+
+  const unstakeArgs = useMemo(
+    () => [account?.address, [amount], false, [BigNumber.from(purchase.index).toNumber()]],
+    [amount, purchase]
+  );
+
   console.log(unstakeArgs);
   // APPROVE
   const {

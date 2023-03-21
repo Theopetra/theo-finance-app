@@ -9,7 +9,7 @@ import { BigNumber } from 'ethers';
 import { Result } from 'ethers/lib/utils';
 import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
 import { Fragment } from 'react';
-import { useContract, useContractRead } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import SubscribeFormModal from './components/SubscribeFormModal';
 import membershipData from './membershipData';
