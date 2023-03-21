@@ -55,6 +55,14 @@ const Memberships = () => {
       args: [1],
     }
   );
+  const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'epochLength'
+  );
+
   const { premium, standard } = membershipData;
   const ACTION_CARD = [
     {
@@ -92,7 +100,10 @@ const Memberships = () => {
           }% THEO`,
           info: '+ ETH rebates for top 4000 Premium stakers',
         },
-        { label: 'Locked for', value: '365 Days' },
+        {
+          label: 'Locked for',
+          value: `${!isEpochLengthLoading ? Number(epochLength) / 86400 : 0} Days`,
+        },
       ],
       highlight: true,
       warning: 'Rewards and part of principal slashed if unstaked while locked - more info',
