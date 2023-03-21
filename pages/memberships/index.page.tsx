@@ -106,7 +106,18 @@ const Memberships = () => {
         },
       ],
       highlight: true,
-      warning: 'Rewards and part of principal slashed if unstaked while locked - more info',
+      warning: (
+        <>
+          Rewards and part of principal slashed if unstaked while locked -{' '}
+          <a
+            href="https://docs.theopetralabs.com/protocol/staking"
+            target="_blank"
+            rel="noreferrer"
+          >
+            more info
+          </a>
+        </>
+      ),
     },
   ];
   // disabling page. enable with page.tsx extension

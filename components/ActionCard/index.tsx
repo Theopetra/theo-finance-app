@@ -10,7 +10,7 @@ type ActionCardProps = {
   };
   data: { label: string; value: string; info?: string; type?: string }[];
   actionButton: { label: string; onClick?: () => void; icon?: ReactElement };
-  warning: string;
+  warning: string | ReactElement;
   icon: ReactElement;
   highlight?: boolean;
 };
