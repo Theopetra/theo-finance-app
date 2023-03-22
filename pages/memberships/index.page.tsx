@@ -6,7 +6,7 @@ import StatCard from '@/components/StatCard';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BigNumber } from 'ethers';
-import { Result } from 'ethers/lib/utils';
+import { formatUnits, Result } from 'ethers/lib/utils';
 import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
 import { Fragment, useMemo } from 'react';
 import { useContractRead } from 'wagmi';
@@ -18,45 +18,75 @@ const useStats = () => {
   const { address, abi } = useContractInfo('TheopetraERC20Token');
   const { address: stakingAddress } = useContractInfo('TheopetraStaking');
   const { address: lockedAddress } = useContractInfo('TheopetraStakingLocked');
+  const { address: calcAddress, abi: calcAbi } = useContractInfo('BondingCalculator');
+  const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } =
+    useContractInfo('ChainlinkPriceFeed');
+  const { data: priceFeed } = useContractRead(
+    {
+      addressOrName: ChainlinkPriceFeed,
+      contractInterface: ChainlinkPriceFeedAbi,
+    },
+    'latestAnswer'
+  );
+
   const contractParams = {
     addressOrName: address,
     contractInterface: abi,
   };
-  const { data: totalSupply, isLoading: isLoadingLocked } = useContractRead(
-    contractParams,
-    'totalSupply'
-  );
+  const { data: totalSupply } = useContractRead(contractParams, 'totalSupply');
   const { data: balanceOfStaking } = useContractRead(contractParams, 'balanceOf', {
     args: [stakingAddress],
   });
   const { data: balanceOfStakingLocked } = useContractRead(contractParams, 'balanceOf', {
     args: [lockedAddress],
   });
+
   const totalTheoStaked = useMemo(() => {
     if (totalSupply && balanceOfStaking && balanceOfStakingLocked) {
       const lockedBal = Number(BigNumber.from(balanceOfStakingLocked).toString());
       const stakingBal = Number(BigNumber.from(balanceOfStaking).toString());
-      const totalStaked = lockedBal + stakingBal;
-      const totalSupplyNumber = Number(BigNumber.from(totalSupply).toString());
-      return Number((totalStaked / totalSupplyNumber) * 100).toFixed(2);
+      const totalTheoStaked = lockedBal + stakingBal;
+      return totalTheoStaked;
     }
     return 0;
   }, [totalSupply, balanceOfStaking, balanceOfStakingLocked]);
-  // const totalValueStaked = useMemo(() => {
-  //   if (totalSupply) {
-  //     return BigNumber.from(totalSupply).toNumber() / 1000000;
-  //   }
-  //   return 0;
-  // }, [totalSupply]);
+
+  const totalTheoStakedAsPercent = useMemo(() => {
+    if (totalSupply) {
+      const totalSupplyNumber = Number(BigNumber.from(totalSupply).toString());
+      return Number((totalTheoStaked / totalSupplyNumber) * 100).toFixed(2);
+    }
+    return 0;
+  }, [totalSupply, totalTheoStaked]);
+  const { data: valuation } = useContractRead(
+    {
+      addressOrName: calcAddress,
+      contractInterface: calcAbi,
+    },
+    'valuation',
+    {
+      args: [address, totalTheoStaked],
+    }
+  );
+  const totalValueStakedUsd = useMemo(() => {
+    if (valuation && priceFeed) {
+      const price = formatUnits(BigNumber.from(priceFeed).toNumber(), 8);
+      const valuationNumber = formatUnits(BigNumber.from(valuation).toString(), 18);
+      const totalValueStaked = Number(valuationNumber) * Number(price);
+
+      return totalValueStaked;
+    }
+    return 0;
+  }, [valuation, priceFeed]);
 
   return [
     {
       name: 'Total THEO Staked',
-      value: totalTheoStaked ? `${totalTheoStaked}%` : 'N/A',
+      value: totalTheoStakedAsPercent ? `${totalTheoStakedAsPercent}%` : 'N/A',
     },
     {
       name: 'Total Value Staked',
-      value: '$11,186,090',
+      value: totalValueStakedUsd && `$${totalValueStakedUsd.toLocaleString()}`,
     },
   ];
 };
