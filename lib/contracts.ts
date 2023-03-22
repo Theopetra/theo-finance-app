@@ -9,6 +9,7 @@ import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
 import BondingCalculatorArtifact from '../artifacts/Twapgetter.json';
+import ChainlinkPriceFeedArtifact from '../artifacts/EACAggregatorProxy.json';
 import { erc20ABI } from 'wagmi';
 
 // address 1 = mainnet, address 4 = rinkeby, address 5 = goerli, address 31337 = hardhat, address 11155111 = sepolia
@@ -132,5 +133,15 @@ export const contractMetadata = {
       11155111: '0x9bd2Aa0F260fA3deF639dD9aB456609f8695Cfdc',
     },
     abi: BondingCalculatorArtifact.abi,
+  },
+  ChainlinkPriceFeed: {
+    address: {
+      1: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
+      4: '',
+      5: '',
+      31337: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
+      11155111: ''
+    },
+    abi: ChainlinkPriceFeedArtifact.abi,
   },
 };
