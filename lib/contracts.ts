@@ -8,6 +8,7 @@ import theopetraStakingLockedArtifact from '../artifacts/TheopetraStakingLocked.
 import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
+import BondingCalculatorArtifact from '../artifacts/Twapgetter.json';
 import { erc20ABI } from 'wagmi';
 
 // address 1 = mainnet, address 4 = rinkeby, address 5 = goerli, address 31337 = hardhat, address 11155111 = sepolia
@@ -121,5 +122,15 @@ export const contractMetadata = {
       11155111: '0x4FDCC3dE1c882Db748f72A3e28117BB3aB643A83',
     },
     abi: pTheopetraArtifact.abi,
+  },
+  BondingCalculator: {
+    address: {
+      1: '0xF7349113330B9Ad56F4BF56b670c88c05cbDCEDE',
+      4: '0x9fA01b224cd42fD147181E377b08d1a19477b320',
+      5: '0x92394c3570B9070765be36F0B92e29ca749B0Fc2',
+      31337: '0xF7349113330B9Ad56F4BF56b670c88c05cbDCEDE',
+      11155111: '0x9bd2Aa0F260fA3deF639dD9aB456609f8695Cfdc',
+    },
+    abi: BondingCalculatorArtifact.abi,
   },
 };
