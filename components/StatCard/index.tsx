@@ -12,7 +12,10 @@ type StatCardProps = {
 
 const StatCard = ({ name, value, tooltip, tooltipIcon }: StatCardProps) => {
   return (
-    <Card title={name} headerRightComponent={<Tooltip icon={tooltipIcon}>{tooltip}</Tooltip>}>
+    <Card
+      title={name}
+      headerRightComponent={tooltip && <Tooltip icon={tooltipIcon}>{tooltip}</Tooltip>}
+    >
       <div className="text-2xl font-extrabold sm:text-3xl">
         <DynamicText value={value} />
       </div>

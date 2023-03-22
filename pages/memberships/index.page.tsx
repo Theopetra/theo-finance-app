@@ -8,30 +8,64 @@ import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BigNumber } from 'ethers';
 import { Result } from 'ethers/lib/utils';
 import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useContractRead } from 'wagmi';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import SubscribeFormModal from './components/SubscribeFormModal';
 import membershipData from './membershipData';
 
-const STATS = [
-  {
-    name: 'Total THEO Staked',
-    value: '78%',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-  },
-  {
-    name: 'Total Value Staked',
-    value: '$11,186,090',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-  },
-];
+const useStats = () => {
+  const { address, abi } = useContractInfo('TheopetraERC20Token');
+  const { address: stakingAddress } = useContractInfo('TheopetraStaking');
+  const { address: lockedAddress } = useContractInfo('TheopetraStakingLocked');
+  const contractParams = {
+    addressOrName: address,
+    contractInterface: abi,
+  };
+  const { data: totalSupply, isLoading: isLoadingLocked } = useContractRead(
+    contractParams,
+    'totalSupply'
+  );
+  const { data: balanceOfStaking } = useContractRead(contractParams, 'balanceOf', {
+    args: [stakingAddress],
+  });
+  const { data: balanceOfStakingLocked } = useContractRead(contractParams, 'balanceOf', {
+    args: [lockedAddress],
+  });
+  const totalTheoStaked = useMemo(() => {
+    if (totalSupply && balanceOfStaking && balanceOfStakingLocked) {
+      const lockedBal = Number(BigNumber.from(balanceOfStakingLocked).toString());
+      const stakingBal = Number(BigNumber.from(balanceOfStaking).toString());
+      const totalStaked = lockedBal + stakingBal;
+      const totalSupplyNumber = Number(BigNumber.from(totalSupply).toString());
+      return Number((totalStaked / totalSupplyNumber) * 100).toFixed(2);
+    }
+    return 0;
+  }, [totalSupply, balanceOfStaking, balanceOfStakingLocked]);
+  // const totalValueStaked = useMemo(() => {
+  //   if (totalSupply) {
+  //     return BigNumber.from(totalSupply).toNumber() / 1000000;
+  //   }
+  //   return 0;
+  // }, [totalSupply]);
+
+  return [
+    {
+      name: 'Total THEO Staked',
+      value: totalTheoStaked ? `${totalTheoStaked}%` : 'N/A',
+    },
+    {
+      name: 'Total Value Staked',
+      value: '$11,186,090',
+    },
+  ];
+};
 const rewardAsPercent = (reward: Result) => {
   return Number(BigNumber.from(reward).toNumber() / 10000).toFixed();
 };
 const Memberships = () => {
   const [, { openModal }] = useModal();
-
+  const STATS = useStats();
   // StakingDistributor
   const { address, abi } = useContractInfo('StakingDistributor');
 

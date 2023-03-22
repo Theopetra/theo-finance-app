@@ -4,7 +4,7 @@ import { ReactElement } from 'react';
 type CardProps = {
   title?: string | ReactElement | undefined;
   cardHeader?: ReactElement;
-  headerRightComponent?: ReactElement;
+  headerRightComponent?: ReactElement | undefined | '';
   children: ReactElement;
   darkModeBgColor?: string;
   lightModeBgColor?: string;
