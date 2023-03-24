@@ -10,7 +10,7 @@ const PurchasesTable = ({ columns, data }) => {
       {rows.length === 0 ? (
         <p className="font-bold dark:text-white">You do not have any purchases.</p>
       ) : (
-        <div className=" shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+        <div className="overflow-scroll shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
           <table {...getTableProps()} className="min-w-full">
             <thead className="bg-gray-50 dark:bg-black ">
               {

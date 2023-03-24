@@ -10,12 +10,14 @@ import { cache } from '@/lib/cache';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
+import { InformationCircleIcon } from '@heroicons/react/solid';
 
 const PenaltyPopover = () => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
       <div className="mx-auto flex whitespace-normal rounded p-1 text-[10px] leading-snug hover:bg-slate-200">
-        Rewards slashed
+        10% Penalty
+        <InformationCircleIcon width={12} height={12} />
       </div>
     </Popover.Button>
 
@@ -30,6 +32,16 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
   const { address, abi } = useContractInfo(purchase.contractName);
   const { address: sTheoAddress, abi: sAbi } = useContractInfo('sTheopetra');
   const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
+  const { address: StakingDistributor, abi: StakingDistributorAbi } =
+    useContractInfo('StakingDistributor');
+
+  const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
+    {
+      addressOrName: StakingDistributor,
+      contractInterface: StakingDistributorAbi,
+    },
+    'epochLength'
+  );
   const theoAddress = purchase.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress;
   const theoAbi = purchase.contractName === 'TheopetraStaking' ? sAbi : pAbi;
   const { data: stakingInfo } = useContractRead(
@@ -62,6 +74,21 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     return BigNumber.from(amountFromGons).toNumber();
   }, [stakingInfo, amountFromGons]);
 
+  const timeRemaining = useMemo(() => {
+    if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
+    return (stakingInfo[3] / Number(epochLength)) * 100;
+  }, [stakingInfo, epochLength, isEpochLengthLoading]);
+  const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'getPenalty',
+    { args: [amount, timeRemaining] }
+  );
+  if (!penaltyIsLoading) {
+    console.log({ penalty });
+  }
   const unstakeArgs = useMemo(
     () => [account?.address, [amount], false, [BigNumber.from(purchase.index).toNumber()]],
     [amount, account?.address, purchase]
@@ -148,6 +175,7 @@ const YourMemberships = () => {
         return {
           startDate,
           endDate,
+          timeRemaining: p.stakingInfo.timeRemaining,
           deposit: BigNumber.from(p.stakingInfo.deposit).toNumber(),
           rewards: p.rewards,
           contractName: p.contractName,
