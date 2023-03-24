@@ -59,14 +59,12 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
   const amount = useMemo(() => {
     if (!stakingInfo) return 0;
     if (!amountFromGons) return 0;
-    return (
-      BigNumber.from(amountFromGons).toNumber()
-    );
-  }, [stakingInfo, purchase]);
+    return BigNumber.from(amountFromGons).toNumber();
+  }, [stakingInfo, amountFromGons]);
 
   const unstakeArgs = useMemo(
     () => [account?.address, [amount], false, [BigNumber.from(purchase.index).toNumber()]],
-    [amount, purchase]
+    [amount, account?.address, purchase]
   );
 
   console.log(unstakeArgs);
