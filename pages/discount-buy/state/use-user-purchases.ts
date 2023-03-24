@@ -13,7 +13,7 @@ export const usePurchasesByContract = (contractName) => {
   const [render, setRender] = useState(false);
 
   const reRender = function () {
-    setRender(true);
+    setRender((value) => !value);
   };
 
   const provider = useProvider();

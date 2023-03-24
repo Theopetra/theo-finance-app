@@ -67,7 +67,6 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     [amount, account?.address, purchase]
   );
 
-  console.log(unstakeArgs);
   // APPROVE
   const {
     data: approveData,
