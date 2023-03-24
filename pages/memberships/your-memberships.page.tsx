@@ -44,10 +44,23 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     }
   );
 
+  const { data: amountFromGons } = useContractRead(
+    {
+      addressOrName: theoAddress,
+      contractInterface: theoAbi,
+    },
+    'balanceForGons',
+    {
+      args: [stakingInfo?.[4]],
+      cacheTime: cache.cacheTimesInMs.prices,
+    }
+  );
+
   const amount = useMemo(() => {
     if (!stakingInfo) return 0;
+    if (!amountFromGons) return 0;
     return (
-      BigNumber.from(stakingInfo?.[0]).toNumber() + BigNumber.from(purchase.rewards).toNumber()
+      BigNumber.from(amountFromGons).toNumber()
     );
   }, [stakingInfo, purchase]);
 
