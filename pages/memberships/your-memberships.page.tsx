@@ -76,8 +76,10 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
 
   const timeRemaining = useMemo(() => {
     if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
-    return (stakingInfo[3] / Number(epochLength)) * 100;
+    if (stakingInfo[3] <= Math.floor(Date.now() / 1000)) return 100;
+    return Math.floor(100 - ((stakingInfo[3] - Math.floor(Date.now() / 1000)) / Number(epochLength)) * 100);
   }, [stakingInfo, epochLength, isEpochLengthLoading]);
+
   const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
     {
       addressOrName: address,
