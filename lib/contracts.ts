@@ -8,7 +8,7 @@ import theopetraStakingLockedArtifact from '../artifacts/TheopetraStakingLocked.
 import wethHelper from '../artifacts/WethHelper.json';
 import whitelistBondDepArtifact from '../artifacts/WhitelistTheopetraBondDepository.json';
 import PublicPreListBondDepositoryArtifact from '../artifacts/PublicPreListBondDepository.json';
-import BondingCalculatorArtifact from '../artifacts/Twapgetter.json';
+import BondingCalculatorArtifact from '../artifacts/TwapGetter.json';
 import ChainlinkPriceFeedArtifact from '../artifacts/EACAggregatorProxy.json';
 import { erc20ABI } from 'wagmi';
 
