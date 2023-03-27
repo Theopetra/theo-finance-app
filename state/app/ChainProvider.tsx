@@ -33,7 +33,7 @@ const envChains = () => {
     case 'production':
       return [chain.mainnet];
     case 'staging':
-      return [sepolia];
+      return [sepolia, chain.hardhat];
     default:
       return [chain.hardhat, chain.localhost, sepolia];
   }
