@@ -12,11 +12,11 @@ import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 
-const PenaltyPopover = () => (
+const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
       <div className="mx-auto flex whitespace-normal rounded p-1 text-[10px] leading-snug hover:bg-slate-200">
-        10% Penalty
+        {penaltyIsLoading ? 'Loading...' : `-${formatTheo(BigNumber.from(penalty).toString())}THEO`}
         <InformationCircleIcon width={12} height={12} />
       </div>
     </Popover.Button>
@@ -77,7 +77,9 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
   const timeRemaining = useMemo(() => {
     if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
     if (stakingInfo[3] <= Math.floor(Date.now() / 1000)) return 100;
-    return Math.floor(100 - ((stakingInfo[3] - Math.floor(Date.now() / 1000)) / Number(epochLength)) * 100);
+    return Math.floor(
+      100 - ((stakingInfo[3] - Math.floor(Date.now() / 1000)) / Number(epochLength)) * 100
+    );
   }, [stakingInfo, epochLength, isEpochLengthLoading]);
 
   const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
@@ -88,9 +90,7 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     'getPenalty',
     { args: [amount, timeRemaining] }
   );
-  if (!penaltyIsLoading) {
-    console.log({ penalty });
-  }
+
   const unstakeArgs = useMemo(
     () => [account?.address, [amount], false, [BigNumber.from(purchase.index).toNumber()]],
     [amount, account?.address, purchase]
@@ -161,7 +161,7 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
           ? 'Unstaking...'
           : `${matured ? 'Unstake' : 'Unstake Early'}`}
       </button>
-      {!matured && <PenaltyPopover />}
+      {!matured && <PenaltyPopover penalty={penalty} penaltyIsLoading={penaltyIsLoading} />}
     </>
   );
 };

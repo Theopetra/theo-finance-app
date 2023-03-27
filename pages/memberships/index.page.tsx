@@ -86,7 +86,7 @@ const useStats = () => {
     },
     {
       name: 'Total Value Staked',
-      value: totalValueStakedUsd && `$${totalValueStakedUsd.toLocaleString()}`,
+      value: totalValueStakedUsd ? `$${totalValueStakedUsd.toLocaleString()}` : 'N/A',
     },
   ];
 };
@@ -141,7 +141,10 @@ const Memberships = () => {
         {
           label: 'APY',
           value: `${
-            !isLoadingStaking && nextRewardRateStaking && rewardAsPercent(nextRewardRateStaking)
+            (!isLoadingStaking &&
+              nextRewardRateStaking &&
+              rewardAsPercent(nextRewardRateStaking)) ||
+            0
           }% THEO`,
         },
       ],
@@ -160,7 +163,7 @@ const Memberships = () => {
         {
           label: 'APY',
           value: `${
-            !isLoadingLocked && nextRewardRateLocked && rewardAsPercent(nextRewardRateLocked)
+            (!isLoadingLocked && nextRewardRateLocked && rewardAsPercent(nextRewardRateLocked)) || 0
           }% THEO`,
           info: '+ ETH rebates for top 4000 Premium stakers',
         },
