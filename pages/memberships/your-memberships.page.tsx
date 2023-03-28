@@ -211,7 +211,7 @@ const YourMemberships = () => {
         Header: 'APY',
         accessor: 'contractName',
         width: '10%',
-        Cell: ({ value }) => (value === 'TheopetraStaking' ? '5%' : '30%'),
+        Cell: ({ value }) => (value === 'TheopetraStaking' ? '5%' : '18%'),
       },
       {
         Header: 'Unlock Date',
