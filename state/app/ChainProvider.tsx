@@ -53,7 +53,7 @@ if (!alchemyId) {
 const { chains, provider } = configureChains(envChains(), [
   ...(process.env.NEXT_PUBLIC_ENV !== 'production' ||
   (process.env.NEXT_PUBLIC_ENV as any) !== 'staging'
-    ? [jsonRpcProvider({ rpc: () => ({ http: 'https://e9ec-2600-1702-6d0-ba00-b113-f34b-8a32-38b2.ngrok.io' }) })]
+    ? [jsonRpcProvider({ rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }) })]
     : []),
   infuraProvider({ infuraId }),
   alchemyProvider({ alchemyId }),
