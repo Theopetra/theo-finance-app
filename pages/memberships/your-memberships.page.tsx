@@ -56,6 +56,8 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     }
   );
 
+  console.log(BigNumber.from(purchase.index).toNumber());
+
   const { data: amountFromGons } = useContractRead(
     {
       addressOrName: theoAddress,
@@ -73,6 +75,8 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     if (!amountFromGons) return 0;
     return BigNumber.from(amountFromGons).toNumber();
   }, [stakingInfo, amountFromGons]);
+
+  console.log(amount);
 
   const timeRemaining = useMemo(() => {
     if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
@@ -187,6 +191,9 @@ const YourMemberships = () => {
       }),
     [memberships]
   );
+
+  console.log(BigNumber.from(p.stakingInfo.stakingExpiry).toNumber());
+  console.log(BigNumber.from(p.stakingInfo.deposit).toNumber());
 
   const [, { reRender }] = useUserPurchases();
   const { data: account } = useAccount();
