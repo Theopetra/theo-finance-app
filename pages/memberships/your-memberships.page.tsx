@@ -11,6 +11,7 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import { InformationCircleIcon } from '@heroicons/react/solid';
+import { rewardAsPercent } from '@/util/reward-as-percent';
 
 const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
   <Popover className="relative -mt-2  ">
@@ -192,14 +193,45 @@ const YourMemberships = () => {
   const { data: account } = useAccount();
 
   const { data: signer } = useSigner();
+  const { address, abi } = useContractInfo('StakingDistributor');
 
+  const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'nextRewardRate',
+    {
+      args: [4],
+    }
+  );
+  const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'nextRewardRate',
+    {
+      args: [3],
+    }
+  );
   const columns = useMemo(
     () => [
       {
-        Header: 'Joined',
-        accessor: 'startDate',
+        Header: 'Type',
+        accessor: 'contractName',
+        id: 'type',
         width: '10%',
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
+        Cell: ({ value }) => (value === 'TheopetraStaking' ? 'Standard' : 'Premium'),
+      },
+      {
+        Header: 'APY',
+        accessor: 'contractName',
+        width: '10%',
+        Cell: ({ value }) =>
+          value === 'TheopetraStaking'
+            ? (nextRewardRateStaking && `${rewardAsPercent(nextRewardRateStaking)}%`) || '5%'
+            : (nextRewardRateLocked && `${rewardAsPercent(nextRewardRateLocked)}%`) || '18%',
       },
       {
         Header: 'THEO Committed',
@@ -208,16 +240,22 @@ const YourMemberships = () => {
         Cell: ({ value }) => formatTheo(value),
       },
       {
-        Header: 'APY',
-        accessor: 'contractName',
+        Header: 'Joined',
+        accessor: 'startDate',
         width: '10%',
-        Cell: ({ value }) => (value === 'TheopetraStaking' ? '5%' : '18%'),
+        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
       },
+
       {
         Header: 'Unlock Date',
         accessor: 'endDate',
         width: '10%',
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
+        Cell: ({ value, cell }) =>
+          cell.row.original.contractName === 'TheopetraStaking' ? (
+            'Anytime'
+          ) : (
+            <span title={format(value, 'yyyy-MM-dd hh:mm:ss')}>{format(value, 'yyyy-MM-dd')}</span>
+          ),
       },
       {
         Header: 'Rewards',
@@ -231,7 +269,6 @@ const YourMemberships = () => {
             <div className={`text-lg font-bold`}>
               {formatTheo(BigNumber.from(value).toNumber(), 3)}
             </div>
-            {/* <div>{format(cell.row.original.endDate, 'yyyy-MM-dd')}</div> */}
           </div>
         ),
       },
@@ -251,7 +288,7 @@ const YourMemberships = () => {
         ),
       },
     ],
-    []
+    [reRender, account, signer]
   );
 
   return (

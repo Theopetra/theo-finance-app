@@ -13,6 +13,7 @@ import { useContractRead } from 'wagmi';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import SubscribeFormModal from './components/SubscribeFormModal';
 import membershipData from './membershipData';
+import { rewardAsPercent } from '@/util/reward-as-percent';
 
 const useStats = () => {
   const { address, abi } = useContractInfo('TheopetraERC20Token');
@@ -90,9 +91,7 @@ const useStats = () => {
     },
   ];
 };
-const rewardAsPercent = (reward: Result) => {
-  return Number(BigNumber.from(reward).toNumber() / 10000).toFixed();
-};
+
 const Memberships = () => {
   const [, { openModal }] = useModal();
   const STATS = useStats();
