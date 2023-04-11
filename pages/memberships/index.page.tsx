@@ -82,8 +82,9 @@ const useStats = () => {
 
   return [
     {
-      name: 'Total THEO Staked',
+      name: 'Total $THEO Staked',
       value: totalTheoStakedAsPercent ? `${totalTheoStakedAsPercent}%` : 'N/A',
+      tooltip: 'Total % staked is calculated based on the total supply of $THEO',
     },
     {
       name: 'Total Value Staked',
@@ -134,7 +135,7 @@ const Memberships = () => {
         primary: <span className="capitalize">{standard.type}</span>,
         classes: 'bg-theo-navy dark:bg-theo-dark-navy text-white',
       },
-      icon: <LockLaminatedOpen size={24} className="w-10" />,
+      icon: <LockLaminatedOpen size={28} className="w-10" />,
       data: [
         { label: 'Assets', value: 'THEO' },
         {
@@ -156,7 +157,7 @@ const Memberships = () => {
         primary: 'Premium',
         classes: 'bg-theo-cyan text-white',
       },
-      icon: <LockLaminated size={24} className="w-10" />,
+      icon: <LockLaminated size={28} className="w-10" />,
       data: [
         { label: 'Assets', value: 'THEO' },
         {
