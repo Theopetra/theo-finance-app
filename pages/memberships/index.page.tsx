@@ -106,7 +106,7 @@ const Memberships = () => {
     },
     'nextRewardRate',
     {
-      args: [4],
+      args: [1],
     }
   );
   const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
@@ -116,7 +116,7 @@ const Memberships = () => {
     },
     'nextRewardRate',
     {
-      args: [3],
+      args: [0],
     }
   );
   const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
