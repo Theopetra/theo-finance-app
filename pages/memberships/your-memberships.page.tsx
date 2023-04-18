@@ -3,7 +3,7 @@ import { formatTheo } from '@/lib/format_theo';
 import { add, format } from 'date-fns';
 import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
-import { useAccount, useContractRead, useContractWrite, useSigner } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import PurchasesTable from '../discount-buy/your-purchases/components/PurchasesTable';
 import { cache } from '@/lib/cache';
@@ -12,6 +12,8 @@ import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import { rewardAsPercent } from '@/util/reward-as-percent';
+import useModal from '@/state/ui/theme/hooks/use-modal';
+import UnstakeConfirm from './components/UnstakeConfirm';
 
 const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
   <Popover className="relative -mt-2  ">
@@ -28,8 +30,9 @@ const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
   </Popover>
 );
 
-const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
+const UnstakeButton = ({ purchase, matured, account }) => {
   // STAKE
+  const [, { openModal }] = useModal();
   const { address, abi } = useContractInfo(purchase.contractName);
   const { address: sTheoAddress, abi: sAbi } = useContractInfo('sTheopetra');
   const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
@@ -97,70 +100,25 @@ const UnstakeButton = ({ purchase, matured, account, signer, reRender }) => {
     [amount, account?.address, purchase]
   );
 
-  // APPROVE
-  const {
-    data: approveData,
-    isLoading: approvalLoading,
-    write: approve,
-  } = useContractWrite(
-    {
-      addressOrName: theoAddress,
-      contractInterface: theoAbi,
-      signerOrProvider: signer,
-    },
-    'approve',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          unstake();
-        } else {
-          console.log('failed', receipt);
-        }
-      },
-      onError(error) {
-        console.log('failed 22', error);
-      },
-      args: [address, amount],
-    }
-  );
-
-  // unstake
-  const { write: unstake, isLoading: unstakeLoading } = useContractWrite(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-      signerOrProvider: signer,
-    },
-    'unstake',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          cache.clear();
-          reRender();
-        }
-      },
-      onError(error) {
-        console.log('error', error);
-      },
-      args: unstakeArgs,
-    }
-  );
-
   return (
     <>
       <button
         className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
         onClick={() => {
-          approve();
+          openModal(
+            <UnstakeConfirm
+              purchase={purchase}
+              theoAddress={theoAddress}
+              theoAbi={theoAbi}
+              unstakeArgs={unstakeArgs}
+              amount={amount}
+              stakingContractAddress={address}
+              stakingContractAbi={abi}
+            />
+          );
         }}
       >
-        {approvalLoading
-          ? 'Approving...'
-          : unstakeLoading
-          ? 'Unstaking...'
-          : `${matured ? 'Unstake' : 'Unstake Early'}`}
+        {`${matured ? 'Unstake' : 'Unstake Early'}`}
       </button>
       {!matured && <PenaltyPopover penalty={penalty} penaltyIsLoading={penaltyIsLoading} />}
     </>
@@ -189,10 +147,8 @@ const YourMemberships = () => {
     [memberships]
   );
 
-  const [, { reRender }] = useUserPurchases();
   const { data: account } = useAccount();
 
-  const { data: signer } = useSigner();
   const { address, abi } = useContractInfo('StakingDistributor');
 
   const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
@@ -278,17 +234,11 @@ const YourMemberships = () => {
         accessor: 'matured',
         width: '10%',
         Cell: ({ value: matured, cell }) => (
-          <UnstakeButton
-            purchase={cell.row.original}
-            matured={matured}
-            reRender={reRender}
-            account={account}
-            signer={signer}
-          />
+          <UnstakeButton purchase={cell.row.original} matured={matured} account={account} />
         ),
       },
     ],
-    [reRender, account, signer]
+    [account]
   );
 
   return (

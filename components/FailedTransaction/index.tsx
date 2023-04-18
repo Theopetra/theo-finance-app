@@ -1,19 +1,17 @@
-import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { LockLaminated } from 'phosphor-react';
-import { Membership } from '../membershipData';
 
-import SubscribeConfirm, { MembershipCommitment } from './SubscribeConfirm';
-import { MembershipAPY, MembershipDuration, MembershipType } from './SubscribeFormModal';
+import { ReactElement } from 'react';
 
-const Failed = ({
+const FailedTransaction = ({
   error,
-  membership,
-  depositAmount,
+  Icon,
+  content,
+  onRetry,
 }: {
   error: any;
-  membership: Membership;
-  depositAmount: string;
+  onRetry?: () => void;
+  Icon: any;
+  content?: ReactElement;
 }) => {
   const [, { openModal }] = useModal();
   let errorMsg;
@@ -35,12 +33,7 @@ const Failed = ({
   return (
     <div>
       <div className="mb-8 flex items-center justify-between ">
-        <button
-          onClick={() =>
-            openModal(<SubscribeConfirm membership={membership} depositAmount={depositAmount} />)
-          }
-          className="text-theo-cyan"
-        >
+        <button onClick={onRetry} className="text-theo-cyan">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-12 w-12"
@@ -76,22 +69,12 @@ const Failed = ({
           <div className="text">Reason: {errorMsg}</div>
         </div>
         <div>
-          <LockLaminated size={50} className=" w-12 dark:text-white" />
+          <Icon size={50} className=" w-12 dark:text-white" />
         </div>
       </div>
-      <div className="mb-4 flex flex-col gap-2">
-        <MembershipType type={membership.type} />
-        <MembershipCommitment value={depositAmount} />
-        <MembershipAPY apy={membership.apy} value={depositAmount} />
-        <MembershipDuration lockDuration={membership?.lockDurationInDays} />
-      </div>
+      <div className="mb-4 flex flex-col gap-2">{content}</div>
       <div className="flex w-full items-center justify-center">
-        <button
-          className="border-button w-60"
-          onClick={() => {
-            openModal(<SubscribeConfirm depositAmount={depositAmount} membership={membership} />);
-          }}
-        >
+        <button className="border-button w-60" onClick={onRetry}>
           Try Again
         </button>
       </div>
@@ -99,4 +82,4 @@ const Failed = ({
   );
 };
 
-export default Failed;
+export default FailedTransaction;

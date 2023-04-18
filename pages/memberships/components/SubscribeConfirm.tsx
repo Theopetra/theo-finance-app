@@ -11,8 +11,8 @@ import { logEvent } from '@/lib/analytics';
 import { parseUnits } from 'ethers/lib/utils';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 import { cache } from '@/lib/cache';
-import Failed from './Failed';
-import Successful from './Successful';
+import SuccessfulTransaction from '@/components/SuccessfulTransaction';
+import FailedTransaction from '@/components/FailedTransaction';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="$THEO to stake" value={value} />;
@@ -33,9 +33,25 @@ const SubscribeConfirm = ({
   const { address: theopetraStakingAddress, abi: theopetraStakingABI } = useContractInfo(
     membership.contractName
   );
-
+  const dataRows = (
+    <>
+      <MembershipType type={membership.type} />
+      <MembershipCommitment value={depositAmount} />
+      <MembershipAPY apy={membership.apy} value={depositAmount} />
+      <MembershipDuration lockDuration={membership?.lockDurationInDays} />
+    </>
+  );
   const { address: theoAddress, abi: theoAbi } = useContractInfo('TheopetraERC20Token');
-
+  const FailedModal = () => (
+    <FailedTransaction
+      Icon={LockLaminated}
+      onRetry={() => {
+        openModal(<SubscribeConfirm depositAmount={depositAmount} membership={membership} />);
+      }}
+      error={{ code: 'Something went wrong.' }}
+      content={dataRows}
+    />
+  );
   const stakeArgs = [account?.address, depositAmountFormatted, true];
   // STAKE
   const {
@@ -59,14 +75,20 @@ const SubscribeConfirm = ({
           reRender();
           console.log('successs');
           openModal(
-            <Successful txId={data.hash} membership={membership} depositAmount={depositAmount} />
+            <SuccessfulTransaction
+              txId={data.hash}
+              redirect={`/memberships/your-memberships`}
+              title={'Membership Successful!'}
+              Icon={LockLaminated}
+              content={dataRows}
+            />
           );
         } else {
           console.log('contract fail');
         }
       },
       onError(error) {
-        openModal(<Failed error={error} membership={membership} depositAmount={depositAmount} />);
+        openModal(<FailedModal />);
       },
       args: stakeArgs,
     }
@@ -101,17 +123,11 @@ const SubscribeConfirm = ({
 
           stake();
         } else {
-          openModal(
-            <Failed
-              error={{ code: 'Something went wrong.' }}
-              membership={membership}
-              depositAmount={depositAmount}
-            />
-          );
+          openModal();
         }
       },
       onError(error) {
-        openModal(<Failed error={error} membership={membership} depositAmount={depositAmount} />);
+        openModal(<FailedModal />);
       },
       args: [theopetraStakingAddress, depositAmountFormatted],
     }
@@ -148,12 +164,7 @@ const SubscribeConfirm = ({
             <LockLaminated color="#2F455C" size={50} />
           </div>
         </div>
-        <div className="mb-4 flex flex-col gap-2">
-          <MembershipType type={membership.type} />
-          <MembershipCommitment value={depositAmount} />
-          <MembershipAPY apy={membership.apy} value={depositAmount} />
-          <MembershipDuration lockDuration={membership?.lockDurationInDays} />
-        </div>
+        <div className="mb-4 flex flex-col gap-2">{dataRows}</div>
         <div className="flex w-full items-center justify-center">
           <button className="border-button w-60" onClick={handleClick}>
             Confirm Membership
