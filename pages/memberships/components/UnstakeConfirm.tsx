@@ -119,11 +119,13 @@ const UnstakeConfirm = ({
               className="text-3xl font-bold capitalize sm:text-4xl"
               style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
             >
-              {/* {membership.type}  */}
+              {/* {purchase.contractName === 'TheopetraStaking' ? 'Standard' : 'Premium'} */}
               Membership
             </div>
-            You can unstake at any time, but won&apos;t be eligible for ETH rebates. <br /> Slashing
-            penalties apply if unstaked early.
+            Premium stakes are locked for 1 year from the date of staking. Premature unstaking—that
+            is, unstaking before the 1-year lock period expires—will incur a slashing penalty. These
+            penalties are in the form of $THEO principal and $THEO rebate slashing. This slashing
+            penalty is present to incentivize long-term behavior for Premium members.
           </div>
           <div>
             <LockLaminated color="#2F455C" size={50} />
