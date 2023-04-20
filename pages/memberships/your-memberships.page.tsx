@@ -19,7 +19,9 @@ const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
       <div className="mx-auto flex whitespace-normal rounded p-1 text-[10px] leading-snug hover:bg-slate-200">
-        {penaltyIsLoading ? 'Loading...' : `-${formatTheo(BigNumber.from(penalty).toString())}THEO`}
+        {penaltyIsLoading || !penalty
+          ? 'Loading...'
+          : `-${formatTheo(BigNumber.from(penalty).toString())}THEO`}
         <InformationCircleIcon width={12} height={12} />
       </div>
     </Popover.Button>
@@ -158,7 +160,7 @@ const YourMemberships = () => {
     },
     'nextRewardRate',
     {
-      args: [4],
+      args: [1],
     }
   );
   const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
@@ -168,7 +170,7 @@ const YourMemberships = () => {
     },
     'nextRewardRate',
     {
-      args: [3],
+      args: [0],
     }
   );
   const columns = useMemo(

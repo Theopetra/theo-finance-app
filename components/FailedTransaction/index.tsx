@@ -26,6 +26,8 @@ const FailedTransaction = ({
       errorMsg =
         'There was a problem executing the transfer. Common reasons include missing token approval or insufficient funds.';
     }
+  } else if (error?.code === -32603) {
+    errorMsg = 'Approve the exact amount of $THEO to transact with.';
   } else {
     errorMsg = 'There was a problem executing the transfer. Please try again.';
   }

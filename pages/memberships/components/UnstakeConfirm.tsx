@@ -119,19 +119,28 @@ const UnstakeConfirm = ({
               className="text-3xl font-bold capitalize sm:text-4xl"
               style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
             >
-              {/* {purchase.contractName === 'TheopetraStaking' ? 'Standard' : 'Premium'} */}
-              Membership
+              {purchase.contractName === 'TheopetraStaking' ? 'Standard' : 'Premium'} Membership
             </div>
-            Premium stakes are locked for 1 year from the date of staking. Premature unstaking—that
-            is, unstaking before the 1-year lock period expires—will incur a slashing penalty. These
-            penalties are in the form of $THEO principal and $THEO rebate slashing. This slashing
-            penalty is present to incentivize long-term behavior for Premium members.
           </div>
           <div>
             <LockLaminated color="#2F455C" size={50} />
           </div>
         </div>
-        <div className="mb-4 flex flex-col gap-2">{/* // todo: add the rest of the rows */}</div>
+        <div className="mb-4 flex flex-col gap-2">
+          {purchase.contractName !== 'TheopetraStaking' && (
+            <div className=" mx-auto mb-4 flex max-w-2xl flex-col gap-4 text-xl">
+              <p>Premium stakes are locked for 1 year from the date of staking. </p>
+              <p>
+                Premature unstaking—that is, unstaking before the 1-year lock period expires—will
+                incur a slashing penalty.
+              </p>
+              <p>
+                These penalties are in the form of $THEO principal and $THEO rebate slashing. This
+                slashing penalty is present to incentivize long-term behavior for Premium members.
+              </p>
+            </div>
+          )}
+        </div>
         <div className="flex w-full items-center justify-center">
           <button className="border-button w-60" onClick={handleClick}>
             Confirm Unstake

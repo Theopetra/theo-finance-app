@@ -42,13 +42,13 @@ const SubscribeConfirm = ({
     </>
   );
   const { address: theoAddress, abi: theoAbi } = useContractInfo('TheopetraERC20Token');
-  const FailedModal = () => (
+  const FailedModal = ({ error }: { error?: any }) => (
     <FailedTransaction
       Icon={LockLaminated}
       onRetry={() => {
         openModal(<SubscribeConfirm depositAmount={depositAmount} membership={membership} />);
       }}
-      error={{ code: 'Something went wrong.' }}
+      error={{ code: error?.code ?? 'Something went wrong.' }}
       content={dataRows}
     />
   );
@@ -88,6 +88,8 @@ const SubscribeConfirm = ({
         }
       },
       onError(error) {
+        console.log(JSON.stringify(error));
+
         openModal(<FailedModal />);
       },
       args: stakeArgs,
@@ -112,6 +114,7 @@ const SubscribeConfirm = ({
     {
       async onSuccess(data) {
         const receipt = await data.wait();
+        console.log({ receipt });
         if (receipt.status === 1) {
           logEvent({ name: 'erc20_approved' });
           openModal(
@@ -127,7 +130,7 @@ const SubscribeConfirm = ({
         }
       },
       onError(error) {
-        openModal(<FailedModal />);
+        openModal(<FailedModal error={error} />);
       },
       args: [theopetraStakingAddress, depositAmountFormatted],
     }
@@ -137,7 +140,12 @@ const SubscribeConfirm = ({
     openModal(
       <PendingTransaction
         message="1 of 2 transactions..."
-        secondaryMessage={`Approving $THEO spend...`}
+        secondaryMessage={
+          <>
+            Approving {depositAmount} $THEO spend...{' '}
+            <div className="text-sm">Make sure to approve exact amount.</div>
+          </>
+        }
       />
     );
     approve();
