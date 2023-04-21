@@ -7,12 +7,15 @@ import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases'
 import { cache } from '@/lib/cache';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import FailedTransaction from '@/components/FailedTransaction';
+import { formatTheo } from '@/lib/format_theo';
+import { BigNumber } from 'ethers';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="$THEO to stake" value={value} />;
 };
 const UnstakeConfirm = ({
   purchase,
+  penalty,
   theoAddress,
   theoAbi,
   unstakeArgs,
@@ -21,6 +24,7 @@ const UnstakeConfirm = ({
   stakingContractAbi,
 }: {
   purchase: any;
+  penalty: any;
   theoAddress: any;
   theoAbi: any;
   unstakeArgs: any;
@@ -138,6 +142,9 @@ const UnstakeConfirm = ({
                 These penalties are in the form of $THEO principal and $THEO rebate slashing. This
                 slashing penalty is present to incentivize long-term behavior for Premium members.
               </p>
+              <div className="text-center text-2xl font-bold">
+                -{penalty ? formatTheo(BigNumber.from(penalty).toString()) : 0} $THEO
+              </div>
             </div>
           )}
         </div>

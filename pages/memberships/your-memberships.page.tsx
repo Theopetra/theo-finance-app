@@ -109,6 +109,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
         onClick={() => {
           openModal(
             <UnstakeConfirm
+              penalty={penalty}
               purchase={purchase}
               theoAddress={theoAddress}
               theoAbi={theoAbi}
