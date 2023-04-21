@@ -144,7 +144,7 @@ const YourMemberships = () => {
           rewards: p.rewards,
           contractName: p.contractName,
           index: p.index,
-          matured: endDate < new Date(),
+          matured: p.contractName === 'TheopetraStaking' ? true : endDate < new Date(),
         };
       }),
     [memberships]
