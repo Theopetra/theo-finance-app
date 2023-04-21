@@ -202,7 +202,9 @@ const YourMemberships = () => {
         Header: 'Joined',
         accessor: 'startDate',
         width: '10%',
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
+        Cell: ({ value }) => (
+          <span title={format(value, 'yyyy-MM-dd hh:mm:ss')}>{format(value, 'yyyy-MM-dd')}</span>
+        ),
       },
 
       {
