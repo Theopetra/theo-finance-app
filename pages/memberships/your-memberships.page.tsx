@@ -88,7 +88,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
     );
   }, [stakingInfo, epochLength, isEpochLengthLoading]);
 
-  const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
+  const { data: penalty, isLoading: penaltyIsLoading } = purchase.contractName === 'TheopetraStaking' ? {data: 0, isLoading: false} : useContractRead(
     {
       addressOrName: address,
       contractInterface: abi,
