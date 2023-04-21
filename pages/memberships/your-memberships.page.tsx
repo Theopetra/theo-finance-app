@@ -83,8 +83,8 @@ const UnstakeButton = ({ purchase, matured, account }) => {
   const timeRemaining = useMemo(() => {
     if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
     if (stakingInfo[3] <= Math.floor(Date.now() / 1000)) return 100;
-    return Math.floor(
-      100 - ((stakingInfo[3] - Math.floor(Date.now() / 1000)) / Number(epochLength)) * 100
+    return 100 - Math.floor(
+      (Number(epochLength)) / ((BigNumber.from(stakingInfo[3]).toNumber() - Math.floor(Date.now() / 1000))) * 100
     );
   }, [stakingInfo, epochLength, isEpochLengthLoading]);
 
