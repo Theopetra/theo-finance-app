@@ -38,7 +38,7 @@ export const MembershipAPY = ({ apy, value }) => {
   return (
     <ConfirmRow
       title="APY"
-      value={`${apy * 100}% THEO`}
+      value={`${apy}% THEO`}
       subtext={`Estimated yield of ${estApy.toFixed(2)} THEO`}
     />
   );

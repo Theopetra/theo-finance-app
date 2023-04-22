@@ -131,6 +131,7 @@ const Memberships = () => {
   const ACTION_CARD = [
     {
       type: standard.type,
+      apy: nextRewardRateStaking && rewardAsPercent(nextRewardRateStaking),
       header: {
         primary: <span className="capitalize">{standard.type}</span>,
         classes: 'bg-theo-navy dark:bg-theo-dark-navy text-white',
@@ -153,6 +154,7 @@ const Memberships = () => {
     },
     {
       type: premium.type,
+      apy: nextRewardRateLocked && rewardAsPercent(nextRewardRateLocked),
       header: {
         primary: 'Premium',
         classes: 'bg-theo-cyan text-white',
@@ -187,7 +189,6 @@ const Memberships = () => {
       ),
     },
   ];
-  // disabling page. enable with page.tsx extension
   return (
     <PageContainer>
       <div className="pt-4">
@@ -208,7 +209,14 @@ const Memberships = () => {
               actionButton={{
                 label: 'Subscribe',
                 onClick: () =>
-                  openModal(<SubscribeFormModal membership={membershipData[props.type]} />),
+                  openModal(
+                    <SubscribeFormModal
+                      membership={{
+                        ...membershipData[props.type],
+                        apy: props.apy,
+                      }}
+                    />
+                  ),
               }}
             />
           </Fragment>

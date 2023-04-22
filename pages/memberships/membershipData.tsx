@@ -8,13 +8,11 @@ export type Membership = {
 const membershipData = {
   premium: {
     type: 'premium',
-    apy: 0.18,
     lockDurationInDays: 365,
     contractName: 'TheopetraStakingLocked',
   },
   standard: {
     type: 'standard',
-    apy: 0.05,
     contractName: 'TheopetraStaking',
   },
 };

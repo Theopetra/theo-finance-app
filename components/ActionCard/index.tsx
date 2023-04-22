@@ -8,7 +8,7 @@ type ActionCardProps = {
     secondary?: string;
     classes?: string;
   };
-  data: { label: string; value: string; info?: string; type?: string }[];
+  data: { label: string; value: string | number; info?: string; type?: string }[];
   actionButton: { label: string; onClick?: () => void; icon?: ReactElement };
   warning: string | ReactElement;
   icon: ReactElement;
