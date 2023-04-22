@@ -14,15 +14,32 @@ import { InformationCircleIcon } from '@heroicons/react/solid';
 import { rewardAsPercent } from '@/util/reward-as-percent';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import UnstakeConfirm from './components/UnstakeConfirm';
+const RewardsPoolPopover = ({ reward }) => (
+  <Popover className="relative -mt-2  ">
+    <Popover.Button>
+      <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
+        <div className="text-sm text-green-600">
+          +{formatTheo(BigNumber.from(reward).toNumber(), 2)} $THEO
+        </div>
+        <InformationCircleIcon width={14} height={14} className="text-gray-500" />
+      </div>
+    </Popover.Button>
 
+    <Popover.Panel className=" absolute right-[100%] z-10 translate-x-[25%] rounded-xl bg-theo-navy p-2 text-center text-xs text-gray-300 shadow-xl">
+      Slashing Pool Bonus available if stake is held to term.
+    </Popover.Panel>
+  </Popover>
+);
 const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
-      <div className="mx-auto flex whitespace-normal rounded p-1 text-[10px] leading-snug hover:bg-slate-200">
-        {penaltyIsLoading || !penalty
-          ? 'Loading...'
-          : `-${formatTheo(BigNumber.from(penalty).toString())}THEO`}
-        <InformationCircleIcon width={12} height={12} />
+      <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
+        <div className="text-red-700">
+          {penaltyIsLoading || !penalty
+            ? 'Loading...'
+            : `-${formatTheo(BigNumber.from(penalty).toString())} $THEO`}
+        </div>
+        <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
     </Popover.Button>
 
@@ -83,18 +100,23 @@ const UnstakeButton = ({ purchase, matured, account }) => {
   const timeRemaining = useMemo(() => {
     if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
     if (stakingInfo[3] <= Math.floor(Date.now() / 1000)) return 100;
-    return 100 - Math.floor(
-      (Number(epochLength)) / ((BigNumber.from(stakingInfo[3]).toNumber() - Math.floor(Date.now() / 1000))) * 100
+    return (
+      100 -
+      Math.floor(
+        (Number(epochLength) /
+          (BigNumber.from(stakingInfo[3]).toNumber() - Math.floor(Date.now() / 1000))) *
+          100
+      )
     );
   }, [stakingInfo, epochLength, isEpochLengthLoading]);
 
-  const { data: penalty, isLoading: penaltyIsLoading } = purchase.contractName === 'TheopetraStaking' ? {data: 0, isLoading: false} : useContractRead(
+  const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
     {
       addressOrName: address,
       contractInterface: abi,
     },
     'getPenalty',
-    { args: [amount, timeRemaining] }
+    { args: [amount, timeRemaining], enabled: purchase.contractName !== 'TheopetraStaking' }
   );
 
   const unstakeArgs = useMemo(
@@ -123,7 +145,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
       >
         {`${matured ? 'Unstake' : 'Unstake Early'}`}
       </button>
-      {!matured && <PenaltyPopover penalty={penalty} penaltyIsLoading={penaltyIsLoading} />}
+      {!matured && <PenaltyPopover penalty={penalty || 0} penaltyIsLoading={penaltyIsLoading} />}
     </>
   );
 };
@@ -133,6 +155,7 @@ const YourMemberships = () => {
   const formattedPurchases = useMemo(
     () =>
       memberships?.map((p) => {
+        console.log(p);
         const endDate = new Date(BigNumber.from(p.stakingInfo.stakingExpiry).toNumber() * 1000);
         const startDate =
           p.contractName === 'TheopetraStaking' ? endDate : add(new Date(endDate), { years: -1 });
@@ -144,6 +167,7 @@ const YourMemberships = () => {
           rewards: p.rewards,
           contractName: p.contractName,
           index: p.index,
+          slashingPoolRewards: p.slashingPoolRewards,
           matured: p.contractName === 'TheopetraStaking' ? true : endDate < new Date(),
         };
       }),
@@ -223,13 +247,13 @@ const YourMemberships = () => {
         accessor: 'rewards',
         width: '10%',
         Cell: ({ value, cell }) => (
-          <div
-            className="flex justify-center dark:text-white"
-            title={formatTheo(BigNumber.from(value).toNumber(), 6)}
-          >
+          <div className=" dark:text-white" title={formatTheo(BigNumber.from(value).toNumber(), 6)}>
             <div className={`text-lg font-bold`}>
               {formatTheo(BigNumber.from(value).toNumber(), 3)}
             </div>
+            {cell.row.original.slashingPoolRewards > 0 && (
+              <RewardsPoolPopover reward={cell.row.original.slashingPoolRewards} />
+            )}
           </div>
         ),
       },
