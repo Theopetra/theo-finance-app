@@ -140,7 +140,7 @@ const Memberships = () => {
       data: [
         { label: 'Assets', value: 'THEO' },
         {
-          label: 'APY',
+          label: 'APR',
           value: `${
             (!isLoadingStaking &&
               nextRewardRateStaking &&
@@ -163,7 +163,7 @@ const Memberships = () => {
       data: [
         { label: 'Assets', value: 'THEO' },
         {
-          label: 'APY',
+          label: 'APR',
           value: `${
             (!isLoadingLocked && nextRewardRateLocked && rewardAsPercent(nextRewardRateLocked)) || 0
           }% THEO`,
