@@ -208,7 +208,7 @@ const YourMemberships = () => {
         Cell: ({ value }) => (value === 'TheopetraStaking' ? 'Standard' : 'Premium'),
       },
       {
-        Header: 'APY',
+        Header: 'APR',
         accessor: 'contractName',
         width: '10%',
         Cell: ({ value }) =>
