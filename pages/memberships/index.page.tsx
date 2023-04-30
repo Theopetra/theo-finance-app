@@ -212,8 +212,7 @@ const Memberships = () => {
                   openModal(
                     <SubscribeFormModal
                       membership={{
-                        ...membershipData[props.type],
-                        apy: props.apy,
+                        ...membershipData[props.type]
                       }}
                     />
                   ),
