@@ -179,9 +179,10 @@ const Memberships = () => {
         <>
           Rewards and part of principal slashed if unstaked while locked -{' '}
           <a
-            href="https://docs.theopetralabs.com/protocol/staking"
+            href="https://docs.theopetralabs.com"
             target="_blank"
             rel="noreferrer"
+            className="text-theo-cyan underline"
           >
             more info
           </a>
@@ -212,7 +213,7 @@ const Memberships = () => {
                   openModal(
                     <SubscribeFormModal
                       membership={{
-                        ...membershipData[props.type]
+                        ...membershipData[props.type],
                       }}
                     />
                   ),
