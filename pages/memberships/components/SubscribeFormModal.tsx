@@ -87,10 +87,7 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
           <button onClick={closeModal} className="cursor-pointer">
             <ArrowLeft color="rgb(80, 174, 203)" size={50} />
           </button>
-          <div
-            className="text-center text-theo-navy dark:text-white"
-            style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
-          >
+          <div className="text-center text-theo-navy dark:text-white">
             <div className="text-3xl font-bold capitalize sm:text-4xl">
               {membership.type} Membership
             </div>

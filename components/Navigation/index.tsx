@@ -8,9 +8,9 @@ import Logo from './Logo';
 import NavItem from './NavItem';
 
 const socialLinks = [
-  { icon: 'twitter-logo', href: 'https://twitter.com/TheopetraLabs' },
-  { icon: 'discord-logo', href: 'https://discord.gg/kUUeyPkwSv' },
-  { icon: 'substack-logo', href: 'https://docs.theopetralabs.com' },
+  { icon: 'twitter', href: 'https://twitter.com/TheopetraLabs' },
+  { icon: 'discord', href: 'https://discord.gg/kUUeyPkwSv' },
+  { icon: 'gitbook', href: 'https://docs.theopetralabs.com' },
 ];
 const classes = {
   statContainer: 'flex flex-row-reverse items-center justify-between flex-1  ',

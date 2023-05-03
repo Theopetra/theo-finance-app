@@ -165,8 +165,12 @@ const SubscribeConfirm = ({
             >
               {membership.type} Membership
             </div>
-            You can unstake at any time, but won&apos;t be eligible for ETH rebates. <br /> Slashing
-            penalties apply if unstaked early.
+            You can unstake at any time, but won&apos;t be eligible for ETH rebates.
+            {membership.type === 'premium' && (
+              <>
+                <br /> Slashing penalties apply if unstaked early.
+              </>
+            )}
           </div>
           <div>
             <LockLaminated color="#2F455C" size={50} />
