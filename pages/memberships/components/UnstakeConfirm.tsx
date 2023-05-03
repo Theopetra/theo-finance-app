@@ -9,6 +9,8 @@ import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import FailedTransaction from '@/components/FailedTransaction';
 import { formatTheo } from '@/lib/format_theo';
 import { BigNumber } from 'ethers';
+import { useState } from 'react';
+import Image from 'next/image';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="$THEO to stake" value={value} />;
@@ -35,7 +37,7 @@ const UnstakeConfirm = ({
   const [, { openModal, closeModal }] = useModal();
   const { data: signer } = useSigner();
   const [, { reRender }] = useUserPurchases();
-
+  const [showInstructions, setShowInstructions] = useState(false);
   // APPROVE
   const {
     data: approveData,
@@ -101,7 +103,7 @@ const UnstakeConfirm = ({
     }
   );
 
-  const handleClick = async () => {
+  const handleConfirmUnstake = async () => {
     openModal(
       <PendingTransaction
         message="1 of 2 transactions..."
@@ -111,6 +113,60 @@ const UnstakeConfirm = ({
     approve();
   };
 
+  const confirmContent = (
+    <>
+      {' '}
+      <div className="mb-4 flex flex-col gap-2">
+        {purchase.contractName !== 'TheopetraStaking' && (
+          <div className=" mx-auto mb-4 flex max-w-2xl flex-col gap-4 text-xl">
+            <p>Premium stakes are locked for 1 year from the date of staking. </p>
+            <p>
+              Premature unstaking—that is, unstaking before the 1-year lock period expires—will
+              incur a slashing penalty.
+            </p>
+            <p>
+              These penalties are in the form of $THEO principal and $THEO rebate slashing. This
+              slashing penalty is present to incentivize long-term behavior for Premium members.
+            </p>
+            <div className="text-center text-2xl font-bold">
+              -{penalty ? formatTheo(BigNumber.from(penalty).toString()) : 0} $THEO
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="flex w-full items-center justify-center">
+        <button className="border-button w-60" onClick={() => setShowInstructions(true)}>
+          Confirm Unstake
+        </button>
+      </div>
+    </>
+  );
+
+  const instructionContent = (
+    <div className="flex flex-col items-center justify-center sm:flex-row">
+      <div>
+        <div className="relative mr-6 w-1/2 overflow-hidden rounded-2xl bg-theo-light p-6 shadow-md sm:w-auto">
+          <Image
+            src="/assets/images/instruction-ex.png"
+            alt="instructions"
+            className=" overflow-hidden rounded-2xl "
+            width={320}
+            height={569}
+          />
+        </div>
+      </div>
+      <div>
+        <p className="mb-4 text-xl font-bold">To Unstake:</p>
+        <p className="mb-4 text-lg">
+          Click the <span className="font-bold text-red-500">&apos;Use default&apos;</span> button
+          or your transaction will not be approved.
+        </p>
+        <button className="border-button button-primary w-60" onClick={handleConfirmUnstake}>
+          Confirm Unstake
+        </button>
+      </div>
+    </div>
+  );
   return (
     <div>
       <div className="flex flex-col">
@@ -130,29 +186,8 @@ const UnstakeConfirm = ({
             <LockLaminated color="#2F455C" size={50} />
           </div>
         </div>
-        <div className="mb-4 flex flex-col gap-2">
-          {purchase.contractName !== 'TheopetraStaking' && (
-            <div className=" mx-auto mb-4 flex max-w-2xl flex-col gap-4 text-xl">
-              <p>Premium stakes are locked for 1 year from the date of staking. </p>
-              <p>
-                Premature unstaking—that is, unstaking before the 1-year lock period expires—will
-                incur a slashing penalty.
-              </p>
-              <p>
-                These penalties are in the form of $THEO principal and $THEO rebate slashing. This
-                slashing penalty is present to incentivize long-term behavior for Premium members.
-              </p>
-              <div className="text-center text-2xl font-bold">
-                -{penalty ? formatTheo(BigNumber.from(penalty).toString()) : 0} $THEO
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="flex w-full items-center justify-center">
-          <button className="border-button w-60" onClick={handleClick}>
-            Confirm Unstake
-          </button>
-        </div>
+
+        {showInstructions ? instructionContent : confirmContent}
       </div>
     </div>
   );
