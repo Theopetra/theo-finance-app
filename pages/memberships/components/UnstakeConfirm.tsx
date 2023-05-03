@@ -146,13 +146,10 @@ const UnstakeConfirm = ({
     <div className="flex flex-col items-center justify-center sm:flex-row">
       <div>
         <div className="relative mr-6 w-1/2 overflow-hidden rounded-2xl bg-theo-light p-6 shadow-md sm:w-auto">
-          <Image
+          <img
             src="/assets/images/instruction-ex.png"
             alt="instructions"
-            className=" overflow-hidden rounded-2xl "
-            width={320}
-            height={569}
-            loader={({ src }) => src}
+            className=" w-full max-w-[250px] overflow-hidden rounded-2xl"
           />
         </div>
       </div>
