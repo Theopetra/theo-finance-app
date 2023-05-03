@@ -160,7 +160,7 @@ const UnstakeConfirm = ({
           or your transaction will not be approved.
         </p>
         <button className="border-button button-primary w-60" onClick={handleConfirmUnstake}>
-          Confirm Unstake
+          Continue with Unstake
         </button>
       </div>
     </div>
