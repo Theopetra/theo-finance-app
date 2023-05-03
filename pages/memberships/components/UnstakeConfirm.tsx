@@ -152,6 +152,7 @@ const UnstakeConfirm = ({
             className=" overflow-hidden rounded-2xl "
             width={320}
             height={569}
+            loader={({ src }) => src}
           />
         </div>
       </div>
