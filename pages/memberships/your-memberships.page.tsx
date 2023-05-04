@@ -150,8 +150,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
   );
 };
 const YourMemberships = () => {
-  const { data } = useAccount();
-  const [{ memberships }] = useUserPurchases();
+  const [{ memberships, isLoadingMemberships, isLoadingPremiumMemberships }] = useUserPurchases();
   const formattedPurchases = useMemo(
     () =>
       memberships?.map((p) => {
@@ -268,18 +267,26 @@ const YourMemberships = () => {
     ],
     [account]
   );
+  const fallbackMessage = useMemo(() => {
+    if (account?.address && isLoadingMemberships) {
+      return 'Checking your memberships...';
+    }
+    if (account?.address && formattedPurchases?.length === 0 && !isLoadingMemberships) {
+      return 'You have no active memberships.';
+    }
+    if (!account?.address) {
+      return 'Please connect your wallet.';
+    }
+
+    return '';
+  }, [account, isLoadingMemberships, formattedPurchases]);
 
   return (
     <PageContainer>
-      {data?.address && formattedPurchases?.length > 0 && (
+      {account?.address && formattedPurchases?.length > 0 && (
         <PurchasesTable columns={columns} data={formattedPurchases} />
       )}
-      {data?.address && formattedPurchases?.length === 0 && (
-        <div className="text-center dark:text-white">You have no active memberships.</div>
-      )}
-      {!data?.address && (
-        <div className="text-center dark:text-white">Please connect your wallet.</div>
-      )}
+      <div className="text-center dark:text-white">{fallbackMessage}</div>
     </PageContainer>
   );
 };

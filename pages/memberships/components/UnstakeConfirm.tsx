@@ -181,7 +181,9 @@ const UnstakeConfirm = ({
             </div>
           </div>
           <div>
-            <LockLaminated color="#2F455C" size={50} />
+            {purchase.contractName !== 'TheopetraStaking' && (
+              <LockLaminated color="#2F455C" size={50} />
+            )}{' '}
           </div>
         </div>
 

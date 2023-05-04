@@ -10,6 +10,7 @@ export const usePurchasesByContract = (contractName) => {
   const { address, abi } = useContractInfo(contractName);
   const { address: sTheoAddress, abi: sAbi } = useContractInfo('sTheopetra');
   const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
+  const [isLoadingPurchases, setIsLoadingPurchases] = useState(false);
   const [pendingNotes, setPendingNotes] = useState<any[]>([]);
   // This is a piece of state to trigger a re-render when the contract is updated.
   const [render, setRender] = useState(false);
@@ -36,6 +37,7 @@ export const usePurchasesByContract = (contractName) => {
 
   useMemo(() => {
     async function callContract() {
+      setIsLoadingPurchases(true);
       const cached = cache.getItem(`purchases-${contractName}`);
       if (cached) {
         setPendingNotes(cached);
@@ -137,12 +139,13 @@ export const usePurchasesByContract = (contractName) => {
             console.log(e);
           }
         }
+        setIsLoadingPurchases(false);
       }
     }
     callContract();
   }, [contract, data?.address, render, contractName]);
 
-  return { pendingNotes, reRender };
+  return { pendingNotes, reRender, isLoadingPurchases };
 };
 
 export const useUserPurchases = () => {
