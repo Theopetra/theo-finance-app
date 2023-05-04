@@ -94,9 +94,7 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
             {membership.type === 'premium' &&
               'Review carefully, your $THEO will be locked once you subscribe'}
           </div>
-          <div>
-            <LockLaminated color="#2F455C" size={50} />
-          </div>
+          <div>{membership.type === 'premium' && <LockLaminated color="#2F455C" size={50} />}</div>
         </div>
         <div className="mb-4 flex flex-col gap-2">
           <MembershipType type={membership.type} />
