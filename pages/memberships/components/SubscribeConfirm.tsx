@@ -73,7 +73,6 @@ const SubscribeConfirm = ({
           logEvent({ name: 'purchase_completed' });
           cache.clear();
           reRender();
-          console.log('successs');
           openModal(
             <SuccessfulTransaction
               txId={data.hash}
