@@ -114,7 +114,6 @@ const SubscribeConfirm = ({
     {
       async onSuccess(data) {
         const receipt = await data.wait();
-        console.log({ receipt });
         if (receipt.status === 1) {
           logEvent({ name: 'erc20_approved' });
           openModal(

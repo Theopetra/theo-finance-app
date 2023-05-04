@@ -155,7 +155,6 @@ const YourMemberships = () => {
   const formattedPurchases = useMemo(
     () =>
       memberships?.map((p) => {
-        console.log(p);
         const endDate = new Date(BigNumber.from(p.stakingInfo.stakingExpiry).toNumber() * 1000);
         const startDate =
           p.contractName === 'TheopetraStaking' ? endDate : add(new Date(endDate), { years: -1 });
