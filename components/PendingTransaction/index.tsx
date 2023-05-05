@@ -1,5 +1,5 @@
 import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import LottieAnimation from 'react-lottie';
 import animationData from './animation-data.json';
 
@@ -8,7 +8,7 @@ const PendingTransaction = ({
   secondaryMessage,
 }: {
   message?: string;
-  secondaryMessage?: string;
+  secondaryMessage?: string | ReactElement;
 }) => {
   const defaultOptions = {
     loop: true,

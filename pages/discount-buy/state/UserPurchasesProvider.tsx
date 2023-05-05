@@ -10,10 +10,16 @@ export const UserPurchasesProvider = ({ children }) => {
   const { pendingNotes: publicPrelistPurchases, reRender: pplReRender } = usePurchasesByContract(
     'PublicPreListBondDepository'
   );
-  const { pendingNotes: standardMemberships, reRender: tsReRender } =
-    usePurchasesByContract('TheopetraStaking');
-  const { pendingNotes: premiumMemberships, reRender: tslReRender } =
-    usePurchasesByContract('TheopetraStakingLocked');
+  const {
+    pendingNotes: standardMemberships,
+    reRender: tsReRender,
+    isLoadingPurchases: isLoadingStandardMemberships,
+  } = usePurchasesByContract('TheopetraStaking');
+  const {
+    pendingNotes: premiumMemberships,
+    reRender: tslReRender,
+    isLoadingPurchases: isLoadingPremiumMemberships,
+  } = usePurchasesByContract('TheopetraStakingLocked');
 
   const reRender = function () {
     wlReRender();
@@ -26,6 +32,7 @@ export const UserPurchasesProvider = ({ children }) => {
     <UserPurchasesContext.Provider
       value={[
         {
+          isLoadingMemberships: isLoadingStandardMemberships || isLoadingPremiumMemberships,
           purchases: [...whitelistPurchases, ...publicPrelistPurchases],
           memberships: [...standardMemberships, ...premiumMemberships],
         },

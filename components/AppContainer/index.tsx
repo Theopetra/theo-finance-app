@@ -52,7 +52,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
               {activeChain?.id && !allowedChains.includes(activeChain.id) && (
                 <div className=" font-bold">Please connect to the Ethereum Mainnet.</div>
               )}
-              {activeChain && allowedChains.includes(activeChain.id) && (
+              {activeChain && allowedChains.includes(activeChain.id) ? (
                 <PageStateProvider>
                   {/* provider */}
                   <Transition
@@ -73,6 +73,8 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
                   </Transition>
                   {children}
                 </PageStateProvider>
+              ) : (
+                <div className="mt-6 font-bold">Please connect wallet</div>
               )}
             </div>
           </div>

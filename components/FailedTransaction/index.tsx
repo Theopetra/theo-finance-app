@@ -1,19 +1,17 @@
-import Icon from '@/components/Icons';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { LockLaminated } from 'phosphor-react';
-import { Membership } from '../membershipData';
 
-import SubscribeConfirm, { MembershipCommitment } from './SubscribeConfirm';
-import { MembershipAPY, MembershipDuration, MembershipType } from './SubscribeFormModal';
+import { ReactElement } from 'react';
 
-const Failed = ({
+const FailedTransaction = ({
   error,
-  membership,
-  depositAmount,
+  Icon,
+  content,
+  onRetry,
 }: {
   error: any;
-  membership: Membership;
-  depositAmount: string;
+  onRetry?: () => void;
+  Icon: any;
+  content?: ReactElement;
 }) => {
   const [, { openModal }] = useModal();
   let errorMsg;
@@ -28,6 +26,8 @@ const Failed = ({
       errorMsg =
         'There was a problem executing the transfer. Common reasons include missing token approval or insufficient funds.';
     }
+  } else if (error?.code === -32603) {
+    errorMsg = 'Approve the exact amount of $THEO to transact with.';
   } else {
     errorMsg = 'There was a problem executing the transfer. Please try again.';
   }
@@ -35,12 +35,7 @@ const Failed = ({
   return (
     <div>
       <div className="mb-8 flex items-center justify-between ">
-        <button
-          onClick={() =>
-            openModal(<SubscribeConfirm membership={membership} depositAmount={depositAmount} />)
-          }
-          className="text-theo-cyan"
-        >
+        <button onClick={onRetry} className="text-theo-cyan">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-12 w-12"
@@ -57,7 +52,7 @@ const Failed = ({
           style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
         >
           <div className="mb-4 text-3xl font-bold sm:text-4xl">
-            Buy Failed...
+            Transaction Failed...
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="inline-block w-8 text-theo-cyan sm:w-10"
@@ -76,22 +71,12 @@ const Failed = ({
           <div className="text">Reason: {errorMsg}</div>
         </div>
         <div>
-          <LockLaminated size={50} className=" w-12 dark:text-white" />
+          <Icon size={50} className=" w-12 dark:text-white" />
         </div>
       </div>
-      <div className="mb-4 flex flex-col gap-2">
-        <MembershipType type={membership.type} />
-        <MembershipCommitment value={depositAmount} />
-        <MembershipAPY apy={membership.apy} value={depositAmount} />
-        <MembershipDuration lockDuration={membership?.lockDurationInDays} />
-      </div>
+      <div className="mb-4 flex flex-col gap-2">{content}</div>
       <div className="flex w-full items-center justify-center">
-        <button
-          className="border-button w-60"
-          onClick={() => {
-            openModal(<SubscribeConfirm depositAmount={depositAmount} membership={membership} />);
-          }}
-        >
+        <button className="border-button w-60" onClick={onRetry}>
           Try Again
         </button>
       </div>
@@ -99,4 +84,4 @@ const Failed = ({
   );
 };
 
-export default Failed;
+export default FailedTransaction;

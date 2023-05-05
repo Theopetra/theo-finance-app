@@ -4,14 +4,14 @@ import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { logEvent } from '@/lib/analytics';
 import { cache } from '@/lib/cache';
-import Failed from './Failed';
-import Successful from './Successful';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { format } from 'date-fns';
-import { ArrowLeft } from 'phosphor-react';
+import { ArrowLeft, Intersect } from 'phosphor-react';
 import { useAccount, useContractWrite, useSigner } from 'wagmi';
+import FailedTransaction from '@/components/FailedTransaction';
+import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 
 export const MarketDiscountRow = () => {
   const { activeContractName } = useActiveBondDepo();
@@ -47,6 +47,15 @@ const ConfirmClaim = ({ purchase }) => {
   const { data: signer } = useSigner();
   const claimArgs = [account?.address, [purchase.index]];
   // CLAIM
+
+  const dataRows = (
+    <>
+      <MarketDiscountRow />
+      <TheoPurchaseDateRow date={purchase.date} />
+      <TokensToClaimRow total={purchase.amount} />
+      <TokensUnlockedRow date={purchase.unlockDate} />
+    </>
+  );
   const {
     data,
     isError: writeErr,
@@ -66,14 +75,31 @@ const ConfirmClaim = ({ purchase }) => {
           logEvent({ name: 'redeem_completed' });
           cache.clear();
           reRender();
-          openModal(<Successful txId={data.hash} purchase={purchase} />);
+          openModal(
+            <SuccessfulTransaction
+              txId={data.hash}
+              title="Claim Successful!"
+              redirect="/whitelist-sale/your-purchases"
+              Icon={Intersect}
+              content={dataRows}
+            />
+          );
         } else {
           console.log('contract fail');
         }
       },
       onError(error) {
         console.log(error);
-        openModal(<Failed error={error} purchase={purchase} />);
+        openModal(
+          <FailedTransaction
+            Icon={Intersect}
+            onRetry={() => {
+              openModal(<ConfirmClaim purchase={purchase} />);
+            }}
+            error={error}
+            content={dataRows}
+          />
+        );
       },
       args: claimArgs,
     }
@@ -101,12 +127,7 @@ const ConfirmClaim = ({ purchase }) => {
           </div>
           <div></div>
         </div>
-        <div className="mb-4 flex flex-col gap-2">
-          <MarketDiscountRow />
-          <TheoPurchaseDateRow date={purchase.date} />
-          <TokensToClaimRow total={purchase.amount} />
-          <TokensUnlockedRow date={purchase.unlockDate} />
-        </div>
+        <div className="mb-4 flex flex-col gap-2">{dataRows}</div>
         <div className="flex w-full items-center justify-center">
           <button className="border-button w-60" onClick={handleClick}>
             Confirm Claim

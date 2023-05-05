@@ -5,7 +5,7 @@ const Table = ({ columns, data }) => {
   const tableInstance = useTable({ columns, data, disableMultiSort: false }, useSortBy);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
   return (
-    <div className=" shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+    <div className="overflow-scroll shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
       <table {...getTableProps()} className="min-w-full divide-y divide-gray-300">
         <thead className="bg-gray-50 dark:bg-black">
           {

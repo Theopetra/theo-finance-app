@@ -3,20 +3,43 @@ import { formatTheo } from '@/lib/format_theo';
 import { add, format } from 'date-fns';
 import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
-import { useAccount, useContract, useContractRead, useContractWrite, useSigner } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import PurchasesTable from '../discount-buy/your-purchases/components/PurchasesTable';
 import { cache } from '@/lib/cache';
-import { logEvent } from '@/lib/analytics';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
-
-const PenaltyPopover = () => (
+import { InformationCircleIcon } from '@heroicons/react/solid';
+import { rewardAsPercent } from '@/util/reward-as-percent';
+import useModal from '@/state/ui/theme/hooks/use-modal';
+import UnstakeConfirm from './components/UnstakeConfirm';
+const RewardsPoolPopover = ({ reward }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
-      <div className="mx-auto flex whitespace-normal rounded p-1 text-[10px] leading-snug hover:bg-slate-200">
-        Rewards slashed
+      <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
+        <div className="text-sm text-green-600">
+          +{formatTheo(BigNumber.from(reward).toNumber(), 2)} $THEO
+        </div>
+        <InformationCircleIcon width={14} height={14} className="text-gray-500" />
+      </div>
+    </Popover.Button>
+
+    <Popover.Panel className=" absolute right-[100%] z-10 translate-x-[25%] rounded-xl bg-theo-navy p-2 text-center text-xs text-gray-300 shadow-xl">
+      Slashing Pool Bonus available if stake is held to term.
+    </Popover.Panel>
+  </Popover>
+);
+const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
+  <Popover className="relative -mt-2  ">
+    <Popover.Button>
+      <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
+        <div className="text-red-700">
+          {penaltyIsLoading || !penalty
+            ? 'Loading...'
+            : `-${formatTheo(BigNumber.from(penalty).toString())} $THEO`}
+        </div>
+        <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
     </Popover.Button>
 
@@ -26,12 +49,24 @@ const PenaltyPopover = () => (
   </Popover>
 );
 
-const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRender }) => {
+const UnstakeButton = ({ purchase, matured, account }) => {
   // STAKE
-
+  const [, { openModal }] = useModal();
   const { address, abi } = useContractInfo(purchase.contractName);
+  const { address: sTheoAddress, abi: sAbi } = useContractInfo('sTheopetra');
+  const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
+  const { address: StakingDistributor, abi: StakingDistributorAbi } =
+    useContractInfo('StakingDistributor');
 
-  // const ad = await contract.stakingInfo(account.address, purchase.index);
+  const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
+    {
+      addressOrName: StakingDistributor,
+      contractInterface: StakingDistributorAbi,
+    },
+    'epochLength'
+  );
+  const theoAddress = purchase.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress;
+  const theoAbi = purchase.contractName === 'TheopetraStaking' ? sAbi : pAbi;
   const { data: stakingInfo } = useContractRead(
     {
       addressOrName: address,
@@ -43,115 +78,79 @@ const UnstakeButton = ({ purchase, matured, account, theoAddress, signer, reRend
       cacheTime: cache.cacheTimesInMs.prices,
     }
   );
-  const amount = stakingInfo?.deposit && BigNumber.from(stakingInfo?.deposit).toNumber();
 
-  const unstakeArgs = [
-    account?.address,
-    [amount],
-    false,
-    [BigNumber.from(purchase.index).toNumber()],
-  ];
-  // TODO: Approval on premium is unnessary
-  // APPROVE
-  const {
-    data: approveData,
-    isLoading: approvalLoading,
-    write: approve,
-  } = useContractWrite(
+  const { data: amountFromGons } = useContractRead(
     {
       addressOrName: theoAddress,
-      contractInterface: [
-        'function approve(address _spender, uint256 _value) public returns (bool success)',
-      ],
-      signerOrProvider: signer,
+      contractInterface: theoAbi,
     },
-    'approve',
+    'balanceForGons',
     {
-      async onSuccess(data) {
-        // console.log({ unstakeArgs });
-
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'erc20_approved' });
-          unstake();
-        } else {
-          console.log('failed', receipt);
-        }
-      },
-      onError(error) {
-        console.log('failed 22', error);
-      },
-      args: [address, amount],
+      args: [stakingInfo?.[4]],
+      cacheTime: cache.cacheTimesInMs.prices,
     }
   );
 
-  // unstake
-  const { write: unstake, isLoading: unstakeLoading } = useContractWrite(
+  const amount = useMemo(() => {
+    if (!stakingInfo) return 0;
+    if (!amountFromGons) return 0;
+    return BigNumber.from(amountFromGons).toNumber();
+  }, [stakingInfo, amountFromGons]);
+
+  const timeRemaining = useMemo(() => {
+    if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
+    if (stakingInfo[3] <= Math.floor(Date.now() / 1000)) return 100;
+    return (
+      100 -
+      Math.floor(
+        (Number(epochLength) /
+          (BigNumber.from(stakingInfo[3]).toNumber() - Math.floor(Date.now() / 1000))) *
+          100
+      )
+    );
+  }, [stakingInfo, epochLength, isEpochLengthLoading]);
+
+  const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
     {
       addressOrName: address,
       contractInterface: abi,
-      signerOrProvider: signer,
     },
-    'forfeit',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'unstake_completed' });
-          cache.clear();
-          reRender();
-        }
-      },
-      onError(error) {
-        console.log('error', error);
-      },
-      args: [purchase.index],
-    }
+    'getPenalty',
+    { args: [amount, timeRemaining], enabled: purchase.contractName !== 'TheopetraStaking' }
   );
-  // claim
-  const { write: claim, isLoading: claimLoading } = useContractWrite(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-      signerOrProvider: signer,
-    },
-    'claim',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'claim_completed' });
-          cache.clear();
-          reRender();
-        }
-      },
-      onError(error) {
-        console.log('error', error);
-      },
-      args: unstakeArgs,
-    }
+
+  const unstakeArgs = useMemo(
+    () => [account?.address, [amount], false, [BigNumber.from(purchase.index).toNumber()]],
+    [amount, account?.address, purchase]
   );
+
   return (
     <>
       <button
         className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
         onClick={() => {
-          approve();
+          openModal(
+            <UnstakeConfirm
+              penalty={penalty}
+              purchase={purchase}
+              theoAddress={theoAddress}
+              theoAbi={theoAbi}
+              unstakeArgs={unstakeArgs}
+              amount={amount}
+              stakingContractAddress={address}
+              stakingContractAbi={abi}
+            />
+          );
         }}
       >
-        {approvalLoading
-          ? 'Approving...'
-          : unstakeLoading
-          ? 'Unstaking...'
-          : `${matured ? 'Unstake' : 'Unstake Early'}`}
+        {`${matured ? 'Unstake' : 'Unstake Early'}`}
       </button>
-      {!matured && <PenaltyPopover />}
+      {!matured && <PenaltyPopover penalty={penalty || 0} penaltyIsLoading={penaltyIsLoading} />}
     </>
   );
 };
 const YourMemberships = () => {
-  const { data } = useAccount();
-  const [{ memberships }] = useUserPurchases();
+  const [{ memberships, isLoadingMemberships, isLoadingPremiumMemberships }] = useUserPurchases();
   const formattedPurchases = useMemo(
     () =>
       memberships?.map((p) => {
@@ -161,30 +160,59 @@ const YourMemberships = () => {
         return {
           startDate,
           endDate,
+          timeRemaining: p.stakingInfo.timeRemaining,
           deposit: BigNumber.from(p.stakingInfo.deposit).toNumber(),
           rewards: p.rewards,
           contractName: p.contractName,
           index: p.index,
-          matured: endDate < new Date(),
+          slashingPoolRewards: p.slashingPoolRewards,
+          matured: p.contractName === 'TheopetraStaking' ? true : endDate < new Date(),
         };
       }),
     [memberships]
   );
 
-  const [, { reRender }] = useUserPurchases();
   const { data: account } = useAccount();
-  const { address: theoAddress } = useContractInfo('sTheopetra');
 
-  const { data: signer } = useSigner();
+  const { address, abi } = useContractInfo('StakingDistributor');
 
-  // POST-LAUNCH TODO: add button for redeem() when relevant
+  const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'nextRewardRate',
+    {
+      args: [3],
+    }
+  );
+  const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'nextRewardRate',
+    {
+      args: [2],
+    }
+  );
   const columns = useMemo(
     () => [
       {
-        Header: 'Joined',
-        accessor: 'startDate',
+        Header: 'Type',
+        accessor: 'contractName',
+        id: 'type',
         width: '10%',
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
+        Cell: ({ value }) => (value === 'TheopetraStaking' ? 'Standard' : 'Premium'),
+      },
+      {
+        Header: 'APR',
+        accessor: 'contractName',
+        width: '10%',
+        Cell: ({ value }) =>
+          value === 'TheopetraStaking'
+            ? (nextRewardRateStaking && `${rewardAsPercent(nextRewardRateStaking)}%`) || '5%'
+            : (nextRewardRateLocked && `${rewardAsPercent(nextRewardRateLocked)}%`) || '18%',
       },
       {
         Header: 'THEO Committed',
@@ -193,30 +221,37 @@ const YourMemberships = () => {
         Cell: ({ value }) => formatTheo(value),
       },
       {
-        Header: 'APY',
-        accessor: 'contractName',
+        Header: 'Joined',
+        accessor: 'startDate',
         width: '10%',
-        Cell: ({ value }) => (value === 'TheopetraStaking' ? '5%' : '30%'),
+        Cell: ({ value }) => (
+          <span title={format(value, 'yyyy-MM-dd hh:mm:ss')}>{format(value, 'yyyy-MM-dd')}</span>
+        ),
       },
+
       {
         Header: 'Unlock Date',
         accessor: 'endDate',
         width: '10%',
-        Cell: ({ value }) => format(value, 'yyyy-MM-dd'),
+        Cell: ({ value, cell }) =>
+          cell.row.original.contractName === 'TheopetraStaking' ? (
+            'Anytime'
+          ) : (
+            <span title={format(value, 'yyyy-MM-dd hh:mm:ss')}>{format(value, 'yyyy-MM-dd')}</span>
+          ),
       },
       {
         Header: 'Rewards',
         accessor: 'rewards',
         width: '10%',
         Cell: ({ value, cell }) => (
-          <div
-            className="flex justify-center dark:text-white"
-            title={formatTheo(BigNumber.from(value).toNumber(), 6)}
-          >
+          <div className=" dark:text-white" title={formatTheo(BigNumber.from(value).toNumber(), 6)}>
             <div className={`text-lg font-bold`}>
               {formatTheo(BigNumber.from(value).toNumber(), 3)}
             </div>
-            {/* <div>{format(cell.row.original.endDate, 'yyyy-MM-dd')}</div> */}
+            {cell.row.original.slashingPoolRewards > 0 && (
+              <RewardsPoolPopover reward={cell.row.original.slashingPoolRewards} />
+            )}
           </div>
         ),
       },
@@ -226,31 +261,32 @@ const YourMemberships = () => {
         accessor: 'matured',
         width: '10%',
         Cell: ({ value: matured, cell }) => (
-          <UnstakeButton
-            purchase={cell.row.original}
-            matured={matured}
-            reRender={reRender}
-            account={account}
-            signer={signer}
-            theoAddress={theoAddress}
-          />
+          <UnstakeButton purchase={cell.row.original} matured={matured} account={account} />
         ),
       },
     ],
-    []
+    [account]
   );
+  const fallbackMessage = useMemo(() => {
+    if (account?.address && isLoadingMemberships) {
+      return 'Checking your memberships...';
+    }
+    if (account?.address && formattedPurchases?.length === 0 && !isLoadingMemberships) {
+      return 'You have no active memberships.';
+    }
+    if (!account?.address) {
+      return 'Please connect your wallet.';
+    }
+
+    return '';
+  }, [account, isLoadingMemberships, formattedPurchases]);
 
   return (
     <PageContainer>
-      {data?.address && formattedPurchases?.length > 0 && (
+      {account?.address && formattedPurchases?.length > 0 && (
         <PurchasesTable columns={columns} data={formattedPurchases} />
       )}
-      {data?.address && formattedPurchases?.length === 0 && (
-        <div className="text-center dark:text-white">You have no active memberships.</div>
-      )}
-      {!data?.address && (
-        <div className="text-center dark:text-white">Please connect your wallet.</div>
-      )}
+      <div className="text-center dark:text-white">{fallbackMessage}</div>
     </PageContainer>
   );
 };

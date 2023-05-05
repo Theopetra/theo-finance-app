@@ -4,8 +4,7 @@ import {
   darkTheme,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { chain, createClient, configureChains, WagmiProvider, WagmiConfig, Chain } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { chain, createClient, configureChains, WagmiConfig, Chain } from 'wagmi';
 
 import { useTheme } from '../ui/theme';
 import { infuraProvider } from 'wagmi/providers/infura';
@@ -34,7 +33,7 @@ const envChains = () => {
     case 'production':
       return [chain.mainnet];
     case 'staging':
-      return [sepolia];
+      return [sepolia, chain.hardhat];
     default:
       return [chain.hardhat, chain.localhost, sepolia];
   }
@@ -52,7 +51,10 @@ if (!alchemyId) {
 }
 
 const { chains, provider } = configureChains(envChains(), [
-  // jsonRpcProvider({ rpc: () => ({ http: 'http://127.0.0.1:8545/' }) }),
+  ...(process.env.NEXT_PUBLIC_ENV !== 'production' ||
+  (process.env.NEXT_PUBLIC_ENV as any) !== 'staging'
+    ? [jsonRpcProvider({ rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }) })]
+    : []),
   infuraProvider({ infuraId }),
   alchemyProvider({ alchemyId }),
   publicProvider(),

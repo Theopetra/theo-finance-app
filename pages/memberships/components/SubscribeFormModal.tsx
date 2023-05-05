@@ -87,19 +87,14 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
           <button onClick={closeModal} className="cursor-pointer">
             <ArrowLeft color="rgb(80, 174, 203)" size={50} />
           </button>
-          <div
-            className="text-center text-theo-navy dark:text-white"
-            style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
-          >
+          <div className="text-center text-theo-navy dark:text-white">
             <div className="text-3xl font-bold capitalize sm:text-4xl">
               {membership.type} Membership
             </div>
             {membership.type === 'premium' &&
               'Review carefully, your $THEO will be locked once you subscribe'}
           </div>
-          <div>
-            <LockLaminated color="#2F455C" size={50} />
-          </div>
+          <div>{membership.type === 'premium' && <LockLaminated color="#2F455C" size={50} />}</div>
         </div>
         <div className="mb-4 flex flex-col gap-2">
           <MembershipType type={membership.type} />

@@ -11,8 +11,8 @@ import { logEvent } from '@/lib/analytics';
 import { parseUnits } from 'ethers/lib/utils';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 import { cache } from '@/lib/cache';
-import Failed from './Failed';
-import Successful from './Successful';
+import SuccessfulTransaction from '@/components/SuccessfulTransaction';
+import FailedTransaction from '@/components/FailedTransaction';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="$THEO to stake" value={value} />;
@@ -33,9 +33,25 @@ const SubscribeConfirm = ({
   const { address: theopetraStakingAddress, abi: theopetraStakingABI } = useContractInfo(
     membership.contractName
   );
-
-  const { address: theoAddress } = useContractInfo('TheopetraERC20Token');
-
+  const dataRows = (
+    <>
+      <MembershipType type={membership.type} />
+      <MembershipCommitment value={depositAmount} />
+      <MembershipAPY apy={membership.apy} value={depositAmount} />
+      <MembershipDuration lockDuration={membership?.lockDurationInDays} />
+    </>
+  );
+  const { address: theoAddress, abi: theoAbi } = useContractInfo('TheopetraERC20Token');
+  const FailedModal = ({ error }: { error?: any }) => (
+    <FailedTransaction
+      Icon={LockLaminated}
+      onRetry={() => {
+        openModal(<SubscribeConfirm depositAmount={depositAmount} membership={membership} />);
+      }}
+      error={{ code: error?.code ?? 'Something went wrong.' }}
+      content={dataRows}
+    />
+  );
   const stakeArgs = [account?.address, depositAmountFormatted, true];
   // STAKE
   const {
@@ -57,16 +73,23 @@ const SubscribeConfirm = ({
           logEvent({ name: 'purchase_completed' });
           cache.clear();
           reRender();
-          console.log('successs');
           openModal(
-            <Successful txId={data.hash} membership={membership} depositAmount={depositAmount} />
+            <SuccessfulTransaction
+              txId={data.hash}
+              redirect={`/memberships/your-memberships`}
+              title={'Membership Successful!'}
+              Icon={LockLaminated}
+              content={dataRows}
+            />
           );
         } else {
           console.log('contract fail');
         }
       },
       onError(error) {
-        openModal(<Failed error={error} membership={membership} depositAmount={depositAmount} />);
+        console.log(JSON.stringify(error));
+
+        openModal(<FailedModal />);
       },
       args: stakeArgs,
     }
@@ -80,9 +103,10 @@ const SubscribeConfirm = ({
   } = useContractWrite(
     {
       addressOrName: theoAddress,
-      contractInterface: [
-        'function approve(address _spender, uint256 _value) public returns (bool success)',
-      ],
+      contractInterface: theoAbi,
+      // [
+      //   'function approve(address _spender, uint256 _value) public returns (bool success)',
+      // ],
       signerOrProvider: signer,
     },
     'approve',
@@ -100,17 +124,11 @@ const SubscribeConfirm = ({
 
           stake();
         } else {
-          openModal(
-            <Failed
-              error={{ code: 'Something went wrong.' }}
-              membership={membership}
-              depositAmount={depositAmount}
-            />
-          );
+          openModal();
         }
       },
       onError(error) {
-        openModal(<Failed error={error} membership={membership} depositAmount={depositAmount} />);
+        openModal(<FailedModal error={error} />);
       },
       args: [theopetraStakingAddress, depositAmountFormatted],
     }
@@ -120,7 +138,12 @@ const SubscribeConfirm = ({
     openModal(
       <PendingTransaction
         message="1 of 2 transactions..."
-        secondaryMessage={`Approving $THEO spend...`}
+        secondaryMessage={
+          <>
+            Approving {depositAmount} $THEO spend...{' '}
+            <div className="text-sm">Make sure to approve exact amount.</div>
+          </>
+        }
       />
     );
     approve();
@@ -133,25 +156,23 @@ const SubscribeConfirm = ({
           <button onClick={closeModal} className="cursor-pointer">
             <ArrowLeft color="rgb(80, 174, 203)" size={50} />
           </button>
-          <div
-            className="text-center text-theo-navy dark:text-white"
-            style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
-          >
-            <div className="text-3xl font-bold capitalize sm:text-4xl">
+          <div className="text-center text-theo-navy dark:text-white">
+            <div
+              className="text-3xl font-bold capitalize sm:text-4xl"
+              style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
+            >
               {membership.type} Membership
             </div>
-            You can unstake at any time, but won’t be eligible for ETH rebates.
+            You can unstake at any time, but won&apos;t be eligible for ETH rebates.
+            {membership.type === 'premium' && (
+              <>
+                <br /> Slashing penalties apply if unstaked early.
+              </>
+            )}
           </div>
-          <div>
-            <LockLaminated color="#2F455C" size={50} />
-          </div>
+          <div>{membership.type === 'premium' && <LockLaminated color="#2F455C" size={50} />}</div>
         </div>
-        <div className="mb-4 flex flex-col gap-2">
-          <MembershipType type={membership.type} />
-          <MembershipCommitment value={depositAmount} />
-          <MembershipAPY apy={membership.apy} value={depositAmount} />
-          <MembershipDuration lockDuration={membership?.lockDurationInDays} />
-        </div>
+        <div className="mb-4 flex flex-col gap-2">{dataRows}</div>
         <div className="flex w-full items-center justify-center">
           <button className="border-button w-60" onClick={handleClick}>
             Confirm Membership
