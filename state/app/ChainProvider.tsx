@@ -51,10 +51,14 @@ if (!alchemyId) {
 }
 
 const { chains, provider } = configureChains(envChains(), [
-  ...(process.env.NEXT_PUBLIC_ENV !== 'production' ||
-  (process.env.NEXT_PUBLIC_ENV as any) !== 'staging'
-    ? [jsonRpcProvider({ rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }) })]
-    : []),
+  // ...(process.env.NEXT_PUBLIC_ENV !== 'production' ||
+  // (process.env.NEXT_PUBLIC_ENV as any) !== 'staging'
+  //   ? [
+  //       jsonRpcProvider({
+  //         rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
+  //       }),
+  //     ]
+  //   : []),
   infuraProvider({ infuraId }),
   alchemyProvider({ alchemyId }),
   publicProvider(),
