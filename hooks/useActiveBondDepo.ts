@@ -4,6 +4,6 @@ export function useActiveBondDepo() {
   const activeContractName =
     Date.now() < parseInt('0') * 1000
       ? 'WhitelistTheopetraBondDepository'
-      : 'PublicPreListBondDepository';
+      : 'TheopetraBondDepository';
   return { activeContractName, ...useContractInfo(activeContractName) };
 }

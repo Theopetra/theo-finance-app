@@ -39,7 +39,7 @@ export const MarketDiscountRow = () => {
   return (
     <ConfirmRow
       title="Purchase Type"
-      value={activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'}
+      value={activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Discount Market'}
       subtext={activeContractName === 'WhitelistTheopetraBondDepository' ? '24-Hour Event' : ''}
     />
   );
@@ -101,6 +101,7 @@ const ConfirmBuy = () => {
     });
   }, [wallet, purchaseToken?.symbol]);
 
+  //TODO: Max price should be set by the user
   const maxPrice = parseEther('25');
   const depositAmount =
     purchaseToken?.symbol?.toLowerCase() === 'usdc'

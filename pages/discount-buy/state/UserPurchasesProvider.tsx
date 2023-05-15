@@ -10,6 +10,9 @@ export const UserPurchasesProvider = ({ children }) => {
   const { pendingNotes: publicPrelistPurchases, reRender: pplReRender } = usePurchasesByContract(
     'PublicPreListBondDepository'
   );
+  const { pendingNotes: theopetraPurchases, reRender: tbdReRender } = usePurchasesByContract(
+    'TheopetraBondDepository'
+  );
   const {
     pendingNotes: standardMemberships,
     reRender: tsReRender,
@@ -24,6 +27,7 @@ export const UserPurchasesProvider = ({ children }) => {
   const reRender = function () {
     wlReRender();
     pplReRender();
+    tbdReRender();
     tsReRender();
     tslReRender();
   };
@@ -33,7 +37,7 @@ export const UserPurchasesProvider = ({ children }) => {
       value={[
         {
           isLoadingMemberships: isLoadingStandardMemberships || isLoadingPremiumMemberships,
-          purchases: [...whitelistPurchases, ...publicPrelistPurchases],
+          purchases: [...whitelistPurchases, ...publicPrelistPurchases, ...theopetraPurchases],
           memberships: [...standardMemberships, ...premiumMemberships],
         },
         { reRender },

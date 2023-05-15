@@ -55,7 +55,6 @@ export const BuyFormProvider: React.FC = (props) => {
     (x) => x.marketData.quoteToken === formState.purchaseToken?.address
   );
 
-  //Temporarily hardcoding address for debugging
   const contract = useContract({
     addressOrName: address,
     contractInterface: abi,
@@ -67,7 +66,7 @@ export const BuyFormProvider: React.FC = (props) => {
       addressOrName: address,
       contractInterface: abi,
     },
-    'calculatePrice',
+    'marketPrice',
     { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
   );
 
