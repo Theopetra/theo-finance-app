@@ -36,7 +36,7 @@ const YourPurchases = () => {
         return {
           date: created,
           amount: `${formatTheo(p.payout_)}`,
-          discount: p.created_ < whitelistExpiry ? `Pre-Market` : p.discount_,
+          discount: p.created_ < whitelistExpiry ? `Discount Market` : p.discount_,
           unlockDate,
           ...p,
         };

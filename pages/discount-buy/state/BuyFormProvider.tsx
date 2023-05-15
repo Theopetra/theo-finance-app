@@ -46,7 +46,7 @@ export const BuyFormProvider: React.FC = (props) => {
   const [{ isOpen }] = useModal();
 
   const [formState, setFormState] = useState<formStateType>(initialFormState);
-  const { address, abi } = useActiveBondDepo();
+  const { activeContractName, address, abi } = useActiveBondDepo();
   const provider = useProvider();
   const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
 
@@ -61,14 +61,23 @@ export const BuyFormProvider: React.FC = (props) => {
     signerOrProvider: provider,
   });
 
-  const { data: priceInfo } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'marketPrice',
-    { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
-  );
+  const priceInfo = (activeContractName != 'TheopetraBondDepository' ? 
+      useContractRead(
+        {
+          addressOrName: address,
+          contractInterface: abi,
+        },
+        'calculatePrice',
+        { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
+      ) : 
+      useContractRead(
+        {
+          addressOrName: address,
+          contractInterface: abi,
+        },
+        'marketPrice',
+        { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
+      ));
 
   useEffect(() => {
     async function callContract() {
