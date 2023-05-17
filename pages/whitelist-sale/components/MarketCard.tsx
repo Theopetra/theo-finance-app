@@ -34,7 +34,6 @@ const MarketCard = ({ bondMarkets }) => {
     const ethMarket = bondMarkets?.markets.find((x) => x.marketData.quoteToken === ethAddress);
     return [usdcMarket, ethMarket];
   }, [bondMarkets]);
-
   const { activeContractName } = useActiveBondDepo();
   const { logEvent } = useAnalytics();
 
@@ -72,13 +71,11 @@ const MarketCard = ({ bondMarkets }) => {
                   value={
                     <div className="flex items-center justify-between  rounded-lg bg-[#e3e3e3] p-5 dark:bg-[#262626]">
                       {token?.symbol && (
-                        <>
-                          <img
-                            src={iconMap[token?.symbol]?.src}
-                            alt={`${token?.symbol} icon`}
-                            className="mr-2 w-8"
-                          />
-                        </>
+                        <img
+                          src={iconMap[token?.symbol]?.src}
+                          alt={`${token?.symbol} icon`}
+                          className="mr-2 w-8"
+                        />
                       )}
                       <div className="text-2xl font-bold">
                         {WhitelistTokenPrice({

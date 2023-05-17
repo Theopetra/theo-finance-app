@@ -46,7 +46,7 @@ export const BuyFormProvider: React.FC = (props) => {
   const [{ isOpen }] = useModal();
 
   const [formState, setFormState] = useState<formStateType>(initialFormState);
-  const { activeContractName, address, abi } = useActiveBondDepo();
+  const { address, abi } = useActiveBondDepo();
   const provider = useProvider();
   const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
 
@@ -55,29 +55,21 @@ export const BuyFormProvider: React.FC = (props) => {
     (x) => x.marketData.quoteToken === formState.purchaseToken?.address
   );
 
+  //Temporarily hardcoding address for debugging
   const contract = useContract({
     addressOrName: address,
     contractInterface: abi,
     signerOrProvider: provider,
   });
 
-  const priceInfo = (activeContractName != 'TheopetraBondDepository' ? 
-      useContractRead(
-        {
-          addressOrName: address,
-          contractInterface: abi,
-        },
-        'calculatePrice',
-        { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
-      ) : 
-      useContractRead(
-        {
-          addressOrName: address,
-          contractInterface: abi,
-        },
-        'marketPrice',
-        { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
-      ));
+  const { data: priceInfo } = useContractRead(
+    {
+      addressOrName: address,
+      contractInterface: abi,
+    },
+    'calculatePrice',
+    { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
+  );
 
   useEffect(() => {
     async function callContract() {
@@ -86,12 +78,12 @@ export const BuyFormProvider: React.FC = (props) => {
         setGroupedBondMarketsMap(cachedMkts);
       } else {
         try {
-          const WhitelistBondMarkets = await contract.liveMarkets();
+          const BondMarkets = await contract.liveMarkets();
 
           const termsMap = {};
-          if (WhitelistBondMarkets) {
+          if (BondMarkets) {
             const setTerms =
-              WhitelistBondMarkets?.map(
+              BondMarkets?.map(
                 async (bondMarket) =>
                   await contract
                     .terms(bondMarket)

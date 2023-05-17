@@ -50,13 +50,13 @@ if (!alchemyId) {
   console.log('WARNING: No alchemy id specified!');
 }
 const { chains, provider } = configureChains(envChains(), [
-  // ...(process.env.NEXT_PUBLIC_ENV === 'staging' || process.env.NEXT_PUBLIC_ENV === 'local'
-  //   ? [
-  //       jsonRpcProvider({
-  //         rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
-  //       }),
-  //     ]
-  //   : []),
+  ...(process.env.NEXT_PUBLIC_ENV === 'staging' || process.env.NEXT_PUBLIC_ENV === 'local'
+    ? [
+        jsonRpcProvider({
+          rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
+        }),
+      ]
+    : []),
   infuraProvider({ infuraId }),
   alchemyProvider({ alchemyId }),
   publicProvider(),
