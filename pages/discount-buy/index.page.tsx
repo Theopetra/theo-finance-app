@@ -9,7 +9,7 @@ import DiscountBuyForm from './components/DiscountBuyForm';
 import useBuyForm from './state/use-buy-form';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import { Intersect } from 'phosphor-react';
-import MarketCard from '../whitelist-sale/components/MarketCard';
+import MarketCard from './components/MarketCard';
 import { useAccount } from 'wagmi';
 
 const STATS = [

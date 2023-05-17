@@ -2,7 +2,7 @@ import Card from '@/components/Card';
 import DynamicText from '@/components/DynamicText';
 import Icon from '@/components/Icons';
 import { TokenInfo } from '@/components/TokenName';
-import { WhitelistTokenPrice } from '@/components/TokenPrice';
+import { TokenPrice } from '@/components/TokenPrice';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import DiscountBuyForm from '@/pages/discount-buy/components/DiscountBuyForm';
@@ -34,11 +34,8 @@ const MarketCard = ({ bondMarkets }) => {
     const ethMarket = bondMarkets?.markets.find((x) => x.marketData.quoteToken === ethAddress);
     return [usdcMarket, ethMarket];
   }, [bondMarkets]);
-  const { activeContractName } = useActiveBondDepo();
+  const { abi, address } = useActiveBondDepo();
   const { logEvent } = useAnalytics();
-
-  const txnType =
-    activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market';
 
   return (
     <>
@@ -71,6 +68,7 @@ const MarketCard = ({ bondMarkets }) => {
                   value={
                     <div className="flex items-center justify-between  rounded-lg bg-[#e3e3e3] p-5 dark:bg-[#262626]">
                       {token?.symbol && (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={iconMap[token?.symbol]?.src}
                           alt={`${token?.symbol} icon`}
@@ -78,7 +76,7 @@ const MarketCard = ({ bondMarkets }) => {
                         />
                       )}
                       <div className="text-2xl font-bold">
-                        {WhitelistTokenPrice({
+                        {TokenPrice({
                           marketId: market?.id,
                           quoteToken: market?.marketData?.quoteToken,
                         })}
@@ -92,9 +90,9 @@ const MarketCard = ({ bondMarkets }) => {
           <button
             className="border-button mb-3 w-full"
             onClick={() => {
-              setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: txnType });
+              setSelection({ selectedBondDuration: bondMarkets.header, purchaseType: 'discount' });
               logEvent({ name: 'purchase_started' });
-              openModal(<DiscountBuyForm title={`${txnType} Buy`} />);
+              openModal(<DiscountBuyForm title={`Discount Buy`} />);
             }}
           >
             Buy $THEO

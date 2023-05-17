@@ -4,8 +4,9 @@ import { cache } from '@/lib/cache';
 import { BigNumber } from 'ethers';
 import { useContractRead, useToken } from 'wagmi';
 
-export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
+export const TokenPrice = ({ marketId: id, quoteToken }) => {
   const { data: token } = useToken({ address: quoteToken });
+  // Discount Rate = Percent(1 - (marketPrice / valuationPrice));
 
   const { address, abi } = useActiveBondDepo();
   const {
@@ -18,7 +19,7 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
       addressOrName: address,
       contractInterface: abi,
     },
-    'calculatePrice',
+    'marketPrice',
     { args: id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
   );
 
@@ -28,9 +29,9 @@ export const WhitelistTokenPrice = ({ marketId: id, quoteToken }) => {
   }
 
   if (isError) {
-    console.log(error);
+    console.log({ error });
 
-    return <></>;
+    return <>-1</>;
   }
-  return <></>;
+  return <>-2</>;
 };

@@ -2,17 +2,16 @@ import Card from '@/components/Card';
 import CardList from '@/components/CardList';
 import Icon from '@/components/Icons';
 import PageContainer from '@/components/PageContainer';
-import { addMinutes, addSeconds, intervalToDuration } from 'date-fns';
+import { intervalToDuration } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
 import useBuyForm from '../discount-buy/state/use-buy-form';
-import MarketCard from './components/MarketCard';
+import MarketCard from '../discount-buy/components/MarketCard';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import { useRouter } from 'next/router';
-import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 
 const whitelistExpiry =
   parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0') * 1000;
@@ -116,15 +115,9 @@ const Whitelist = () => {
   );
 };
 Whitelist.PageHead = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { activeContractName } = useActiveBondDepo();
-
   return (
     <>
-      <div>
-        {activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'}{' '}
-        Sale!
-      </div>
+      <div>Whitelist Sale!</div>
     </>
   );
 };
