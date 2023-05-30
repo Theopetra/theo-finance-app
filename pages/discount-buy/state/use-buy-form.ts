@@ -7,11 +7,13 @@ type BuyFormStateType = {
   purchaseAmount;
   purchaseCost;
   transactionPending;
-  bondMarkets;
+  selectedTerm;
   selectedMarket;
   groupedBondMarkets;
   groupedBondMarketsMap;
   selection;
+  setSelection;
+  maxSlippage;
 };
 type BuyFormDispatchType = {
   setSelection;

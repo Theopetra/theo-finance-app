@@ -1,10 +1,11 @@
 import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon } from '@heroicons/react/solid';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import { TokenInfo } from '../TokenName';
 import { cleanSymbol } from '@/lib/clean_symbol';
+import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 export type CurrencySelectOptionType = {
   symbol?: string | undefined;
@@ -39,7 +40,7 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
             {cleanSymbol(selected)}&nbsp;
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center sm:pr-6">
-            <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </span>
         </Listbox.Button>
         <Transition

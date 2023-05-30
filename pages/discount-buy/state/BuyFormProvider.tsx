@@ -1,12 +1,10 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
-import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { add } from 'date-fns';
 import { BigNumber } from 'ethers';
-import React, { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
-import { useBalance, useContract, useContractRead, useProvider, useToken } from 'wagmi';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useContract, useContractRead, useProvider, useToken } from 'wagmi';
 
 export const BuyFormContext = React.createContext<any>(null);
 
@@ -16,20 +14,7 @@ type formStateType = {
   purchaseAmount;
   purchaseCost;
   transactionPending: boolean;
-};
-
-type Selection = {
-  label: string;
-  value: string | number;
-};
-
-type SelectionType = {
-  level?: Selection;
-  discount?: Selection;
-  buyWith?: Selection;
-  bondPrice?: Selection;
-  lockDuration?: Selection;
-  selectedBondDuration?;
+  maxSlippage: number;
 };
 
 const initialFormState: formStateType = {
@@ -38,10 +23,11 @@ const initialFormState: formStateType = {
   purchaseAmount: 0,
   purchaseCost: 0,
   transactionPending: false,
+  maxSlippage: 0.01,
 };
 
 export const BuyFormProvider: React.FC = (props) => {
-  const [selection, setSelection] = useState<SelectionType>();
+  const [selection, setSelection] = useState<string>();
   const [groupedBondMarketsMap, setGroupedBondMarketsMap] = useState({});
   const [{ isOpen }] = useModal();
 
@@ -50,12 +36,19 @@ export const BuyFormProvider: React.FC = (props) => {
   const provider = useProvider();
   const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
 
-  const bondMarkets = groupedBondMarketsMap[selection?.selectedBondDuration];
-  const selectedMarket = bondMarkets?.markets.find(
-    (x) => x.marketData.quoteToken === formState.purchaseToken?.address
+  const selectedTerm = useMemo(
+    () => selection && groupedBondMarketsMap[selection],
+    [selection, groupedBondMarketsMap]
   );
 
-  //Temporarily hardcoding address for debugging
+  const selectedMarket = useMemo(
+    () =>
+      selectedTerm?.markets.find(
+        (x) => x.marketData.quoteToken === formState.purchaseToken?.address
+      ),
+    [selectedTerm, formState.purchaseToken?.address]
+  );
+
   const contract = useContract({
     addressOrName: address,
     contractInterface: abi,
@@ -67,94 +60,124 @@ export const BuyFormProvider: React.FC = (props) => {
       addressOrName: address,
       contractInterface: abi,
     },
-    'calculatePrice',
+    'marketPrice',
     { args: selectedMarket?.id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
   );
 
   useEffect(() => {
     async function callContract() {
       const cachedMkts = cache.getItem('groupedBondMarketsMap');
+
       if (cachedMkts) {
         setGroupedBondMarketsMap(cachedMkts);
-      } else {
-        try {
-          const BondMarkets = await contract.liveMarkets();
+        return;
+      }
 
+      try {
+        const BondMarkets = await contract.liveMarkets();
+
+        if (BondMarkets) {
           const termsMap = {};
-          if (BondMarkets) {
-            const setTerms =
-              BondMarkets?.map(
-                async (bondMarket) =>
-                  await contract
-                    .terms(bondMarket)
-                    .then(async (terms) => {
-                      const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
-                      const mapKey = vestingInMonths;
+          const setTerms = await Promise.all(
+            BondMarkets.map(async (bondMarket) => {
+              try {
+                const terms = await contract.terms(bondMarket);
+                const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
+                const vestingInMinutes = terms.vesting / 60;
+                const mapKey =
+                  process.env.NEXT_PUBLIC_ENV !== 'production' ? vestingInMinutes : vestingInMonths;
 
-                      const market = await contract.markets(bondMarket).then((market) => market);
+                const market = await contract.markets(bondMarket);
+                const marketPrice = 0;
+                const valuationPrice = 0;
+                // const marketPrice = BigNumber.from(
+                //   await contract.marketPrice(bondMarket)
+                // ).toNumber();
+                // const valuationPrice = BigNumber.from(
+                //   await contract.bondRateVariable(bondMarket)
+                // ).toNumber();
+                const termWithMarkets = {
+                  mapKey,
+                  terms,
+                  vestingInMonths,
+                  marketData: Object.assign({}, { ...market, marketPrice, valuationPrice }),
+                  id: bondMarket.toString(),
+                };
 
-                      return (termsMap[mapKey] = {
-                        header: mapKey,
-                        highlight: vestingInMonths === 18,
-                        markets: [
-                          ...(termsMap?.[mapKey] ? termsMap?.[mapKey].markets : []),
-                          {
-                            ...terms,
-                            marketData: Object.assign({}, market),
-                            id: bondMarket.toString(),
-                          },
-                        ],
-                      });
-                    })
-                    .catch((err) => console.log(err.stack))
-              ) || [];
+                return termWithMarkets;
+              } catch (err) {
+                console.log(err);
+                return null;
+              }
+            })
+          );
 
-            Promise.allSettled(setTerms).then(([result]) => {
-              setGroupedBondMarketsMap(termsMap);
-              cache.setItem(
-                'groupedBondMarketsMap',
-                Object.assign({}, termsMap),
-                process.env.NEXT_PUBLIC_GROUPED_BOND_MKTS_CACHE_SECS
-              );
-            });
-          }
-        } catch (err) {
-          console.log(err);
+          setTerms.forEach((term) => {
+            if (term) {
+              const { mapKey, terms, vestingInMonths, marketData, id } = term;
+
+              if (!termsMap[mapKey]) {
+                termsMap[mapKey] = {
+                  header: `${mapKey} minutes`,
+                  highlight: vestingInMonths === 18,
+                  markets: [],
+                };
+              }
+
+              termsMap[mapKey].markets.push({ ...terms, marketData, id });
+            }
+          });
+
+          setGroupedBondMarketsMap(termsMap);
+
+          cache.setItem(
+            'groupedBondMarketsMap',
+            Object.assign({}, termsMap),
+            process.env.NEXT_PUBLIC_GROUPED_BOND_MKTS_CACHE_SECS
+          );
         }
+      } catch (err) {
+        console.log(err);
       }
     }
     callContract();
   }, [contract]);
 
   const groupedBondMarkets = useMemo(() => {
-    return Object.values(groupedBondMarketsMap).sort((a: any, b: any) => a.header - b.header);
+    const allTermedMarkets = Object.keys(groupedBondMarketsMap);
+    setSelection(allTermedMarkets[0]);
+    return allTermedMarkets.sort((a: any, b: any) => a.header - b.header);
   }, [groupedBondMarketsMap]);
 
-  const handleUpdate: any = (e: BaseSyntheticEvent, fieldName: string) => {
+  const handleUpdate = (e, fieldName) => {
     const value = e.target.value;
-
     setFormState({ ...formState, [fieldName]: value });
   };
 
-  const handleTokenInput: any = (e: BaseSyntheticEvent, fieldName: string) => {
+  const handleTokenInput = (e, fieldName) => {
     const value = e.target.value;
-    const quotePrice = BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9);
+    const quotePrice = priceInfo ? BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9) : 0;
+    const purchaseCostPrecision = token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2;
+    const purchaseAmountPrecision = token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2;
+
+    const updateFields: { purchaseCost: string; purchaseAmount: string } = {
+      purchaseCost: '',
+      purchaseAmount: '',
+    };
+
     if (fieldName === 'purchaseAmount') {
-      setFormState((prevState) => ({
-        ...prevState,
-        purchaseCost: Number(value * quotePrice).toFixed(
-          token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2
-        ),
-        [fieldName]: value,
-      }));
-      return;
+      const purchaseCost = Number(value * quotePrice).toFixed(purchaseCostPrecision);
+      updateFields.purchaseCost = purchaseCost;
+    } else {
+      const purchaseAmount = Number(value / quotePrice).toFixed(purchaseAmountPrecision);
+      updateFields.purchaseAmount = purchaseAmount;
     }
+
+    updateFields[fieldName] = value;
+
     setFormState((prevState) => ({
       ...prevState,
-      purchaseAmount: Number(value / quotePrice).toFixed(
-        token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2
-      ),
-      [fieldName]: value,
+      ...updateFields,
     }));
   };
 
@@ -177,11 +200,12 @@ export const BuyFormProvider: React.FC = (props) => {
       value={[
         {
           ...formState,
-          bondMarkets,
+          selectedTerm,
           selectedMarket,
           groupedBondMarkets,
           groupedBondMarketsMap,
           selection,
+          setSelection,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}
