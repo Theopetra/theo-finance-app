@@ -7,21 +7,9 @@ import HorizontalSubNav from '@/components/HorizontalSubNav';
 import { useAccount, useBalance } from 'wagmi';
 import CurrencyInput from '@/components/CurrencyInput';
 import SimpleSelect from '@/components/SimpleSelect';
+import Icon from '@/components/Icons';
 
-const STATS = [
-  {
-    name: 'Treasury Balance',
-    value: '$110,310,013',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-  },
-  {
-    name: '$THEO Price',
-    value: '$35.42',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-  },
-];
 const DiscountBuy = () => {
-  const [{}, { openModal }] = useModal();
   const [
     {
       purchaseCost,
@@ -31,7 +19,6 @@ const DiscountBuy = () => {
       selection,
       setSelection,
       groupedBondMarketsMap,
-      selectedTerm,
     },
     { handleUpdate, getSelectedMarketPrice, handleTokenInput },
   ] = useBuyForm();
@@ -56,10 +43,30 @@ const DiscountBuy = () => {
       </div>
       <PageContainer>
         <div className="w-full rounded-lg bg-white p-4 shadow-lg sm:w-1/2">
+          <div
+            className={`flex justify-between rounded-lg bg-[#ebebeb]  p-2 dark:bg-theo-dark-navy sm:items-center`}
+          >
+            <span className=" flex  items-center truncate text-lg font-bold uppercase sm:text-2xl">
+              Term
+            </span>
+            <SimpleSelect
+              options={Object.entries(groupedBondMarketsMap).map(([key, value]: [string, any]) => ({
+                label: value.header,
+                value: key,
+              }))}
+              selected={{
+                label: selection?.label,
+                value: selection?.value,
+              }}
+              onChange={(value) => {
+                setSelection(value);
+              }}
+            />
+          </div>
           <CurrencyInput
             className={'mb-2'}
             selectedToken={{ ...purchaseToken }}
-            options={selectedTerm?.markets
+            options={groupedBondMarketsMap[selection?.value]?.markets
               .filter((m) =>
                 [
                   process.env.NEXT_PUBLIC_USDC_ADDRESS,
@@ -78,26 +85,7 @@ const DiscountBuy = () => {
               handleTokenInput(e, 'purchaseCost');
             }}
           />
-          <div
-            className={`flex justify-between rounded-lg bg-[#ebebeb]  p-2 dark:bg-theo-dark-navy sm:items-center`}
-          >
-            <span className=" flex  items-center truncate text-lg font-bold uppercase sm:text-2xl">
-              Term
-            </span>
-            <SimpleSelect
-              options={Object.keys(groupedBondMarketsMap).map((x) => ({
-                label: x,
-                value: x,
-              }))}
-              selected={{
-                label: selection?.selectedBondDuration,
-                value: selection?.selectedBondDuration,
-              }}
-              onChange={(value) => {
-                setSelection(value);
-              }}
-            />
-          </div>
+
           <div className="space-between mb-4 flex align-middle">
             <label htmlFor="maxSlippage" className="color w-full flex-1 text-gray-400 ">
               Max Slippage
@@ -118,11 +106,10 @@ const DiscountBuy = () => {
               }}
             />
           </div>
-          <CurrencyInput
-            selectedToken={{ symbol: 'THEO' }}
-            value={purchaseAmount}
-            onChange={(e: BaseSyntheticEvent) => handleTokenInput(e, 'purchaseAmount')}
-          />
+          <button className="border-button w-full">
+            <Icon name={'theo'} className="mr-2 w-8" />
+            Purchase {purchaseAmount} THEO
+          </button>
         </div>
       </PageContainer>
     </>

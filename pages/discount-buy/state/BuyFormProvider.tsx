@@ -19,7 +19,11 @@ type formStateType = {
 
 const initialFormState: formStateType = {
   theoPrice: 100,
-  purchaseToken: null,
+  purchaseToken: {
+    quoteToken: process.env.NEXT_PUBLIC_USDC_ADDRESS,
+    address: process.env.NEXT_PUBLIC_USDC_ADDRESS,
+    symbol: 'USDC',
+  },
   purchaseAmount: 0,
   purchaseCost: 0,
   transactionPending: false,
@@ -27,26 +31,24 @@ const initialFormState: formStateType = {
 };
 
 export const BuyFormProvider: React.FC = (props) => {
-  const [selection, setSelection] = useState<string>();
+  const [selection, setSelection] = useState<{ label: string; value: string }>({
+    label: '',
+    value: '',
+  });
   const [groupedBondMarketsMap, setGroupedBondMarketsMap] = useState({});
-  const [{ isOpen }] = useModal();
 
   const [formState, setFormState] = useState<formStateType>(initialFormState);
   const { address, abi } = useActiveBondDepo();
   const provider = useProvider();
   const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
 
-  const selectedTerm = useMemo(
-    () => selection && groupedBondMarketsMap[selection],
-    [selection, groupedBondMarketsMap]
-  );
-
   const selectedMarket = useMemo(
     () =>
-      selectedTerm?.markets.find(
+      selection &&
+      groupedBondMarketsMap[selection.value]?.markets.find(
         (x) => x.marketData.quoteToken === formState.purchaseToken?.address
       ),
-    [selectedTerm, formState.purchaseToken?.address]
+    [selection, formState.purchaseToken?.address]
   );
 
   const contract = useContract({
@@ -144,8 +146,8 @@ export const BuyFormProvider: React.FC = (props) => {
   }, [contract]);
 
   const groupedBondMarkets = useMemo(() => {
-    const allTermedMarkets = Object.keys(groupedBondMarketsMap);
-    setSelection(allTermedMarkets[0]);
+    const allTermedMarkets: any = Object.values(groupedBondMarketsMap);
+
     return allTermedMarkets.sort((a: any, b: any) => a.header - b.header);
   }, [groupedBondMarketsMap]);
 
@@ -188,8 +190,8 @@ export const BuyFormProvider: React.FC = (props) => {
   };
 
   useEffect(() => {
-    if (!isOpen) setFormState(initialFormState);
-  }, [isOpen]);
+    setFormState(initialFormState);
+  }, []);
 
   const updateFormState = (vals: any) => {
     setFormState({ ...formState, ...vals });
@@ -200,7 +202,6 @@ export const BuyFormProvider: React.FC = (props) => {
       value={[
         {
           ...formState,
-          selectedTerm,
           selectedMarket,
           groupedBondMarkets,
           groupedBondMarketsMap,
