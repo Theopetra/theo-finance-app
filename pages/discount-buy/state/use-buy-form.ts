@@ -16,6 +16,19 @@ type BuyFormStateType = {
   };
   setSelection;
   maxSlippage;
+  allTermedMarkets: {
+    mapKey;
+    terms;
+    vestingInMonths;
+    vestingInMinutes;
+    marketData: {
+      quoteToken;
+      valuation;
+      discountRate;
+      marketPrice;
+    };
+    id: string;
+  }[];
 };
 type BuyFormDispatchType = {
   setSelection;

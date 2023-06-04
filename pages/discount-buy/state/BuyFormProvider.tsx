@@ -36,12 +36,11 @@ export const BuyFormProvider: React.FC = (props) => {
     value: '',
   });
   const [groupedBondMarketsMap, setGroupedBondMarketsMap] = useState({});
-
+  const [allTermedMarkets, setAllTermedMarkets] = useState<any[]>([]);
   const [formState, setFormState] = useState<formStateType>(initialFormState);
   const { address, abi } = useActiveBondDepo();
   const provider = useProvider();
-  const { data: token } = useToken({ address: formState.purchaseToken?.quoteToken });
-
+  const { data: selectedToken } = useToken({ address: formState.purchaseToken?.quoteToken });
   const selectedMarket = useMemo(
     () =>
       selection &&
@@ -102,10 +101,11 @@ export const BuyFormProvider: React.FC = (props) => {
                   mapKey,
                   terms,
                   vestingInMonths,
+                  vestingInMinutes,
                   marketData: Object.assign({}, { ...market, marketPrice, valuationPrice }),
                   id: bondMarket.toString(),
                 };
-
+                setAllTermedMarkets((prev) => [...prev, termWithMarkets]);
                 return termWithMarkets;
               } catch (err) {
                 console.log(err);
@@ -153,14 +153,17 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const handleUpdate = (e, fieldName) => {
     const value = e.target.value;
+
     setFormState({ ...formState, [fieldName]: value });
   };
 
   const handleTokenInput = (e, fieldName) => {
     const value = e.target.value;
     const quotePrice = priceInfo ? BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9) : 0;
-    const purchaseCostPrecision = token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2;
-    const purchaseAmountPrecision = token?.symbol === 'WETH' || token?.symbol === 'ETH' ? 9 : 2;
+    const purchaseCostPrecision =
+      selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH' ? 9 : 2;
+    const purchaseAmountPrecision =
+      selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH' ? 9 : 2;
 
     const updateFields: { purchaseCost: string; purchaseAmount: string } = {
       purchaseCost: '',
@@ -186,7 +189,7 @@ export const BuyFormProvider: React.FC = (props) => {
   const getSelectedMarketPrice = () => {
     if (!selectedMarket?.id) return;
     const output = (BigNumber.from(priceInfo || 0).toNumber() / Math.pow(10, 9)).toFixed(9);
-    return token?.symbol === 'USDC' ? Number(output).toFixed(2) : output;
+    return selectedToken?.symbol === 'USDC' ? Number(output).toFixed(2) : output;
   };
 
   useEffect(() => {
@@ -207,6 +210,7 @@ export const BuyFormProvider: React.FC = (props) => {
           groupedBondMarketsMap,
           selection,
           setSelection,
+          allTermedMarkets,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}

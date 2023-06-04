@@ -8,6 +8,8 @@ import { useAccount, useBalance } from 'wagmi';
 import CurrencyInput from '@/components/CurrencyInput';
 import SimpleSelect from '@/components/SimpleSelect';
 import Icon from '@/components/Icons';
+import Table from '@/components/Table';
+import { TokenInfo } from '@/components/TokenName';
 
 const DiscountBuy = () => {
   const [
@@ -19,8 +21,9 @@ const DiscountBuy = () => {
       selection,
       setSelection,
       groupedBondMarketsMap,
+      allTermedMarkets,
     },
-    { handleUpdate, getSelectedMarketPrice, handleTokenInput },
+    { handleUpdate, updateFormState, handleTokenInput },
   ] = useBuyForm();
   const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
   const {
@@ -34,6 +37,113 @@ const DiscountBuy = () => {
       token: purchaseToken?.quoteToken,
     }),
   });
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Duration',
+        accessor: 'duration',
+        id: 'duration',
+        width: '10%',
+      },
+      {
+        Header: 'Token',
+        accessor: 'token',
+        id: 'token',
+        width: '10%',
+        Cell: ({ value }) => TokenInfo(value)?.symbol,
+      },
+      {
+        Header: 'Valuation',
+        accessor: 'valuation',
+        id: 'valuation',
+        width: '10%',
+      },
+      {
+        Header: 'Discount Rate',
+        accessor: 'discountRate',
+        id: 'discountRate',
+        width: '10%',
+      },
+      {
+        Header: 'Market Price',
+        accessor: 'marketPrice',
+
+        id: 'marketPrice',
+        width: '10%',
+      },
+      {
+        Header: '',
+        accessor: 'select',
+        id: 'select',
+        width: '10%',
+        Cell: ({ value, cell }) => {
+          const symbol = TokenInfo(cell.row.original.token)?.symbol;
+          return (
+            <button
+              className="rounded-lg bg-[#ebebeb] p-2"
+              onClick={() => {
+                setSelection(value);
+                handleUpdate(
+                  {
+                    target: {
+                      value: {
+                        address: cell.row.original.token,
+                        quoteToken: cell.row.original.token,
+                        symbol,
+                      },
+                    },
+                  },
+                  'purchaseToken'
+                );
+                handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
+                // updateFormState({
+                //   purchaseToken: {
+                //     quoteToken: cell.row.original.token,
+                //     address: cell.row.original.token,
+                //   },
+                // });
+              }}
+            >
+              Select
+            </button>
+          );
+        },
+      },
+    ],
+    []
+  );
+  const tableData = useMemo(
+    () =>
+      allTermedMarkets.map((y) => {
+        return {
+          duration: `${y.vestingInMinutes} minutes`,
+          token: y.marketData.quoteToken,
+          valuation: y.marketData.valuation,
+          discountRate: y.marketData.discountRate,
+          marketPrice: y.marketData.marketPrice,
+          marketData: y.marketData,
+          select: {
+            label: `${y.vestingInMinutes} minutes`,
+            value: `${y.vestingInMinutes}`,
+          },
+        };
+      }),
+
+    // Object.entries(groupedBondMarketsMap).flatMap(([key, value]: [string, any]) => ({
+    //   duration: value.header,
+    //   token: value.markets[0].marketData.quoteToken,
+    //   valuation: value.markets[0].marketData.valuation,
+    //   discountRate: value.markets[0].marketData.discountRate,
+    //   marketPrice: value.markets[0].marketData.marketPrice,
+    //   select: {
+    //     label: value.header,
+    //     value: key,
+    //   },
+    // }))
+    [groupedBondMarketsMap]
+  );
+
   return (
     <>
       <div className="pt-4">
@@ -43,9 +153,7 @@ const DiscountBuy = () => {
       </div>
       <PageContainer>
         <div className="w-full rounded-lg bg-white p-4 shadow-lg sm:w-1/2">
-          <div
-            className={`flex justify-between rounded-lg bg-[#ebebeb]  p-2 dark:bg-theo-dark-navy sm:items-center`}
-          >
+          <div className="mb-4 flex justify-between rounded-lg bg-[#ebebeb] p-2 dark:bg-theo-dark-navy sm:items-center">
             <span className=" flex  items-center truncate text-lg font-bold uppercase sm:text-2xl">
               Term
             </span>
@@ -110,6 +218,9 @@ const DiscountBuy = () => {
             <Icon name={'theo'} className="mr-2 w-8" />
             Purchase {purchaseAmount} THEO
           </button>
+        </div>
+        <div className="w-full rounded-lg shadow-lg ">
+          <Table columns={columns} data={tableData} />
         </div>
       </PageContainer>
     </>
