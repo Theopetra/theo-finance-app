@@ -108,15 +108,15 @@ const DiscountBuy = () => {
     () =>
       allTermedMarkets.map((y) => {
         return {
-          duration: `${y.vestingInMinutes} minutes`,
+          duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
           token: y.marketData.quoteToken,
           valuation: y.marketData.valuation,
           discountRate: y.marketData.discountRate,
           marketPrice: y.marketData.marketPrice,
           marketData: y.marketData,
           select: {
-            label: `${y.vestingInMinutes} minutes`,
-            value: `${y.vestingInMinutes}`,
+            label: `${y.mapKey} ${y.vestingTimeIncrement}`,
+            value: `${y.mapKey}`,
           },
         };
       }),

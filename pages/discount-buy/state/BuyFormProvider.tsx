@@ -85,7 +85,7 @@ export const BuyFormProvider: React.FC = (props) => {
                 const terms = await contract.terms(bondMarket);
                 const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
                 const vestingInMinutes = terms.vesting / 60;
-                const mapKey =
+                const vestingTime =
                   process.env.NEXT_PUBLIC_ENV !== 'production' ? vestingInMinutes : vestingInMonths;
 
                 const market = await contract.markets(bondMarket);
@@ -98,9 +98,11 @@ export const BuyFormProvider: React.FC = (props) => {
                 //   await contract.bondRateVariable(bondMarket)
                 // ).toNumber();
                 const termWithMarkets = {
-                  mapKey,
+                  mapKey: vestingTime,
                   terms,
-                  vestingInMonths,
+                  vestingTime,
+                  vestingTimeIncrement:
+                    process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : 'months',
                   vestingInMinutes,
                   marketData: Object.assign({}, { ...market, marketPrice, valuationPrice }),
                   id: bondMarket.toString(),
@@ -187,8 +189,13 @@ export const BuyFormProvider: React.FC = (props) => {
   };
 
   useEffect(() => {
-    setFormState(initialFormState);
-  }, []);
+    if (selection.value) return;
+    if (!allTermedMarkets.length) return;
+    setSelection({
+      label: allTermedMarkets[0].mapKey,
+      value: allTermedMarkets[0].mapKey,
+    });
+  }, [allTermedMarkets]);
 
   const updateFormState = (vals: any) => {
     setFormState({ ...formState, ...vals });

@@ -18,8 +18,8 @@ type BuyFormStateType = {
   allTermedMarkets: {
     mapKey;
     terms;
-    vestingInMonths;
-    vestingInMinutes;
+    vestingTime;
+    vestingTimeIncrement;
     marketData: {
       quoteToken;
       valuation;
