@@ -8,7 +8,6 @@ type BuyFormStateType = {
   purchaseCost;
   transactionPending;
   selectedMarket;
-  groupedBondMarkets;
   groupedBondMarketsMap;
   selection: {
     label: string;

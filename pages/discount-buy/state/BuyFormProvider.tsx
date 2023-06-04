@@ -145,12 +145,6 @@ export const BuyFormProvider: React.FC = (props) => {
     callContract();
   }, [contract]);
 
-  const groupedBondMarkets = useMemo(() => {
-    const allTermedMarkets: any = Object.values(groupedBondMarketsMap);
-
-    return allTermedMarkets.sort((a: any, b: any) => a.header - b.header);
-  }, [groupedBondMarketsMap]);
-
   const handleUpdate = (e, fieldName) => {
     const value = e.target.value;
 
@@ -206,7 +200,6 @@ export const BuyFormProvider: React.FC = (props) => {
         {
           ...formState,
           selectedMarket,
-          groupedBondMarkets,
           groupedBondMarketsMap,
           selection,
           setSelection,

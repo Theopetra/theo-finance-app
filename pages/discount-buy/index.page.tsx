@@ -1,6 +1,6 @@
 import PageContainer from '@/components/PageContainer';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { BaseSyntheticEvent, Fragment, useMemo } from 'react';
+import { BaseSyntheticEvent, useMemo } from 'react';
 import BuyFormProvider from './state/BuyFormProvider';
 import useBuyForm from './state/use-buy-form';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
@@ -23,14 +23,10 @@ const DiscountBuy = () => {
       groupedBondMarketsMap,
       allTermedMarkets,
     },
-    { handleUpdate, updateFormState, handleTokenInput },
+    { handleUpdate, handleTokenInput },
   ] = useBuyForm();
-  const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
-  const {
-    data: balance,
-    isError: balanceIsError,
-    isLoading: balanceIsLoading,
-  } = useBalance({
+  const { data: account } = useAccount();
+  const { data: balance, isLoading: balanceIsLoading } = useBalance({
     addressOrName: account?.address,
     ...(purchaseToken?.symbol === 'USDC' && {
       formatUnits: 'mwei',
@@ -38,6 +34,22 @@ const DiscountBuy = () => {
     }),
   });
 
+  const handleBuyClick = (value, cell, symbol) => {
+    setSelection(value);
+    handleUpdate(
+      {
+        target: {
+          value: {
+            address: cell.row.original.token,
+            quoteToken: cell.row.original.token,
+            symbol,
+          },
+        },
+      },
+      'purchaseToken'
+    );
+    handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
+  };
   const columns = useMemo(
     () => [
       {
@@ -82,30 +94,9 @@ const DiscountBuy = () => {
           return (
             <button
               className="rounded-lg bg-[#ebebeb] p-2"
-              onClick={() => {
-                setSelection(value);
-                handleUpdate(
-                  {
-                    target: {
-                      value: {
-                        address: cell.row.original.token,
-                        quoteToken: cell.row.original.token,
-                        symbol,
-                      },
-                    },
-                  },
-                  'purchaseToken'
-                );
-                handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
-                // updateFormState({
-                //   purchaseToken: {
-                //     quoteToken: cell.row.original.token,
-                //     address: cell.row.original.token,
-                //   },
-                // });
-              }}
+              onClick={() => handleBuyClick(value, cell, symbol)}
             >
-              Select
+              Buy THEO
             </button>
           );
         },
@@ -130,18 +121,7 @@ const DiscountBuy = () => {
         };
       }),
 
-    // Object.entries(groupedBondMarketsMap).flatMap(([key, value]: [string, any]) => ({
-    //   duration: value.header,
-    //   token: value.markets[0].marketData.quoteToken,
-    //   valuation: value.markets[0].marketData.valuation,
-    //   discountRate: value.markets[0].marketData.discountRate,
-    //   marketPrice: value.markets[0].marketData.marketPrice,
-    //   select: {
-    //     label: value.header,
-    //     value: key,
-    //   },
-    // }))
-    [groupedBondMarketsMap]
+    [allTermedMarkets]
   );
 
   return (
@@ -152,7 +132,7 @@ const DiscountBuy = () => {
         />
       </div>
       <PageContainer>
-        <div className="w-full rounded-lg bg-white p-4 shadow-lg sm:w-1/2">
+        <div className="w-full rounded-lg bg-white p-4 shadow-lg sm:w-3/4">
           <div className="mb-4 flex justify-between rounded-lg bg-[#ebebeb] p-2 dark:bg-theo-dark-navy sm:items-center">
             <span className=" flex  items-center truncate text-lg font-bold uppercase sm:text-2xl">
               Term
@@ -182,7 +162,7 @@ const DiscountBuy = () => {
                 ].includes(m.marketData.quoteToken)
               )
               .map((x) => ({ ...x.marketData }))}
-            balance={balance?.formatted}
+            balance={balanceIsLoading ? '0' : balance?.formatted}
             value={purchaseCost}
             onCurrencyChange={(e: BaseSyntheticEvent) => {
               handleUpdate(e, 'purchaseToken');
@@ -219,7 +199,8 @@ const DiscountBuy = () => {
             Purchase {purchaseAmount} THEO
           </button>
         </div>
-        <div className="w-full rounded-lg shadow-lg ">
+        <div className="mt-6 w-full rounded-lg pt-4">
+          <div className="mb-4 text-xl font-bold">All Markets</div>
           <Table columns={columns} data={tableData} />
         </div>
       </PageContainer>
