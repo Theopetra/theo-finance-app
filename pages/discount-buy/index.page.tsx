@@ -10,6 +10,8 @@ import SimpleSelect from '@/components/SimpleSelect';
 import Icon from '@/components/Icons';
 import Table from '@/components/Table';
 import { TokenInfo } from '@/components/TokenName';
+import ConfirmBuy from './components/ConfirmBuy';
+import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 
 const DiscountBuy = () => {
   const [
@@ -25,6 +27,7 @@ const DiscountBuy = () => {
     },
     { handleUpdate, handleTokenInput },
   ] = useBuyForm();
+  const [, { openModal }] = useModal();
   const { data: account } = useAccount();
   const { data: balance, isLoading: balanceIsLoading } = useBalance({
     addressOrName: account?.address,
@@ -63,7 +66,8 @@ const DiscountBuy = () => {
         accessor: 'token',
         id: 'token',
         width: '10%',
-        Cell: ({ value }) => TokenInfo(value)?.symbol,
+        Cell: ({ value }) =>
+          TokenInfo(value)?.symbol === 'WETH' ? 'ETH' : TokenInfo(value)?.symbol,
       },
       {
         Header: 'Valuation',
@@ -93,10 +97,11 @@ const DiscountBuy = () => {
           const symbol = TokenInfo(cell.row.original.token)?.symbol;
           return (
             <button
-              className="rounded-lg bg-[#ebebeb] p-2"
+              key={`${value.value}_${symbol}`}
+              className="border-button"
               onClick={() => handleBuyClick(value, cell, symbol)}
             >
-              Buy THEO
+              Set Market
             </button>
           );
         },
@@ -194,7 +199,15 @@ const DiscountBuy = () => {
               }}
             />
           </div>
-          <button className="border-button w-full">
+
+          <button
+            className={`border-button w-full ${
+              (Number(purchaseAmount) <= 0 || isNaN(purchaseAmount)) &&
+              'cursor-not-allowed opacity-50'
+            }`}
+            disabled={purchaseAmount <= 0 || isNaN(purchaseAmount)}
+            onClick={() => openModal(<ConfirmBuy />)}
+          >
             <Icon name={'theo'} className="mr-2 w-8" />
             Purchase {purchaseAmount} THEO
           </button>
@@ -208,7 +221,11 @@ const DiscountBuy = () => {
   );
 };
 
-DiscountBuy.PageStateProvider = (props) => <BuyFormProvider {...props} />;
+DiscountBuy.PageStateProvider = (props) => (
+  <UserPurchasesProvider {...props}>
+    <BuyFormProvider {...props} />
+  </UserPurchasesProvider>
+);
 DiscountBuy.PageHead = () => {
   return <div>Discount Buy</div>;
 };

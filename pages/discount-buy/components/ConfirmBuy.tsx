@@ -3,7 +3,7 @@ import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-si
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import Icon from '@/components/Icons';
 import PendingTransaction from '@/components/PendingTransaction';
-import { WhitelistTokenPrice } from '@/components/TokenPrice';
+import { TokenPrice } from '@/components/TokenPrice';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { useContractInfo } from '@/hooks/useContractInfo';
@@ -16,32 +16,17 @@ import { useMemo } from 'react';
 import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import { useUserPurchases } from '../state/use-user-purchases';
-import DiscountBuyForm from './DiscountBuyForm';
-import Failed from './Failed';
-import Successful from './Successful';
+import FailedTransaction from '@/components/FailedTransaction';
+import { Intersect } from 'phosphor-react';
+import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
 
   return (
     <>
-      <WhitelistTokenPrice
-        marketId={selectedMarket?.id}
-        quoteToken={selectedMarket?.marketData.quoteToken}
-      />{' '}
-      {cleanSymbol(purchaseToken?.symbol)}
+      <TokenPrice market={selectedMarket} /> {cleanSymbol(purchaseToken?.symbol)}
     </>
-  );
-};
-export const MarketDiscountRow = () => {
-  const { activeContractName } = useActiveBondDepo();
-
-  return (
-    <ConfirmRow
-      title="Purchase Type"
-      value={activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Discount Market'}
-      subtext={activeContractName === 'WhitelistTheopetraBondDepository' ? '24-Hour Event' : ''}
-    />
   );
 };
 
@@ -63,29 +48,21 @@ export const TheoPurchasePriceRow = () => {
 };
 
 export const LockDurationRow = () => {
-  const [{ bondMarkets }] = useBuyForm();
   return (
     <ConfirmRow
       title="Lock Duration"
-      value={`${bondMarkets?.header} Months`}
-      subtext={`Tokens will unlock on ${format(
-        add(new Date(), { months: bondMarkets?.header }),
-        'MM-dd-yy'
-      )}`}
+      value={`--- Months`}
+      subtext={`Tokens will unlock on ${format(add(new Date(), { months: 3 }), 'MM-dd-yy')}`}
     />
   );
 };
 
 const ConfirmBuy = () => {
-  const [, { openModal }] = useModal();
+  const [, { openModal, closeModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const { data: wallet } = useAccount();
-  const {
-    address: activeBondDepoAddress,
-    abi: activeBondDepoAbi,
-    activeContractName,
-  } = useActiveBondDepo();
+  const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
   const { data: signer, isError, isLoading } = useSigner();
   const { logEvent } = useAnalytics();
@@ -124,10 +101,27 @@ const ConfirmBuy = () => {
     wallet?.address,
     // TODO: autostake
     true,
-    activeContractName !== 'PublicPrelistBondDepository',
+    // activeContractName !== 'PublicPrelistBondDepository'
+    true,
     signature?.wethHelperSignature || '0x00',
   ];
-
+  const FailedModal = ({ error }: { error?: any }) => (
+    <FailedTransaction
+      Icon={Intersect}
+      onRetry={() => {
+        openModal(<ConfirmBuy />);
+      }}
+      error={{ code: error?.code ?? 'Something went wrong.' }}
+    />
+  );
+  const SuccessModal = ({ txId }) => (
+    <SuccessfulTransaction
+      txId={txId}
+      redirect={`/memberships/your-memberships`}
+      title={'Membership Successful!'}
+      Icon={Intersect}
+    />
+  );
   const {
     data,
     isError: writeErr,
@@ -147,14 +141,14 @@ const ConfirmBuy = () => {
           logEvent({ name: 'purchase_completed' });
           cache.clear();
           reRender();
-          openModal(<Successful txId={data.hash} />);
+          openModal(<SuccessModal txId={data.hash} />);
         } else {
-          openModal(<Failed error={{ code: 'Something went wrong.' }} />);
+          openModal(<FailedModal />);
         }
       },
       onError(error) {
         console.log(error);
-        openModal(<Failed error={error} />);
+        openModal(<FailedModal />);
       },
       args,
     }
@@ -186,13 +180,13 @@ const ConfirmBuy = () => {
           logEvent({ name: 'purchase_completed' });
           cache.clear();
           reRender();
-          openModal(<Successful txId={data.hash} />);
+          openModal(<SuccessModal txId={data.hash} />);
         } else {
-          openModal(<Failed error={{ code: 'Something went wrong.' }} />);
+          openModal(<FailedModal />);
         }
       },
       onError(error) {
-        openModal(<Failed error={error} />);
+        openModal(<FailedModal error={error} />);
       },
       args: WethArgs,
       overrides: {
@@ -229,11 +223,11 @@ const ConfirmBuy = () => {
 
           deposit();
         } else {
-          openModal(<Failed error={{ code: 'Something went wrong.' }} />);
+          openModal(<FailedModal error={{ code: 'Something went wrong.' }} />);
         }
       },
       onError(error) {
-        openModal(<Failed error={error} />);
+        openModal(<FailedModal error={error} />);
       },
       args: [activeBondDepoAddress, depositAmount],
     }
@@ -248,7 +242,7 @@ const ConfirmBuy = () => {
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
-
+      console.log('eth depo');
       wethDeposit();
     } else {
       openModal(
@@ -265,7 +259,7 @@ const ConfirmBuy = () => {
     <div>
       <div className="flex justify-between">
         <div>
-          <button onClick={() => openModal(<DiscountBuyForm />)} className="text-theo-cyan">
+          <button onClick={() => closeModal()} className="text-theo-cyan">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-12 w-12"
@@ -296,7 +290,6 @@ const ConfirmBuy = () => {
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-2">
-        <MarketDiscountRow />
         <TheoPurchasePriceRow />
         <PurchaseAmountRow />
         <LockDurationRow />

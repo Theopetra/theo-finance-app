@@ -1,7 +1,6 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { cache } from '@/lib/cache';
-import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BigNumber } from 'ethers';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useContract, useContractRead, useProvider, useToken } from 'wagmi';
@@ -43,13 +42,13 @@ export const BuyFormProvider: React.FC = (props) => {
   const { data: selectedToken } = useToken({ address: formState.purchaseToken?.quoteToken });
   const selectedMarket = useMemo(
     () =>
-      selection &&
+      selection.value &&
+      Object.keys(groupedBondMarketsMap).length > 0 &&
       groupedBondMarketsMap[selection.value]?.markets.find(
         (x) => x.marketData.quoteToken === formState.purchaseToken?.address
       ),
-    [selection, formState.purchaseToken?.address]
+    [selection, groupedBondMarketsMap, formState.purchaseToken?.address]
   );
-
   const contract = useContract({
     addressOrName: address,
     contractInterface: abi,
@@ -169,6 +168,7 @@ export const BuyFormProvider: React.FC = (props) => {
       updateFields.purchaseCost = purchaseCost;
     } else {
       const purchaseAmount = Number(value / quotePrice).toFixed(purchaseAmountPrecision);
+      // this is a fallback. There should always be a quotePrice greater than 0.
       updateFields.purchaseAmount = purchaseAmount;
     }
 

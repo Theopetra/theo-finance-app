@@ -20,9 +20,9 @@ const FailedTransaction = ({
 
   // this is some rudimentary error mapping, we can make this richer if desired
   if (error?.code === 'UNPREDICTABLE_GAS_LIMIT') {
-    if (error?.reason.includes('signature')) {
+    if (error?.reason?.includes('signature')) {
       errorMsg = 'Your current wallet is not on the whitelist. Come back soon!';
-    } else if (error?.reason.includes('TRANSFER_FROM_FAILED')) {
+    } else if (error?.reason?.includes('TRANSFER_FROM_FAILED')) {
       errorMsg =
         'There was a problem executing the transfer. Common reasons include missing token approval or insufficient funds.';
     }
