@@ -22,7 +22,7 @@ type BuyFormStateType = {
     vestingTimeIncrement;
     marketData: {
       quoteToken;
-      valuation;
+      valuationPrice;
       discountRate;
       marketPrice;
     };

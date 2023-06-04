@@ -67,7 +67,7 @@ const DiscountBuy = () => {
       },
       {
         Header: 'Valuation',
-        accessor: 'valuation',
+        accessor: 'valuationPrice',
         id: 'valuation',
         width: '10%',
       },
@@ -110,7 +110,7 @@ const DiscountBuy = () => {
         return {
           duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
           token: y.marketData.quoteToken,
-          valuation: y.marketData.valuation,
+          valuationPrice: y.marketData.valuationPrice,
           discountRate: y.marketData.discountRate,
           marketPrice: y.marketData.marketPrice,
           marketData: y.marketData,
