@@ -14,15 +14,7 @@ import FailedTransaction from '@/components/FailedTransaction';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 
 export const MarketDiscountRow = () => {
-  const { activeContractName } = useActiveBondDepo();
-
-  return (
-    <ConfirmRow
-      title="Purchase Type"
-      value={activeContractName === 'WhitelistTheopetraBondDepository' ? 'Whitelist' : 'Pre-Market'}
-      subtext={activeContractName === 'WhitelistTheopetraBondDepository' ? '24-Hour Event' : ''}
-    />
-  );
+  return <ConfirmRow title="Purchase Type" value={'Pre-Market'} />;
 };
 export const TheoPurchaseDateRow = ({ date }) => {
   return <ConfirmRow title="Purchase Date" value={format(new Date(date * 1000), 'yyyy-MM-dd')} />;
@@ -46,7 +38,6 @@ const ConfirmClaim = ({ purchase }) => {
 
   const { data: signer } = useSigner();
   const claimArgs = [account?.address, [purchase.index]];
-  // CLAIM
 
   const dataRows = (
     <>
