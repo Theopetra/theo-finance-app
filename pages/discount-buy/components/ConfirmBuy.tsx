@@ -100,9 +100,8 @@ const ConfirmBuy = () => {
     wallet?.address,
     wallet?.address,
     // TODO: autostake
-    true,
-    // activeContractName !== 'PublicPrelistBondDepository'
-    true,
+    false,
+    false,
     signature?.wethHelperSignature || '0x00',
   ];
   const FailedModal = ({ error }: { error?: any }) => (
@@ -182,7 +181,7 @@ const ConfirmBuy = () => {
           reRender();
           openModal(<SuccessModal txId={data.hash} />);
         } else {
-          openModal(<FailedModal />);
+          openModal(<FailedModal error={'call'} />);
         }
       },
       onError(error) {

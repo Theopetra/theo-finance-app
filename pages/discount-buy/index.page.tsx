@@ -99,6 +99,7 @@ const DiscountBuy = () => {
             <button
               key={`${value.value}_${symbol}`}
               className="border-button"
+              disabled={!symbol}
               onClick={() => handleBuyClick(value, cell, symbol)}
             >
               Set Market

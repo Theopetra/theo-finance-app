@@ -142,6 +142,11 @@ export const BuyFormProvider: React.FC = (props) => {
       }
     }
     callContract();
+    // cleanup useEffect
+    return () => {
+      setGroupedBondMarketsMap({});
+      setAllTermedMarkets([]);
+    };
   }, [contract]);
 
   const handleUpdate = (e, fieldName) => {
