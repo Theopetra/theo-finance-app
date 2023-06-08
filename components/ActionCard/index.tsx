@@ -1,6 +1,5 @@
 import { Fragment, ReactElement } from 'react';
 import Card from '../Card';
-import Icon from '../Icons';
 
 type ActionCardProps = {
   header: {

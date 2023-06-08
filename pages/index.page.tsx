@@ -1,14 +1,8 @@
 import Card from '@/components/Card';
-import CardList from '@/components/CardList';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
-import StatCard from '@/components/StatCard';
-import useStats from '@/hooks/StatsList';
-import { Fragment } from 'react';
 
 const Dashboard = ({}) => {
-  // const { stats } = useStats();
-
   return (
     <>
       <div className="pt-4">
@@ -17,13 +11,6 @@ const Dashboard = ({}) => {
         />
       </div>
       <PageContainer>
-        {/* <CardList>
-          {stats.map((props, i) => (
-            <Fragment key={i}>
-              <StatCard {...props} />
-            </Fragment>
-          ))}
-        </CardList> */}
         <div className="mt-4">
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
             <Card>
