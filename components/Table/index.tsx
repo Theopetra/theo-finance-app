@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useTable, useSortBy } from 'react-table';
 
 const Table = ({ columns, data }) => {

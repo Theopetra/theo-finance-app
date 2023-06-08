@@ -1,82 +1,134 @@
-import ActionCard from '@/components/ActionCard';
-import CardList from '@/components/CardList';
 import PageContainer from '@/components/PageContainer';
-import StatCard from '@/components/StatCard';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { Fragment } from 'react';
+import { BaseSyntheticEvent, useMemo } from 'react';
 import BuyFormProvider from './state/BuyFormProvider';
-import DiscountBuyForm from './components/DiscountBuyForm';
 import useBuyForm from './state/use-buy-form';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
-import { Intersect } from 'phosphor-react';
-import MarketCard from './components/MarketCard';
-import { useAccount } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
+import CurrencyInput from '@/components/CurrencyInput';
+import SimpleSelect from '@/components/SimpleSelect';
+import Icon from '@/components/Icons';
+import Table from '@/components/Table';
+import { TokenInfo } from '@/components/TokenName';
+import ConfirmBuy from './components/ConfirmBuy';
+import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 
-const STATS = [
-  {
-    name: 'Treasury Balance',
-    value: '$110,310,013',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-  },
-  {
-    name: '$THEO Price',
-    value: '$35.42',
-    tooltip: 'Lorem ipsum dolor sit amet, consectetur..',
-  },
-];
 const DiscountBuy = () => {
-  const [{}, { openModal }] = useModal();
-  const [{ groupedBondMarkets }] = useBuyForm();
-  const { data: account, isError, isLoading } = useAccount();
-  console.log(groupedBondMarkets);
-  // const ACTION_CARD = [
-  //   {
-  //     header: {
-  //       primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Intro</span>,
-  //     },
-  //     icon: <Intersect size={26} className="mr-2 w-8" />,
-  //     data: {
-  //       level: { label: 'Intro', value: 'intro' },
-  //       discount: { label: 'Discount', value: '1-4%' },
-  //       buyWith: { label: 'Buy With', value: 'ETH/USD' },
-  //       bondPrice: { label: 'Bond Price', value: '$31.50' },
-  //       lockDuration: { label: 'Lock Duration', value: '14 Days' },
-  //     },
-  //     warning:
-  //       'Important: New buys are auto-staked (accrue rebase rewards) and no longer vest linearly',
-  //   },
-  //   {
-  //     header: {
-  //       primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Intermediate</span>,
-  //     },
-  //     icon: <Intersect size={26} className="mr-2 w-8" />,
-  //     data: {
-  //       level: { label: 'Intermediate', value: 'intermediate' },
-  //       discount: { label: 'Discount', value: '3-9%' },
-  //       buyWith: { label: 'Buy With', value: 'ETH/USD' },
-  //       bondPrice: { label: 'Bond Price', value: '$28.30' },
-  //       lockDuration: { label: 'Lock Duration', value: '28 Days' },
-  //     },
-  //     warning:
-  //       'Important: New buys are auto-staked (accrue rebase rewards) and no longer vest linearly',
-  //   },
-  //   {
-  //     header: {
-  //       primary: <span className="text-2xl sm:text-4xl lg:text-2xl xl:text-4xl">Pro</span>,
-  //     },
-  //     icon: <Intersect size={26} className="mr-2 w-8" />,
-  //     highlight: true,
-  //     data: {
-  //       level: { label: 'Pro', value: 'pro' },
-  //       discount: { label: 'Discount', value: '8-30%' },
-  //       buyWith: { label: 'Buy With', value: 'ETH/USD' },
-  //       bondPrice: { label: 'Bond Price', value: '$25.20' },
-  //       lockDuration: { label: 'Lock Duration', value: '84 Days' },
-  //     },
-  //     warning:
-  //       'Important: New buys are auto-staked (accrue rebase rewards) and no longer vest linearly',
-  //   },
-  // ];
+  const [
+    {
+      purchaseCost,
+      purchaseAmount,
+      maxSlippage,
+      purchaseToken,
+      selection,
+      setSelection,
+      groupedBondMarketsMap,
+      allTermedMarkets,
+    },
+    { handleUpdate, handleTokenInput },
+  ] = useBuyForm();
+  const [, { openModal }] = useModal();
+  const { data: account } = useAccount();
+  const { data: balance, isLoading: balanceIsLoading } = useBalance({
+    addressOrName: account?.address,
+    ...(purchaseToken?.symbol === 'USDC' && {
+      formatUnits: 'mwei',
+      token: purchaseToken?.quoteToken,
+    }),
+  });
+
+  const handleBuyClick = (value, cell, symbol) => {
+    setSelection(value);
+    handleUpdate(
+      {
+        target: {
+          value: {
+            address: cell.row.original.token,
+            quoteToken: cell.row.original.token,
+            symbol,
+          },
+        },
+      },
+      'purchaseToken'
+    );
+    handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
+  };
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Duration',
+        accessor: 'duration',
+        id: 'duration',
+        width: '10%',
+      },
+      {
+        Header: 'Token',
+        accessor: 'token',
+        id: 'token',
+        width: '10%',
+        Cell: ({ value }) =>
+          TokenInfo(value)?.symbol === 'WETH' ? 'ETH' : TokenInfo(value)?.symbol,
+      },
+      {
+        Header: 'Valuation',
+        accessor: 'valuationPrice',
+        id: 'valuation',
+        width: '10%',
+      },
+      {
+        Header: 'Discount Rate',
+        accessor: 'discountRate',
+        id: 'discountRate',
+        width: '10%',
+      },
+      {
+        Header: 'Market Price',
+        accessor: 'marketPrice',
+
+        id: 'marketPrice',
+        width: '10%',
+      },
+      {
+        Header: '',
+        accessor: 'select',
+        id: 'select',
+        width: '10%',
+        Cell: ({ value, cell }) => {
+          const symbol = TokenInfo(cell.row.original.token)?.symbol;
+          return (
+            <button
+              key={`${value.value}_${symbol}`}
+              className="border-button"
+              disabled={!symbol}
+              onClick={() => handleBuyClick(value, cell, symbol)}
+            >
+              Set Market
+            </button>
+          );
+        },
+      },
+    ],
+    []
+  );
+  const tableData = useMemo(
+    () =>
+      allTermedMarkets.map((y) => {
+        return {
+          duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
+          token: y.marketData.quoteToken,
+          valuationPrice: y.marketData.valuationPrice,
+          discountRate: y.marketData.discountRate,
+          marketPrice: y.marketData.marketPrice,
+          marketData: y.marketData,
+          select: {
+            label: `${y.mapKey} ${y.vestingTimeIncrement}`,
+            value: `${y.mapKey}`,
+          },
+        };
+      }),
+
+    [allTermedMarkets]
+  );
 
   return (
     <>
@@ -86,62 +138,95 @@ const DiscountBuy = () => {
         />
       </div>
       <PageContainer>
-        {account?.address ? (
-          <>
-            {groupedBondMarkets.length ? (
-              <CardList>
-                {groupedBondMarkets.map((groupedBondMarket, i) => {
-                  return (
-                    <Fragment key={`${groupedBondMarket?.header}_${i}`}>
-                      <MarketCard bondMarkets={groupedBondMarket} />
-                    </Fragment>
-                  );
-                })}
-              </CardList>
-            ) : (
-              <>There are no markets on the network. Please switch to a supported network.</>
-            )}
-          </>
-        ) : (
-          <p className="font-bold dark:text-white">Please connect your wallet</p>
-        )}
+        <div className="w-full rounded-lg bg-white p-4 shadow-lg sm:w-3/4">
+          <div className="mb-4 flex justify-between rounded-lg bg-[#ebebeb] p-2 dark:bg-theo-dark-navy sm:items-center">
+            <span className=" flex  items-center truncate text-lg font-bold uppercase sm:text-2xl">
+              Term
+            </span>
+            <SimpleSelect
+              options={Object.entries(groupedBondMarketsMap).map(([key, value]: [string, any]) => ({
+                label: value.header,
+                value: key,
+              }))}
+              selected={{
+                label: selection?.label,
+                value: selection?.value,
+              }}
+              onChange={(value) => {
+                setSelection(value);
+              }}
+            />
+          </div>
+          <CurrencyInput
+            className={'mb-2'}
+            selectedToken={{ ...purchaseToken }}
+            options={groupedBondMarketsMap[selection?.value]?.markets
+              .filter((m) =>
+                [
+                  process.env.NEXT_PUBLIC_USDC_ADDRESS,
+                  process.env.NEXT_PUBLIC_ETH_ADDRESS,
+                ].includes(m.marketData.quoteToken)
+              )
+              .map((x) => ({ ...x.marketData }))}
+            balance={balanceIsLoading ? '0' : balance?.formatted}
+            value={purchaseCost}
+            onCurrencyChange={(e: BaseSyntheticEvent) => {
+              handleUpdate(e, 'purchaseToken');
+              handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
+            }}
+            onChange={(e: BaseSyntheticEvent) => {
+              if (Number(e.target.value) < 0) return;
+              handleTokenInput(e, 'purchaseCost');
+            }}
+          />
+
+          <div className="space-between mb-4 flex align-middle">
+            <label htmlFor="maxSlippage" className="color w-full flex-1 text-gray-400 ">
+              Max Slippage
+            </label>
+            <input
+              name="maxSlippage"
+              value={maxSlippage}
+              onChange={(e: BaseSyntheticEvent) => {
+                if (Number(e.target.value) < 0) return;
+                handleUpdate(e, 'maxSlippage');
+              }}
+              className="rounded border bg-transparent pr-2 text-right hover:appearance-none focus:outline-none"
+              placeholder="00.00"
+              onKeyPress={(event) => {
+                if (!/^\d*\.?\d*$/.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+            />
+          </div>
+
+          <button
+            className={`border-button w-full ${
+              (Number(purchaseAmount) <= 0 || isNaN(purchaseAmount)) &&
+              'cursor-not-allowed opacity-50'
+            }`}
+            disabled={purchaseAmount <= 0 || isNaN(purchaseAmount)}
+            onClick={() => openModal(<ConfirmBuy />)}
+          >
+            <Icon name={'theo'} className="mr-2 w-8" />
+            Purchase {purchaseAmount} THEO
+          </button>
+        </div>
+        <div className="mt-6 w-full rounded-lg pt-4">
+          <div className="mb-4 text-xl font-bold">All Markets</div>
+          <Table columns={columns} data={tableData} />
+        </div>
       </PageContainer>
-      {/* <PageContainer>
-        <CardList className={'sm:mb-4'}>
-          {STATS.map((props) => (
-            <Fragment key={props.name}>
-              <StatCard {...props} />
-            </Fragment>
-          ))}
-        </CardList>
-        <CardList>
-          {ACTION_CARD.map((props: any, i) => {
-            const listData = { ...props.data };
-            delete listData.level;
-            return (
-              <Fragment key={`${props.header.primary}_${i}`}>
-                <ActionCard
-                  {...props}
-                  data={Object.values(listData)}
-                  actionButton={{
-                    label: 'Buy $THEO',
-                    onClick: () => {
-                      setSelection(props.data);
-                      openModal(<DiscountBuyForm />);
-                    },
-                    icon: <Intersect size={26} className="mr-2 w-8" />,
-                  }}
-                />
-              </Fragment>
-            );
-          })}
-        </CardList>
-      </PageContainer> */}
     </>
   );
 };
 
-DiscountBuy.PageStateProvider = (props) => <BuyFormProvider {...props} />;
+DiscountBuy.PageStateProvider = (props) => (
+  <UserPurchasesProvider {...props}>
+    <BuyFormProvider {...props} />
+  </UserPurchasesProvider>
+);
 DiscountBuy.PageHead = () => {
   return <div>Discount Buy</div>;
 };

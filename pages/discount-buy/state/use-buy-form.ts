@@ -7,11 +7,27 @@ type BuyFormStateType = {
   purchaseAmount;
   purchaseCost;
   transactionPending;
-  bondMarkets;
   selectedMarket;
-  groupedBondMarkets;
   groupedBondMarketsMap;
-  selection;
+  selection: {
+    label: string;
+    value: string;
+  };
+  setSelection;
+  maxSlippage;
+  allTermedMarkets: {
+    mapKey;
+    terms;
+    vestingTime;
+    vestingTimeIncrement;
+    marketData: {
+      quoteToken;
+      valuationPrice;
+      discountRate;
+      marketPrice;
+    };
+    id: string;
+  }[];
 };
 type BuyFormDispatchType = {
   setSelection;
