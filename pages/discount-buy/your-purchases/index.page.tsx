@@ -6,7 +6,6 @@ import { format } from 'date-fns';
 import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
-import BuyFormProvider from '../state/BuyFormProvider';
 import { useUserPurchases } from '../state/use-user-purchases';
 import { UserPurchasesProvider } from '../state/UserPurchasesProvider';
 import PurchasesTable from './components/PurchasesTable';

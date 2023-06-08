@@ -70,7 +70,7 @@ const ConfirmClaim = ({ purchase }) => {
             <SuccessfulTransaction
               txId={data.hash}
               title="Claim Successful!"
-              redirect="/whitelist-sale/your-purchases"
+              redirect="/discount-buy/your-purchases"
               Icon={Intersect}
               content={dataRows}
             />
