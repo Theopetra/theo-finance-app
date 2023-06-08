@@ -116,8 +116,8 @@ const ConfirmBuy = () => {
   const SuccessModal = ({ txId }) => (
     <SuccessfulTransaction
       txId={txId}
-      redirect={`/memberships/your-memberships`}
-      title={'Membership Successful!'}
+      redirect={`/discount-buy/your-purchases`}
+      title={'Purchase Successful!'}
       Icon={Intersect}
     />
   );
