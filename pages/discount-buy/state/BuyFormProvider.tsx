@@ -37,6 +37,7 @@ export const BuyFormProvider: React.FC = (props) => {
   const [groupedBondMarketsMap, setGroupedBondMarketsMap] = useState({});
   const [allTermedMarkets, setAllTermedMarkets] = useState<any[]>([]);
   const [formState, setFormState] = useState<formStateType>(initialFormState);
+  const [UIBondMarketsIsLoading, setUIBondMarketsIsLoading] = useState(true);
   const { address, abi } = useActiveBondDepo();
   const provider = useProvider();
   const { data: selectedToken } = useToken({ address: formState.purchaseToken?.quoteToken });
@@ -66,6 +67,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   useEffect(() => {
     async function callContract() {
+      setUIBondMarketsIsLoading(true);
       const cachedMkts = cache.getItem('groupedBondMarketsMap');
 
       if (cachedMkts) {
@@ -130,7 +132,7 @@ export const BuyFormProvider: React.FC = (props) => {
           });
 
           setGroupedBondMarketsMap(termsMap);
-
+          setUIBondMarketsIsLoading(false);
           cache.setItem(
             'groupedBondMarketsMap',
             Object.assign({}, termsMap),
@@ -198,7 +200,7 @@ export const BuyFormProvider: React.FC = (props) => {
       label: allTermedMarkets[0].mapKey,
       value: allTermedMarkets[0].mapKey,
     });
-  }, [allTermedMarkets]);
+  }, [allTermedMarkets, selection]);
 
   const updateFormState = (vals: any) => {
     setFormState({ ...formState, ...vals });
@@ -214,6 +216,7 @@ export const BuyFormProvider: React.FC = (props) => {
           selection,
           setSelection,
           allTermedMarkets,
+          UIBondMarketsIsLoading,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}

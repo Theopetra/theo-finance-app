@@ -12,6 +12,8 @@ import Table from '@/components/Table';
 import { TokenInfo } from '@/components/TokenName';
 import ConfirmBuy from './components/ConfirmBuy';
 import { UserPurchasesProvider } from './state/UserPurchasesProvider';
+import Skeleton from 'react-loading-skeleton';
+import { useTheme } from '@/state/ui/theme';
 
 const DiscountBuy = () => {
   const [
@@ -24,6 +26,7 @@ const DiscountBuy = () => {
       setSelection,
       groupedBondMarketsMap,
       allTermedMarkets,
+      UIBondMarketsIsLoading,
     },
     { handleUpdate, handleTokenInput },
   ] = useBuyForm();
@@ -36,7 +39,7 @@ const DiscountBuy = () => {
       token: purchaseToken?.quoteToken,
     }),
   });
-
+  const [{ theme }] = useTheme();
   const handleBuyClick = (value, cell, symbol) => {
     setSelection(value);
     handleUpdate(
@@ -112,20 +115,22 @@ const DiscountBuy = () => {
   );
   const tableData = useMemo(
     () =>
-      allTermedMarkets.map((y) => {
-        return {
-          duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
-          token: y.marketData.quoteToken,
-          valuationPrice: y.marketData.valuationPrice,
-          discountRate: y.marketData.discountRate,
-          marketPrice: y.marketData.marketPrice,
-          marketData: y.marketData,
-          select: {
-            label: `${y.mapKey} ${y.vestingTimeIncrement}`,
-            value: `${y.mapKey}`,
-          },
-        };
-      }),
+      allTermedMarkets
+        ? allTermedMarkets.map((y) => {
+            return {
+              duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
+              token: y.marketData.quoteToken,
+              valuationPrice: y.marketData.valuationPrice,
+              discountRate: y.marketData.discountRate,
+              marketPrice: y.marketData.marketPrice,
+              marketData: y.marketData,
+              select: {
+                label: `${y.mapKey} ${y.vestingTimeIncrement}`,
+                value: `${y.mapKey}`,
+              },
+            };
+          })
+        : [],
 
     [allTermedMarkets]
   );
@@ -138,24 +143,30 @@ const DiscountBuy = () => {
         />
       </div>
       <PageContainer>
-        <div className="w-full rounded-lg bg-white p-4 shadow-lg sm:w-3/4">
+        <div className="w-full rounded-lg bg-white p-4 shadow-lg sm:w-3/4 xl:w-1/2">
           <div className="mb-4 flex justify-between rounded-lg bg-[#ebebeb] p-2 dark:bg-theo-dark-navy sm:items-center">
             <span className=" flex  items-center truncate text-lg font-bold uppercase sm:text-2xl">
               Term
             </span>
-            <SimpleSelect
-              options={Object.entries(groupedBondMarketsMap).map(([key, value]: [string, any]) => ({
-                label: value.header,
-                value: key,
-              }))}
-              selected={{
-                label: selection?.label,
-                value: selection?.value,
-              }}
-              onChange={(value) => {
-                setSelection(value);
-              }}
-            />
+            {Object.entries(groupedBondMarketsMap).length > 0 ? (
+              <SimpleSelect
+                options={Object.entries(groupedBondMarketsMap).map(
+                  ([key, value]: [string, any]) => ({
+                    label: value.header,
+                    value: key,
+                  })
+                )}
+                selected={{
+                  label: selection?.label,
+                  value: selection?.value,
+                }}
+                onChange={(value) => {
+                  setSelection(value);
+                }}
+              />
+            ) : (
+              <></>
+            )}
           </div>
           <CurrencyInput
             className={'mb-2'}
@@ -215,7 +226,11 @@ const DiscountBuy = () => {
         </div>
         <div className="mt-6 w-full rounded-lg pt-4">
           <div className="mb-4 text-xl font-bold">All Markets</div>
-          <Table columns={columns} data={tableData} />
+          {!UIBondMarketsIsLoading ? (
+            <Table columns={columns} data={tableData} />
+          ) : (
+            <Skeleton height={30} count={5} />
+          )}
         </div>
       </PageContainer>
     </>

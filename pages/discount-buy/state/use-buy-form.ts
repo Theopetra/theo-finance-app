@@ -15,6 +15,7 @@ type BuyFormStateType = {
   };
   setSelection;
   maxSlippage;
+  UIBondMarketsIsLoading: boolean;
   allTermedMarkets: {
     mapKey;
     terms;
