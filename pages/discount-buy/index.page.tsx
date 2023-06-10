@@ -14,6 +14,8 @@ import ConfirmBuy from './components/ConfirmBuy';
 import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
 import { useTheme } from '@/state/ui/theme';
+import { formatTheo } from '@/lib/format_theo';
+import { formatEther } from 'ethers/lib/utils';
 
 const DiscountBuy = () => {
   const [
@@ -77,19 +79,28 @@ const DiscountBuy = () => {
         accessor: 'valuationPrice',
         id: 'valuation',
         width: '10%',
+        Cell: ({ value }) => formatTheo(value),
       },
       {
         Header: 'Discount Rate',
         accessor: 'discountRate',
         id: 'discountRate',
         width: '10%',
+        // value is a large percent value and needs to be converted to percentage.
+        Cell: ({ value }) => (
+          <span title={`${value / 10 ** 7}`}>{(value / 10 ** 7).toFixed(2)}%</span>
+        ),
       },
       {
         Header: 'Market Price',
         accessor: 'marketPrice',
-
         id: 'marketPrice',
         width: '10%',
+        Cell: ({ value, cell }) => {
+          const symbol = TokenInfo(cell.row.original.token)?.symbol;
+
+          return `${formatEther(value)} ${symbol === 'WETH' ? 'ETH' : symbol}`;
+        },
       },
       {
         Header: '',
@@ -124,6 +135,7 @@ const DiscountBuy = () => {
               discountRate: y.marketData.discountRate,
               marketPrice: y.marketData.marketPrice,
               marketData: y.marketData,
+              symbol: y.marketData.symbol,
               select: {
                 label: `${y.mapKey} ${y.vestingTimeIncrement}`,
                 value: `${y.mapKey}`,

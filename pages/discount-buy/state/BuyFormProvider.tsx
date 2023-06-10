@@ -96,6 +96,11 @@ export const BuyFormProvider: React.FC = (props) => {
                 const valuationPrice = BigNumber.from(
                   await contract.bondRateVariable(bondMarket)
                 ).toNumber();
+
+                const discountRate = BigNumber.from(
+                  await contract.bondRateVariable(bondMarket)
+                ).toNumber();
+
                 const termWithMarkets = {
                   mapKey: vestingTime,
                   terms,
@@ -103,7 +108,15 @@ export const BuyFormProvider: React.FC = (props) => {
                   vestingTimeIncrement:
                     process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : 'months',
                   vestingInMinutes,
-                  marketData: Object.assign({}, { ...market, marketPrice, valuationPrice }),
+                  marketData: Object.assign(
+                    {},
+                    {
+                      ...market,
+                      marketPrice,
+                      valuationPrice,
+                      discountRate,
+                    }
+                  ),
                   id: bondMarket.toString(),
                 };
                 setAllTermedMarkets((prev) => [...prev, termWithMarkets]);
