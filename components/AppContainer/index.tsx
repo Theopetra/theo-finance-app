@@ -8,6 +8,7 @@ import FauxModal from '../FauxModal';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { Transition } from '@headlessui/react';
 import { useNetwork } from 'wagmi';
+import { getNetwork } from '@wagmi/core';
 
 const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
   children,
@@ -16,7 +17,7 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
 }) => {
   const [{ theme }] = useTheme();
   const [{ isOpen, transitioning }, { setTransitioning }] = useModal();
-  const { isLoading, activeChain } = useNetwork();
+  const { chain } = getNetwork();
   const allowedChains = [1, 11155111, 31337];
   return (
     <div className={`${theme} h-full min-h-screen`}>
@@ -47,12 +48,12 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
               </div>
             </div>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {isLoading && <div className="  font-bold">Loading</div>}
+              {!chain && <div className="  font-bold">Loading</div>}
 
-              {activeChain?.id && !allowedChains.includes(activeChain.id) && (
+              {chain?.id && !allowedChains.includes(chain.id) && (
                 <div className=" font-bold">Please connect to the Ethereum Mainnet.</div>
               )}
-              {activeChain && allowedChains.includes(activeChain.id) ? (
+              {chain && allowedChains.includes(chain.id) ? (
                 <PageStateProvider>
                   {/* provider */}
                   <Transition

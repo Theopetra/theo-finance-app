@@ -1,32 +1,35 @@
 import {
-  getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
+  getDefaultWallets,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { configureChains, WagmiConfig, Chain, createConfig, mainnet } from 'wagmi';
+import { configureChains, WagmiConfig, createConfig } from 'wagmi';
 import { createPublicClient, http } from 'viem';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
 import { useTheme } from '../ui/theme';
 
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { mainnet, hardhat } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 
 const envChains = () => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'production':
-      return [chain.mainnet];
+      return [mainnet];
     case 'staging':
-      return [chain.hardhat];
+      return [mainnet];
     default:
-      return [chain.hardhat];
+      return [mainnet];
   }
 };
 
-const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
-const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID || '';
+const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID || '';
 
 if (!infuraId) {
   console.log('WARNING: No infura id specified!');
@@ -35,25 +38,30 @@ if (!infuraId) {
 if (!alchemyId) {
   console.log('WARNING: No alchemy id specified!');
 }
-const { chains, publicClient } = configureChains(envChains(), [
-  // ...(process.env.NEXT_PUBLIC_ENV === 'staging' || process.env.NEXT_PUBLIC_ENV === 'local'
-  //   ? [
-  //       jsonRpcProvider({
-  //         rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
-  //       }),
-  //     ]
-  //   : []),
-  infuraProvider({ infuraId }),
-  alchemyProvider({ alchemyId }),
-  publicProvider(),
-]);
 
+const { chains, publicClient } = configureChains(
+  [mainnet],
+  [
+    // ...(process.env.NEXT_PUBLIC_ENV === 'staging' || process.env.NEXT_PUBLIC_ENV === 'local'
+    //   ? [
+    //       jsonRpcProvider({
+    //         rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
+    //       }),
+    //     ]
+    //   : []),
+
+    infuraProvider({ apiKey: infuraId }),
+    alchemyProvider({ apiKey: alchemyId }),
+    publicProvider(),
+  ]
+);
 const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
   chains,
 });
 const config = createConfig({
   autoConnect: true,
+  connectors,
 
   publicClient: createPublicClient({
     chain: mainnet,
@@ -65,7 +73,7 @@ const ChainProvider = (props) => {
   const [{ theme }] = useTheme();
 
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={config}>
       <RainbowKitProvider
         theme={
           theme === 'dark'

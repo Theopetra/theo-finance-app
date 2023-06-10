@@ -6,8 +6,8 @@ import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import { useRouter } from 'next/router';
 import { setDeviceId, setWallet } from '@/lib/analytics';
-import { useAccount, useNetwork } from 'wagmi';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { getAccount } from '@wagmi/core';
 
 type AppComponentExtensions = {
   PageHead: FC;
@@ -23,7 +23,7 @@ const NoopComponent = (props) => <>{props.children}</>;
 function App({ Component, pageProps }: CustomAppProps) {
   const { PageHead = NoopComponent, PageStateProvider = NoopComponent } = Component;
   const router = useRouter();
-  const { data } = useAccount();
+  const account = getAccount();
   const { logEvent } = useAnalytics();
 
   // log the device id ologEventn app load
@@ -35,13 +35,13 @@ function App({ Component, pageProps }: CustomAppProps) {
 
   // log wallet connected
   useEffect(() => {
-    const wallet = data?.address;
+    const wallet = account?.address;
     if (wallet) {
       setWallet(wallet);
       logEvent({ name: 'wallet_connected' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.address]);
+  }, [account?.address]);
 
   // log page views
   useEffect(() => {

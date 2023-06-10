@@ -2,11 +2,11 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import { formatTheo } from '@/lib/format_theo';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
-import { useContract, useContractRead } from 'wagmi';
-
+import { useContractRead } from 'wagmi';
+import { getContract } from 'wagmi/actions';
 const useGetLockedTheoByContract = async (contractName) => {
   const { address, abi } = useContractInfo(contractName);
-  const contract = useContract({ address: address, contractInterface: abi });
+  const contract = getContract({ address: address, contractInterface: abi });
   const { data } = useContractRead(
     {
       address: address,
