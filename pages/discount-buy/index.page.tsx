@@ -135,7 +135,6 @@ const DiscountBuy = () => {
               discountRate: y.marketData.discountRate,
               marketPrice: y.marketData.marketPrice,
               marketData: y.marketData,
-              symbol: y.marketData.symbol,
               select: {
                 label: `${y.mapKey} ${y.vestingTimeIncrement}`,
                 value: `${y.mapKey}`,
