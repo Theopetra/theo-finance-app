@@ -86,9 +86,8 @@ const DiscountBuy = () => {
         id: 'discountRate',
         width: '10%',
         // value is a large percent value and needs to be converted to percentage.
-        Cell: ({ value }) => (
-          <span title={`${value / 10 ** 7}`}>{(value / 10 ** 7).toFixed(2)}%</span>
-        ),
+        Cell: ({ value }) => value,
+        // <span title={`${value / 10 ** 7}`}>{(value / 10 ** 7).toFixed(2)}%</span>
       },
       {
         Header: 'Market Price',
@@ -96,9 +95,10 @@ const DiscountBuy = () => {
         id: 'marketPrice',
         width: '10%',
         Cell: ({ value, cell }) => {
-          const symbol = TokenInfo(cell.row.original.token)?.symbol;
+          // const symbol = TokenInfo(cell.row.original.token)?.symbol;
 
-          return `${formatEther(value)} ${symbol === 'WETH' ? 'ETH' : symbol}`;
+          // return `${formatEther(value)} ${symbol === 'WETH' ? 'ETH' : symbol}`;
+          return value;
         },
       },
       {
