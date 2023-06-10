@@ -66,7 +66,7 @@ export const BuyFormProvider: React.FC = (props) => {
   );
 
   useEffect(() => {
-    async function callContract() {
+    const callContract = async () => {
       setUIBondMarketsIsLoading(true);
       const cachedMkts = cache.getItem('groupedBondMarketsMap');
 
@@ -91,12 +91,14 @@ export const BuyFormProvider: React.FC = (props) => {
 
                 const market = await contract.markets(bondMarket);
                 let marketPrice = 0;
-                // try {
-                //   marketPrice = BigNumber.from(await contract.marketPrice(bondMarket)).toNumber();
-                // } catch {
-                //   marketPrice = 0;
-                //   console.log('error getting market price');
-                // }
+
+                /* try {
+                  marketPrice = BigNumber.from(await contract.marketPrice(bondMarket)).toNumber();
+                } catch {
+                  marketPrice = 0;
+                  console.log('error getting market price');
+                } */
+
                 const valuationPrice = BigNumber.from(
                   await contract.bondRateVariable(bondMarket)
                 ).toNumber();
@@ -112,17 +114,15 @@ export const BuyFormProvider: React.FC = (props) => {
                   vestingTimeIncrement:
                     process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : 'months',
                   vestingInMinutes,
-                  marketData: Object.assign(
-                    {},
-                    {
-                      ...market,
-                      marketPrice,
-                      valuationPrice,
-                      discountRate,
-                    }
-                  ),
+                  marketData: {
+                    ...market,
+                    marketPrice,
+                    valuationPrice,
+                    discountRate,
+                  },
                   id: bondMarket.toString(),
                 };
+
                 setAllTermedMarkets((prev) => [...prev, termWithMarkets]);
                 return termWithMarkets;
               } catch (err) {
@@ -152,7 +152,7 @@ export const BuyFormProvider: React.FC = (props) => {
           setUIBondMarketsIsLoading(false);
           cache.setItem(
             'groupedBondMarketsMap',
-            Object.assign({}, termsMap),
+            { ...termsMap },
             process.env.NEXT_PUBLIC_GROUPED_BOND_MKTS_CACHE_SECS
           );
         }
@@ -160,9 +160,11 @@ export const BuyFormProvider: React.FC = (props) => {
         console.log(err);
         return null;
       }
-    }
+    };
+
     callContract();
-    // cleanup useEffect
+
+    // Cleanup useEffect
     return () => {
       setGroupedBondMarketsMap({});
       setAllTermedMarkets([]);
