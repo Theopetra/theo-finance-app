@@ -24,14 +24,14 @@ const useStats = () => {
     useContractInfo('ChainlinkPriceFeed');
   const { data: priceFeed } = useContractRead(
     {
-      addressOrName: ChainlinkPriceFeed,
+      address: ChainlinkPriceFeed,
       contractInterface: ChainlinkPriceFeedAbi,
     },
     'latestAnswer'
   );
 
   const contractParams = {
-    addressOrName: address,
+    addressess,
     contractInterface: abi,
   };
   const { data: totalSupply } = useContractRead(contractParams, 'totalSupply');
@@ -61,7 +61,7 @@ const useStats = () => {
   }, [totalSupply, totalTheoStaked]);
   const { data: valuation } = useContractRead(
     {
-      addressOrName: calcAddress,
+      address: calcAddress,
       contractInterface: calcAbi,
     },
     'valuation',
@@ -101,7 +101,7 @@ const Memberships = () => {
 
   const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'nextRewardRate',
@@ -111,7 +111,7 @@ const Memberships = () => {
   );
   const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'nextRewardRate',
@@ -121,7 +121,7 @@ const Memberships = () => {
   );
   const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'epochLength'

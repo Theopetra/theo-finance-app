@@ -6,10 +6,10 @@ import { useContract, useContractRead } from 'wagmi';
 
 const useGetLockedTheoByContract = async (contractName) => {
   const { address, abi } = useContractInfo(contractName);
-  const contract = useContract({ addressOrName: address, contractInterface: abi });
+  const contract = useContract({ address: address, contractInterface: abi });
   const { data } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'getMarkets'

@@ -60,7 +60,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
 
   const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
     {
-      addressOrName: StakingDistributor,
+      address: StakingDistributor,
       contractInterface: StakingDistributorAbi,
     },
     'epochLength'
@@ -69,7 +69,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
   const theoAbi = purchase.contractName === 'TheopetraStaking' ? sAbi : pAbi;
   const { data: stakingInfo } = useContractRead(
     {
-      addressOrName: address,
+      address
       contractInterface: abi,
     },
     'stakingInfo',
@@ -81,7 +81,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
 
   const { data: amountFromGons } = useContractRead(
     {
-      addressOrName: theoAddress,
+      address: theoAddress,
       contractInterface: theoAbi,
     },
     'balanceForGons',
@@ -112,7 +112,7 @@ const UnstakeButton = ({ purchase, matured, account }) => {
 
   const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'getPenalty',
@@ -178,7 +178,7 @@ const YourMemberships = () => {
 
   const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'nextRewardRate',
@@ -188,7 +188,7 @@ const YourMemberships = () => {
   );
   const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'nextRewardRate',

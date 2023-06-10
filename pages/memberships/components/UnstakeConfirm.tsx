@@ -45,7 +45,7 @@ const UnstakeConfirm = ({
     write: approve,
   } = useContractWrite(
     {
-      addressOrName: theoAddress,
+      address: theoAddress,
       contractInterface: theoAbi,
       signerOrProvider: signer,
     },
@@ -75,7 +75,7 @@ const UnstakeConfirm = ({
   // unstake
   const { write: unstake, isLoading: unstakeLoading } = useContractWrite(
     {
-      addressOrName: stakingContractAddress,
+      address: stakingContractAddress,
       contractInterface: stakingContractAbi,
       signerOrProvider: signer,
     },

@@ -9,7 +9,7 @@ import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases'
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { format } from 'date-fns';
 import { ArrowLeft, Intersect } from 'phosphor-react';
-import { useAccount, useContractWrite, useSigner } from 'wagmi';
+import { useAccount, useContractWrite, useWalletClient } from 'wagmi';
 import FailedTransaction from '@/components/FailedTransaction';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 
@@ -36,7 +36,7 @@ const ConfirmClaim = ({ purchase }) => {
     purchase.contractName
   );
 
-  const { data: signer } = useSigner();
+  const { data: walletClient } = useWalletClient();
   const claimArgs = [account?.address, [purchase.index]];
 
   const dataRows = (
@@ -54,9 +54,9 @@ const ConfirmClaim = ({ purchase }) => {
     write: redeem,
   } = useContractWrite(
     {
-      addressOrName: activeContract,
+      address: activeContract,
       contractInterface: activeContractABI,
-      signerOrProvider: signer,
+      signerOrProvider: walletClient,
     },
     'redeem',
     {

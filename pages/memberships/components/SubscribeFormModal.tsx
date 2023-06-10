@@ -67,7 +67,7 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
     isError: balanceIsError,
     isLoading: balanceIsLoading,
   } = useBalance({
-    addressOrName: account?.address,
+    address: account?.address,
     formatUnits: 9,
     token: address,
   });

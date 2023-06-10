@@ -3,7 +3,7 @@ import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { cache } from '@/lib/cache';
 import { BigNumber } from 'ethers';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useContract, useContractRead, useProvider, useToken } from 'wagmi';
+import { useContract, useContractRead, usePublicClient, useToken } from 'wagmi';
 
 export const BuyFormContext = React.createContext<any>(null);
 
@@ -39,7 +39,7 @@ export const BuyFormProvider: React.FC = (props) => {
   const [formState, setFormState] = useState<formStateType>(initialFormState);
   const [UIBondMarketsIsLoading, setUIBondMarketsIsLoading] = useState(true);
   const { address, abi } = useActiveBondDepo();
-  const provider = useProvider();
+  const provider = usePublicClient();
   const { data: selectedToken } = useToken({ address: formState.purchaseToken?.quoteToken });
   const selectedMarket = useMemo(
     () =>
@@ -51,14 +51,14 @@ export const BuyFormProvider: React.FC = (props) => {
     [selection, groupedBondMarketsMap, formState.purchaseToken?.address]
   );
   const contract = useContract({
-    addressOrName: address,
+    address: address,
     contractInterface: abi,
     signerOrProvider: provider,
   });
 
   const { data: priceInfo } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'marketPrice',

@@ -128,7 +128,7 @@ const ConfirmBuy = () => {
     write: deposit,
   } = useContractWrite(
     {
-      addressOrName: activeBondDepoAddress,
+      address: activeBondDepoAddress,
       contractInterface: activeBondDepoAbi,
       signerOrProvider: signer,
     },
@@ -160,7 +160,7 @@ const ConfirmBuy = () => {
     write: wethDeposit,
   } = useContractWrite(
     {
-      addressOrName: WethHelperAddress,
+      address: WethHelperAddress,
       contractInterface: WethHelperAbi,
       signerOrProvider: signer,
     },
@@ -201,7 +201,7 @@ const ConfirmBuy = () => {
     write: approve,
   } = useContractWrite(
     {
-      addressOrName: purchaseToken?.quoteToken!,
+      address: purchaseToken?.quoteToken!,
       contractInterface: [
         'function approve(address _spender, uint256 _value) public returns (bool success)',
       ],

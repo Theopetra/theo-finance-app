@@ -34,7 +34,7 @@ const DiscountBuy = () => {
   const [, { openModal }] = useModal();
   const { data: account } = useAccount();
   const { data: balance, isLoading: balanceIsLoading } = useBalance({
-    addressOrName: account?.address,
+    address: account?.address,
     ...(purchaseToken?.symbol === 'USDC' && {
       formatUnits: 'mwei',
       token: purchaseToken?.quoteToken,

@@ -16,7 +16,7 @@ export const TokenPrice = ({ market }) => {
     isSuccess,
   } = useContractRead(
     {
-      addressOrName: address,
+      address: address,
       contractInterface: abi,
     },
     'marketPrice',

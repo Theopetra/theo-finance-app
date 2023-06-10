@@ -23,7 +23,7 @@ const Navigation = () => {
   const { address } = useContractInfo('TheopetraERC20Token');
 
   const { data: balance } = useBalance({
-    addressOrName: account?.address,
+    address: account?.address,
     formatUnits: 9,
     token: address,
     watch: true,

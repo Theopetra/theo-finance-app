@@ -61,7 +61,7 @@ const SubscribeConfirm = ({
     write: stake,
   } = useContractWrite(
     {
-      addressOrName: theopetraStakingAddress,
+      address: theopetraStakingAddress,
       contractInterface: theopetraStakingABI,
       signerOrProvider: signer,
     },
@@ -102,7 +102,7 @@ const SubscribeConfirm = ({
     write: approve,
   } = useContractWrite(
     {
-      addressOrName: theoAddress,
+      address: theoAddress,
       contractInterface: theoAbi,
       // [
       //   'function approve(address _spender, uint256 _value) public returns (bool success)',

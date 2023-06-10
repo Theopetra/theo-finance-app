@@ -2,7 +2,7 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
 import { BigNumber } from 'ethers';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useAccount, useContract, useProvider } from 'wagmi';
+import { useAccount, useContract, usePublicClient } from 'wagmi';
 import { UserPurchasesContext } from './UserPurchasesProvider';
 
 export const usePurchasesByContract = (contractName) => {
@@ -19,9 +19,9 @@ export const usePurchasesByContract = (contractName) => {
     setRender((value) => !value);
   };
 
-  const provider = useProvider();
+  const provider = usePublicClient();
   const contract = useContract({
-    addressOrName: address,
+    address: address,
     contractInterface: abi,
     signerOrProvider: provider,
   });
@@ -30,7 +30,7 @@ export const usePurchasesByContract = (contractName) => {
   const theoAbi = contractName === 'TheopetraStaking' ? sAbi : pAbi;
 
   const stakedTheoContract = useContract({
-    addressOrName: theoAddress,
+    address: theoAddress,
     contractInterface: theoAbi,
     signerOrProvider: provider,
   });
