@@ -90,9 +90,13 @@ export const BuyFormProvider: React.FC = (props) => {
                   process.env.NEXT_PUBLIC_ENV !== 'production' ? vestingInMinutes : vestingInMonths;
 
                 const market = await contract.markets(bondMarket);
-                const marketPrice = BigNumber.from(
-                  await contract.marketPrice(bondMarket)
-                ).toNumber();
+                let marketPrice = 0;
+                try {
+                  marketPrice = BigNumber.from(await contract.marketPrice(bondMarket)).toNumber();
+                } catch {
+                  marketPrice = 0;
+                  console.log('error getting market price');
+                }
                 const valuationPrice = BigNumber.from(
                   await contract.bondRateVariable(bondMarket)
                 ).toNumber();
