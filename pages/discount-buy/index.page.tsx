@@ -1,6 +1,6 @@
 import PageContainer from '@/components/PageContainer';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { BaseSyntheticEvent, useMemo } from 'react';
+import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
 import BuyFormProvider from './state/BuyFormProvider';
 import useBuyForm from './state/use-buy-form';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
@@ -13,7 +13,6 @@ import { TokenInfo } from '@/components/TokenName';
 import ConfirmBuy from './components/ConfirmBuy';
 import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
-import { useTheme } from '@/state/ui/theme';
 import { formatTheo } from '@/lib/format_theo';
 import { formatEther } from 'ethers/lib/utils';
 
@@ -41,7 +40,7 @@ const DiscountBuy = () => {
       token: purchaseToken?.quoteToken,
     }),
   });
-  const [{ theme }] = useTheme();
+  const [error, setError] = useState<string>();
   const handleBuyClick = (value, cell, symbol) => {
     setSelection(value);
     handleUpdate(
@@ -145,7 +144,13 @@ const DiscountBuy = () => {
 
     [allTermedMarkets]
   );
-
+  useEffect(() => {
+    if (Number(purchaseAmount) <= 0 || purchaseAmount === 'NaN' || purchaseAmount === 'Infinity') {
+      setError('Please enter a valid amount');
+    } else {
+      setError('');
+    }
+  }, [purchaseCost, purchaseAmount]);
   return (
     <>
       <div className="pt-4">
@@ -198,6 +203,11 @@ const DiscountBuy = () => {
             }}
             onChange={(e: BaseSyntheticEvent) => {
               if (Number(e.target.value) < 0) return;
+              if (Number(e.target.value) > Number(balance?.formatted)) {
+                setError('Insufficient balance');
+              } else {
+                setError('');
+              }
               handleTokenInput(e, 'purchaseCost');
             }}
           />
@@ -224,15 +234,18 @@ const DiscountBuy = () => {
           </div>
 
           <button
-            className={`border-button w-full ${
-              (Number(purchaseAmount) <= 0 || isNaN(purchaseAmount)) &&
-              'cursor-not-allowed opacity-50'
-            }`}
-            disabled={purchaseAmount <= 0 || isNaN(purchaseAmount)}
+            className={`border-button w-full ${error && 'cursor-not-allowed opacity-50'}`}
+            disabled={Boolean(error?.length)}
             onClick={() => openModal(<ConfirmBuy />)}
           >
-            <Icon name={'theo'} className="mr-2 w-8" />
-            Purchase {purchaseAmount} THEO
+            {error ? (
+              error
+            ) : (
+              <>
+                <Icon name={'theo'} className="mr-2 w-8" />
+                Purchase {purchaseAmount} THEO
+              </>
+            )}
           </button>
         </div>
         <div className="mt-6 w-full rounded-lg pt-4">
