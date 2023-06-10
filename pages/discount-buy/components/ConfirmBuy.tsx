@@ -271,17 +271,12 @@ const ConfirmBuy = () => {
             </svg>
           </button>
         </div>
-        <div
-          className="mb-8 text-center text-theo-navy dark:text-white"
-          style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.25)' }}
-        >
+        <div className="mb-8 text-center text-theo-navy dark:text-white">
           <div className="mb-4 text-3xl font-bold sm:text-4xl">Confirm Buy</div>
           <div>
             Please review carefully, this purchase is final.
             <br />
             Click <strong>Confirm Purchase</strong> below to confirm.
-            <br />
-            *Note: This purchase includes 10% $THEO inflation to fund exchange listings*
           </div>
         </div>
         <div>
