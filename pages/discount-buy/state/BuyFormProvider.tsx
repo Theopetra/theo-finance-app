@@ -158,6 +158,7 @@ export const BuyFormProvider: React.FC = (props) => {
         }
       } catch (err) {
         console.log(err);
+        return null;
       }
     }
     callContract();
