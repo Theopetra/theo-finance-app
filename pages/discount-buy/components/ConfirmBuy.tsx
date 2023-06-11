@@ -11,7 +11,7 @@ import { cache } from '@/lib/cache';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
-import { parseEther, parseUnits } from 'viem';
+import { parseEther, parseUnits, toHex } from 'viem';
 import { useMemo } from 'react';
 import { useAccount, useContractWrite, useWalletClient } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
@@ -20,6 +20,7 @@ import FailedTransaction from '@/components/FailedTransaction';
 import { Intersect } from 'phosphor-react';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import { Abi } from 'viem';
+import { getContract } from 'wagmi/dist/actions';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -65,7 +66,7 @@ const ConfirmBuy = () => {
   const account = useAccount();
   const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
-  const { data: signer, isError, isLoading } = useWalletClient();
+
   const { logEvent } = useAnalytics();
 
   const signature: any = useMemo(() => {
@@ -97,10 +98,9 @@ const ConfirmBuy = () => {
 
   const WethArgs = [
     selectedMarket.id,
-    maxPrice,
+    toHex(maxPrice),
     account?.address,
     account?.address,
-    // TODO: autostake
     false,
     false,
     signature?.wethHelperSignature || '0x00',
@@ -156,8 +156,8 @@ const ConfirmBuy = () => {
     write: wethDeposit,
   } = useContractWrite({
     address: WethHelperAddress,
+    account: account.address,
     abi: WethHelperAbi as Abi,
-    // signerOrProvider: signer,
     functionName: 'deposit',
     onSuccess: async (data) => {
       openModal(
@@ -178,7 +178,7 @@ const ConfirmBuy = () => {
     },
     onError: (error) => {
       console.log(error);
-      openModal(<FailedModal />);
+      openModal(<FailedModal error={error} />);
     },
     args: WethArgs,
     value: depositAmount,
@@ -226,7 +226,6 @@ const ConfirmBuy = () => {
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
-      console.log('eth depo');
       wethDeposit();
     } else {
       openModal(
@@ -259,7 +258,7 @@ const ConfirmBuy = () => {
         <div className="mb-8 text-center text-theo-navy dark:text-white">
           <div className="mb-4 text-3xl font-bold sm:text-4xl">Confirm Buy</div>
           <div>
-            Please review carefully, this purchase is final.
+            Please review carefully, this purchase is final. {selectedMarket.id}
             <br />
             Click <strong>Confirm Purchase</strong> below to confirm.
           </div>

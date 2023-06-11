@@ -140,7 +140,7 @@ export const BuyFormProvider: React.FC = (props) => {
                     valuationPrice,
                     discountRate,
                   },
-                  id: bondMarket.toString(),
+                  id: Number(bondMarket),
                 };
 
                 setAllTermedMarkets((prev) => [...prev, termWithMarkets]);
