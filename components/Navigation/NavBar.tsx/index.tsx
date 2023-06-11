@@ -2,8 +2,9 @@ import homeButtonLight from '../assets/homeButtonlight.png';
 import homeButtonDark from '../assets/homeButtonDark.png';
 import { formatTheo } from '@/lib/format_theo';
 import { useTheme } from '@/state/ui/theme';
-import { useAccount, useBalance } from 'wagmi';
+import { useBalance } from 'wagmi';
 import { useContractInfo } from '@/hooks/useContractInfo';
+import { getAccount } from '@wagmi/core';
 
 const NavBar = () => {
   const [{ theme, navigationOpen }, { setNavigationOpen }] = useTheme();
@@ -12,7 +13,7 @@ const NavBar = () => {
     number: 'font-bold text-theo-cyan dark:text-white',
     label: 'text-xs font-normal text-theo-navy dark:text-theo-cyan',
   };
-  const { data: account } = useAccount();
+  const account = getAccount();
   const { address } = useContractInfo('TheopetraERC20Token');
   const { data: balance } = useBalance({
     address: account?.address,

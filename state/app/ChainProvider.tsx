@@ -4,16 +4,15 @@ import {
   getDefaultWallets,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { configureChains, WagmiConfig, createConfig } from 'wagmi';
+import { configureChains, WagmiConfig, createConfig, mainnet } from 'wagmi';
 import { createPublicClient, http } from 'viem';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
 import { useTheme } from '../ui/theme';
 
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { mainnet, hardhat } from 'wagmi/chains';
+import { hardhat } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
@@ -22,7 +21,7 @@ const envChains = () => {
     case 'production':
       return [mainnet];
     case 'staging':
-      return [mainnet];
+      return [mainnet, hardhat];
     default:
       return [mainnet];
   }
@@ -40,15 +39,11 @@ if (!alchemyId) {
 }
 
 const { chains, publicClient } = configureChains(
-  [mainnet],
+  [mainnet, hardhat],
   [
-    // ...(process.env.NEXT_PUBLIC_ENV === 'staging' || process.env.NEXT_PUBLIC_ENV === 'local'
-    //   ? [
-    //       jsonRpcProvider({
-    //         rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
-    //       }),
-    //     ]
-    //   : []),
+    jsonRpcProvider({
+      rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
+    }),
 
     infuraProvider({ apiKey: infuraId }),
     alchemyProvider({ apiKey: alchemyId }),
@@ -62,11 +57,7 @@ const { connectors } = getDefaultWallets({
 const config = createConfig({
   autoConnect: true,
   connectors,
-
-  publicClient: createPublicClient({
-    chain: mainnet,
-    transport: http(),
-  }),
+  publicClient,
 });
 
 const ChainProvider = (props) => {

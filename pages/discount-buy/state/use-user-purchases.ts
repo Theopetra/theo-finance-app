@@ -1,12 +1,12 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
-import { BigNumber } from 'ethers';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useAccount, useContract, usePublicClient } from 'wagmi';
 import { UserPurchasesContext } from './UserPurchasesProvider';
+import { getContract, getAccount } from '@wagmi/core';
+import { Abi } from 'viem';
 
 export const usePurchasesByContract = (contractName) => {
-  const { data } = useAccount();
+  const account = getAccount();
   const { address, abi } = useContractInfo(contractName);
   const { address: sTheoAddress, abi: sAbi } = useContractInfo('sTheopetra');
   const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
@@ -19,131 +19,99 @@ export const usePurchasesByContract = (contractName) => {
     setRender((value) => !value);
   };
 
-  const provider = usePublicClient();
-  const contract = useContract({
+  const contract = getContract({
     address: address,
-    contractInterface: abi,
-    signerOrProvider: provider,
+    abi: abi as Abi,
   });
 
   const theoAddress = contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress;
   const theoAbi = contractName === 'TheopetraStaking' ? sAbi : pAbi;
 
-  const stakedTheoContract = useContract({
+  const stakedTheoContract = getContract({
     address: theoAddress,
-    contractInterface: theoAbi,
-    signerOrProvider: provider,
+    abi: theoAbi as Abi,
   });
 
-  useMemo(() => {
-    async function callContract() {
+  useEffect(() => {
+    const fetchData = async () => {
       setIsLoadingPurchases(true);
-      const cached = cache.getItem(`purchases-${contractName}`);
-      if (cached) {
-        setPendingNotes(cached);
-      } else if (contract && data?.address) {
-        let indexes = [];
+      const cachedData = cache.getItem(`purchases-${contractName}`);
 
-        if (contractName === 'TheopetraStaking') {
-          try {
-            indexes = await contract.indexesFor(data?.address, false);
-
-            const pnPromises = indexes.map(async (i) => {
-              let rewards;
-              let slashingPoolRewards;
-              let totalRewards;
-              let stakingInfo = await contract.stakingInfo(data?.address, i);
-              try {
-                totalRewards = await stakedTheoContract.balanceForGons(stakingInfo.gonsRemaining);
-                rewards = totalRewards - stakingInfo.deposit;
-                slashingPoolRewards = BigNumber.from(0);
-              } catch (e) {
-                rewards = BigNumber.from(0);
-                slashingPoolRewards = BigNumber.from(0);
-                totalRewards = BigNumber.from(0);
-                console.log(e);
-              }
-              return {
-                rewards,
-                slashingPoolRewards,
-                stakingInfo,
-              };
-            });
-            const pn = await Promise.all(pnPromises);
-            const pnObjs = pn.map((p, i) =>
-              Object.assign({}, { ...p, index: indexes[i], contractName })
-            );
-            setPendingNotes(pnObjs);
-            cache.setItem(
-              `memberships-${contractName}`,
-              indexes,
-              process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
-            );
-          } catch (e) {
-            console.log(e);
-          }
-        } else if (contractName === 'TheopetraStakingLocked') {
-          try {
-            indexes = await contract.indexesFor(data?.address, false);
-
-            const pnPromises = indexes.map(async (i) => {
-              let rewards;
-              let slashingPoolRewards;
-              let totalRewards;
-              let stakingInfo = await contract.stakingInfo(data?.address, i);
-              try {
-                totalRewards = await stakedTheoContract.balanceForGons(stakingInfo.gonsRemaining);
-                rewards = totalRewards - stakingInfo.deposit;
-                slashingPoolRewards = (await contract.rewardsFor(data?.address, i)) - rewards;
-              } catch (e) {
-                rewards = BigNumber.from(0);
-                slashingPoolRewards = BigNumber.from(0);
-                totalRewards = BigNumber.from(0);
-                console.log(e);
-              }
-              return {
-                rewards,
-                slashingPoolRewards,
-                stakingInfo,
-              };
-            });
-            const pn = await Promise.all(pnPromises);
-            const pnObjs = pn.map((p, i) =>
-              Object.assign({}, { ...p, index: indexes[i], contractName })
-            );
-            setPendingNotes(pnObjs);
-            cache.setItem(
-              `memberships-${contractName}`,
-              indexes,
-              process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
-            );
-          } catch (e) {
-            console.log(e);
-          }
-        } else {
-          try {
-            indexes = await contract.indexesFor(data?.address);
-
-            const pnPromises = indexes.map((i) => contract.pendingFor(data?.address, i));
-            const pn = await Promise.all(pnPromises);
-            const pnObjs = pn.map((p, i) =>
-              Object.assign({}, { ...p, index: indexes[i], contractName })
-            );
-            setPendingNotes(pnObjs);
-            cache.setItem(
-              `purchases-${contractName}`,
-              pnObjs,
-              process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
-            );
-          } catch (e) {
-            console.log(e);
-          }
-        }
+      if (cachedData) {
+        setPendingNotes(cachedData);
         setIsLoadingPurchases(false);
+        return;
       }
-    }
-    callContract();
-  }, [contract, data?.address, render, contractName]);
+
+      if (!contract || !account?.address) {
+        setIsLoadingPurchases(false);
+        return;
+      }
+
+      let indexes = [];
+
+      try {
+        if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
+          indexes = await contract.read.indexesFor([account?.address, false]);
+        } else {
+          indexes = await contract.read.indexesFor([account?.address]);
+        }
+
+        const pnPromises = indexes.map(async (i) => {
+          let rewards = BigInt(0);
+          let slashingPoolRewards = BigInt(0);
+          let totalRewards = BigInt(0);
+          let stakingInfo = null;
+
+          if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
+            stakingInfo = (await contract.read.stakingInfo([account?.address, i])) as any;
+          } else {
+            stakingInfo = (await contract.read.pendingFor([account?.address, i])) as any;
+          }
+
+          try {
+            totalRewards = (await stakedTheoContract.read.balanceForGons([
+              stakingInfo.gonsRemaining,
+            ])) as any;
+            rewards = totalRewards - stakingInfo?.deposit;
+
+            if (contractName === 'TheopetraStakingLocked') {
+              slashingPoolRewards = (await contract.read.rewardsFor([account?.address, i])) as any;
+              slashingPoolRewards = slashingPoolRewards - rewards;
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
+          return {
+            rewards,
+            slashingPoolRewards,
+            stakingInfo,
+          };
+        });
+
+        const pnData = await Promise.all(pnPromises);
+        const pnObjs = pnData.map((p, i) => ({
+          ...p,
+          index: indexes[i],
+          contractName,
+        }));
+
+        setPendingNotes(pnObjs);
+        cache.setItem(
+          `purchases-${contractName}`,
+          pnObjs,
+          process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
+        );
+      } catch (e) {
+        console.log(e);
+      }
+
+      setIsLoadingPurchases(false);
+    };
+
+    fetchData();
+  }, [account?.address, render, contractName]);
 
   return { pendingNotes, reRender, isLoadingPurchases };
 };
