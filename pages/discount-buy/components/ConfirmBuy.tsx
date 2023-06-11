@@ -11,14 +11,15 @@ import { cache } from '@/lib/cache';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
-import { parseEther, parseUnits } from 'ethers/lib/utils';
+import { parseEther, parseUnits } from 'viem';
 import { useMemo } from 'react';
-import { useAccount, useContractWrite, useSigner } from 'wagmi';
+import { useAccount, useContractWrite, useWalletClient } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import { useUserPurchases } from '../state/use-user-purchases';
 import FailedTransaction from '@/components/FailedTransaction';
 import { Intersect } from 'phosphor-react';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
+import { Abi } from 'viem';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
@@ -61,22 +62,22 @@ const ConfirmBuy = () => {
   const [, { openModal, closeModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
   const [, { reRender }] = useUserPurchases();
-  const { data: wallet } = useAccount();
+  const account = useAccount();
   const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
-  const { data: signer, isError, isLoading } = useSigner();
+  const { data: signer, isError, isLoading } = useWalletClient();
   const { logEvent } = useAnalytics();
 
   const signature: any = useMemo(() => {
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
       return wethHelperSignedMessages.find((sig) => {
-        return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
+        return sig.address.toLowerCase() === account?.address?.toLowerCase();
       });
     }
     return wlBondDepoSignedMessages.find((sig) => {
-      return sig.address.toLowerCase() === wallet?.address?.toLowerCase();
+      return sig.address.toLowerCase() === account?.address?.toLowerCase();
     });
-  }, [wallet, purchaseToken?.symbol]);
+  }, [account, purchaseToken?.symbol]);
 
   //TODO: Max price should be set by the user
   const maxPrice = parseEther('25');
@@ -88,17 +89,17 @@ const ConfirmBuy = () => {
   const args = [
     selectedMarket.id,
     depositAmount,
-    maxPrice._hex,
-    wallet?.address,
-    wallet?.address,
+    maxPrice,
+    account?.address,
+    account?.address,
     signature?.wlDepoSignature || '0x00',
   ];
 
   const WethArgs = [
     selectedMarket.id,
-    maxPrice._hex,
-    wallet?.address,
-    wallet?.address,
+    maxPrice,
+    account?.address,
+    account?.address,
     // TODO: autostake
     false,
     false,
@@ -126,47 +127,78 @@ const ConfirmBuy = () => {
     isError: writeErr,
     isLoading: writeLoading,
     write: deposit,
-  } = useContractWrite(
-    {
-      address: activeBondDepoAddress,
-      contractInterface: activeBondDepoAbi,
-      signerOrProvider: signer,
-    },
-    'deposit',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'purchase_completed' });
-          cache.clear();
-          reRender();
-          openModal(<SuccessModal txId={data.hash} />);
-        } else {
-          openModal(<FailedModal />);
-        }
-      },
-      onError(error) {
-        console.log(error);
+  } = useContractWrite({
+    address: activeBondDepoAddress,
+    abi: activeBondDepoAbi as Abi,
+    // signerOrProvider: signer,
+    functionName: 'deposit',
+    args,
+    onSuccess: async (data) => {
+      if (data) {
+        logEvent({ name: 'purchase_completed' });
+        cache.clear();
+        reRender();
+        openModal(<SuccessModal txId={data.hash} />);
+      } else {
         openModal(<FailedModal />);
-      },
-      args,
-    }
-  );
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+      openModal(<FailedModal />);
+    },
+  });
 
   const {
     data: wethData,
     isError: wethWriteErr,
     isLoading: wethWriteLoading,
     write: wethDeposit,
-  } = useContractWrite(
-    {
-      address: WethHelperAddress,
-      contractInterface: WethHelperAbi,
-      signerOrProvider: signer,
+  } = useContractWrite({
+    address: WethHelperAddress,
+    abi: WethHelperAbi as Abi,
+    // signerOrProvider: signer,
+    functionName: 'deposit',
+    onSuccess: async (data) => {
+      openModal(
+        <PendingTransaction
+          message="2 of 2 transactions..."
+          secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
+        />
+      );
+
+      if (data) {
+        logEvent({ name: 'purchase_completed' });
+        cache.clear();
+        reRender();
+        openModal(<SuccessModal txId={data.hash} />);
+      } else {
+        openModal(<FailedModal error={'call'} />);
+      }
     },
-    'deposit',
-    {
-      async onSuccess(data) {
+    onError: (error) => {
+      console.log(error);
+      openModal(<FailedModal />);
+    },
+    args: WethArgs,
+    value: depositAmount,
+  });
+
+  const {
+    data: approveData,
+    isError: approveErr,
+    isLoading: approveLoading,
+    write: approve,
+  } = useContractWrite({
+    address: purchaseToken?.quoteToken,
+    // contractInterface: [
+    //   'function approve(address _spender, uint256 _value) public returns (bool success)',
+    // ],
+    // signerOrProvider: signer,
+    functionName: 'approve',
+    onSuccess: async (data) => {
+      if (data) {
+        logEvent({ name: 'erc20_approved' });
         openModal(
           <PendingTransaction
             message="2 of 2 transactions..."
@@ -174,63 +206,16 @@ const ConfirmBuy = () => {
           />
         );
 
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'purchase_completed' });
-          cache.clear();
-          reRender();
-          openModal(<SuccessModal txId={data.hash} />);
-        } else {
-          openModal(<FailedModal error={'call'} />);
-        }
-      },
-      onError(error) {
-        openModal(<FailedModal error={error} />);
-      },
-      args: WethArgs,
-      overrides: {
-        value: depositAmount,
-      },
-    }
-  );
-
-  const {
-    data: approveData,
-    isError: approveErr,
-    isLoading: approveLoading,
-    write: approve,
-  } = useContractWrite(
-    {
-      address: purchaseToken?.quoteToken!,
-      contractInterface: [
-        'function approve(address _spender, uint256 _value) public returns (bool success)',
-      ],
-      signerOrProvider: signer,
+        deposit();
+      } else {
+        openModal(<FailedModal error={{ code: 'Something went wrong.' }} />);
+      }
     },
-    'approve',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'erc20_approved' });
-          openModal(
-            <PendingTransaction
-              message="2 of 2 transactions..."
-              secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
-            />
-          );
-
-          deposit();
-        } else {
-          openModal(<FailedModal error={{ code: 'Something went wrong.' }} />);
-        }
-      },
-      onError(error) {
-        openModal(<FailedModal error={error} />);
-      },
-      args: [activeBondDepoAddress, depositAmount],
-    }
-  );
+    onError(error) {
+      openModal(<FailedModal error={error} />);
+    },
+    args: [activeBondDepoAddress, depositAmount],
+  });
 
   const handleClick = async () => {
     logEvent({ name: 'purchase_submitted' });

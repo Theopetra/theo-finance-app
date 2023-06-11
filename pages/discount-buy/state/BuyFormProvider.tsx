@@ -151,6 +151,10 @@ export const BuyFormProvider: React.FC = (props) => {
               }
             })
           );
+          setSelection({
+            value: setTerms[0].vestingTime,
+            label: `${setTerms[0].vestingTime} ${setTerms[0].vestingTimeIncrement}`,
+          });
 
           setTerms.forEach((term) => {
             if (term) {

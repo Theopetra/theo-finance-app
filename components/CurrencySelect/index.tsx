@@ -20,7 +20,7 @@ export type CurrencySelectProps = {
   onChange;
 };
 
-const iconMap = {
+export const iconMap = {
   ETH: EthIcon,
   WETH: EthIcon,
   USDC: UdcIcon,
