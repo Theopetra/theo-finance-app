@@ -20,9 +20,9 @@ type formStateType = {
 const initialFormState: formStateType = {
   theoPrice: 100,
   purchaseToken: {
-    quoteToken: process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`,
-    address: process.env.NEXT_PUBLIC_USDC_ADDRESS,
-    symbol: 'USDC',
+    quoteToken: process.env.NEXT_PUBLIC_ETH_ADDRESS as `0x${string}`,
+    address: process.env.NEXT_PUBLIC_ETH_ADDRESS,
+    symbol: 'ETH',
   },
   purchaseAmount: 0,
   purchaseCost: 0,
@@ -75,7 +75,6 @@ export const BuyFormProvider: React.FC = (props) => {
         setGroupedBondMarketsMap(cachedMkts);
         return;
       }
-      console.log('BondMarkets', await contract.read.liveMarkets());
 
       try {
         const BondMarkets = (await contract.read.liveMarkets()) as any;
@@ -95,13 +94,21 @@ export const BuyFormProvider: React.FC = (props) => {
                   discountRateYield: termsValues[6],
                   maxDebt: termsValues[7],
                 };
-                console.log(terms);
                 const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
                 const vestingInMinutes = terms.vesting / 60;
                 const vestingTime =
                   process.env.NEXT_PUBLIC_ENV !== 'production' ? vestingInMinutes : vestingInMonths;
 
-                const market = (await contract.read.markets([bondMarket])) as any;
+                const marketValues = (await contract.read.markets([bondMarket])) as any;
+                const market = {
+                  capacity: marketValues[0],
+                  quoteToken: marketValues[1],
+                  capacityInQuote: marketValues[2],
+                  sold: marketValues[3],
+                  purchased: marketValues[4],
+                  totalDebt: marketValues[5],
+                  maxPayout: marketValues[6],
+                };
                 let marketPrice = '';
 
                 try {

@@ -179,14 +179,6 @@ const DiscountBuy = () => {
           <CurrencyInput
             className={'mb-2'}
             selectedToken={{ ...purchaseToken }}
-            options={groupedBondMarketsMap[selection?.value]?.markets
-              .filter((m) =>
-                [
-                  process.env.NEXT_PUBLIC_USDC_ADDRESS,
-                  process.env.NEXT_PUBLIC_ETH_ADDRESS,
-                ].includes(m.marketData.quoteToken)
-              )
-              .map((x) => ({ ...x.marketData }))}
             balance={balanceIsLoading ? '0' : balance?.formatted}
             value={purchaseCost}
             onCurrencyChange={(e: BaseSyntheticEvent) => {
