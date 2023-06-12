@@ -44,9 +44,9 @@ const { chains, publicClient } = configureChains(
     jsonRpcProvider({
       rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
     }),
-    infuraProvider({ apiKey: infuraId }),
-    alchemyProvider({ apiKey: alchemyId }),
-    publicProvider(),
+    // infuraProvider({ apiKey: infuraId }),
+    // alchemyProvider({ apiKey: alchemyId }),
+    // publicProvider(),
   ]
 );
 const { connectors } = getDefaultWallets({

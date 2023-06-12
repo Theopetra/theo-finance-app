@@ -82,29 +82,22 @@ const ConfirmBuy = () => {
 
   //TODO: Max price should be set by the user
   const maxPrice = parseEther('25');
-  const depositAmount =
-    purchaseToken?.symbol?.toLowerCase() === 'usdc'
-      ? parseUnits(purchaseCost, 6)
-      : parseEther(purchaseCost);
+  const depositAmount = useMemo(
+    () =>
+      purchaseToken?.symbol?.toLowerCase() === 'usdc'
+        ? parseUnits(purchaseCost, 6)
+        : parseEther(purchaseCost),
+    [purchaseCost, purchaseToken?.symbol]
+  );
+  // const args = [
+  //   selectedMarket.id,
+  //   depositAmount,
+  //   maxPrice,
+  //   account?.address,
+  //   account?.address,
+  //   signature?.wlDepoSignature || '0x00',
+  // ];
 
-  const args = [
-    selectedMarket.id,
-    depositAmount,
-    maxPrice,
-    account?.address,
-    account?.address,
-    signature?.wlDepoSignature || '0x00',
-  ];
-
-  const WethArgs = [
-    selectedMarket.id,
-    toHex(maxPrice),
-    account?.address,
-    account?.address,
-    false,
-    false,
-    signature?.wethHelperSignature || '0x00',
-  ];
   const FailedModal = ({ error }: { error?: any }) => (
     <FailedTransaction
       Icon={Intersect}
@@ -122,32 +115,32 @@ const ConfirmBuy = () => {
       Icon={Intersect}
     />
   );
-  const {
-    data,
-    isError: writeErr,
-    isLoading: writeLoading,
-    write: deposit,
-  } = useContractWrite({
-    address: activeBondDepoAddress,
-    abi: activeBondDepoAbi as Abi,
-    // signerOrProvider: signer,
-    functionName: 'deposit',
-    args,
-    onSuccess: async (data) => {
-      if (data) {
-        logEvent({ name: 'purchase_completed' });
-        cache.clear();
-        reRender();
-        openModal(<SuccessModal txId={data.hash} />);
-      } else {
-        openModal(<FailedModal />);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-      openModal(<FailedModal />);
-    },
-  });
+  // const {
+  //   data,
+  //   isError: writeErr,
+  //   isLoading: writeLoading,
+  //   write: deposit,
+  // } = useContractWrite({
+  //   address: activeBondDepoAddress,
+  //   abi: activeBondDepoAbi as Abi,
+  //   // signerOrProvider: signer,
+  //   functionName: 'deposit',
+  //   args,
+  //   onSuccess: async (data) => {
+  //     if (data) {
+  //       logEvent({ name: 'purchase_completed' });
+  //       cache.clear();
+  //       reRender();
+  //       openModal(<SuccessModal txId={data.hash} />);
+  //     } else {
+  //       openModal(<FailedModal />);
+  //     }
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //     openModal(<FailedModal />);
+  //   },
+  // });
 
   const {
     data: wethData,
@@ -177,45 +170,53 @@ const ConfirmBuy = () => {
       }
     },
     onError: (error) => {
-      console.log(error);
+      console.log('failing initial', depositAmount);
       openModal(<FailedModal error={error} />);
     },
-    args: WethArgs,
+    args: [
+      selectedMarket.id,
+      toHex(maxPrice),
+      account?.address,
+      account?.address,
+      false,
+      false,
+      signature?.wethHelperSignature || '0x00',
+    ],
     value: depositAmount,
   });
 
-  const {
-    data: approveData,
-    isError: approveErr,
-    isLoading: approveLoading,
-    write: approve,
-  } = useContractWrite({
-    address: purchaseToken?.quoteToken,
-    // contractInterface: [
-    //   'function approve(address _spender, uint256 _value) public returns (bool success)',
-    // ],
-    // signerOrProvider: signer,
-    functionName: 'approve',
-    onSuccess: async (data) => {
-      if (data) {
-        logEvent({ name: 'erc20_approved' });
-        openModal(
-          <PendingTransaction
-            message="2 of 2 transactions..."
-            secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
-          />
-        );
+  // const {
+  //   data: approveData,
+  //   isError: approveErr,
+  //   isLoading: approveLoading,
+  //   write: approve,
+  // } = useContractWrite({
+  //   address: purchaseToken?.quoteToken,
+  //   // contractInterface: [
+  //   //   'function approve(address _spender, uint256 _value) public returns (bool success)',
+  //   // ],
+  //   // signerOrProvider: signer,
+  //   functionName: 'approve',
+  //   onSuccess: async (data) => {
+  //     if (data) {
+  //       logEvent({ name: 'erc20_approved' });
+  //       openModal(
+  //         <PendingTransaction
+  //           message="2 of 2 transactions..."
+  //           secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
+  //         />
+  //       );
 
-        deposit();
-      } else {
-        openModal(<FailedModal error={{ code: 'Something went wrong.' }} />);
-      }
-    },
-    onError(error) {
-      openModal(<FailedModal error={error} />);
-    },
-    args: [activeBondDepoAddress, depositAmount],
-  });
+  //       deposit();
+  //     } else {
+  //       openModal(<FailedModal error={{ code: 'Something went wrong.' }} />);
+  //     }
+  //   },
+  //   onError(error) {
+  //     openModal(<FailedModal error={error} />);
+  //   },
+  //   args: [activeBondDepoAddress, depositAmount],
+  // });
 
   const handleClick = async () => {
     logEvent({ name: 'purchase_submitted' });
@@ -228,13 +229,13 @@ const ConfirmBuy = () => {
       );
       wethDeposit();
     } else {
-      openModal(
-        <PendingTransaction
-          message="1 of 2 transactions..."
-          secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
-        />
-      );
-      approve();
+      // openModal(
+      //   <PendingTransaction
+      //     message="1 of 2 transactions..."
+      //     secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
+      //   />
+      // );
+      // approve();
     }
   };
 

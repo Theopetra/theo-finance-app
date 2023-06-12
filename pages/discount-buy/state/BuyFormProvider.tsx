@@ -225,7 +225,6 @@ export const BuyFormProvider: React.FC = (props) => {
     }
 
     updateFields[fieldName] = value;
-
     setFormState((prevState) => ({
       ...prevState,
       ...updateFields,

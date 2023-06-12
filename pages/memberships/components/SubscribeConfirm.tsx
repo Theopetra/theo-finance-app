@@ -1,7 +1,7 @@
 import PendingTransaction from '@/components/PendingTransaction';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { ArrowLeft, LockLaminated } from 'phosphor-react';
-import { useAccount, useContractWrite, useSigner } from 'wagmi';
+import { useContractWrite } from 'wagmi';
 import { Membership } from '../membershipData';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { useMemo } from 'react';
@@ -13,6 +13,8 @@ import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases'
 import { cache } from '@/lib/cache';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import FailedTransaction from '@/components/FailedTransaction';
+import { getAccount } from '@wagmi/core';
+import { Abi } from 'viem';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="$THEO to stake" value={value} />;
@@ -25,8 +27,8 @@ const SubscribeConfirm = ({
   depositAmount: string;
 }) => {
   const [, { openModal, closeModal }] = useModal();
-  const { data: account } = useAccount();
-  const { data: signer, isError, isLoading } = useSigner();
+  const account = getAccount();
+  // const { data: signer, isError, isLoading } = useSigner();
   const depositAmountFormatted = useMemo(() => parseUnits(depositAmount, 9), [depositAmount]);
   const [, { reRender }] = useUserPurchases();
 
@@ -59,80 +61,73 @@ const SubscribeConfirm = ({
     isError: writeErr,
     isLoading: writeLoading,
     write: stake,
-  } = useContractWrite(
-    {
-      address: theopetraStakingAddress,
-      contractInterface: theopetraStakingABI,
-      signerOrProvider: signer,
+  } = useContractWrite({
+    address: theopetraStakingAddress,
+    abi: theopetraStakingABI as Abi,
+    // signerOrProvider: signer,
+    functionName: 'stake',
+    onSuccess: (data) => {
+      // const receipt = await data.wait();
+      // if (receipt.status === 1) {
+      if (data) {
+        logEvent({ name: 'purchase_completed' });
+        cache.clear();
+        reRender();
+        openModal(
+          <SuccessfulTransaction
+            txId={data.hash}
+            redirect={`/memberships/your-memberships`}
+            title={'Membership Successful!'}
+            Icon={LockLaminated}
+            content={dataRows}
+          />
+        );
+      } else {
+        console.log('contract fail');
+      }
     },
-    'stake',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'purchase_completed' });
-          cache.clear();
-          reRender();
-          openModal(
-            <SuccessfulTransaction
-              txId={data.hash}
-              redirect={`/memberships/your-memberships`}
-              title={'Membership Successful!'}
-              Icon={LockLaminated}
-              content={dataRows}
-            />
-          );
-        } else {
-          console.log('contract fail');
-        }
-      },
-      onError(error) {
-        console.log(JSON.stringify(error));
+    onError(error) {
+      console.log(JSON.stringify(error));
 
-        openModal(<FailedModal />);
-      },
-      args: stakeArgs,
-    }
-  );
+      openModal(<FailedModal />);
+    },
+    args: stakeArgs,
+  });
   // APPROVE
   const {
     data: approveData,
     isError: approveErr,
     isLoading: approveLoading,
     write: approve,
-  } = useContractWrite(
-    {
-      address: theoAddress,
-      contractInterface: theoAbi,
-      // [
-      //   'function approve(address _spender, uint256 _value) public returns (bool success)',
-      // ],
-      signerOrProvider: signer,
-    },
-    'approve',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'erc20_approved' });
-          openModal(
-            <PendingTransaction
-              message="2 of 2 transactions..."
-              secondaryMessage={`Submitting $THEO transaction...`}
-            />
-          );
+  } = useContractWrite({
+    address: theoAddress,
+    abi: theoAbi as Abi,
+    // [
+    //   'function approve(address _spender, uint256 _value) public returns (bool success)',
+    // ],
+    // signerOrProvider: signer,
+    functionName: 'approve',
+    onSuccess: async (data) => {
+      // const receipt = await data;
+      if (data) {
+        logEvent({ name: 'erc20_approved' });
+        openModal(
+          <PendingTransaction
+            message="2 of 2 transactions..."
+            secondaryMessage={`Submitting $THEO transaction...`}
+          />
+        );
 
-          stake();
-        } else {
-          openModal();
-        }
-      },
-      onError(error) {
-        openModal(<FailedModal error={error} />);
-      },
-      args: [theopetraStakingAddress, depositAmountFormatted],
-    }
-  );
+        stake();
+      } else {
+        openModal();
+      }
+    },
+    onError(error) {
+      openModal(<FailedModal error={error} />);
+    },
+    args: [theopetraStakingAddress, depositAmountFormatted],
+  });
 
   const handleClick = async () => {
     openModal(

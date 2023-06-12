@@ -5,8 +5,6 @@ import PageContainer from '@/components/PageContainer';
 import StatCard from '@/components/StatCard';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import { BigNumber } from 'ethers';
-import { formatUnits, Result } from 'ethers/lib/utils';
 import { LockLaminated, LockLaminatedOpen } from 'phosphor-react';
 import { Fragment, useMemo } from 'react';
 import { useContractRead } from 'wagmi';
@@ -14,6 +12,7 @@ import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvid
 import SubscribeFormModal from './components/SubscribeFormModal';
 import membershipData from './membershipData';
 import { rewardAsPercent } from '@/util/reward-as-percent';
+import { Abi, formatUnits } from 'viem';
 
 const useStats = () => {
   const { address, abi } = useContractInfo('TheopetraERC20Token');
@@ -22,30 +21,32 @@ const useStats = () => {
   const { address: calcAddress, abi: calcAbi } = useContractInfo('BondingCalculator');
   const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } =
     useContractInfo('ChainlinkPriceFeed');
-  const { data: priceFeed } = useContractRead(
-    {
-      address: ChainlinkPriceFeed,
-      contractInterface: ChainlinkPriceFeedAbi,
-    },
-    'latestAnswer'
-  );
+  const { data: priceFeed } = useContractRead({
+    address: ChainlinkPriceFeed,
+    abi: ChainlinkPriceFeedAbi as Abi,
+    functionName: 'latestAnswer',
+  });
 
   const contractParams = {
-    addressess,
-    contractInterface: abi,
+    address,
+    abi: abi as Abi,
   };
-  const { data: totalSupply } = useContractRead(contractParams, 'totalSupply');
-  const { data: balanceOfStaking } = useContractRead(contractParams, 'balanceOf', {
+  const { data: totalSupply } = useContractRead({ ...contractParams, functionName: 'totalSupply' });
+  const { data: balanceOfStaking } = useContractRead({
+    ...contractParams,
+    functionName: 'balanceOf',
     args: [stakingAddress],
   });
-  const { data: balanceOfStakingLocked } = useContractRead(contractParams, 'balanceOf', {
+  const { data: balanceOfStakingLocked } = useContractRead({
+    ...contractParams,
+    functionName: 'balanceOf',
     args: [lockedAddress],
   });
 
   const totalTheoStaked = useMemo(() => {
     if (totalSupply && balanceOfStaking && balanceOfStakingLocked) {
-      const lockedBal = Number(BigNumber.from(balanceOfStakingLocked).toString());
-      const stakingBal = Number(BigNumber.from(balanceOfStaking).toString());
+      const lockedBal = Number(BigInt(balanceOfStakingLocked as bigint));
+      const stakingBal = Number(BigInt(balanceOfStaking as bigint));
       const totalTheoStaked = lockedBal + stakingBal;
       return totalTheoStaked;
     }
@@ -54,25 +55,21 @@ const useStats = () => {
 
   const totalTheoStakedAsPercent = useMemo(() => {
     if (totalSupply) {
-      const totalSupplyNumber = Number(BigNumber.from(totalSupply).toString());
+      const totalSupplyNumber = Number(BigInt(totalSupply as bigint));
       return Number((totalTheoStaked / totalSupplyNumber) * 100).toFixed(2);
     }
     return 0;
   }, [totalSupply, totalTheoStaked]);
-  const { data: valuation } = useContractRead(
-    {
-      address: calcAddress,
-      contractInterface: calcAbi,
-    },
-    'valuation',
-    {
-      args: [address, totalTheoStaked],
-    }
-  );
+  const { data: valuation } = useContractRead({
+    address: calcAddress,
+    abi: calcAbi as Abi,
+    functionName: 'valuation',
+    args: [address, totalTheoStaked],
+  });
   const totalValueStakedUsd = useMemo(() => {
     if (valuation && priceFeed) {
-      const price = formatUnits(BigNumber.from(priceFeed).toNumber(), 8);
-      const valuationNumber = formatUnits(BigNumber.from(valuation).toString(), 18);
+      const price = formatUnits(BigInt(priceFeed as bigint), 8);
+      const valuationNumber = formatUnits(BigInt(valuation as bigint), 18);
       const totalValueStaked = Number(valuationNumber) * Number(price);
 
       return totalValueStaked;
@@ -99,33 +96,23 @@ const Memberships = () => {
   // StakingDistributor
   const { address, abi } = useContractInfo('StakingDistributor');
 
-  const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
-    {
-      address: address,
-      contractInterface: abi,
-    },
-    'nextRewardRate',
-    {
-      args: [3],
-    }
-  );
-  const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
-    {
-      address: address,
-      contractInterface: abi,
-    },
-    'nextRewardRate',
-    {
-      args: [2],
-    }
-  );
-  const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
-    {
-      address: address,
-      contractInterface: abi,
-    },
-    'epochLength'
-  );
+  const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'nextRewardRate',
+    args: [3],
+  });
+  const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'nextRewardRate',
+    args: [2],
+  });
+  const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'epochLength',
+  });
 
   const { premium, standard } = membershipData;
   const ACTION_CARD = [

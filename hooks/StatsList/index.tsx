@@ -2,18 +2,17 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import { formatTheo } from '@/lib/format_theo';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
+import { Abi } from 'viem';
 import { useContractRead } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 const useGetLockedTheoByContract = async (contractName) => {
   const { address, abi } = useContractInfo(contractName);
-  const contract = getContract({ address: address, contractInterface: abi });
-  const { data } = useContractRead(
-    {
-      address: address,
-      contractInterface: abi,
-    },
-    'getMarkets'
-  );
+  const contract = getContract({ address: address, abi: abi as Abi });
+  const { data } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'getMarkets',
+  });
 
   let locked = [BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)];
   if (data) {
@@ -21,8 +20,8 @@ const useGetLockedTheoByContract = async (contractName) => {
       data.map(async (b) => {
         return {
           marketId: b,
-          market: await contract.markets(b),
-          term: await contract.terms(b),
+          market: await contract.read.markets(b),
+          term: await contract.read.terms(b),
         };
       })
     );

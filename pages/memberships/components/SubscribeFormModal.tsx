@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { formatTheo } from '@/lib/format_theo';
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import SubscribeConfirm from './SubscribeConfirm';
+import { getAccount } from '@wagmi/core';
 
 export const MembershipType = ({ type }) => {
   return <ConfirmRow title="Type" value={<span className="capitalize">{type}</span>} />;
@@ -59,7 +60,7 @@ const SubscribeFormModal = ({ membership }: { membership: Membership }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [, { openModal, closeModal }] = useModal();
-  const { data: account, isError: accountIsError, isLoading: accountIsLoading } = useAccount();
+  const account = getAccount();
   const { address } = useContractInfo('TheopetraERC20Token');
 
   const {
