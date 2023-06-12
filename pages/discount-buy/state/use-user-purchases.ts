@@ -57,26 +57,35 @@ export const usePurchasesByContract = (contractName) => {
           indexes = await contract.read.indexesFor([account?.address]);
         }
 
-        const pnPromises = indexes.map(async (i) => {
+        const pnPromises = indexes.map(async (index) => {
           let rewards = BigInt(0);
           let slashingPoolRewards = BigInt(0);
           let totalRewards = BigInt(0);
           let stakingInfo = null;
 
           if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
-            stakingInfo = (await contract.read.stakingInfo([account?.address, i])) as any;
+            stakingInfo = (await contract.read.stakingInfo([account?.address, index])) as any;
           } else {
-            stakingInfo = (await contract.read.pendingFor([account?.address, i])) as any;
+            stakingInfo = (await contract.read.pendingFor([account?.address, index])) as any;
           }
-
+          //   {
+          //     0 uint256 deposit;
+          //     1 uint256 gonsInWarmup;
+          //     2 uint256 warmupExpiry;
+          //     3 uint256 stakingExpiry;
+          //     4 uint256 gonsRemaining;
+          // }
           try {
             totalRewards = (await stakedTheoContract.read.balanceForGons([
-              stakingInfo.gonsRemaining,
+              stakingInfo?.[4],
             ])) as any;
-            rewards = totalRewards - stakingInfo?.deposit;
+            rewards = totalRewards - (stakingInfo?.[0] || BigInt(0));
 
             if (contractName === 'TheopetraStakingLocked') {
-              slashingPoolRewards = (await contract.read.rewardsFor([account?.address, i])) as any;
+              slashingPoolRewards = (await contract.read.rewardsFor([
+                account?.address,
+                index,
+              ])) as any;
               slashingPoolRewards = slashingPoolRewards - rewards;
             }
           } catch (e) {

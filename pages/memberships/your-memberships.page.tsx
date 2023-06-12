@@ -143,16 +143,14 @@ const YourMemberships = () => {
   const formattedPurchases = useMemo(
     () =>
       memberships?.map((p) => {
-        const endDate = p.stakingInfo.stakingExpiry
-          ? new Date(Number(BigInt(p.stakingInfo.stakingExpiry)) * 1000)
-          : new Date();
+        const endDate = p.stakingInfo[3] ? new Date(Number(BigInt(p.stakingInfo[3])) * 1000) : '?';
         const startDate =
           p.contractName === 'TheopetraStaking' ? endDate : add(new Date(endDate), { years: -1 });
         return {
           startDate,
           endDate,
           timeRemaining: p.stakingInfo.timeRemaining,
-          deposit: p.stakingInfo.deposit ? BigInt(p.stakingInfo.deposit) : 0,
+          deposit: p.stakingInfo[0] ? BigInt(p.stakingInfo[0]) : 0,
           rewards: p.rewards,
           contractName: p.contractName,
           index: p.index,
