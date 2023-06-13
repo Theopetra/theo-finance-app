@@ -1,7 +1,6 @@
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
-import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
-import { BigNumber } from 'ethers';
+import { Abi, formatEther } from 'viem';
 import { useContractRead, useToken } from 'wagmi';
 
 export const TokenPrice = ({ market }) => {
@@ -14,16 +13,15 @@ export const TokenPrice = ({ market }) => {
     isError,
     error,
     isSuccess,
-  } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'marketPrice',
-    { args: id || BigNumber.from(0), cacheTime: cache.cacheTimesInMs.prices }
-  );
+  } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'marketPrice',
+    args: [id || BigInt(0)],
+    cacheTime: cache.cacheTimesInMs.prices,
+  });
   if (isSuccess) {
-    const output = (BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9)).toFixed(9);
+    const output = (Number(BigInt(priceInfo as bigint)) / Math.pow(10, 9)).toFixed(9);
     return <>{token?.symbol === 'USDC' ? Number(output).toFixed(2) : output}</>;
   }
 

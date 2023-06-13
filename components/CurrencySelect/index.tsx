@@ -10,7 +10,7 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 export type CurrencySelectOptionType = {
   symbol?: string | undefined;
   address?: string | undefined;
-  quoteToken?: string | undefined;
+  quoteToken?: `0x${string}` | undefined;
 };
 export type CurrencySelectOptionsType = CurrencySelectOptionType[];
 
@@ -20,7 +20,7 @@ export type CurrencySelectProps = {
   onChange;
 };
 
-const iconMap = {
+export const iconMap = {
   ETH: EthIcon,
   WETH: EthIcon,
   USDC: UdcIcon,

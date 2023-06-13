@@ -14,7 +14,8 @@ import ConfirmBuy from './components/ConfirmBuy';
 import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
 import { formatTheo } from '@/lib/format_theo';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther } from 'viem';
+import { parseEther } from 'viem';
 
 const DiscountBuy = () => {
   const [
@@ -32,11 +33,11 @@ const DiscountBuy = () => {
     { handleUpdate, handleTokenInput },
   ] = useBuyForm();
   const [, { openModal }] = useModal();
-  const { data: account } = useAccount();
+  const account = useAccount();
   const { data: balance, isLoading: balanceIsLoading } = useBalance({
-    addressOrName: account?.address,
+    address: account?.address,
     ...(purchaseToken?.symbol === 'USDC' && {
-      formatUnits: 'mwei',
+      formatUnits: 'wei',
       token: purchaseToken?.quoteToken,
     }),
   });
@@ -65,14 +66,7 @@ const DiscountBuy = () => {
         id: 'duration',
         width: '10%',
       },
-      {
-        Header: 'Token',
-        accessor: 'token',
-        id: 'token',
-        width: '10%',
-        Cell: ({ value }) =>
-          TokenInfo(value)?.symbol === 'WETH' ? 'ETH' : TokenInfo(value)?.symbol,
-      },
+
       {
         Header: 'Valuation',
         accessor: 'valuationPrice',
@@ -86,8 +80,9 @@ const DiscountBuy = () => {
         id: 'discountRate',
         width: '10%',
         // value is a large percent value and needs to be converted to percentage.
-        Cell: ({ value }) => value,
-        // <span title={`${value / 10 ** 7}`}>{(value / 10 ** 7).toFixed(2)}%</span>
+        Cell: ({ value }) => (
+          <span title={`${value / BigInt(10 ** 7)}`}>{(value / BigInt(10 ** 7)).toString()}%</span>
+        ),
       },
       {
         Header: 'Market Price',
@@ -95,10 +90,7 @@ const DiscountBuy = () => {
         id: 'marketPrice',
         width: '10%',
         Cell: ({ value, cell }) => {
-          // const symbol = TokenInfo(cell.row.original.token)?.symbol;
-
-          // return `${formatEther(value)} ${symbol === 'WETH' ? 'ETH' : symbol}`;
-          return value;
+          return `${formatEther(value)} ETH`;
         },
       },
       {
@@ -187,14 +179,6 @@ const DiscountBuy = () => {
           <CurrencyInput
             className={'mb-2'}
             selectedToken={{ ...purchaseToken }}
-            options={groupedBondMarketsMap[selection?.value]?.markets
-              .filter((m) =>
-                [
-                  process.env.NEXT_PUBLIC_USDC_ADDRESS,
-                  process.env.NEXT_PUBLIC_ETH_ADDRESS,
-                ].includes(m.marketData.quoteToken)
-              )
-              .map((x) => ({ ...x.marketData }))}
             balance={balanceIsLoading ? '0' : balance?.formatted}
             value={purchaseCost}
             onCurrencyChange={(e: BaseSyntheticEvent) => {

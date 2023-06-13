@@ -2,10 +2,11 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import { formatTheo } from '@/lib/format_theo';
 import { navigation } from '@/pages/nav-config';
 import { Fragment } from 'react';
-import { useAccount, useBalance } from 'wagmi';
+import { useBalance } from 'wagmi';
 import Icon from '../Icons';
 import Logo from './Logo';
 import NavItem from './NavItem';
+import { getAccount } from '@wagmi/core';
 
 const socialLinks = [
   { icon: 'twitter', href: 'https://twitter.com/TheopetraLabs' },
@@ -19,11 +20,11 @@ const classes = {
 };
 
 const Navigation = () => {
-  const { data: account } = useAccount();
+  const account = getAccount();
   const { address } = useContractInfo('TheopetraERC20Token');
 
   const { data: balance } = useBalance({
-    addressOrName: account?.address,
+    address: account?.address,
     formatUnits: 9,
     token: address,
     watch: true,

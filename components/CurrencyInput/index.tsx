@@ -2,6 +2,7 @@ import { cleanSymbol } from '@/lib/clean_symbol';
 import CurrencySelect, {
   CurrencySelectOptionsType,
   CurrencySelectOptionType,
+  iconMap,
 } from '../CurrencySelect';
 import Icon from '../Icons';
 
@@ -38,10 +39,14 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
         />
       ) : (
         <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
+          {/* {selectedToken?.symbol && <Icon name={selectedToken.symbol} className="mr-2 w-8" />} */}
           {selectedToken?.symbol && (
-            <Icon name={selectedToken.symbol.toLowerCase()} className="mr-2 w-8" />
+            <img
+              src={iconMap[selectedToken.symbol]?.src}
+              alt={`${cleanSymbol(selectedToken?.symbol)} icon`}
+              className="mr-2 max-h-8 w-8"
+            />
           )}
-
           {cleanSymbol(selectedToken?.symbol)}
         </span>
       )}

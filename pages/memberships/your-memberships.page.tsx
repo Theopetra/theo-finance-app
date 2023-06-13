@@ -1,7 +1,6 @@
 import PageContainer from '@/components/PageContainer';
 import { formatTheo } from '@/lib/format_theo';
 import { add, format } from 'date-fns';
-import { BigNumber } from 'ethers';
 import React, { useMemo } from 'react';
 import { useAccount, useContractRead } from 'wagmi';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
@@ -10,17 +9,17 @@ import { cache } from '@/lib/cache';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
-import { InformationCircleIcon } from '@heroicons/react/solid';
 import { rewardAsPercent } from '@/util/reward-as-percent';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import UnstakeConfirm from './components/UnstakeConfirm';
+import { Abi } from 'viem';
+import { getAccount } from '@wagmi/core';
+import { InformationCircleIcon } from '@heroicons/react/20/solid';
 const RewardsPoolPopover = ({ reward }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
       <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
-        <div className="text-sm text-green-600">
-          +{formatTheo(BigNumber.from(reward).toNumber(), 2)} $THEO
-        </div>
+        <div className="text-sm text-green-600">+{formatTheo(BigInt(reward), 2)} $THEO</div>
         <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
     </Popover.Button>
@@ -35,9 +34,7 @@ const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
     <Popover.Button>
       <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
         <div className="text-red-700">
-          {penaltyIsLoading || !penalty
-            ? 'Loading...'
-            : `-${formatTheo(BigNumber.from(penalty).toString())} $THEO`}
+          {penaltyIsLoading || !penalty ? 'Loading...' : `-${formatTheo(BigInt(penalty))} $THEO`}
         </div>
         <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
@@ -58,43 +55,33 @@ const UnstakeButton = ({ purchase, matured, account }) => {
   const { address: StakingDistributor, abi: StakingDistributorAbi } =
     useContractInfo('StakingDistributor');
 
-  const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead(
-    {
-      addressOrName: StakingDistributor,
-      contractInterface: StakingDistributorAbi,
-    },
-    'epochLength'
-  );
+  const { data: epochLength, isLoading: isEpochLengthLoading } = useContractRead({
+    address: StakingDistributor,
+    abi: StakingDistributorAbi as Abi,
+    functionName: 'epochLength',
+  });
   const theoAddress = purchase.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress;
   const theoAbi = purchase.contractName === 'TheopetraStaking' ? sAbi : pAbi;
-  const { data: stakingInfo } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'stakingInfo',
-    {
-      args: [account?.address, BigNumber.from(purchase.index).toNumber()],
-      cacheTime: cache.cacheTimesInMs.prices,
-    }
-  );
+  const { data: stakingInfo } = useContractRead({
+    address,
+    abi: abi as Abi,
+    functionName: 'stakingInfo',
+    args: [account?.address, BigInt(purchase.index)],
+    cacheTime: cache.cacheTimesInMs.prices,
+  });
 
-  const { data: amountFromGons } = useContractRead(
-    {
-      addressOrName: theoAddress,
-      contractInterface: theoAbi,
-    },
-    'balanceForGons',
-    {
-      args: [stakingInfo?.[4]],
-      cacheTime: cache.cacheTimesInMs.prices,
-    }
-  );
+  const { data: amountFromGons } = useContractRead({
+    address: theoAddress,
+    abi: theoAbi as Abi,
+    functionName: 'balanceForGons',
+    args: [stakingInfo?.[4]],
+    cacheTime: cache.cacheTimesInMs.prices,
+  });
 
   const amount = useMemo(() => {
     if (!stakingInfo) return 0;
     if (!amountFromGons) return 0;
-    return BigNumber.from(amountFromGons).toNumber();
+    return Number(BigInt(amountFromGons as string));
   }, [stakingInfo, amountFromGons]);
 
   const timeRemaining = useMemo(() => {
@@ -103,24 +90,22 @@ const UnstakeButton = ({ purchase, matured, account }) => {
     return (
       100 -
       Math.floor(
-        (Number(epochLength) /
-          (BigNumber.from(stakingInfo[3]).toNumber() - Math.floor(Date.now() / 1000))) *
+        (Number(epochLength) / (Number(BigInt(stakingInfo[3])) - Math.floor(Date.now() / 1000))) *
           100
       )
     );
   }, [stakingInfo, epochLength, isEpochLengthLoading]);
 
-  const { data: penalty, isLoading: penaltyIsLoading } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'getPenalty',
-    { args: [amount, timeRemaining], enabled: purchase.contractName !== 'TheopetraStaking' }
-  );
+  const { data: penalty, isLoading: penaltyIsLoading } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'getPenalty',
+    args: [amount, timeRemaining],
+    enabled: purchase.contractName !== 'TheopetraStaking',
+  });
 
   const unstakeArgs = useMemo(
-    () => [account?.address, [amount], false, [BigNumber.from(purchase.index).toNumber()]],
+    () => [account?.address, [amount], false, [BigInt(purchase.index)]],
     [amount, account?.address, purchase]
   );
 
@@ -154,14 +139,14 @@ const YourMemberships = () => {
   const formattedPurchases = useMemo(
     () =>
       memberships?.map((p) => {
-        const endDate = new Date(BigNumber.from(p.stakingInfo.stakingExpiry).toNumber() * 1000);
+        const endDate = p.stakingExpiry ? new Date(Number(BigInt(p.stakingExpiry)) * 1000) : '?';
         const startDate =
           p.contractName === 'TheopetraStaking' ? endDate : add(new Date(endDate), { years: -1 });
         return {
           startDate,
           endDate,
-          timeRemaining: p.stakingInfo.timeRemaining,
-          deposit: BigNumber.from(p.stakingInfo.deposit).toNumber(),
+          timeRemaining: p.timeRemaining,
+          deposit: p.deposit ? BigInt(p.deposit) : 0,
           rewards: p.rewards,
           contractName: p.contractName,
           index: p.index,
@@ -172,30 +157,22 @@ const YourMemberships = () => {
     [memberships]
   );
 
-  const { data: account } = useAccount();
+  const account = getAccount();
 
   const { address, abi } = useContractInfo('StakingDistributor');
 
-  const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'nextRewardRate',
-    {
-      args: [3],
-    }
-  );
-  const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'nextRewardRate',
-    {
-      args: [2],
-    }
-  );
+  const { data: nextRewardRateLocked, isLoading: isLoadingLocked } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'nextRewardRate',
+    args: [3],
+  });
+  const { data: nextRewardRateStaking, isLoading: isLoadingStaking } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'nextRewardRate',
+    args: [2],
+  });
   const columns = useMemo(
     () => [
       {
@@ -245,10 +222,8 @@ const YourMemberships = () => {
         accessor: 'rewards',
         width: '10%',
         Cell: ({ value, cell }) => (
-          <div className=" dark:text-white" title={formatTheo(BigNumber.from(value).toNumber(), 6)}>
-            <div className={`text-lg font-bold`}>
-              {formatTheo(BigNumber.from(value).toNumber(), 3)}
-            </div>
+          <div className=" dark:text-white" title={formatTheo(BigInt(value), 6)}>
+            <div className={`text-lg font-bold`}>{formatTheo(BigInt(value), 3)}</div>
             {cell.row.original.slashingPoolRewards > 0 && (
               <RewardsPoolPopover reward={cell.row.original.slashingPoolRewards} />
             )}

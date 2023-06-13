@@ -21,10 +21,10 @@ const Claim = () => {
       purchases?.map((p) => {
         return {
           ...p,
-          date: new Date(p.created_),
-          amount: `${formatTheo(p.payout_)}`,
+          date: new Date(p.created),
+          amount: `${formatTheo(p.payout)}`,
           discount: 0,
-          unlockDate: new Date(p.expiry_),
+          unlockDate: new Date(p.expiry),
           index: BigNumber.from(p.index).toNumber(),
         };
       }),
@@ -80,12 +80,12 @@ const Claim = () => {
                 />
                 <button
                   className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
-                  disabled={!purchase.matured_}
+                  disabled={!purchase.matured}
                   onClick={() => {
                     openModal(<ConfirmClaim purchase={purchase} />);
                   }}
                 >
-                  {purchase.matured_ ? 'Claim THEO' : 'Locked'}
+                  {purchase.matured ? 'Claim THEO' : 'Locked'}
                 </button>
               </>
             </Card>
