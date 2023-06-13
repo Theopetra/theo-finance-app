@@ -40,14 +40,14 @@ const Claim = () => {
       </div>
       <PageContainer>
         <CardList>
-          {formattedPurchases.map((purchase) => (
+          {formattedPurchases.map((purchase, i) => (
             <Card
-              key={purchase.id}
+              key={i}
               darkModeBgColor="bg-theo-dark-navy"
               title={<div className="pb-3 text-2xl font-bold">Claim Tokens</div>}
               headerRightComponent={
                 <div>
-                  {purchase.matured_ ? (
+                  {purchase.matured ? (
                     <CircleWavyCheck size={28} color="rgb(47, 69, 92)" weight="fill" />
                   ) : (
                     <Clock size={28} color="rgb(47, 69, 92)" weight="regular" />

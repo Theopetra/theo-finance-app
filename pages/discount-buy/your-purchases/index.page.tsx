@@ -18,7 +18,7 @@ const YourPurchases = () => {
   const ClaimButton = ({ purchase }) => (
     <button
       className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
-      disabled={!purchase.matured_}
+      disabled={!purchase.matured}
       onClick={() => {
         openModal(<ConfirmClaim purchase={purchase} />);
       }}
@@ -72,7 +72,7 @@ const YourPurchases = () => {
       },
       {
         Header: 'Status',
-        accessor: 'matured_',
+        accessor: 'matured',
         width: '10%',
         Cell: ({ value: matured, cell }) => (
           <div className="flex justify-center">
