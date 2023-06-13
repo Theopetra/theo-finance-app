@@ -1,16 +1,15 @@
 import PendingTransaction from '@/components/PendingTransaction';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { ArrowLeft, LockLaminated } from 'phosphor-react';
-import { useContractWrite, useSigner } from 'wagmi';
+import { useContractWrite } from 'wagmi';
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
 import { cache } from '@/lib/cache';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import FailedTransaction from '@/components/FailedTransaction';
 import { formatTheo } from '@/lib/format_theo';
-import { BigNumber } from 'ethers';
 import { useState } from 'react';
-import Image from 'next/image';
+import { Abi } from 'viem';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="$THEO to stake" value={value} />;
@@ -35,7 +34,6 @@ const UnstakeConfirm = ({
   stakingContractAbi: any;
 }) => {
   const [, { openModal, closeModal }] = useModal();
-  const { data: signer } = useSigner();
   const [, { reRender }] = useUserPurchases();
   const [showInstructions, setShowInstructions] = useState(false);
   // APPROVE
@@ -43,65 +41,53 @@ const UnstakeConfirm = ({
     data: approveData,
     isLoading: approvalLoading,
     write: approve,
-  } = useContractWrite(
-    {
-      address: theoAddress,
-      contractInterface: theoAbi,
-      signerOrProvider: signer,
+  } = useContractWrite({
+    address: theoAddress,
+    abi: theoAbi as Abi,
+    functionName: 'approve',
+    onSuccess: async (data) => {
+      if (data.hash) {
+        openModal(
+          <PendingTransaction
+            message="2 of 2 transactions..."
+            secondaryMessage={`Submitting $THEO transaction...`}
+          />
+        );
+        unstake();
+      } else {
+        console.log('failed', data);
+      }
     },
-    'approve',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          openModal(
-            <PendingTransaction
-              message="2 of 2 transactions..."
-              secondaryMessage={`Submitting $THEO transaction...`}
-            />
-          );
-          unstake();
-        } else {
-          console.log('failed', receipt);
-        }
-      },
-      onError(error) {
-        console.log('failed 22', error);
-      },
-      args: [stakingContractAddress, amount],
-    }
-  );
+    onError: (error) => {
+      console.log(error);
+    },
+    args: [stakingContractAddress, amount],
+  });
 
   // unstake
-  const { write: unstake, isLoading: unstakeLoading } = useContractWrite(
-    {
-      address: stakingContractAddress,
-      contractInterface: stakingContractAbi,
-      signerOrProvider: signer,
+  const { write: unstake, isLoading: unstakeLoading } = useContractWrite({
+    address: stakingContractAddress,
+    abi: stakingContractAbi as Abi,
+    functionName: 'unstake',
+    onSuccess: async (data) => {
+      if (data.hash) {
+        openModal(
+          <SuccessfulTransaction
+            Icon={LockLaminated}
+            title={'Unstake Successful'}
+            txId={data.hash}
+          />
+        );
+        cache.clear();
+        reRender();
+      }
     },
-    'unstake',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          openModal(
-            <SuccessfulTransaction
-              Icon={LockLaminated}
-              title={'Unstake Successful'}
-              txId={data.hash}
-            />
-          );
-          cache.clear();
-          reRender();
-        }
-      },
-      onError(error) {
-        openModal(<FailedTransaction Icon={LockLaminated} error={error} />);
-        console.log('error', error);
-      },
-      args: unstakeArgs,
-    }
-  );
+    onError: (error) => {
+      openModal(<FailedTransaction Icon={LockLaminated} error={error} />);
+      console.log('error', error);
+    },
+    args: unstakeArgs,
+  });
 
   const handleConfirmUnstake = async () => {
     openModal(
@@ -129,7 +115,7 @@ const UnstakeConfirm = ({
               slashing penalty is present to incentivize long-term behavior for Premium members.
             </p>
             <div className="text-center text-2xl font-bold">
-              -{penalty ? formatTheo(BigNumber.from(penalty).toString()) : 0} $THEO
+              -{penalty ? formatTheo(BigInt(penalty)) : 0} $THEO
             </div>
           </div>
         )}
