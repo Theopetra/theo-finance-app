@@ -146,7 +146,7 @@ const ConfirmBuy = () => {
     data: wethData,
     isError: wethWriteErr,
     isLoading: wethWriteLoading,
-    write: wethDeposit,
+    writeAsync: wethDeposit,
   } = useContractWrite({
     address: WethHelperAddress,
     account: account.address,
@@ -159,8 +159,7 @@ const ConfirmBuy = () => {
           secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
         />
       );
-
-      if (data) {
+      if (data.hash) {
         logEvent({ name: 'purchase_completed' });
         cache.clear();
         reRender();
@@ -227,7 +226,7 @@ const ConfirmBuy = () => {
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
-      wethDeposit();
+      await wethDeposit();
     } else {
       // openModal(
       //   <PendingTransaction

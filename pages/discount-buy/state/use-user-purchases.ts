@@ -61,20 +61,42 @@ export const usePurchasesByContract = (contractName) => {
           let rewards = BigInt(0);
           let slashingPoolRewards = BigInt(0);
           let totalRewards = BigInt(0);
-          let stakingInfo = null;
+          let stakingInfo = {};
+          let pendingFor = {};
 
           if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
-            stakingInfo = (await contract.read.stakingInfo([account?.address, index])) as any;
+            // "0": "deposit",
+            // "1": "gonsInWarmup",
+            // "2": "warmupExpiry",
+            // "3": "stakingExpiry",
+            // "4": "gonsRemaining",
+            const sValues = (await contract.read.stakingInfo([account?.address, index])) as any;
+            stakingInfo = {
+              deposit: sValues?.[0],
+              gonsInWarmup: sValues?.[1],
+              warmupExpiry: sValues?.[2],
+              stakingExpiry: sValues?.[3],
+              gonsRemaining: sValues?.[4],
+            };
           } else {
-            stakingInfo = (await contract.read.pendingFor([account?.address, index])) as any;
+            const pValues = (await contract.read.pendingFor([account?.address, index])) as any;
+            pendingFor = {
+              payout: pValues?.[0],
+              created: pValues?.[1],
+              expiry: pValues?.[2],
+              timeRemaining: pValues?.[3],
+              matured: pValues?.[4],
+              discount: pValues?.[5],
+            } as any;
+            console.log(pendingFor);
+            // "0": "payout_",
+            // "1": "created_",
+            // "2": "expiry_",
+            // "3": "timeRemaining_",
+            // "4": "matured_",
+            // "5": "discount_",
           }
-          //   {
-          //     0 uint256 deposit;
-          //     1 uint256 gonsInWarmup;
-          //     2 uint256 warmupExpiry;
-          //     3 uint256 stakingExpiry;
-          //     4 uint256 gonsRemaining;
-          // }
+
           try {
             totalRewards = (await stakedTheoContract.read.balanceForGons([
               stakingInfo?.[4],
@@ -95,7 +117,8 @@ export const usePurchasesByContract = (contractName) => {
           return {
             rewards,
             slashingPoolRewards,
-            stakingInfo,
+            ...stakingInfo,
+            ...pendingFor,
           };
         });
 

@@ -1,6 +1,5 @@
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import PendingTransaction from '@/components/PendingTransaction';
-import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { logEvent } from '@/lib/analytics';
 import { cache } from '@/lib/cache';
@@ -9,9 +8,11 @@ import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases'
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { format } from 'date-fns';
 import { ArrowLeft, Intersect } from 'phosphor-react';
-import { useAccount, useContractWrite, useWalletClient } from 'wagmi';
+import { useContractWrite, useWalletClient } from 'wagmi';
 import FailedTransaction from '@/components/FailedTransaction';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
+import { Abi } from 'viem';
+import { getAccount } from '@wagmi/core';
 
 export const MarketDiscountRow = () => {
   return <ConfirmRow title="Purchase Type" value={'Pre-Market'} />;
@@ -29,7 +30,7 @@ export const TokensUnlockedRow = ({ date }) => {
 
 const ConfirmClaim = ({ purchase }) => {
   const [, { openModal, closeModal }] = useModal();
-  const { data: account } = useAccount();
+  const account = getAccount();
   const [, { reRender }] = useUserPurchases();
 
   const { address: activeContract, abi: activeContractABI } = useContractInfo(
@@ -52,49 +53,43 @@ const ConfirmClaim = ({ purchase }) => {
     isError: writeErr,
     isLoading: writeLoading,
     write: redeem,
-  } = useContractWrite(
-    {
-      address: activeContract,
-      contractInterface: activeContractABI,
-      signerOrProvider: walletClient,
-    },
-    'redeem',
-    {
-      async onSuccess(data) {
-        const receipt = await data.wait();
-        if (receipt.status === 1) {
-          logEvent({ name: 'redeem_completed' });
-          cache.clear();
-          reRender();
-          openModal(
-            <SuccessfulTransaction
-              txId={data.hash}
-              title="Claim Successful!"
-              redirect="/discount-buy/your-purchases"
-              Icon={Intersect}
-              content={dataRows}
-            />
-          );
-        } else {
-          console.log('contract fail');
-        }
-      },
-      onError(error) {
-        console.log(error);
+  } = useContractWrite({
+    address: activeContract,
+    abi: activeContractABI as Abi,
+    functionName: 'redeem',
+    onSuccess: async (data) => {
+      if (data.hash) {
+        logEvent({ name: 'redeem_completed' });
+        cache.clear();
+        reRender();
         openModal(
-          <FailedTransaction
+          <SuccessfulTransaction
+            txId={data.hash}
+            title="Claim Successful!"
+            redirect="/claim"
             Icon={Intersect}
-            onRetry={() => {
-              openModal(<ConfirmClaim purchase={purchase} />);
-            }}
-            error={error}
             content={dataRows}
           />
         );
-      },
-      args: claimArgs,
-    }
-  );
+      } else {
+        console.log('contract fail');
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+      openModal(
+        <FailedTransaction
+          Icon={Intersect}
+          onRetry={() => {
+            openModal(<ConfirmClaim purchase={purchase} />);
+          }}
+          error={error}
+          content={dataRows}
+        />
+      );
+    },
+    args: claimArgs,
+  });
 
   const handleClick = async () => {
     openModal(

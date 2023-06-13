@@ -9,19 +9,17 @@ import { cache } from '@/lib/cache';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { Popover } from '@headlessui/react';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
-import { InformationCircleIcon } from '@heroicons/react/solid';
 import { rewardAsPercent } from '@/util/reward-as-percent';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import UnstakeConfirm from './components/UnstakeConfirm';
 import { Abi } from 'viem';
 import { getAccount } from '@wagmi/core';
+import { InformationCircleIcon } from '@heroicons/react/20/solid';
 const RewardsPoolPopover = ({ reward }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
       <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
-        <div className="text-sm text-green-600">
-          +{formatTheo(BigInt(reward).toString(), 2)} $THEO
-        </div>
+        <div className="text-sm text-green-600">+{formatTheo(BigInt(reward), 2)} $THEO</div>
         <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
     </Popover.Button>
@@ -36,9 +34,7 @@ const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
     <Popover.Button>
       <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
         <div className="text-red-700">
-          {penaltyIsLoading || !penalty
-            ? 'Loading...'
-            : `-${formatTheo(BigInt(penalty).toString())} $THEO`}
+          {penaltyIsLoading || !penalty ? 'Loading...' : `-${formatTheo(BigInt(penalty))} $THEO`}
         </div>
         <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
@@ -143,14 +139,14 @@ const YourMemberships = () => {
   const formattedPurchases = useMemo(
     () =>
       memberships?.map((p) => {
-        const endDate = p.stakingInfo[3] ? new Date(Number(BigInt(p.stakingInfo[3])) * 1000) : '?';
+        const endDate = p.stakingExpiry ? new Date(Number(BigInt(p.stakingExpiry)) * 1000) : '?';
         const startDate =
           p.contractName === 'TheopetraStaking' ? endDate : add(new Date(endDate), { years: -1 });
         return {
           startDate,
           endDate,
-          timeRemaining: p.stakingInfo.timeRemaining,
-          deposit: p.stakingInfo[0] ? BigInt(p.stakingInfo[0]) : 0,
+          timeRemaining: p.timeRemaining,
+          deposit: p.deposit ? BigInt(p.deposit) : 0,
           rewards: p.rewards,
           contractName: p.contractName,
           index: p.index,

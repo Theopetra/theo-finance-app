@@ -98,18 +98,15 @@ const SubscribeConfirm = ({
     data: approveData,
     isError: approveErr,
     isLoading: approveLoading,
-    write: approve,
+    writeAsync: approve,
+    isSuccess: addSuccess,
   } = useContractWrite({
     address: theoAddress,
     abi: theoAbi as Abi,
-    // [
-    //   'function approve(address _spender, uint256 _value) public returns (bool success)',
-    // ],
-    // signerOrProvider: signer,
+
     functionName: 'approve',
     onSuccess: async (data) => {
-      // const receipt = await data;
-      if (data) {
+      if (data.hash) {
         logEvent({ name: 'erc20_approved' });
         openModal(
           <PendingTransaction
@@ -120,7 +117,7 @@ const SubscribeConfirm = ({
 
         stake();
       } else {
-        openModal();
+        openModal(<FailedModal />);
       }
     },
     onError(error) {
