@@ -52,9 +52,9 @@ export const usePurchasesByContract = (contractName) => {
 
       try {
         if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
-          indexes = await contract.read.indexesFor([account?.address, false]);
+          indexes = (await contract.read.indexesFor([account?.address, false])) as any;
         } else {
-          indexes = await contract.read.indexesFor([account?.address]);
+          indexes = (await contract.read.indexesFor([account?.address])) as any;
         }
 
         const pnPromises = indexes.map(async (index) => {

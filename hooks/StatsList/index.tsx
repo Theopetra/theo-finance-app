@@ -8,7 +8,7 @@ import { getContract } from 'wagmi/actions';
 const useGetLockedTheoByContract = async (contractName) => {
   const { address, abi } = useContractInfo(contractName);
   const contract = getContract({ address: address, abi: abi as Abi });
-  const { data } = useContractRead({
+  const { data }: { data: any } = useContractRead({
     address: address,
     abi: abi as Abi,
     functionName: 'getMarkets',
@@ -45,9 +45,9 @@ const useStats = () => {
   const bondRepo = useGetLockedTheoByContract('TheopetraBondDepository');
   const publicPreListRepo = useGetLockedTheoByContract('PublicPreListBondDepository');
   const locked = useMemo(() => {
-    return [0, 1, 2].map((i) => [
-      whitelistRepo[i]?.add(bondRepo[i])?.add(publicPreListRepo[i])?.toString(),
-    ]);
+    return [0, 1, 2].map((i) =>
+      whitelistRepo[i]?.add(bondRepo[i])?.add(publicPreListRepo[i])?.toString()
+    );
   }, [whitelistRepo, bondRepo, publicPreListRepo]);
 
   const STATS = useMemo(
@@ -60,7 +60,7 @@ const useStats = () => {
             <strong>6 Months</strong>
           </>
         ),
-        value: formatTheo(locked?.[0]?.toString() || 0),
+        value: formatTheo(BigInt(locked?.[0] || 0)),
         tooltip: 'This is the total amount of $THEO locked in the 6 Month contract',
         tooltipIcon: 'info',
       },
@@ -72,7 +72,7 @@ const useStats = () => {
             <strong>12 Months</strong>
           </>
         ),
-        value: formatTheo(locked?.[1]?.toString() || 0),
+        value: formatTheo(locked?.[1] || 0),
         tooltip: 'This is the total amount of $THEO locked in the 12 Month contract',
         tooltipIcon: 'info',
       },
@@ -84,7 +84,7 @@ const useStats = () => {
             <strong>18 Months</strong>
           </>
         ),
-        value: formatTheo(locked?.[2]?.toString() || 0),
+        value: formatTheo(locked?.[2] || 0),
         tooltip: 'This is the total amount of $THEO locked in the 18 Month contract',
         tooltipIcon: 'info',
       },

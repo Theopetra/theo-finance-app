@@ -28,7 +28,6 @@ const SubscribeConfirm = ({
 }) => {
   const [, { openModal, closeModal }] = useModal();
   const account = getAccount();
-  // const { data: signer, isError, isLoading } = useSigner();
   const depositAmountFormatted = useMemo(() => parseUnits(depositAmount, 9), [depositAmount]);
   const [, { reRender }] = useUserPurchases();
 
