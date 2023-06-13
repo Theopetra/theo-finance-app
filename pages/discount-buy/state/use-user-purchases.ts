@@ -88,7 +88,6 @@ export const usePurchasesByContract = (contractName) => {
               matured: pValues?.[4],
               discount: pValues?.[5],
             } as any;
-            console.log(pendingFor);
             // "0": "payout_",
             // "1": "created_",
             // "2": "expiry_",
@@ -98,10 +97,12 @@ export const usePurchasesByContract = (contractName) => {
           }
 
           try {
-            totalRewards = (await stakedTheoContract.read.balanceForGons([
-              stakingInfo?.[4],
-            ])) as any;
-            rewards = totalRewards - (stakingInfo?.[0] || BigInt(0));
+            if (stakingInfo?.[4]) {
+              totalRewards = (await stakedTheoContract.read.balanceForGons([
+                stakingInfo?.[4],
+              ])) as any;
+            }
+            rewards = totalRewards - BigInt(stakingInfo?.[0] || 0);
 
             if (contractName === 'TheopetraStakingLocked') {
               slashingPoolRewards = (await contract.read.rewardsFor([
@@ -130,11 +131,11 @@ export const usePurchasesByContract = (contractName) => {
         }));
 
         setPendingNotes(pnObjs);
-        cache.setItem(
-          `purchases-${contractName}`,
-          pnObjs,
-          process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
-        );
+        // cache.setItem(
+        //   `purchases-${contractName}`,
+        //   pnObjs,
+        //   process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
+        // );
       } catch (e) {
         console.log(e);
       }

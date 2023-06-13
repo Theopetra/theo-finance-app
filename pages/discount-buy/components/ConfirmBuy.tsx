@@ -13,14 +13,13 @@ import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
 import { parseEther, parseUnits, toHex } from 'viem';
 import { useMemo } from 'react';
-import { useAccount, useContractWrite, useWalletClient } from 'wagmi';
+import { useAccount, useContractWrite } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import { useUserPurchases } from '../state/use-user-purchases';
 import FailedTransaction from '@/components/FailedTransaction';
 import { Intersect } from 'phosphor-react';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import { Abi } from 'viem';
-import { getContract } from 'wagmi/dist/actions';
 
 export const Price = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
