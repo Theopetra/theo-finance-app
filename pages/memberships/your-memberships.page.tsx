@@ -19,7 +19,9 @@ const RewardsPoolPopover = ({ reward }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>
       <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
-        <div className="text-sm text-green-600">+{formatTheo(BigInt(reward), 2)} $THEO</div>
+        <div className="text-sm text-green-600">
+          +{formatTheo(BigInt(reward), 2)} {reward} $THEO
+        </div>
         <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
     </Popover.Button>
@@ -34,7 +36,7 @@ const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
     <Popover.Button>
       <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
         <div className="text-red-700">
-          {penaltyIsLoading || !penalty ? 'Loading...' : `-${formatTheo(BigInt(penalty))} $THEO`}
+          {penaltyIsLoading ? 'Loading...' : `-${formatTheo(BigInt(penalty))} $THEO`}
         </div>
         <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
@@ -87,13 +89,15 @@ const UnstakeButton = ({ purchase, matured, account }) => {
   const timeRemaining = useMemo(() => {
     if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
     if (stakingInfo[3] <= Math.floor(Date.now() / 1000)) return 100;
-    return (
+    const value =
       100 -
       Math.floor(
-        (Number(epochLength) / (Number(BigInt(stakingInfo[3])) - Math.floor(Date.now() / 1000))) *
+        (Number(epochLength) /
+          (Number(BigInt(stakingInfo[3]).toString()) - Math.floor(Date.now() / 1000))) *
           100
-      )
-    );
+      );
+
+    return value;
   }, [stakingInfo, epochLength, isEpochLengthLoading]);
 
   const { data: penalty, isLoading: penaltyIsLoading } = useContractRead({
@@ -103,7 +107,6 @@ const UnstakeButton = ({ purchase, matured, account }) => {
     args: [amount, timeRemaining],
     enabled: purchase.contractName !== 'TheopetraStaking',
   });
-
   const unstakeArgs = useMemo(
     () => [account?.address, [amount], false, [BigInt(purchase.index)]],
     [amount, account?.address, purchase]

@@ -105,11 +105,11 @@ export const usePurchasesByContract = (contractName) => {
             rewards = totalRewards - BigInt(stakingInfo?.[0] || 0);
 
             if (contractName === 'TheopetraStakingLocked') {
-              slashingPoolRewards = (await contract.read.rewardsFor([
+              const slashingPoolRewardsVal = (await contract.read.rewardsFor([
                 account?.address,
                 index,
               ])) as any;
-              slashingPoolRewards = slashingPoolRewards - rewards;
+              slashingPoolRewards = slashingPoolRewardsVal - rewards;
             }
           } catch (e) {
             console.log(e);
