@@ -2,7 +2,7 @@ import PageContainer from '@/components/PageContainer';
 import { formatTheo } from '@/lib/format_theo';
 import { add, format } from 'date-fns';
 import React, { useMemo } from 'react';
-import { useAccount, useContractRead } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import PurchasesTable from '../discount-buy/your-purchases/components/PurchasesTable';
 import { cache } from '@/lib/cache';

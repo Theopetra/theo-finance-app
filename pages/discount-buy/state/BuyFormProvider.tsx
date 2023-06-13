@@ -1,9 +1,8 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { cache } from '@/lib/cache';
-import { BigNumber } from 'ethers';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useContractRead, usePublicClient, useToken } from 'wagmi';
+import { useContractRead, useToken } from 'wagmi';
 import { getContract } from '@wagmi/core';
 import { Abi } from 'viem';
 export const BuyFormContext = React.createContext<any>(null);
@@ -204,7 +203,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const handleTokenInput = (e, fieldName) => {
     const value = e.target.value;
-    const quotePrice = priceInfo ? BigNumber.from(priceInfo).toNumber() / Math.pow(10, 9) : 0;
+    const quotePrice = priceInfo ? Number(BigInt(priceInfo as string)) / Math.pow(10, 9) : 0;
     const purchaseCostPrecision =
       selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH' ? 9 : 2;
     const purchaseAmountPrecision =

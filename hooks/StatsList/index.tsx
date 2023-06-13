@@ -1,6 +1,5 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { formatTheo } from '@/lib/format_theo';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { Abi } from 'viem';
 import { useContractRead } from 'wagmi';
@@ -14,7 +13,7 @@ const useGetLockedTheoByContract = async (contractName) => {
     functionName: 'getMarkets',
   });
 
-  let locked = [BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)];
+  let locked = [BigInt(0), BigInt(0), BigInt(0)];
   if (data) {
     const merged = await Promise.all(
       data.map(async (b) => {
@@ -33,7 +32,7 @@ const useGetLockedTheoByContract = async (contractName) => {
     locked = [15768000, 31536000, 47304000].map((v) => {
       return merged
         .filter((e: any) => e.term.fixedTerm && e.term.vesting === v)
-        .reduce((prev, cur: any) => prev.add(cur.market.sold), BigNumber.from(0));
+        .reduce((prev, cur: any) => prev.add(cur.market.sold), BigInt(0));
     });
   }
 

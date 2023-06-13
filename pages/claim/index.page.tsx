@@ -11,7 +11,6 @@ import { CircleWavyCheck, Clock } from 'phosphor-react';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import { formatTheo } from '@/lib/format_theo';
 import { useMemo } from 'react';
-import { BigNumber } from 'ethers';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 
 const Claim = () => {
@@ -25,7 +24,7 @@ const Claim = () => {
           amount: `${formatTheo(p.payout)}`,
           discount: 0,
           unlockDate: new Date(p.expiry),
-          index: BigNumber.from(p.index).toNumber(),
+          index: BigInt(p.index),
         };
       }),
     [purchases]
