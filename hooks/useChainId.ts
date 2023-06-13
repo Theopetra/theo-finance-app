@@ -10,7 +10,7 @@ export function getChainId() {
 }
 
 export function useChainId() {
-  const { activeChain } = useNetwork();
-  const chainId = useMemo(() => activeChain?.id || getChainId(), [activeChain]);
+  const { chain } = useNetwork();
+  const chainId = useMemo(() => chain?.id || getChainId(), [chain]);
   return chainId;
 }
