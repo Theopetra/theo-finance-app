@@ -1,5 +1,6 @@
 import { logEvent } from '@/lib/analytics';
 import { useAccount, usePublicClient } from 'wagmi';
+import { getAccount } from '@wagmi/core';
 
 type LogEventHookData = {
   name: string;
@@ -7,8 +8,8 @@ type LogEventHookData = {
 };
 
 export function useAnalytics() {
-  const { data: accountData } = useAccount();
-  const wallet = accountData?.address;
+  const account = getAccount();
+  const wallet = account?.address;
   const provider = usePublicClient();
 
   return {
