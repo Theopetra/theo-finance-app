@@ -69,6 +69,9 @@ const YourPurchases = () => {
         Header: 'Discount',
         accessor: 'discount',
         width: '10%',
+        Cell: ({ value }) => (
+          <span title={`${value / 10 ** 7}`}>{(value / 10 ** 7).toFixed()}%</span>
+        ),
       },
       {
         Header: 'Status',

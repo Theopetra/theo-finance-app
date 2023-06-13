@@ -3,7 +3,7 @@ import { formatTheo } from '@/lib/format_theo';
 import { add, format } from 'date-fns';
 import React, { useMemo } from 'react';
 import { useContractRead } from 'wagmi';
-import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
+import { PendingNote, useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import PurchasesTable from '../discount-buy/your-purchases/components/PurchasesTable';
 import { cache } from '@/lib/cache';
 import { useContractInfo } from '@/hooks/useContractInfo';
@@ -48,7 +48,15 @@ const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
   </Popover>
 );
 
-const UnstakeButton = ({ purchase, matured, account }) => {
+const UnstakeButton = ({
+  purchase,
+  matured,
+  account,
+}: {
+  purchase: PendingNote;
+  matured: boolean;
+  account: any;
+}) => {
   // STAKE
   const [, { openModal }] = useModal();
   const { address, abi } = useContractInfo(purchase.contractName);
@@ -64,41 +72,35 @@ const UnstakeButton = ({ purchase, matured, account }) => {
   });
   const theoAddress = purchase.contractName === 'TheopetraStaking' ? sTheoAddress : pTheoAddress;
   const theoAbi = purchase.contractName === 'TheopetraStaking' ? sAbi : pAbi;
-  const { data: stakingInfo } = useContractRead({
-    address,
-    abi: abi as Abi,
-    functionName: 'stakingInfo',
-    args: [account?.address, BigInt(purchase.index)],
-    cacheTime: cache.cacheTimesInMs.prices,
-  });
 
   const { data: amountFromGons } = useContractRead({
     address: theoAddress,
     abi: theoAbi as Abi,
     functionName: 'balanceForGons',
-    args: [stakingInfo?.[4]],
+    args: [purchase.gonsRemaining],
     cacheTime: cache.cacheTimesInMs.prices,
   });
 
   const amount = useMemo(() => {
-    if (!stakingInfo) return 0;
+    if (!purchase) return 0;
     if (!amountFromGons) return 0;
     return Number(BigInt(amountFromGons as string));
-  }, [stakingInfo, amountFromGons]);
+  }, [purchase, amountFromGons]);
 
   const timeRemaining = useMemo(() => {
-    if (!stakingInfo || isEpochLengthLoading || !epochLength) return 0;
-    if (stakingInfo[3] <= Math.floor(Date.now() / 1000)) return 100;
+    if (!purchase.stakingExpiry || isEpochLengthLoading || !epochLength) return 0;
+    if (purchase.stakingExpiry && purchase.stakingExpiry <= Math.floor(Date.now() / 1000))
+      return 100;
     const value =
       100 -
       Math.floor(
         (Number(epochLength) /
-          (Number(BigInt(stakingInfo[3]).toString()) - Math.floor(Date.now() / 1000))) *
+          (Number(BigInt(purchase.stakingExpiry).toString()) - Math.floor(Date.now() / 1000))) *
           100
       );
 
     return value;
-  }, [stakingInfo, epochLength, isEpochLengthLoading]);
+  }, [purchase, epochLength, isEpochLengthLoading]);
 
   const { data: penalty, isLoading: penaltyIsLoading } = useContractRead({
     address: address,

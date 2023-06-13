@@ -4,6 +4,32 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { UserPurchasesContext } from './UserPurchasesProvider';
 import { getContract, getAccount } from '@wagmi/core';
 import { Abi } from 'viem';
+import { contractMetadata } from '@/lib/contracts';
+// stakingInfo interface
+export interface StakingInfo {
+  deposit?: bigint;
+  gonsInWarmup?: bigint;
+  warmupExpiry?: bigint;
+  stakingExpiry?: bigint;
+  gonsRemaining?: bigint;
+}
+
+export interface PendingFor {
+  payout?: bigint;
+  created?: bigint;
+  expiry?: bigint;
+  timeRemaining?: bigint;
+  matured?: boolean;
+  discount?: bigint;
+}
+
+// interface that includes both stakingInfo and pendingFor
+export interface PendingNote extends StakingInfo, PendingFor {
+  index: bigint;
+  contractName: keyof typeof contractMetadata;
+  rewards?: bigint;
+  slashingPoolRewards?: bigint;
+}
 
 export const usePurchasesByContract = (contractName) => {
   const account = getAccount();
@@ -11,7 +37,7 @@ export const usePurchasesByContract = (contractName) => {
   const { address: sTheoAddress, abi: sAbi } = useContractInfo('sTheopetra');
   const { address: pTheoAddress, abi: pAbi } = useContractInfo('pTheopetra');
   const [isLoadingPurchases, setIsLoadingPurchases] = useState(false);
-  const [pendingNotes, setPendingNotes] = useState<any[]>([]);
+  const [pendingNotes, setPendingNotes] = useState<PendingNote[]>([]);
   // This is a piece of state to trigger a re-render when the contract is updated.
   const [render, setRender] = useState(false);
 
@@ -61,8 +87,8 @@ export const usePurchasesByContract = (contractName) => {
           let rewards = BigInt(0);
           let slashingPoolRewards = BigInt(0);
           let totalRewards = BigInt(0);
-          let stakingInfo = {};
-          let pendingFor = {};
+          let stakingInfo: StakingInfo = {};
+          let pendingFor: PendingFor = {};
 
           if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
             // "0": "deposit",
@@ -97,13 +123,10 @@ export const usePurchasesByContract = (contractName) => {
           }
 
           try {
-            if (stakingInfo?.[4]) {
-              totalRewards = (await stakedTheoContract.read.balanceForGons([
-                stakingInfo?.[4],
-              ])) as any;
-            }
-            rewards = totalRewards - BigInt(stakingInfo?.[0] || 0);
-
+            totalRewards = (await stakedTheoContract.read.balanceForGons([
+              stakingInfo?.gonsRemaining,
+            ])) as any;
+            rewards = totalRewards - BigInt(stakingInfo?.deposit || 0);
             if (contractName === 'TheopetraStakingLocked') {
               const slashingPoolRewardsVal = (await contract.read.rewardsFor([
                 account?.address,
