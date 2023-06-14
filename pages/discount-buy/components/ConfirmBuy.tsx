@@ -22,7 +22,7 @@ import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import { Abi } from 'viem';
 
 export const Price = () => {
-  const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
+  const [{ selectedMarket, purchaseToken }] = useBuyForm();
 
   return (
     <>
@@ -44,16 +44,22 @@ export const PurchaseAmountRow = () => {
 };
 
 export const TheoPurchasePriceRow = () => {
-  const [{ purchaseToken }] = useBuyForm();
   return <ConfirmRow title="$THEO Purchase Price" value={<Price />} subtext={`Per $THEO`} />;
 };
 
 export const LockDurationRow = () => {
+  const [{ groupedBondMarketsMap, selection, selectedMarket }] = useBuyForm();
+
   return (
     <ConfirmRow
       title="Lock Duration"
-      value={`--- Months`}
-      subtext={`Tokens will unlock on ${format(add(new Date(), { months: 3 }), 'MM-dd-yy')}`}
+      value={groupedBondMarketsMap[selection.value].header}
+      subtext={`Tokens will unlock on ${format(
+        add(new Date(), {
+          [groupedBondMarketsMap[selection.value].vestingTimeIncrement]: selection.value,
+        }),
+        'MM-dd-yy hh:mm a'
+      )}`}
     />
   );
 };

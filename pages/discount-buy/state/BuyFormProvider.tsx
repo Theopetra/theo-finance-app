@@ -161,6 +161,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
               if (!termsMap[mapKey]) {
                 termsMap[mapKey] = {
+                  ...term,
                   header: `${mapKey} minutes`,
                   highlight: vestingInMonths === 18,
                   markets: [],

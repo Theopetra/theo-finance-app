@@ -13,9 +13,15 @@ import FailedTransaction from '@/components/FailedTransaction';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import { Abi } from 'viem';
 import { getAccount } from '@wagmi/core';
+const whitelistExpiry = parseInt(process.env.NEXT_PUBLIC_WHITELIST_EXPIRY_EPOCH_SECONDS || '0');
 
-export const MarketDiscountRow = () => {
-  return <ConfirmRow title="Purchase Type" value={'Pre-Market'} />;
+export const MarketDiscountRow = ({ date }) => {
+  return (
+    <ConfirmRow
+      title="Purchase Type"
+      value={Number(BigInt(date)) > whitelistExpiry ? `Discount Market` : 'Pre-Market'}
+    />
+  );
 };
 export const TheoPurchaseDateRow = ({ date }) => {
   return <ConfirmRow title="Purchase Date" value={format(new Date(date * 1000), 'yyyy-MM-dd')} />;
@@ -42,7 +48,7 @@ const ConfirmClaim = ({ purchase }) => {
 
   const dataRows = (
     <>
-      <MarketDiscountRow />
+      <MarketDiscountRow date={purchase.date} />
       <TheoPurchaseDateRow date={purchase.date} />
       <TokensToClaimRow total={purchase.amount} />
       <TokensUnlockedRow date={purchase.unlockDate} />
