@@ -17,11 +17,14 @@ import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
 const envChains = () => {
+  console.log(process.env.NEXT_PUBLIC_ENV);
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'production':
       return [mainnet];
+    case 'local':
+      return [hardhat];
     case 'staging':
-      return [mainnet, hardhat];
+      return [hardhat];
     default:
       return [mainnet];
   }
@@ -39,7 +42,7 @@ if (!alchemyId) {
 }
 
 const { chains, publicClient } = configureChains(
-  [mainnet, hardhat],
+  [...envChains()],
   [
     jsonRpcProvider({
       rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),

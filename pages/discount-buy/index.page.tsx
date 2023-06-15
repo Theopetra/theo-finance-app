@@ -68,7 +68,7 @@ const DiscountBuy = () => {
       },
 
       {
-        Header: 'Valuation',
+        Header: '$THEO Price',
         accessor: 'valuationPrice',
         id: 'valuation',
         width: '10%',
@@ -85,7 +85,7 @@ const DiscountBuy = () => {
         ),
       },
       {
-        Header: 'Market Price',
+        Header: 'Discount Pricee',
         accessor: 'marketPrice',
         id: 'marketPrice',
         width: '10%',
