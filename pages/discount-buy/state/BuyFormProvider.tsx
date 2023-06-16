@@ -3,8 +3,9 @@ import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { cache } from '@/lib/cache';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useContractRead, useToken } from 'wagmi';
+import { useContractInfo } from '@/hooks/useContractInfo';
 import { getContract } from '@wagmi/core';
-import { Abi } from 'viem';
+import { Abi, formatUnits } from 'viem';
 export const BuyFormContext = React.createContext<any>(null);
 
 type formStateType = {
@@ -65,8 +66,38 @@ export const BuyFormProvider: React.FC = (props) => {
     enabled: !!selectedMarket?.id,
   });
 
+  const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } = useContractInfo('ChainlinkPriceFeed');
+  const { address: calcAddress, abi: calcAbi } = useContractInfo('BondingCalculator');
+  const { address: theoERC20address, abi: theoERC20abi } = useContractInfo('TheopetraERC20Token');
+
+  const { data: priceFeed } = useContractRead({
+    address: ChainlinkPriceFeed,
+    abi: ChainlinkPriceFeedAbi as Abi,
+    functionName: 'latestAnswer',
+  });
+
+  const { data: valuation } = useContractRead({
+    address: calcAddress,
+    abi: calcAbi as Abi,
+    functionName: 'valuation',
+    args: [theoERC20address, 1e9],
+  });
+
+  const valuationPrice = useMemo(() => {
+    if (valuation && priceFeed) {
+      const price = formatUnits(BigInt(priceFeed as bigint), 8);
+      const valuationNumber = formatUnits(BigInt(valuation as bigint), 18);
+      const totalValueStaked = Number(valuationNumber) * Number(price);
+
+      return totalValueStaked as number;
+    }
+    return 0;
+  }, [valuation, priceFeed]);
+
   useEffect(() => {
+    
     const callContract = async () => {
+      
       setUIBondMarketsIsLoading(true);
       const cachedMkts = cache.getItem('groupedBondMarketsMap');
 
@@ -77,6 +108,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
       try {
         const BondMarkets = (await contract.read.liveMarkets()) as any;
+
         if (BondMarkets) {
           const termsMap = {};
           const setTerms = await Promise.all(
@@ -118,10 +150,6 @@ export const BuyFormProvider: React.FC = (props) => {
                   marketPrice = '';
                   console.log('error getting market price');
                 }
-
-                const valuationPrice = BigInt(
-                  (await contract.read.bondRateVariable([bondMarket])) as number
-                );
 
                 const discountRate = BigInt(
                   (await contract.read.bondRateVariable([bondMarket])) as number

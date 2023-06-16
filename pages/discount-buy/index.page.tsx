@@ -72,7 +72,7 @@ const DiscountBuy = () => {
         accessor: 'valuationPrice',
         id: 'valuation',
         width: '10%',
-        Cell: ({ value }) => formatTheo(value),
+        Cell: ({ value }) => `$${Math.round(value * 10000) / 10000}`,
       },
       {
         Header: 'Discount Rate',
@@ -85,7 +85,7 @@ const DiscountBuy = () => {
         ),
       },
       {
-        Header: 'Discount Pricee',
+        Header: 'Discount Price',
         accessor: 'marketPrice',
         id: 'marketPrice',
         width: '10%',
