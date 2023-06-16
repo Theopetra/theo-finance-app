@@ -66,7 +66,7 @@ export const LockDurationRow = () => {
 
 const ConfirmBuy = () => {
   const [, { openModal, closeModal }] = useModal();
-  const [{ selectedMarket, purchaseToken, purchaseCost }] = useBuyForm();
+  const [{ selectedMarket, purchaseToken, purchaseCost, maxSlippage }] = useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
   const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
@@ -85,8 +85,6 @@ const ConfirmBuy = () => {
     });
   }, [account, purchaseToken?.symbol]);
 
-  //TODO: Max price should be set by the user
-  const maxPrice = parseEther('25');
   const depositAmount = useMemo(
     () =>
       purchaseToken?.symbol?.toLowerCase() === 'usdc'
@@ -94,6 +92,7 @@ const ConfirmBuy = () => {
         : parseEther(purchaseCost),
     [purchaseCost, purchaseToken?.symbol]
   );
+
   // const args = [
   //   selectedMarket.id,
   //   depositAmount,
@@ -179,7 +178,7 @@ const ConfirmBuy = () => {
     },
     args: [
       selectedMarket.id,
-      toHex(maxPrice),
+      toHex((BigInt(Math.floor(maxSlippage * 1000)) * depositAmount / BigInt(1000)) + depositAmount),
       account?.address,
       account?.address,
       false,
