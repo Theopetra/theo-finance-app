@@ -27,7 +27,7 @@ const DiscountBuy = () => {
       groupedBondMarketsMap,
       terms,
       UIBondMarketsIsLoading,
-      convertedMaxPayout,
+      maxPayout,
     },
     { handleUpdate, handleTokenInput },
   ] = useBuyForm();
@@ -148,9 +148,11 @@ const DiscountBuy = () => {
   };
 
   useEffect(() => {
-    if (Number(purchaseCost) > convertedMaxPayout) {
+    if (Number(purchaseAmount) > maxPayout) {
       // TODO: this should probably be rewritten.
       setError('Amount exceeds max payout');
+      console.log(purchaseAmount)
+      console.log(maxPayout)
     } else if (
       Number(purchaseAmount) <= 0 ||
       purchaseAmount === 'NaN' ||

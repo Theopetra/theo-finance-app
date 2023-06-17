@@ -85,18 +85,21 @@ export const BuyFormProvider: React.FC = (props) => {
     args: [theoERC20address, 1e9],
   });
 
-  const convertedMaxPayout = useMemo(() => {
-    // Do conversions here
-    return 4;
+  const maxPayout = useMemo(() => {
+    if (selectedMarket?.maxPayout) {
+      const max = selectedMarket.maxPayout//formatUnits(BigInt(selectedMarket.maxPayout as bigint), 9)
+      return Number(max);
+    }
+    return 0;
   }, [selectedMarket]);
 
   const valuationPrice = useMemo(() => {
     if (valuation && priceFeed) {
       const price = formatUnits(BigInt(priceFeed as bigint), 8);
       const valuationNumber = formatUnits(BigInt(valuation as bigint), 18);
-      const totalValueStaked = Number(valuationNumber) * Number(price);
+      const totalValue = Number(valuationNumber) * Number(price);
 
-      return totalValueStaked as number;
+      return totalValue as number;
     }
     return 0;
   }, [valuation, priceFeed]);
@@ -294,7 +297,7 @@ export const BuyFormProvider: React.FC = (props) => {
           setSelection,
           terms,
           UIBondMarketsIsLoading,
-          convertedMaxPayout,
+          maxPayout,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}
