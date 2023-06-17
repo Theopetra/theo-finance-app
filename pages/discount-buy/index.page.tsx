@@ -118,7 +118,6 @@ const DiscountBuy = () => {
     () =>
       terms
         ? terms.map((y) => {
-            console.log(y);
             return {
               duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
               token: y.marketData.quoteToken,
@@ -139,10 +138,7 @@ const DiscountBuy = () => {
 
   const handleCurencyInputChange = (e: BaseSyntheticEvent) => {
     if (Number(e.target.value) < 0) return;
-    if (Number(e.target.value) > convertedMaxPayout) {
-      // TODO: this should probably be rewritten.
-      setError('Amount exceeds max payout');
-    }
+
     if (Number(e.target.value) > Number(balance?.formatted)) {
       setError('Insufficient balance');
     } else {
@@ -152,8 +148,14 @@ const DiscountBuy = () => {
   };
 
   useEffect(() => {
-    console.log(purchaseAmount);
-    if (Number(purchaseAmount) <= 0 || purchaseAmount === 'NaN' || purchaseAmount === 'Infinity') {
+    if (Number(purchaseCost) > convertedMaxPayout) {
+      // TODO: this should probably be rewritten.
+      setError('Amount exceeds max payout');
+    } else if (
+      Number(purchaseAmount) <= 0 ||
+      purchaseAmount === 'NaN' ||
+      purchaseAmount === 'Infinity'
+    ) {
       setError('Please enter a valid amount');
     } else {
       setError('');

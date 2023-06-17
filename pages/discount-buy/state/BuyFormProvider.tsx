@@ -87,7 +87,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const convertedMaxPayout = useMemo(() => {
     // Do conversions here
-    return 0;
+    return 4;
   }, [selectedMarket]);
 
   const valuationPrice = useMemo(() => {
