@@ -6,6 +6,7 @@ import { useContractRead, useToken } from 'wagmi';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { getContract } from '@wagmi/core';
 import { Abi, formatUnits } from 'viem';
+import { GroupedBondMarketsMapType, Terms } from './use-buy-form';
 export const BuyFormContext = React.createContext<any>(null);
 
 type formStateType = {
@@ -31,25 +32,25 @@ const initialFormState: formStateType = {
 };
 
 export const BuyFormProvider: React.FC = (props) => {
-  const [selection, setSelection] = useState<{ label: string; value: string }>({
+  const [selection, setSelection] = useState<{ label: string; value: number }>({
     label: '',
-    value: '',
+    value: 0,
   });
-  const [groupedBondMarketsMap, setGroupedBondMarketsMap] = useState({});
-  const [allTermedMarkets, setAllTermedMarkets] = useState<any[]>([]);
+  const [groupedBondMarketsMap, setGroupedBondMarketsMap] = useState<GroupedBondMarketsMapType>({});
+  const [terms, setTerms] = useState<Terms[]>([]);
   const [formState, setFormState] = useState<formStateType>(initialFormState);
   const [UIBondMarketsIsLoading, setUIBondMarketsIsLoading] = useState(true);
   const { address, abi } = useActiveBondDepo();
   const { data: selectedToken } = useToken({ address: formState.purchaseToken?.quoteToken });
-  const selectedMarket = useMemo(
-    () =>
-      selection.value &&
-      Object.keys(groupedBondMarketsMap).length > 0 &&
-      groupedBondMarketsMap[selection.value]?.markets.find(
+  const selectedMarket = useMemo(() => {
+    if (selection.value && Object.keys(groupedBondMarketsMap).length > 0) {
+      return groupedBondMarketsMap[selection.value]?.markets.find(
         (x) => x.marketData.quoteToken === formState.purchaseToken?.address
-      ),
-    [selection, groupedBondMarketsMap, formState.purchaseToken?.address]
-  );
+      );
+    }
+    return undefined;
+  }, [selection, groupedBondMarketsMap, formState.purchaseToken?.address]);
+
   const contract = useMemo(
     () =>
       getContract({
@@ -66,7 +67,8 @@ export const BuyFormProvider: React.FC = (props) => {
     enabled: !!selectedMarket?.id,
   });
 
-  const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } = useContractInfo('ChainlinkPriceFeed');
+  const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } =
+    useContractInfo('ChainlinkPriceFeed');
   const { address: calcAddress, abi: calcAbi } = useContractInfo('BondingCalculator');
   const { address: theoERC20address, abi: theoERC20abi } = useContractInfo('TheopetraERC20Token');
 
@@ -83,6 +85,11 @@ export const BuyFormProvider: React.FC = (props) => {
     args: [theoERC20address, 1e9],
   });
 
+  const convertedMaxPayout = useMemo(() => {
+    // Do conversions here
+    return 0;
+  }, [selectedMarket]);
+
   const valuationPrice = useMemo(() => {
     if (valuation && priceFeed) {
       const price = formatUnits(BigInt(priceFeed as bigint), 8);
@@ -95,9 +102,7 @@ export const BuyFormProvider: React.FC = (props) => {
   }, [valuation, priceFeed]);
 
   useEffect(() => {
-    
     const callContract = async () => {
-      
       setUIBondMarketsIsLoading(true);
       const cachedMkts = cache.getItem('groupedBondMarketsMap');
 
@@ -111,7 +116,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
         if (BondMarkets) {
           const termsMap = {};
-          const setTerms = await Promise.all(
+          const getTerms = await Promise.all(
             BondMarkets.map(async (bondMarket) => {
               try {
                 const termsValues = (await contract.read.terms([bondMarket])) as any;
@@ -154,12 +159,14 @@ export const BuyFormProvider: React.FC = (props) => {
                 const discountRate = BigInt(
                   (await contract.read.bondRateVariable([bondMarket])) as number
                 );
+                const vestingTimeIncrement =
+                  process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : 'months';
                 const termWithMarkets = {
                   mapKey: vestingTime,
+                  header: `${vestingTime} ${vestingTimeIncrement}`,
                   terms,
                   vestingTime,
-                  vestingTimeIncrement:
-                    process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : 'months',
+                  vestingTimeIncrement,
                   vestingInMinutes,
                   marketData: {
                     ...market,
@@ -170,7 +177,7 @@ export const BuyFormProvider: React.FC = (props) => {
                   id: Number(bondMarket),
                 };
 
-                setAllTermedMarkets((prev) => [...prev, termWithMarkets]);
+                setTerms((prev) => [...prev, termWithMarkets]);
                 return termWithMarkets;
               } catch (err) {
                 console.log(err);
@@ -179,19 +186,17 @@ export const BuyFormProvider: React.FC = (props) => {
             })
           );
           setSelection({
-            value: setTerms[0].vestingTime,
-            label: `${setTerms[0].vestingTime} ${setTerms[0].vestingTimeIncrement}`,
+            value: getTerms[0].vestingTime,
+            label: `${getTerms[0].vestingTime} ${getTerms[0].vestingTimeIncrement}`,
           });
 
-          setTerms.forEach((term) => {
+          getTerms.forEach((term) => {
             if (term) {
               const { mapKey, terms, vestingInMonths, marketData, id } = term;
 
               if (!termsMap[mapKey]) {
                 termsMap[mapKey] = {
                   ...term,
-                  header: `${mapKey} minutes`,
-                  highlight: vestingInMonths === 18,
                   markets: [],
                 };
               }
@@ -220,7 +225,7 @@ export const BuyFormProvider: React.FC = (props) => {
     // Cleanup useEffect
     return () => {
       setGroupedBondMarketsMap({});
-      setAllTermedMarkets([]);
+      setTerms([]);
     };
   }, [contract]);
 
@@ -267,10 +272,10 @@ export const BuyFormProvider: React.FC = (props) => {
 
   useEffect(() => {
     if (selection.value) return;
-    if (!allTermedMarkets.length) return;
+    if (!terms.length) return;
     setSelection({
-      label: allTermedMarkets[0].mapKey,
-      value: allTermedMarkets[0].mapKey,
+      label: `${terms[0].mapKey} ${terms[0].mapKey}`,
+      value: terms[0].mapKey,
     });
   }, []);
 
@@ -287,8 +292,9 @@ export const BuyFormProvider: React.FC = (props) => {
           groupedBondMarketsMap,
           selection,
           setSelection,
-          allTermedMarkets,
+          terms,
           UIBondMarketsIsLoading,
+          convertedMaxPayout,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}

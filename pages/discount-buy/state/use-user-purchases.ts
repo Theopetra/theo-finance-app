@@ -1,6 +1,6 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserPurchasesContext } from './UserPurchasesProvider';
 import { getContract, getAccount } from '@wagmi/core';
 import { Abi } from 'viem';

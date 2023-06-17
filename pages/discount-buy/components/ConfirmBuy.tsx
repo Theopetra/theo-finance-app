@@ -88,8 +88,8 @@ const ConfirmBuy = () => {
   const depositAmount = useMemo(
     () =>
       purchaseToken?.symbol?.toLowerCase() === 'usdc'
-        ? parseUnits(purchaseCost, 6)
-        : parseEther(purchaseCost),
+        ? parseUnits(`${purchaseCost}`, 6)
+        : parseEther(`${purchaseCost}`),
     [purchaseCost, purchaseToken?.symbol]
   );
 
@@ -178,7 +178,9 @@ const ConfirmBuy = () => {
     },
     args: [
       selectedMarket.id,
-      toHex((BigInt(Math.floor(maxSlippage * 1000)) * depositAmount / BigInt(1000)) + depositAmount),
+      toHex(
+        (BigInt(Math.floor(maxSlippage * 1000)) * depositAmount) / BigInt(1000) + depositAmount
+      ),
       account?.address,
       account?.address,
       false,

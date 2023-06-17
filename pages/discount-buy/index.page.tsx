@@ -13,9 +13,7 @@ import { TokenInfo } from '@/components/TokenName';
 import ConfirmBuy from './components/ConfirmBuy';
 import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
-import { formatTheo } from '@/lib/format_theo';
 import { formatEther } from 'viem';
-import { parseEther } from 'viem';
 
 const DiscountBuy = () => {
   const [
@@ -27,8 +25,9 @@ const DiscountBuy = () => {
       selection,
       setSelection,
       groupedBondMarketsMap,
-      allTermedMarkets,
+      terms,
       UIBondMarketsIsLoading,
+      convertedMaxPayout,
     },
     { handleUpdate, handleTokenInput },
   ] = useBuyForm();
@@ -117,8 +116,9 @@ const DiscountBuy = () => {
   );
   const tableData = useMemo(
     () =>
-      allTermedMarkets
-        ? allTermedMarkets.map((y) => {
+      terms
+        ? terms.map((y) => {
+            console.log(y);
             return {
               duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
               token: y.marketData.quoteToken,
@@ -134,15 +134,32 @@ const DiscountBuy = () => {
           })
         : [],
 
-    [allTermedMarkets]
+    [terms]
   );
+
+  const handleCurencyInputChange = (e: BaseSyntheticEvent) => {
+    if (Number(e.target.value) < 0) return;
+    if (Number(e.target.value) > convertedMaxPayout) {
+      // TODO: this should probably be rewritten.
+      setError('Amount exceeds max payout');
+    }
+    if (Number(e.target.value) > Number(balance?.formatted)) {
+      setError('Insufficient balance');
+    } else {
+      setError('');
+    }
+    handleTokenInput(e, 'purchaseCost');
+  };
+
   useEffect(() => {
+    console.log(purchaseAmount);
     if (Number(purchaseAmount) <= 0 || purchaseAmount === 'NaN' || purchaseAmount === 'Infinity') {
       setError('Please enter a valid amount');
     } else {
       setError('');
     }
   }, [purchaseCost, purchaseAmount]);
+
   return (
     <>
       <div className="pt-4">
@@ -185,15 +202,7 @@ const DiscountBuy = () => {
               handleUpdate(e, 'purchaseToken');
               handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
             }}
-            onChange={(e: BaseSyntheticEvent) => {
-              if (Number(e.target.value) < 0) return;
-              if (Number(e.target.value) > Number(balance?.formatted)) {
-                setError('Insufficient balance');
-              } else {
-                setError('');
-              }
-              handleTokenInput(e, 'purchaseCost');
-            }}
+            onChange={handleCurencyInputChange}
           />
 
           <div className="space-between mb-4 flex align-middle">
