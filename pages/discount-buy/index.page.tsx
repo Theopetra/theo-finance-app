@@ -151,8 +151,8 @@ const DiscountBuy = () => {
     if (Number(purchaseAmount) > maxPayout) {
       // TODO: this should probably be rewritten.
       setError('Amount exceeds max payout');
-      console.log(purchaseAmount)
-      console.log(maxPayout)
+      console.log(purchaseAmount);
+      console.log(maxPayout);
     } else if (
       Number(purchaseAmount) <= 0 ||
       purchaseAmount === 'NaN' ||
