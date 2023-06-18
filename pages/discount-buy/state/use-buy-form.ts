@@ -63,6 +63,7 @@ type BuyFormStateType = {
   maxSlippage: number;
   UIBondMarketsIsLoading: boolean;
   terms: Terms[];
+  maxPayout;
 };
 type BuyFormDispatchType = {
   setSelection;
