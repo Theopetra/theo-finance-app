@@ -3,20 +3,18 @@ import { useContext } from 'react';
 import { BuyFormContext } from './BuyFormProvider';
 
 type MarketData = {
-  quoteToken;
   valuationPrice;
-
+  maxPayout: number;
   discountRate;
   marketPrice;
-};
-type Market = {
   capacity: BigInt;
-  quoteToken: BigInt;
+  quoteToken: string;
   capacityInQuote: BigInt;
   sold: BigInt;
   purchased: BigInt;
   totalDebt: BigInt;
-  maxPayout: BigInt;
+};
+type Market = {
   marketData: MarketData;
   id: number;
 };
@@ -64,7 +62,6 @@ type BuyFormStateType = {
   setSelection: (selection: { label: string; value: string }) => void;
   maxSlippage: number;
   UIBondMarketsIsLoading: boolean;
-  maxPayout: number;
   terms: Terms[];
 };
 type BuyFormDispatchType = {

@@ -86,8 +86,8 @@ export const BuyFormProvider: React.FC = (props) => {
   });
 
   const maxPayout = useMemo(() => {
-    if (selectedMarket?.maxPayout) {
-      const max = selectedMarket.maxPayout//formatUnits(BigInt(selectedMarket.maxPayout as bigint), 9)
+    if (selectedMarket?.marketData.maxPayout) {
+      const max = selectedMarket.marketData.maxPayout; //formatUnits(BigInt(selectedMarket.maxPayout as bigint), 9)
       return Number(max);
     }
     return 0;
