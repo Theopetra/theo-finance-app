@@ -209,21 +209,24 @@ const DiscountBuy = () => {
             <label htmlFor="maxSlippage" className="color w-full flex-1 text-gray-400 ">
               Max Slippage
             </label>
-            <input
-              name="maxSlippage"
-              value={maxSlippage}
-              onChange={(e: BaseSyntheticEvent) => {
-                if (Number(e.target.value) < 0) return;
-                handleUpdate(e, 'maxSlippage');
-              }}
-              className="rounded border bg-transparent pr-2 text-right hover:appearance-none focus:outline-none"
-              placeholder="00.00"
-              onKeyPress={(event) => {
-                if (!/^\d*\.?\d*$/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-            />
+            <div className="rounded border bg-transparent pr-4 text-right ">
+              <input
+                name="maxSlippage"
+                value={maxSlippage * 100}
+                onChange={(e: BaseSyntheticEvent) => {
+                  if (Number(e.target.value) < 0) return;
+                  handleUpdate({ target: { value: e.target.value / 100 } }, 'maxSlippage');
+                }}
+                placeholder="00.00"
+                className="pr-1 text-right hover:appearance-none focus:outline-none"
+                onKeyPress={(event) => {
+                  if (!/^\d*\.?\d*$/.test(event.key)) {
+                    event.preventDefault();
+                  }
+                }}
+              />
+              <span className="text-gray-400">%</span>
+            </div>
           </div>
           {UIBondMarketsIsLoading}{' '}
           <button

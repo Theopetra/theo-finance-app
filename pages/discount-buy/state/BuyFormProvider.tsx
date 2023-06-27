@@ -233,7 +233,6 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const handleUpdate = (e, fieldName) => {
     const value = e.target.value;
-
     setFormState({ ...formState, [fieldName]: value });
   };
 
