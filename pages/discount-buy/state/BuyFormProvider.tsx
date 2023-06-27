@@ -64,7 +64,6 @@ export const BuyFormProvider: React.FC = (props) => {
     abi: abi as Abi,
     functionName: 'marketPrice',
     args: [selectedMarket?.id],
-    enabled: !!selectedMarket?.id,
   });
 
   const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } =

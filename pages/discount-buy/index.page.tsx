@@ -149,10 +149,7 @@ const DiscountBuy = () => {
 
   useEffect(() => {
     if (Number(purchaseAmount) > maxPayout) {
-      // TODO: this should probably be rewritten.
       setError('Amount exceeds max payout');
-      console.log(purchaseAmount);
-      console.log(maxPayout);
     } else if (
       Number(purchaseAmount) <= 0 ||
       purchaseAmount === 'NaN' ||
@@ -208,7 +205,6 @@ const DiscountBuy = () => {
             }}
             onChange={handleCurencyInputChange}
           />
-
           <div className="space-between mb-4 flex align-middle">
             <label htmlFor="maxSlippage" className="color w-full flex-1 text-gray-400 ">
               Max Slippage
@@ -229,7 +225,7 @@ const DiscountBuy = () => {
               }}
             />
           </div>
-
+          {UIBondMarketsIsLoading}{' '}
           <button
             className={`border-button w-full ${error && 'cursor-not-allowed opacity-50'}`}
             disabled={Boolean(error?.length)}
