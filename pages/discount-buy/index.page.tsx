@@ -64,6 +64,7 @@ const DiscountBuy = () => {
         accessor: 'duration',
         id: 'duration',
         width: '10%',
+        defaultCanSort: true,
       },
 
       {
@@ -247,7 +248,18 @@ const DiscountBuy = () => {
         <div className="mt-6 w-full rounded-lg pt-4">
           <div className="mb-4 text-xl font-bold">All Markets</div>
           {!UIBondMarketsIsLoading ? (
-            <Table columns={columns} data={tableData} />
+            <Table
+              columns={columns}
+              data={tableData}
+              initialState={{
+                sortBy: [
+                  {
+                    id: 'duration',
+                    desc: true,
+                  },
+                ],
+              }}
+            />
           ) : (
             <Skeleton height={30} count={5} />
           )}
