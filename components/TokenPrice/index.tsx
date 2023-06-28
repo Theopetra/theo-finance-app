@@ -1,11 +1,12 @@
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { cache } from '@/lib/cache';
+import { TermsWithMarket } from '@/pages/discount-buy/state/use-buy-form';
 import { Abi, formatEther } from 'viem';
 import { useContractRead, useToken } from 'wagmi';
 
-export const TokenPrice = ({ market }) => {
-  const id = market.id;
-  const quoteToken = market.marketData.quoteToken;
+export const TokenPrice = ({ market }: { market: TermsWithMarket }) => {
+  const id = market?.id;
+  const quoteToken = market?.marketData.quoteToken;
   const { data: token } = useToken({ address: quoteToken });
   const { address, abi } = useActiveBondDepo();
   const {

@@ -8,7 +8,7 @@ type MarketData = {
   discountRate;
   marketPrice;
   capacity: BigInt;
-  quoteToken: string;
+  quoteToken: `0x${string}`;
   capacityInQuote: BigInt;
   sold: BigInt;
   purchased: BigInt;

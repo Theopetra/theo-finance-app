@@ -52,7 +52,7 @@ export const LockDurationRow = () => {
 
   return (
     <ConfirmRow
-      title="Lock Duration"
+      title="Lock time"
       value={groupedBondMarketsMap[selection.value].header}
       subtext={`Tokens will unlock on ${format(
         add(new Date(), {
