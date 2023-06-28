@@ -42,7 +42,7 @@ const DiscountBuy = () => {
       token: purchaseToken?.quoteToken,
     }),
   });
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string>('');
   const handleBuyClick = (value, cell, symbol) => {
     setSelection(value);
     handleUpdate(
@@ -147,7 +147,6 @@ const DiscountBuy = () => {
 
   const handleCurencyInputChange = (e: BaseSyntheticEvent) => {
     if (Number(e.target.value) < 0) return;
-
     if (Number(e.target.value) > Number(balance?.formatted)) {
       setError('Insufficient balance');
     } else {
@@ -165,8 +164,6 @@ const DiscountBuy = () => {
       purchaseAmount === 'Infinity'
     ) {
       setError('Please enter a valid amount');
-    } else {
-      setError('');
     }
   }, [purchaseCost, purchaseAmount]);
 
@@ -244,7 +241,7 @@ const DiscountBuy = () => {
               disabled={Boolean(error?.length)}
               onClick={() => openModal(<ConfirmBuy />)}
             >
-              {error ? (
+              {Boolean(error?.length) ? (
                 error
               ) : (
                 <>
