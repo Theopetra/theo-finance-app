@@ -15,6 +15,7 @@ import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
 import { TokenPrice } from '@/components/TokenPrice';
 import { cleanSymbol } from '@/lib/clean_symbol';
+import { formatUnits } from 'viem';
 
 const DiscountBuy = () => {
   const [
@@ -204,6 +205,7 @@ const DiscountBuy = () => {
             <CurrencyInput
               className={'mb-2'}
               selectedToken={{ ...purchaseToken }}
+              maxPayout={selectedMarket?  Number(formatUnits(BigInt(Number(selectedMarket.marketData.marketPrice) * Number(selectedMarket.marketData.maxPayout)), 18)) : 0}
               balance={balanceIsLoading ? '0' : balance?.formatted}
               value={purchaseCost}
               onCurrencyChange={(e: BaseSyntheticEvent) => {
