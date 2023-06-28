@@ -187,9 +187,13 @@ export const BuyFormProvider: React.FC = (props) => {
               }
             })
           );
+          const termWithLogestDuration = getTerms.reduce((prev, current) =>
+            prev.vestingTime > current.vestingTime ? prev : current
+          );
+          // initialize the form with the longest duration
           setSelection({
-            value: getTerms[0].vestingTime,
-            label: `${getTerms[0].vestingTime} ${getTerms[0].vestingTimeIncrement}`,
+            value: termWithLogestDuration.vestingTime,
+            label: `${termWithLogestDuration.vestingTime} ${termWithLogestDuration.vestingTimeIncrement}`,
           });
 
           getTerms.forEach((term) => {
