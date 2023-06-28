@@ -31,8 +31,8 @@ const SuccessfulTransaction = ({
 
   const addTheoToken = async () => {
     const walletClient = await getWalletClient()
- 
-    const success = await walletClient?.watchAsset({ 
+    try {
+      const success = await walletClient?.watchAsset({ 
         type: 'ERC20',
         options: {
           address: '0xfac0403a24229d7e2edd994d50f5940624cbeac2',
@@ -40,8 +40,10 @@ const SuccessfulTransaction = ({
           symbol: 'THEO',
         },
       })
-      
-    return success;
+      return success;
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   return (
