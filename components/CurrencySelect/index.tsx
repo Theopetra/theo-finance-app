@@ -1,15 +1,16 @@
 import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon } from '@heroicons/react/solid';
 import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import { TokenInfo } from '../TokenName';
 import { cleanSymbol } from '@/lib/clean_symbol';
+import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 export type CurrencySelectOptionType = {
   symbol?: string | undefined;
   address?: string | undefined;
-  quoteToken?: string | undefined;
+  quoteToken?: `0x${string}` | undefined;
 };
 export type CurrencySelectOptionsType = CurrencySelectOptionType[];
 
@@ -19,7 +20,7 @@ export type CurrencySelectProps = {
   onChange;
 };
 
-const iconMap = {
+export const iconMap = {
   ETH: EthIcon,
   WETH: EthIcon,
   USDC: UdcIcon,
@@ -28,7 +29,7 @@ const iconMap = {
 const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onChange }) => {
   return (
     <Listbox value={selected} onChange={(value) => onChange({ target: { value } })}>
-      <div className="relative mt-1">
+      <div className="relative z-10 mt-1">
         <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-transparent pl-1 pr-4 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-orange-300 sm:pl-3 sm:pr-10 sm:text-sm">
           <span className=" flex items-center truncate py-2 text-lg font-bold uppercase sm:py-3 sm:text-2xl">
             <img
@@ -39,7 +40,7 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({ options, selected, onCh
             {cleanSymbol(selected)}&nbsp;
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center sm:pr-6">
-            <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </span>
         </Listbox.Button>
         <Transition

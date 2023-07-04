@@ -1,28 +1,26 @@
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { formatTheo } from '@/lib/format_theo';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
-import { useContract, useContractRead } from 'wagmi';
-
+import { Abi } from 'viem';
+import { useContractRead } from 'wagmi';
+import { getContract } from 'wagmi/actions';
 const useGetLockedTheoByContract = async (contractName) => {
   const { address, abi } = useContractInfo(contractName);
-  const contract = useContract({ addressOrName: address, contractInterface: abi });
-  const { data } = useContractRead(
-    {
-      addressOrName: address,
-      contractInterface: abi,
-    },
-    'getMarkets'
-  );
+  const contract = getContract({ address: address, abi: abi as Abi });
+  const { data }: { data: any } = useContractRead({
+    address: address,
+    abi: abi as Abi,
+    functionName: 'getMarkets',
+  });
 
-  let locked = [BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)];
+  let locked = [BigInt(0), BigInt(0), BigInt(0)];
   if (data) {
     const merged = await Promise.all(
       data.map(async (b) => {
         return {
           marketId: b,
-          market: await contract.markets(b),
-          term: await contract.terms(b),
+          market: await contract.read.markets(b),
+          term: await contract.read.terms(b),
         };
       })
     );
@@ -34,7 +32,7 @@ const useGetLockedTheoByContract = async (contractName) => {
     locked = [15768000, 31536000, 47304000].map((v) => {
       return merged
         .filter((e: any) => e.term.fixedTerm && e.term.vesting === v)
-        .reduce((prev, cur: any) => prev.add(cur.market.sold), BigNumber.from(0));
+        .reduce((prev, cur: any) => prev.add(cur.market.sold), BigInt(0));
     });
   }
 
@@ -46,9 +44,9 @@ const useStats = () => {
   const bondRepo = useGetLockedTheoByContract('TheopetraBondDepository');
   const publicPreListRepo = useGetLockedTheoByContract('PublicPreListBondDepository');
   const locked = useMemo(() => {
-    return [0, 1, 2].map((i) => [
-      whitelistRepo[i]?.add(bondRepo[i])?.add(publicPreListRepo[i])?.toString(),
-    ]);
+    return [0, 1, 2].map((i) =>
+      whitelistRepo[i]?.add(bondRepo[i])?.add(publicPreListRepo[i])?.toString()
+    );
   }, [whitelistRepo, bondRepo, publicPreListRepo]);
 
   const STATS = useMemo(
@@ -61,7 +59,7 @@ const useStats = () => {
             <strong>6 Months</strong>
           </>
         ),
-        value: formatTheo(locked?.[0]?.toString() || 0),
+        value: formatTheo(BigInt(locked?.[0] || 0)),
         tooltip: 'This is the total amount of $THEO locked in the 6 Month contract',
         tooltipIcon: 'info',
       },
@@ -73,7 +71,7 @@ const useStats = () => {
             <strong>12 Months</strong>
           </>
         ),
-        value: formatTheo(locked?.[1]?.toString() || 0),
+        value: formatTheo(locked?.[1] || 0),
         tooltip: 'This is the total amount of $THEO locked in the 12 Month contract',
         tooltipIcon: 'info',
       },
@@ -85,7 +83,7 @@ const useStats = () => {
             <strong>18 Months</strong>
           </>
         ),
-        value: formatTheo(locked?.[2]?.toString() || 0),
+        value: formatTheo(locked?.[2] || 0),
         tooltip: 'This is the total amount of $THEO locked in the 18 Month contract',
         tooltipIcon: 'info',
       },

@@ -1,46 +1,37 @@
 import {
-  getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
+  getDefaultWallets,
   lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { chain, createClient, configureChains, WagmiConfig, Chain } from 'wagmi';
+import { configureChains, WagmiConfig, createConfig, mainnet } from 'wagmi';
+import { createPublicClient, http } from 'viem';
 
 import { useTheme } from '../ui/theme';
+
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-export const sepolia = {
-  id: 11155111,
-  name: 'Sepolia',
-  network: 'sepolia',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'sepoliaETH',
-    symbol: 'sepoliaETH',
-  },
-  rpcUrls: {
-    default: 'https://sepolia.infura.io/v3/445d2fc9c7b64c7e976ae27a7ac27ae2',
-  },
-  blockExplorers: {
-    default: { name: 'etherscan', url: 'https://sepolia.etherscan.io' },
-  },
-} as Chain;
+import { hardhat } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 
 const envChains = () => {
+  console.log(process.env.NEXT_PUBLIC_ENV);
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'production':
-      return [chain.mainnet];
+      return [mainnet];
+    case 'local':
+      return [hardhat];
     case 'staging':
-      return [sepolia, chain.hardhat];
+      return [hardhat];
     default:
-      return [chain.hardhat, chain.localhost, sepolia];
+      return [mainnet];
   }
 };
 
-const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
-const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID;
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID || '';
+const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID || '';
 
 if (!infuraId) {
   console.log('WARNING: No infura id specified!');
@@ -50,36 +41,32 @@ if (!alchemyId) {
   console.log('WARNING: No alchemy id specified!');
 }
 
-const { chains, provider } = configureChains(envChains(), [
-  // ...(process.env.NEXT_PUBLIC_ENV !== 'production' ||
-  // (process.env.NEXT_PUBLIC_ENV as any) !== 'staging'
-  //   ? [
-  //       jsonRpcProvider({
-  //         rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
-  //       }),
-  //     ]
-  //   : []),
-  infuraProvider({ infuraId }),
-  alchemyProvider({ alchemyId }),
-  publicProvider(),
-]);
-
+const { chains, publicClient } = configureChains(
+  [...envChains()],
+  [
+    jsonRpcProvider({
+      rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
+    }),
+    infuraProvider({ apiKey: infuraId }),
+    alchemyProvider({ apiKey: alchemyId }),
+    publicProvider(),
+  ]
+);
 const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
   chains,
 });
-
-export const wagmiClient = createClient({
+const config = createConfig({
   autoConnect: true,
   connectors,
-  provider,
+  publicClient,
 });
 
 const ChainProvider = (props) => {
   const [{ theme }] = useTheme();
 
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={config}>
       <RainbowKitProvider
         theme={
           theme === 'dark'

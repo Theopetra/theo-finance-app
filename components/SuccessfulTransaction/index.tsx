@@ -2,6 +2,7 @@ import { useEtherscanTxId } from '@/hooks/useEtherscanTxId';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
+import { getWalletClient } from '@wagmi/core'
 
 const SuccessfulTransaction = ({
   txId,
@@ -28,6 +29,23 @@ const SuccessfulTransaction = ({
     }
   };
 
+  const addTheoToken = async () => {
+    const walletClient = await getWalletClient()
+    try {
+      const success = await walletClient?.watchAsset({ 
+        type: 'ERC20',
+        options: {
+          address: '0xfac0403a24229d7e2edd994d50f5940624cbeac2',
+          decimals: 9,
+          symbol: 'THEO',
+        },
+      })
+      return success;
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div>
       <div className="flex justify-between">
@@ -50,6 +68,9 @@ const SuccessfulTransaction = ({
           <a href={etherscanUrl} target="_blank" rel="noreferrer">
             View Etherscan Transaction
           </a>
+        </button>
+        <button className="border-button mr-2 mb-4 w-72 sm:mb-0" onClick={addTheoToken}>
+          Add $THEO to wallet
         </button>
         <button className="border-button w-72" onClick={handleClick}>
           Finish

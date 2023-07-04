@@ -2,6 +2,7 @@ import { cleanSymbol } from '@/lib/clean_symbol';
 import CurrencySelect, {
   CurrencySelectOptionsType,
   CurrencySelectOptionType,
+  iconMap,
 } from '../CurrencySelect';
 import Icon from '../Icons';
 
@@ -9,6 +10,7 @@ type CurrrencyInputProps = {
   className?: string;
   selectedToken?: CurrencySelectOptionType;
   balance?: string;
+  maxPayout?: number;
   value?: number;
   onChange?: any;
   onCurrencyChange?: any;
@@ -19,6 +21,7 @@ type CurrrencyInputProps = {
 const CurrencyInput: React.FC<CurrrencyInputProps> = ({
   className,
   balance,
+  maxPayout,
   selectedToken,
   value,
   onChange,
@@ -38,10 +41,14 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
         />
       ) : (
         <span className=" flex items-center truncate p-2 text-lg font-bold uppercase sm:p-3 sm:text-2xl">
+          {/* {selectedToken?.symbol && <Icon name={selectedToken.symbol} className="mr-2 w-8" />} */}
           {selectedToken?.symbol && (
-            <Icon name={selectedToken.symbol.toLowerCase()} className="mr-2 w-8" />
+            <img
+              src={iconMap[selectedToken.symbol]?.src}
+              alt={`${cleanSymbol(selectedToken?.symbol)} icon`}
+              className="mr-2 max-h-8 w-8"
+            />
           )}
-
           {cleanSymbol(selectedToken?.symbol)}
         </span>
       )}
@@ -56,7 +63,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
                 </>
               )}
               <span
-                onClick={() => onChange({ target: { value: balance } }, 'purchasePrice')}
+                onClick={() => onChange({ target: { value: Number(maxPayout) } }, 'purchasePrice')}
                 className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white"
               >
                 max

@@ -11,7 +11,6 @@ import { CircleWavyCheck, Clock } from 'phosphor-react';
 import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
 import { formatTheo } from '@/lib/format_theo';
 import { useMemo } from 'react';
-import { BigNumber } from 'ethers';
 import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
 
 const Claim = () => {
@@ -21,11 +20,11 @@ const Claim = () => {
       purchases?.map((p) => {
         return {
           ...p,
-          date: new Date(p.created_),
-          amount: `${formatTheo(p.payout_)}`,
+          date: new Date(p.created),
+          amount: `${formatTheo(p.payout)}`,
           discount: 0,
-          unlockDate: new Date(p.expiry_),
-          index: BigNumber.from(p.index).toNumber(),
+          unlockDate: new Date(p.expiry),
+          index: BigInt(p.index),
         };
       }),
     [purchases]
@@ -40,14 +39,14 @@ const Claim = () => {
       </div>
       <PageContainer>
         <CardList>
-          {formattedPurchases.map((purchase) => (
+          {formattedPurchases.map((purchase, i) => (
             <Card
-              key={purchase.id}
+              key={i}
               darkModeBgColor="bg-theo-dark-navy"
               title={<div className="pb-3 text-2xl font-bold">Claim Tokens</div>}
               headerRightComponent={
                 <div>
-                  {purchase.matured_ ? (
+                  {purchase.matured ? (
                     <CircleWavyCheck size={28} color="rgb(47, 69, 92)" weight="fill" />
                   ) : (
                     <Clock size={28} color="rgb(47, 69, 92)" weight="regular" />
@@ -80,12 +79,12 @@ const Claim = () => {
                 />
                 <button
                   className="border-button mb-3 mt-3 w-full disabled:cursor-not-allowed disabled:opacity-50 "
-                  disabled={!purchase.matured_}
+                  disabled={!purchase.matured}
                   onClick={() => {
                     openModal(<ConfirmClaim purchase={purchase} />);
                   }}
                 >
-                  {purchase.matured_ ? 'Claim THEO' : 'Locked'}
+                  {purchase.matured ? 'Claim THEO' : 'Locked'}
                 </button>
               </>
             </Card>

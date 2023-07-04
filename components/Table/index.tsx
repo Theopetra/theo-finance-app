@@ -1,8 +1,16 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useTable, useSortBy } from 'react-table';
 
-const Table = ({ columns, data }) => {
-  const tableInstance = useTable({ columns, data, disableMultiSort: false }, useSortBy);
+const Table = ({ columns, data, initialState }) => {
+  const tableInstance = useTable(
+    {
+      columns,
+      data,
+      initialState,
+      disableMultiSort: false,
+    },
+    useSortBy
+  );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
   return (
     <div className="overflow-scroll shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">

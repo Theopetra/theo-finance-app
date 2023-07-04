@@ -1,6 +1,3 @@
-import { BigNumber } from 'ethers';
-import { Result } from 'ethers/lib/utils';
-
-export const rewardAsPercent = (reward: Result) => {
-  return Number(BigNumber.from(reward).toNumber() / 10000).toFixed();
+export const rewardAsPercent = (reward) => {
+  return Number(Number(BigInt(reward)) / 10000).toFixed();
 };

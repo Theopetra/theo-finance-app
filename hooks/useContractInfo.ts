@@ -1,4 +1,3 @@
-import { useConnect, useNetwork } from 'wagmi';
 import { contractMetadata } from '../lib/contracts';
 import { useChainId } from './useChainId';
 

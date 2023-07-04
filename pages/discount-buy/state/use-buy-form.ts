@@ -1,17 +1,69 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useContext } from 'react';
 import { BuyFormContext } from './BuyFormProvider';
+
+type MarketData = {
+  valuationPrice;
+  maxPayout: number;
+  discountRate;
+  marketPrice;
+  capacity: BigInt;
+  quoteToken: `0x${string}`;
+  capacityInQuote: BigInt;
+  sold: BigInt;
+  purchased: BigInt;
+  totalDebt: BigInt;
+};
+type Market = {
+  marketData: MarketData;
+  id: number;
+};
+
+export interface Terms {
+  header: string;
+  mapKey: number;
+  terms: {
+    fixedTerm: any;
+    vesting: any;
+    conclusion: any;
+    bondRateFixed: any;
+    maxBondRateVariable: any;
+    discountRateBond: any;
+    discountRateYield: any;
+    maxDebt: any;
+  };
+  vestingTime: number;
+  vestingTimeIncrement: string;
+  vestingInMinutes: number;
+  marketData: MarketData;
+  id: number;
+}
+
+export interface TermsWithMarket extends Terms {
+  markets: Market[];
+}
+
+export type GroupedBondMarketsMapType = {
+  [key: string]: TermsWithMarket;
+};
+
 type BuyFormStateType = {
   theoPrice: number;
   purchaseToken: CurrencySelectOptionType | null;
-  purchaseAmount;
-  purchaseCost;
+  purchaseAmount: number | string;
+  purchaseCost: number;
   transactionPending;
-  bondMarkets;
-  selectedMarket;
-  groupedBondMarkets;
-  groupedBondMarketsMap;
-  selection;
+  selectedMarket: TermsWithMarket;
+  groupedBondMarketsMap: GroupedBondMarketsMapType;
+  selection: {
+    label: number;
+    value: number;
+  };
+  setSelection: (selection: { label: string; value: string }) => void;
+  maxSlippage: number;
+  UIBondMarketsIsLoading: boolean;
+  terms: Terms[];
+  maxPayout;
 };
 type BuyFormDispatchType = {
   setSelection;

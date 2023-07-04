@@ -1,21 +1,10 @@
-import { Coin, File, Gauge, LockLaminated } from 'phosphor-react';
+import { Coin, File, Gauge, Intersect, LockLaminated } from 'phosphor-react';
 export const navigation = [
   { name: 'Dashboard', href: '/', icon: <Gauge size={26} className="mr-2 w-8" /> },
   // {
-  //   name: 'Whitelist Sale',
-  //   href: '/whitelist-sale',
-  //   icon: <Intersect size={26} className="mr-2 w-8" />,
-  //   subNav: [
-  //     {
-  //       name: 'Your Purchases',
-  //       href: '/whitelist-sale/your-purchases',
-  //     },
-  //   ],
-  // },
-  // {
-  //   name: 'Pre-Market Sale',
+  //   name: 'Discount Buy',
   //   href: '/discount-buy',
-  //   icon: 'intersect',
+  //   icon: <Intersect size={26} className="mr-2 w-8" />,
   //   subNav: [
   //     {
   //       name: 'Your Purchases',
