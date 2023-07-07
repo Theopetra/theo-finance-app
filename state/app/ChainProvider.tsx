@@ -32,6 +32,7 @@ const envChains = () => {
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID || '';
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID || '';
+const walletConnectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID || '';
 
 if (!infuraId) {
   console.log('WARNING: No infura id specified!');
@@ -44,9 +45,9 @@ if (!alchemyId) {
 const { chains, publicClient } = configureChains(
   [...envChains()],
   [
-    jsonRpcProvider({
-      rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
-    }),
+    // jsonRpcProvider({
+    //   rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
+    // }),
     infuraProvider({ apiKey: infuraId }),
     alchemyProvider({ apiKey: alchemyId }),
     publicProvider(),
@@ -54,6 +55,7 @@ const { chains, publicClient } = configureChains(
 );
 const { connectors } = getDefaultWallets({
   appName: 'Theopetra Finance',
+  projectId: walletConnectId,
   chains,
 });
 const config = createConfig({

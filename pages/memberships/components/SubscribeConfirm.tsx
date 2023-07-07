@@ -1,7 +1,7 @@
 import PendingTransaction from '@/components/PendingTransaction';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { ArrowLeft, LockLaminated } from 'phosphor-react';
-import { useContractWrite } from 'wagmi';
+import { useContractWrite, useContractRead } from 'wagmi';
 import { Membership } from '../membershipData';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { useMemo } from 'react';
@@ -34,6 +34,7 @@ const SubscribeConfirm = ({
   const { address: theopetraStakingAddress, abi: theopetraStakingABI } = useContractInfo(
     membership.contractName
   );
+  
   const dataRows = (
     <>
       <MembershipType type={membership.type} />
@@ -42,7 +43,21 @@ const SubscribeConfirm = ({
       <MembershipDuration lockDuration={membership?.lockDurationInDays} />
     </>
   );
+
+  
+
   const { address: theoAddress, abi: theoAbi } = useContractInfo('TheopetraERC20Token');
+  
+  const { data: allowance, isError: noAllowance } = useContractRead({
+    address: theoAddress,
+    abi: theoAbi as Abi, 
+    functionName: 'allowance',
+    args: [
+      account?.address, 
+      theopetraStakingAddress
+    ]
+  });
+
   const FailedModal = ({ error }: { error?: any }) => (
     <FailedTransaction
       Icon={LockLaminated}
@@ -126,18 +141,28 @@ const SubscribeConfirm = ({
   });
 
   const handleClick = async () => {
-    openModal(
-      <PendingTransaction
-        message="1 of 2 transactions..."
-        secondaryMessage={
-          <>
-            Approving {depositAmount} $THEO spend...{' '}
-            <div className="text-sm">Make sure to approve exact amount.</div>
-          </>
-        }
-      />
-    );
-    approve();
+    if (allowance? BigInt(allowance as string) < BigInt(depositAmount) : true) {
+      openModal(
+        <PendingTransaction
+          message="1 of 2 transactions..."
+          secondaryMessage={
+            <>
+              Approving {depositAmount} $THEO spend...{' '}
+              <div className="text-sm">Make sure to approve exact amount.</div>
+            </>
+          }
+        />
+      );
+      approve();
+    } else {
+      openModal(
+        <PendingTransaction
+          message="2 of 2 transactions..."
+          secondaryMessage={`Submitting $THEO transaction...`}
+        />
+      );
+      stake();
+    }
   };
 
   return (
