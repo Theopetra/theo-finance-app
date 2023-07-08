@@ -25,6 +25,7 @@ export const MembershipCommitment = ({ balance, value, onChange }) => {
         <>
           <CurrencyInput
             hideValue={true}
+            isDiscountBuy={false}
             balance={balance?.formatted}
             value={value}
             onChange={onChange}

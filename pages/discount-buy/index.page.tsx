@@ -205,6 +205,7 @@ const DiscountBuy = () => {
             <CurrencyInput
               className={'mb-2'}
               selectedToken={{ ...purchaseToken }}
+              isDiscountBuy={true}
               maxPayout={selectedMarket? Number(formatUnits(BigInt(Number(selectedMarket.marketData.marketPrice) * Number(selectedMarket.marketData.maxPayout)), 18)) : 0}
               balance={balanceIsLoading ? '0' : balance?.formatted}
               value={purchaseCost}
