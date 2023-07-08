@@ -10,6 +10,7 @@ type CurrrencyInputProps = {
   className?: string;
   selectedToken?: CurrencySelectOptionType;
   balance?: string;
+  isDiscountBuy?: boolean;
   maxPayout?: number;
   value?: number;
   onChange?: any;
@@ -21,6 +22,7 @@ type CurrrencyInputProps = {
 const CurrencyInput: React.FC<CurrrencyInputProps> = ({
   className,
   balance,
+  isDiscountBuy,
   maxPayout,
   selectedToken,
   value,
@@ -63,7 +65,10 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
                 </>
               )}
               <span
-                onClick={() => onChange({ target: { value: Number(maxPayout) } }, 'purchasePrice')}
+                onClick={() => 
+                  isDiscountBuy === true ? 
+                  onChange({ target: { value: Number(maxPayout) } }, 'purchasePrice') : 
+                  onChange({ target: { value: Number(balance) } }, 'purchasePrice')}
                 className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white"
               >
                 max
