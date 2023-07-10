@@ -195,6 +195,7 @@ const DiscountBuy = () => {
                     value: selection?.value,
                   }}
                   onChange={(value) => {
+                    handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
                     setSelection(value);
                   }}
                 />
@@ -206,7 +207,19 @@ const DiscountBuy = () => {
               className={'mb-2'}
               selectedToken={{ ...purchaseToken }}
               isDiscountBuy={true}
-              maxPayout={selectedMarket? Number(formatUnits(BigInt(Number(selectedMarket.marketData.marketPrice) * Number(selectedMarket.marketData.maxPayout)), 18)) : 0}
+              maxPayout={
+                selectedMarket
+                  ? Number(
+                      formatUnits(
+                        BigInt(
+                          Number(selectedMarket.marketData.marketPrice) *
+                            Number(selectedMarket.marketData.maxPayout)
+                        ),
+                        18
+                      )
+                    )
+                  : 0
+              }
               balance={balanceIsLoading ? '0' : balance?.formatted}
               value={purchaseCost}
               onCurrencyChange={(e: BaseSyntheticEvent) => {
