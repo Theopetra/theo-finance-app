@@ -24,14 +24,14 @@ export const MarketDiscountRow = ({ date }) => {
   );
 };
 export const TheoPurchaseDateRow = ({ date }) => {
-  return <ConfirmRow title="Purchase Date" value={format(new Date(date * 1000), 'yyyy-MM-dd')} />;
+  return <ConfirmRow title="Purchase Date" value={format(new Date(date), 'yyyy-MM-dd')} />;
 };
 
 export const TokensToClaimRow = ({ total }) => {
   return <ConfirmRow title="$THEO claimed" value={total} />;
 };
 export const TokensUnlockedRow = ({ date }) => {
-  return <ConfirmRow title="Tokens Unlocked" value={format(new Date(date * 1000), 'yyyy-MM-dd')} />;
+  return <ConfirmRow title="Tokens Unlocked" value={format(new Date(date), 'yyyy-MM-dd')} />;
 };
 
 const ConfirmClaim = ({ purchase }) => {
