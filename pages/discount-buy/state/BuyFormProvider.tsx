@@ -86,7 +86,7 @@ export const BuyFormProvider: React.FC = (props) => {
 
   const maxPayout = useMemo(() => {
     if (selectedMarket?.marketData.maxPayout) {
-      const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9)
+      const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9);
       return Number(max);
     }
     return 0;
@@ -233,7 +233,7 @@ export const BuyFormProvider: React.FC = (props) => {
       setGroupedBondMarketsMap({});
       setTerms([]);
     };
-  }, [contract]);
+  }, [contract, valuationPrice]);
 
   const handleUpdate = (e, fieldName) => {
     const value = e.target.value;

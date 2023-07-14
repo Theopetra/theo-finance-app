@@ -13,7 +13,6 @@ import { TokenInfo } from '@/components/TokenName';
 import ConfirmBuy from './components/ConfirmBuy';
 import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
-import { TokenPrice } from '@/components/TokenPrice';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import { formatUnits } from 'viem';
 
@@ -97,7 +96,7 @@ const DiscountBuy = () => {
         Cell: ({ value, cell }) => {
           return (
             <>
-              <TokenPrice market={selectedMarket} /> {cleanSymbol(purchaseToken?.symbol)}
+              {formatUnits(value, 9)} {cleanSymbol(purchaseToken?.symbol)}
             </>
           );
         },
@@ -122,7 +121,7 @@ const DiscountBuy = () => {
         },
       },
     ],
-    []
+    [selectedMarket, purchaseToken]
   );
   const tableData = useMemo(
     () =>
