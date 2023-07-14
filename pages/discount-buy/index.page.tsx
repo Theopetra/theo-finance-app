@@ -28,7 +28,7 @@ const DiscountBuy = () => {
       groupedBondMarketsMap,
       terms,
       UIBondMarketsIsLoading,
-      maxPayout,
+      maxPayoutFormatted,
       selectedMarket,
     },
     { handleUpdate, handleTokenInput },
@@ -156,7 +156,7 @@ const DiscountBuy = () => {
   };
 
   useEffect(() => {
-    if (Number(purchaseAmount) > maxPayout) {
+    if (Number(purchaseAmount) > maxPayoutFormatted) {
       setError('Amount exceeds max payout');
     } else if (
       Number(purchaseAmount) <= 0 ||
@@ -165,7 +165,7 @@ const DiscountBuy = () => {
     ) {
       setError('Please enter a valid amount');
     }
-  }, [purchaseCost, purchaseAmount]);
+  }, [purchaseCost, purchaseAmount, maxPayoutFormatted]);
 
   return (
     <>

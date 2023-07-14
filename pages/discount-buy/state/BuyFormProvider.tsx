@@ -84,7 +84,7 @@ export const BuyFormProvider: React.FC = (props) => {
     args: [theoERC20address, 1e9],
   });
 
-  const maxPayout = useMemo(() => {
+  const maxPayoutFormatted = useMemo(() => {
     if (selectedMarket?.marketData.maxPayout) {
       const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9);
       return Number(max);
@@ -299,7 +299,7 @@ export const BuyFormProvider: React.FC = (props) => {
           setSelection,
           terms,
           UIBondMarketsIsLoading,
-          maxPayout,
+          maxPayoutFormatted,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}
