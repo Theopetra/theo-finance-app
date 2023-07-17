@@ -87,10 +87,8 @@ export const BuyFormProvider: React.FC = (props) => {
   const maxPayoutFormatted = useMemo(() => {
     if (selectedMarket?.marketData?.maxPayout) {
       const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9);
-      console.log({ max });
       return Number(max);
     }
-    console.log('payout undefined', selectedMarket);
 
     return 0;
   }, [selectedMarket?.marketData]);
@@ -291,7 +289,6 @@ export const BuyFormProvider: React.FC = (props) => {
       },
       'purchaseToken'
     );
-    // handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
 
     if (selection.value) return;
     if (!terms.length) return;
