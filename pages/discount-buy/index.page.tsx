@@ -15,6 +15,7 @@ import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import { formatUnits } from 'viem';
+import Tooltip from '@/components/Tooltip';
 
 const DiscountBuy = () => {
   const [
@@ -228,8 +229,11 @@ const DiscountBuy = () => {
               onChange={handleCurencyInputChange}
             />
             <div className="space-between mb-4 flex align-middle">
-              <label htmlFor="maxSlippage" className="color w-full flex-1 text-gray-400 ">
-                Max Slippage
+              <label htmlFor="maxSlippage" className="space-between color w-full flex-1 text-gray-400 ">
+                Max Slippage &nbsp;
+                <Tooltip size="small">
+                  {'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the discount rate may have changed due to interactions with other users, resulting in a different payout than expected.'}
+                </Tooltip>
               </label>
               <div className="rounded border bg-transparent pr-4 text-right ">
                 <input
