@@ -285,7 +285,7 @@ export const BuyFormProvider: React.FC = (props) => {
       label: `${terms[0].mapKey} ${terms[0].mapKey}`,
       value: terms[0].mapKey,
     });
-  }, []);
+  }, [terms, selection.value]);
 
   const updateFormState = (vals: any) => {
     setFormState({ ...formState, ...vals });
