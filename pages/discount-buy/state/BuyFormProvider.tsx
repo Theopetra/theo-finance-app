@@ -279,6 +279,20 @@ export const BuyFormProvider: React.FC = (props) => {
   };
 
   useEffect(() => {
+    handleUpdate(
+      {
+        target: {
+          value: {
+            address: terms[0]?.marketData.quoteToken,
+            quoteToken: terms[0]?.marketData.quoteToken,
+            symbol: 'WETH',
+          },
+        },
+      },
+      'purchaseToken'
+    );
+    // handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
+
     if (selection.value) return;
     if (!terms.length) return;
     setSelection({
