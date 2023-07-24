@@ -85,7 +85,7 @@ const DiscountBuy = () => {
         // value is a large percent value and needs to be converted to percentage.
         Cell: ({ value }) => (
           <span title={`${value / BigInt(10 ** 7)}`}>
-            {Number(value / BigInt(10 ** 7)).toFixed(2)}%
+            {Number(formatUnits(value, 7)).toFixed(2)}%
           </span>
         ),
       },
