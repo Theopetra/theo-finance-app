@@ -15,6 +15,7 @@ import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import FailedTransaction from '@/components/FailedTransaction';
 import { getAccount } from '@wagmi/core';
 import { Abi } from 'viem';
+import { BigNumber } from 'ethers';
 
 export const MembershipCommitment = ({ value }) => {
   return <ConfirmRow title="$THEO to stake" value={value} />;
@@ -28,7 +29,7 @@ const SubscribeConfirm = ({
 }) => {
   const [, { openModal, closeModal }] = useModal();
   const account = getAccount();
-  const depositAmountFormatted = useMemo(() => parseUnits(depositAmount, 9), [depositAmount]);
+  const depositAmountFormatted = useMemo(() => parseUnits(depositAmount, 9), [depositAmount]); // Max balance amount fails here due to decimals
   const [, { reRender }] = useUserPurchases();
 
   const { address: theopetraStakingAddress, abi: theopetraStakingABI } = useContractInfo(
@@ -141,7 +142,7 @@ const SubscribeConfirm = ({
   });
 
   const handleClick = async () => {
-    if (allowance? BigInt(allowance as string) < BigInt(depositAmount) : true) {
+    if (allowance? BigNumber.from(allowance as string) < depositAmountFormatted : true) {
       openModal(
         <PendingTransaction
           message="1 of 2 transactions..."
