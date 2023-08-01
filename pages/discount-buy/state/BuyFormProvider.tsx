@@ -133,10 +133,11 @@ export const BuyFormProvider: React.FC = (props) => {
                   discountRateYield: termsValues[6],
                   maxDebt: termsValues[7],
                 };
-                const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
+                const vestingInMonths =  Math.floor(terms.vesting / 60 / 60 / 24 / 30);
+                const vestingInWeeks = Math.floor(terms.vesting / 60 / 60 / 24 / 7);
                 const vestingInMinutes = terms.vesting / 60;
                 const vestingTime =
-                  process.env.NEXT_PUBLIC_ENV !== 'production' ? vestingInMinutes : vestingInMonths;
+                  process.env.NEXT_PUBLIC_ENV !== 'production' ? vestingInMinutes : terms.vesting > 2629799 ? vestingInMonths : vestingInWeeks;
 
                 const marketValues = (await contract.read.markets([bondMarket])) as any;
                 const market = {
@@ -160,10 +161,10 @@ export const BuyFormProvider: React.FC = (props) => {
                 }
 
                 const discountRate = BigInt(
-                  (await contract.read.bondRateVariable([bondMarket])) as number
+                  (await contract.read.bondRateVariable([bondMarket])) as string
                 );
                 const vestingTimeIncrement =
-                  process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : 'months';
+                  process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : terms.vesting > 2629799 ? 'months' : 'weeks';
                 const termWithMarkets = {
                   mapKey: vestingTime,
                   header: `${vestingTime} ${vestingTimeIncrement}`,
