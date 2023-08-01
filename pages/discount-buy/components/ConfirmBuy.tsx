@@ -228,7 +228,7 @@ const ConfirmBuy = () => {
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
       openModal(
         <PendingTransaction
-          message="1 of 2 transactions..."
+          message="1 of 1 transactions..."
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
