@@ -84,13 +84,14 @@ export const BuyFormProvider: React.FC = (props) => {
     args: [theoERC20address, 1e9],
   });
 
-  const maxPayout = useMemo(() => {
-    if (selectedMarket?.marketData.maxPayout) {
-      const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9)
+  const maxPayoutFormatted = useMemo(() => {
+    if (selectedMarket?.marketData?.maxPayout) {
+      const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9);
       return Number(max);
     }
+
     return 0;
-  }, [selectedMarket]);
+  }, [selectedMarket?.marketData]);
 
   const valuationPrice = useMemo(() => {
     if (valuation && priceFeed) {
@@ -233,7 +234,7 @@ export const BuyFormProvider: React.FC = (props) => {
       setGroupedBondMarketsMap({});
       setTerms([]);
     };
-  }, [contract]);
+  }, [contract, valuationPrice]);
 
   const handleUpdate = (e, fieldName) => {
     const value = e.target.value;
@@ -276,13 +277,26 @@ export const BuyFormProvider: React.FC = (props) => {
   };
 
   useEffect(() => {
+    handleUpdate(
+      {
+        target: {
+          value: {
+            address: terms[0]?.marketData.quoteToken,
+            quoteToken: terms[0]?.marketData.quoteToken,
+            symbol: 'WETH',
+          },
+        },
+      },
+      'purchaseToken'
+    );
+
     if (selection.value) return;
     if (!terms.length) return;
     setSelection({
       label: `${terms[0].mapKey} ${terms[0].mapKey}`,
       value: terms[0].mapKey,
     });
-  }, []);
+  }, [terms, selection.value]);
 
   const updateFormState = (vals: any) => {
     setFormState({ ...formState, ...vals });
@@ -299,7 +313,7 @@ export const BuyFormProvider: React.FC = (props) => {
           setSelection,
           terms,
           UIBondMarketsIsLoading,
-          maxPayout,
+          maxPayoutFormatted,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}

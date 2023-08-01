@@ -36,7 +36,7 @@ const Navigation = () => {
         <div className="flex items-center px-9">
           <Logo />
         </div>
-        <nav className="mt-5 flex-1 space-y-2 px-2 pr-8 pl-8">
+        <nav className="mt-5 flex-1 space-y-2 px-2 pl-8 pr-8">
           {navigation.map((item) => (
             <Fragment key={`${item.name}_main`}>
               <NavItem item={{ ...item, disabled: item.disabled }} />
@@ -48,7 +48,7 @@ const Navigation = () => {
             <Fragment key={x.icon}>
               <a
                 href={x.href}
-                className=" flex h-20  w-20 items-center rounded p-4 transition hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
+                className=" flex h-20  w-20 items-center rounded p-4 text-theo-navy transition hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
                 target={'_blank'}
                 rel="noreferrer"
               >

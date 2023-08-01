@@ -13,9 +13,9 @@ import { TokenInfo } from '@/components/TokenName';
 import ConfirmBuy from './components/ConfirmBuy';
 import { UserPurchasesProvider } from './state/UserPurchasesProvider';
 import Skeleton from 'react-loading-skeleton';
-import { TokenPrice } from '@/components/TokenPrice';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import { formatUnits } from 'viem';
+import Tooltip from '@/components/Tooltip';
 
 const DiscountBuy = () => {
   const [
@@ -29,7 +29,7 @@ const DiscountBuy = () => {
       groupedBondMarketsMap,
       terms,
       UIBondMarketsIsLoading,
-      maxPayout,
+      maxPayoutFormatted,
       selectedMarket,
     },
     { handleUpdate, handleTokenInput },
@@ -85,7 +85,7 @@ const DiscountBuy = () => {
         // value is a large percent value and needs to be converted to percentage.
         Cell: ({ value }) => (
           <span title={`${value / BigInt(10 ** 7)}`}>
-            {Number(value / BigInt(10 ** 7)).toFixed(2)}%
+            {Number(formatUnits(value, 7)).toFixed(2)}%
           </span>
         ),
       },
@@ -97,7 +97,7 @@ const DiscountBuy = () => {
         Cell: ({ value, cell }) => {
           return (
             <>
-              <TokenPrice market={selectedMarket} /> {cleanSymbol(purchaseToken?.symbol)}
+              {formatUnits(value, 9)} {cleanSymbol(purchaseToken?.symbol)}
             </>
           );
         },
@@ -122,7 +122,7 @@ const DiscountBuy = () => {
         },
       },
     ],
-    []
+    [selectedMarket, purchaseToken]
   );
   const tableData = useMemo(
     () =>
@@ -157,7 +157,7 @@ const DiscountBuy = () => {
   };
 
   useEffect(() => {
-    if (Number(purchaseAmount) > maxPayout) {
+    if (Number(purchaseAmount) > maxPayoutFormatted) {
       setError('Amount exceeds max payout');
     } else if (
       Number(purchaseAmount) <= 0 ||
@@ -166,7 +166,7 @@ const DiscountBuy = () => {
     ) {
       setError('Please enter a valid amount');
     }
-  }, [purchaseCost, purchaseAmount]);
+  }, [purchaseCost, purchaseAmount, maxPayoutFormatted]);
 
   return (
     <>
@@ -195,6 +195,7 @@ const DiscountBuy = () => {
                     value: selection?.value,
                   }}
                   onChange={(value) => {
+                    handleTokenInput({ target: { value: 0 } }, 'purchaseCost');
                     setSelection(value);
                   }}
                 />
@@ -206,7 +207,19 @@ const DiscountBuy = () => {
               className={'mb-2'}
               selectedToken={{ ...purchaseToken }}
               isDiscountBuy={true}
-              maxPayout={selectedMarket? Number(formatUnits(BigInt(Number(selectedMarket.marketData.marketPrice) * Number(selectedMarket.marketData.maxPayout)), 18)) : 0}
+              maxPayout={
+                selectedMarket
+                  ? Number(
+                      formatUnits(
+                        BigInt(
+                          Number(selectedMarket.marketData.marketPrice) *
+                            Number(selectedMarket.marketData.maxPayout)
+                        ),
+                        18
+                      )
+                    )
+                  : 0
+              }
               balance={balanceIsLoading ? '0' : balance?.formatted}
               value={purchaseCost}
               onCurrencyChange={(e: BaseSyntheticEvent) => {
@@ -216,8 +229,11 @@ const DiscountBuy = () => {
               onChange={handleCurencyInputChange}
             />
             <div className="space-between mb-4 flex align-middle">
-              <label htmlFor="maxSlippage" className="color w-full flex-1 text-gray-400 ">
-                Max Slippage
+              <label htmlFor="maxSlippage" className="space-between color w-full flex-1 text-gray-400 ">
+                Max Slippage &nbsp;
+                <Tooltip size="small">
+                  {'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the discount rate may have changed due to interactions with other users, resulting in a different payout than expected.'}
+                </Tooltip>
               </label>
               <div className="rounded border bg-transparent pr-4 text-right ">
                 <input

@@ -22,7 +22,7 @@ const NavBar = () => {
     watch: true,
   });
   return (
-    <div className="fixed bottom-0 z-30 flex h-16 w-full justify-between bg-white pt-1 pl-1 dark:bg-black sm:pl-3 sm:pt-3 lg:hidden">
+    <div className="fixed bottom-0 z-30 flex h-16 w-full justify-between bg-white pl-1 pt-1 dark:bg-black sm:pl-3 sm:pt-3 lg:hidden">
       <div className={classes.statContainer}>
         {balance?.value && (
           <div>
