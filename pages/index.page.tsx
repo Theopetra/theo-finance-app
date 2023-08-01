@@ -14,14 +14,7 @@ const Dashboard = ({}) => {
         <div className="mt-4">
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
             <Card>
-              <iframe
-                className="mt-4 w-full"
-                id="ytplayer"
-                width="720"
-                height="405"
-                src="https://www.youtube.com/embed/YDsKambUAR8?modestbranding=1&color=white"
-                allowFullScreen
-              />
+              <video className="w-full" controls src="/assets/anatomy-of-a-discount-buy.mp4" />
             </Card>
           </div>
         </div>
