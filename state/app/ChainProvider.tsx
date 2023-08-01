@@ -45,9 +45,9 @@ if (!alchemyId) {
 const { chains, publicClient } = configureChains(
   [...envChains()],
   [
-    jsonRpcProvider({
-      rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
-    }),
+    // jsonRpcProvider({
+    //   rpc: () => ({ http: 'https://mainnet-fork-endpoint-x1gi.onrender.com' }),
+    // }),
     infuraProvider({ apiKey: infuraId }),
     alchemyProvider({ apiKey: alchemyId }),
     publicProvider(),
