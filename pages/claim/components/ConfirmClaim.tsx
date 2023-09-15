@@ -49,9 +49,9 @@ const ConfirmClaim = ({ purchase }) => {
   const dataRows = (
     <>
       <MarketDiscountRow date={purchase.date} />
-      <TheoPurchaseDateRow date={purchase.date} />
+      <TheoPurchaseDateRow date={purchase.date * 1000} />
       <TokensToClaimRow total={purchase.amount} />
-      <TokensUnlockedRow date={purchase.unlockDate} />
+      <TokensUnlockedRow date={purchase.unlockDate * 1000} />
     </>
   );
   const {
