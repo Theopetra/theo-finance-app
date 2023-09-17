@@ -157,6 +157,7 @@ const YourMemberships = () => {
           index: p.index,
           slashingPoolRewards: p.slashingPoolRewards,
           matured: p.contractName === 'TheopetraStaking' ? true : endDate < new Date(),
+          gonsRemaining: p.gonsRemaining
         };
       }),
     [memberships]
