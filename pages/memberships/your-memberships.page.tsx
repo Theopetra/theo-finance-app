@@ -36,8 +36,7 @@ const PenaltyPopover = ({ penalty, penaltyIsLoading }) => (
     <Popover.Button>
       <div className="mx-auto flex items-center space-x-1 whitespace-normal rounded p-1 text-xs leading-snug hover:bg-slate-200">
         <div className="text-red-700">
-        -0 $THEO
-          {/* {penaltyIsLoading ? 'Loading...' : `-${formatTheo(BigInt(penalty))} $THEO`} */}
+          {penaltyIsLoading ? 'Loading...' : `-${formatTheo(BigInt(penalty))} $THEO`}
         </div>
         <InformationCircleIcon width={14} height={14} className="text-gray-500" />
       </div>
