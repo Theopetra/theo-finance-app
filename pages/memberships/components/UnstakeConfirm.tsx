@@ -105,9 +105,8 @@ const UnstakeConfirm = ({
       <div className="mb-4 flex flex-col gap-2">
         {purchase.contractName !== 'TheopetraStaking' && (
           <div className=" mx-auto mb-4 flex max-w-2xl flex-col gap-4 text-xl">
-            <p>Premium stakes are locked for 1 year from the date of staking. </p>
             <p>
-              Staking is being phased out as part of the tokenomics upgrade, so all unstaking penalties have been removed.
+              Staking is being phased out as part of the tokenomics upgrade, so all unstaking penalties have been removed. 
             </p>
             <p>
               Thank you for staking for the first two rebates! Be sure to check back soon for more updates!
@@ -120,7 +119,7 @@ const UnstakeConfirm = ({
         )}
       </div>
       <div className="flex w-full items-center justify-center">
-        <button className="border-button w-60" onClick={() => setShowInstructions(true)}>
+        <button className="border-button w-60" onClick={handleConfirmUnstake}>
           Confirm Unstake
         </button>
       </div>
