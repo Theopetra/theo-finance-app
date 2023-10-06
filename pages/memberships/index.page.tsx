@@ -164,7 +164,7 @@ const Memberships = () => {
       highlight: true,
       warning: (
         <>
-          Rewards and part of principal slashed if unstaked while locked -{' '}
+          Don't worry, slashing penalties have been removed! 
           <a
             href="https://docs.theopetralabs.com"
             target="_blank"

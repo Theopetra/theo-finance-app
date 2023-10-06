@@ -133,7 +133,7 @@ const UnstakeButton = ({
           );
         }}
       >
-        {`${matured ? 'Unstake' : 'Unstake Early'}`}
+        {`${matured ? 'Unstake' : 'Unstake'}`}
       </button>
       {!matured && <PenaltyPopover penalty={penalty || 0} penaltyIsLoading={penaltyIsLoading} />}
     </>
