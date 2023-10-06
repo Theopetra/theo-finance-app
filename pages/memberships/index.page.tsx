@@ -162,19 +162,7 @@ const Memberships = () => {
         },
       ],
       highlight: true,
-      warning: (
-        <>
-          Don't worry, slashing penalties have been removed! 
-          <a
-            href="https://docs.theopetralabs.com"
-            target="_blank"
-            rel="noreferrer"
-            className="text-theo-cyan underline"
-          >
-            more info
-          </a>
-        </>
-      ),
+      warning: 'Dont worry, slashing penalties have been removed!',
     },
   ];
   return (
