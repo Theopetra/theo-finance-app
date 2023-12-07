@@ -164,7 +164,7 @@ const Memberships = () => {
       highlight: true,
       warning: (
         <>
-          Don't worry, slashing penalties have been removed! 
+          Dont worry, slashing penalties have been removed! 
           <a
             href="https://docs.theopetralabs.com"
             target="_blank"
