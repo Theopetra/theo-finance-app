@@ -25,6 +25,16 @@ export const contractMetadata = {
     },
     abi: PublicPreListBondDepositoryArtifact.abi,
   },
+  MobyBondDepository: {
+    address: {
+      1: '0x7c02b58029beeA7c1FcC872803dC9818f57A0E61',
+      4: '0x7c02b58029beeA7c1FcC872803dC9818f57A0E61',
+      5: '0x7c02b58029beeA7c1FcC872803dC9818f57A0E61',
+      31337: '0x7c02b58029beeA7c1FcC872803dC9818f57A0E61',
+      11155111: '0x7c02b58029beeA7c1FcC872803dC9818f57A0E61',
+    },
+    abi: PublicPreListBondDepositoryArtifact.abi,
+  },
   StakingDistributor: {
     address: {
       1: '0x1BE45D4069329CE41d07953FBB8a5cC6B9E545Ce',
