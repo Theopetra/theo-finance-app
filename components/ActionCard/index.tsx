@@ -7,14 +7,23 @@ type ActionCardProps = {
     secondary?: string;
     classes?: string;
   };
-  data: { label: string; value: string | number; info?: string; type?: string }[];
+  data: { label: string; value: string | number | ReactElement; info?: string; type?: string }[];
   actionButton: { label: string; onClick?: () => void; icon?: ReactElement };
-  warning: string | ReactElement;
+  warning?: string | ReactElement;
   icon: ReactElement;
   highlight?: boolean;
+  extraContent?: ReactElement;
 };
 
-const ActionCard = ({ header, data, actionButton, warning, icon, highlight }: ActionCardProps) => {
+const ActionCard = ({
+  header,
+  data,
+  actionButton,
+  warning,
+  icon,
+  highlight,
+  extraContent,
+}: ActionCardProps) => {
   const highlightClasses = 'drop-shadow-[4px_4px_4px_rgba(80,174,203,0.75)]';
   return (
     <Card
@@ -45,6 +54,7 @@ const ActionCard = ({ header, data, actionButton, warning, icon, highlight }: Ac
             </Fragment>
           ))}
         </div>
+        {extraContent}
         <button className="border-button mb-3 w-full" onClick={actionButton.onClick}>
           {actionButton.icon}
           {actionButton.label}
