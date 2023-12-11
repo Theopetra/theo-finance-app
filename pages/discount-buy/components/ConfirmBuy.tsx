@@ -26,7 +26,8 @@ export const Price = () => {
 
   return (
     <>
-      <TokenPrice market={selectedMarket} /> {cleanSymbol(purchaseToken?.symbol)}
+      <TokenPrice market={selectedMarket} bondDepoName="TheopetraBondDepository" />{' '}
+      {cleanSymbol(purchaseToken?.symbol)}
     </>
   );
 };
@@ -69,7 +70,8 @@ const ConfirmBuy = () => {
   const [{ selectedMarket, purchaseToken, purchaseCost, maxSlippage }] = useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
-  const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
+  const { address: activeBondDepoAddress, abi: activeBondDepoAbi } =
+    useActiveBondDepo('TheopetraBondDepository');
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
 
   const { logEvent } = useAnalytics();

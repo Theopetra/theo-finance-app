@@ -77,18 +77,18 @@ const DiscountBuy = () => {
         width: '10%',
         Cell: ({ value }) => `$${Math.round(value * 10000) / 10000}`,
       },
-      {
-        Header: 'Discount Rate',
-        accessor: 'discountRate',
-        id: 'discountRate',
-        width: '10%',
-        // value is a large percent value and needs to be converted to percentage.
-        Cell: ({ value }) => (
-          <span title={`${value / BigInt(10 ** 7)}`}>
-            {Number(formatUnits(value, 7)).toFixed(2)}%
-          </span>
-        ),
-      },
+      // {
+      //   Header: 'Discount Rate',
+      //   accessor: 'discountRate',
+      //   id: 'discountRate',
+      //   width: '10%',
+      //   // value is a large percent value and needs to be converted to percentage.
+      //   Cell: ({ value }) => (
+      //     <span >
+      //       {Number(formatUnits(value, 7)).toFixed(2)}%
+      //     </span>
+      //   ),
+      // },
       {
         Header: 'Discount Price',
         accessor: 'marketPrice',
@@ -132,7 +132,7 @@ const DiscountBuy = () => {
               duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
               token: y.marketData.quoteToken,
               valuationPrice: y.marketData.valuationPrice,
-              discountRate: y.marketData.discountRate,
+              // discountRate: y.marketData.discountRate,
               marketPrice: y.marketData.marketPrice,
               marketData: y.marketData,
               select: {
@@ -229,10 +229,15 @@ const DiscountBuy = () => {
               onChange={handleCurencyInputChange}
             />
             <div className="space-between mb-4 flex align-middle">
-              <label htmlFor="maxSlippage" className="space-between color w-full flex-1 text-gray-400 ">
+              <label
+                htmlFor="maxSlippage"
+                className="space-between color w-full flex-1 text-gray-400 "
+              >
                 Max Slippage &nbsp;
                 <Tooltip size="small">
-                  {'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the discount rate may have changed due to interactions with other users, resulting in a different payout than expected.'}
+                  {
+                    'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the discount rate may have changed due to interactions with other users, resulting in a different payout than expected.'
+                  }
                 </Tooltip>
               </label>
               <div className="rounded border bg-transparent pr-4 text-right ">
@@ -302,7 +307,7 @@ const DiscountBuy = () => {
 
 DiscountBuy.PageStateProvider = (props) => (
   <UserPurchasesProvider {...props}>
-    <BuyFormProvider {...props} />
+    <BuyFormProvider {...props} bondDepoName="PublicPreListBondDepository" />
   </UserPurchasesProvider>
 );
 DiscountBuy.PageHead = () => {

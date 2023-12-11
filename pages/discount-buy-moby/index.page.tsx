@@ -1,8 +1,6 @@
 import PageContainer from '@/components/PageContainer';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
-import BuyFormProvider from './state/BuyFormProvider';
-import useBuyForm from './state/use-buy-form';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import { useAccount, useBalance } from 'wagmi';
 import CurrencyInput from '@/components/CurrencyInput';
@@ -10,12 +8,15 @@ import SimpleSelect from '@/components/SimpleSelect';
 import Icon from '@/components/Icons';
 import Table from '@/components/Table';
 import { TokenInfo } from '@/components/TokenName';
-import ConfirmBuy from './components/ConfirmBuy';
-import { UserPurchasesProvider } from './state/UserPurchasesProvider';
+
 import Skeleton from 'react-loading-skeleton';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import { formatUnits } from 'viem';
 import Tooltip from '@/components/Tooltip';
+import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
+import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
+import useBuyForm from '../discount-buy/state/use-buy-form';
+import ConfirmBuy from '../discount-buy/components/ConfirmBuy';
 
 const DiscountBuy = () => {
   const [
@@ -132,7 +133,7 @@ const DiscountBuy = () => {
               duration: `${y.mapKey} ${y.vestingTimeIncrement}`,
               token: y.marketData.quoteToken,
               valuationPrice: y.marketData.valuationPrice,
-              discountRate: y.marketData.discountRate,
+              // discountRate: y.marketData.discountRate,
               marketPrice: y.marketData.marketPrice,
               marketData: y.marketData,
               select: {
@@ -229,10 +230,15 @@ const DiscountBuy = () => {
               onChange={handleCurencyInputChange}
             />
             <div className="space-between mb-4 flex align-middle">
-              <label htmlFor="maxSlippage" className="space-between color w-full flex-1 text-gray-400 ">
+              <label
+                htmlFor="maxSlippage"
+                className="space-between color w-full flex-1 text-gray-400 "
+              >
                 Max Slippage &nbsp;
                 <Tooltip size="small">
-                  {'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the discount rate may have changed due to interactions with other users, resulting in a different payout than expected.'}
+                  {
+                    'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the discount rate may have changed due to interactions with other users, resulting in a different payout than expected.'
+                  }
                 </Tooltip>
               </label>
               <div className="rounded border bg-transparent pr-4 text-right ">
@@ -302,11 +308,11 @@ const DiscountBuy = () => {
 
 DiscountBuy.PageStateProvider = (props) => (
   <UserPurchasesProvider {...props}>
-    <BuyFormProvider {...props} />
+    <BuyFormProvider {...props} bondDepoName="MobyBondDepository" />
   </UserPurchasesProvider>
 );
 DiscountBuy.PageHead = () => {
-  return <div>Discount Buy</div>;
+  return <div>Discount Buy - Moby</div>;
 };
 
 export default DiscountBuy;

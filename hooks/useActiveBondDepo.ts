@@ -1,6 +1,6 @@
-import { useContractInfo } from './useContractInfo';
+import { BondDepoNameType, useContractInfo } from './useContractInfo';
 
-export function useActiveBondDepo() {
-  const { address, abi } = useContractInfo('TheopetraBondDepository');
+export function useActiveBondDepo(bondName: BondDepoNameType) {
+  const { address, abi } = useContractInfo(bondName);
   return { address, abi };
 }

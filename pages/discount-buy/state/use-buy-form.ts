@@ -1,11 +1,12 @@
 import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useContext } from 'react';
 import { BuyFormContext } from './BuyFormProvider';
+import { BondDepoNameType } from '@/hooks/useContractInfo';
 
 type MarketData = {
   valuationPrice;
   maxPayout: number;
-  discountRate;
+  // discountRate;
   marketPrice;
   capacity: BigInt;
   quoteToken: `0x${string}`;
@@ -64,6 +65,7 @@ type BuyFormStateType = {
   UIBondMarketsIsLoading: boolean;
   terms: Terms[];
   maxPayoutFormatted: number;
+  bondDepoName: BondDepoNameType;
 };
 type BuyFormDispatchType = {
   setSelection;
