@@ -183,7 +183,7 @@ const ConfirmBuy = () => {
       ),
       account?.address,
       account?.address,
-      false,
+      2, // Moby markets are 3, standard are 2
       false,
       signature?.wethHelperSignature || '0x00',
     ],
