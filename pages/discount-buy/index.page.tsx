@@ -67,7 +67,7 @@ const DiscountBuy = () => {
         accessor: 'duration',
         id: 'duration',
         width: '10%',
-        defaultCanSort: true,
+        defaultCanSort: false,
       },
 
       {
@@ -290,8 +290,8 @@ const DiscountBuy = () => {
               initialState={{
                 sortBy: [
                   {
-                    id: 'duration',
-                    desc: true,
+                    id: 'marketPrice',
+                    desc: false,
                   },
                 ],
               }}

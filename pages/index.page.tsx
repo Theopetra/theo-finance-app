@@ -20,8 +20,12 @@ const Dashboard = ({}) => {
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
             <div className="flex w-full space-x-4">
               <ActionCard
-                icon={<img src="/images/your-purchases.svg" alt="Y" />}
-                header={{ primary: 'Moby' }}
+                icon={
+                  <img src="/assets/images/moby_icon-black.png" alt="moby Icon" className="w-16" />
+                }
+                header={{
+                  primary: <img src="/assets/images/moby-text.png" className="w-32" alt="Moby" />,
+                }}
                 data={[
                   {
                     label: 'Type',
@@ -40,8 +44,10 @@ const Dashboard = ({}) => {
                 }}
               />
               <ActionCard
-                icon={<img src="/images/your-purchases.svg" alt="Y" />}
-                header={{ primary: 'T Home' }}
+                icon={<img src="/assets/images/house-simple-fill.svg" className="w-12" alt="Y" />}
+                header={{
+                  primary: <img src="/assets/images/t-home-01.svg" className="w-36" alt="T-Home" />,
+                }}
                 data={[
                   {
                     label: 'Type',

@@ -68,7 +68,7 @@ const DiscountBuy = () => {
         accessor: 'duration',
         id: 'duration',
         width: '10%',
-        defaultCanSort: true,
+        defaultCanSort: false,
       },
 
       {
@@ -78,21 +78,11 @@ const DiscountBuy = () => {
         width: '10%',
         Cell: ({ value }) => `$${Math.round(value * 10000) / 10000}`,
       },
-      {
-        Header: 'Discount Rate',
-        accessor: 'discountRate',
-        id: 'discountRate',
-        width: '10%',
-        // value is a large percent value and needs to be converted to percentage.
-        Cell: ({ value }) => (
-          <span title={`${value / BigInt(10 ** 7)}`}>
-            {Number(formatUnits(value, 7)).toFixed(2)}%
-          </span>
-        ),
-      },
+
       {
         Header: 'Discount Price',
         accessor: 'marketPrice',
+        defaultCanSort: true,
         id: 'marketPrice',
         width: '10%',
         Cell: ({ value, cell }) => {
@@ -291,8 +281,8 @@ const DiscountBuy = () => {
               initialState={{
                 sortBy: [
                   {
-                    id: 'duration',
-                    desc: true,
+                    id: 'marketPrice',
+                    desc: false,
                   },
                 ],
               }}
