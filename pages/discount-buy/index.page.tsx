@@ -63,11 +63,12 @@ const DiscountBuy = () => {
   const columns = useMemo(
     () => [
       {
-        Header: 'Lock time',
-        accessor: 'duration',
-        id: 'duration',
+        Header: 'Capacity',
+        accessor: 'capacity',
+        id: 'capacity',
         width: '10%',
         defaultCanSort: false,
+        Cell: ({ value }) => (value ? formatUnits(value, 9) : ''),
       },
 
       {
@@ -135,6 +136,7 @@ const DiscountBuy = () => {
               // discountRate: y.marketData.discountRate,
               marketPrice: y.marketData.marketPrice,
               marketData: y.marketData,
+              capacity: y.marketData.capacity,
               select: {
                 label: `${y.mapKey} ${y.vestingTimeIncrement}`,
                 value: `${y.mapKey}`,

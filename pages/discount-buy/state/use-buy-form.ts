@@ -8,7 +8,7 @@ type MarketData = {
   maxPayout: number;
   // discountRate;
   marketPrice;
-  capacity: BigInt;
+  capacity: bigint;
   quoteToken: `0x${string}`;
   capacityInQuote: BigInt;
   sold: BigInt;

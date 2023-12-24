@@ -89,8 +89,9 @@ export const BuyFormProvider: {
   });
 
   const maxPayoutFormatted = useMemo(() => {
+    console.log(selectedMarket?.marketData);
     if (selectedMarket?.marketData?.maxPayout) {
-      const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9);
+      const max = formatUnits(selectedMarket.marketData.capacity, 9);
       return Number(max);
     }
 
