@@ -254,7 +254,7 @@ const DiscountBuy = () => {
             <button
               className={`border-button w-full ${error && 'cursor-not-allowed opacity-50'}`}
               disabled={Boolean(error?.length)}
-              onClick={() => openModal(<ConfirmBuy />)}
+              onClick={() => openModal(<ConfirmBuy bondDepoName="MobyBondDepository" />)}
             >
               {Boolean(error?.length) ? (
                 error
