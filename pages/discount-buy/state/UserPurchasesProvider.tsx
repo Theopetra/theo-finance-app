@@ -10,9 +10,8 @@ export const UserPurchasesProvider = ({ children }) => {
   const { pendingNotes: publicPrelistPurchases, reRender: pplReRender } = usePurchasesByContract(
     'PublicPreListBondDepository'
   );
-  const { pendingNotes: theopetraPurchases, reRender: tbdReRender } = usePurchasesByContract(
-    'TheopetraBondDepository'
-  );
+  const { pendingNotes: theopetraPurchases, reRender: tbdReRender } =
+    usePurchasesByContract('TheopetraBondDepository');
   const {
     pendingNotes: standardMemberships,
     reRender: tsReRender,
@@ -23,6 +22,11 @@ export const UserPurchasesProvider = ({ children }) => {
     reRender: tslReRender,
     isLoadingPurchases: isLoadingPremiumMemberships,
   } = usePurchasesByContract('TheopetraStakingLocked');
+  const {
+    pendingNotes: mobyPurchases,
+    reRender: mobyReRender,
+    isLoadingPurchases: isLoadingMobyPurchases,
+  } = usePurchasesByContract('MobyBondDepository');
 
   const reRender = function () {
     wlReRender();
@@ -30,6 +34,7 @@ export const UserPurchasesProvider = ({ children }) => {
     tbdReRender();
     tsReRender();
     tslReRender();
+    mobyReRender();
   };
 
   return (
@@ -37,7 +42,12 @@ export const UserPurchasesProvider = ({ children }) => {
       value={[
         {
           isLoadingMemberships: isLoadingStandardMemberships || isLoadingPremiumMemberships,
-          purchases: [...whitelistPurchases, ...publicPrelistPurchases, ...theopetraPurchases],
+          purchases: [
+            ...whitelistPurchases,
+            ...publicPrelistPurchases,
+            ...theopetraPurchases,
+            ...mobyPurchases,
+          ],
           memberships: [...standardMemberships, ...premiumMemberships],
         },
         { reRender },

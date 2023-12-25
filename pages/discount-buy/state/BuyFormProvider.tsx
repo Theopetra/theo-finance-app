@@ -3,7 +3,7 @@ import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { cache } from '@/lib/cache';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useContractRead, useToken } from 'wagmi';
-import { useContractInfo } from '@/hooks/useContractInfo';
+import { BondDepoNameType, useContractInfo } from '@/hooks/useContractInfo';
 import { getContract } from '@wagmi/core';
 import { Abi, formatUnits } from 'viem';
 import { GroupedBondMarketsMapType, Terms } from './use-buy-form';
@@ -31,7 +31,9 @@ const initialFormState: formStateType = {
   maxSlippage: 0.01,
 };
 
-export const BuyFormProvider: React.FC = (props) => {
+export const BuyFormProvider: {
+  (props: { bondDepoName: BondDepoNameType; children: React.ReactNode }): JSX.Element;
+} = ({ children, bondDepoName }) => {
   const [selection, setSelection] = useState<{ label: string; value: number }>({
     label: '',
     value: 0,
@@ -40,7 +42,7 @@ export const BuyFormProvider: React.FC = (props) => {
   const [terms, setTerms] = useState<Terms[]>([]);
   const [formState, setFormState] = useState<formStateType>(initialFormState);
   const [UIBondMarketsIsLoading, setUIBondMarketsIsLoading] = useState(true);
-  const { address, abi } = useActiveBondDepo();
+  const { address, abi } = useActiveBondDepo(bondDepoName);
   const { data: selectedToken } = useToken({ address: formState.purchaseToken?.quoteToken });
   const selectedMarket = useMemo(() => {
     if (selection.value && Object.keys(groupedBondMarketsMap).length > 0) {
@@ -59,12 +61,14 @@ export const BuyFormProvider: React.FC = (props) => {
       }),
     [address, abi]
   );
+
   const { data: priceInfo } = useContractRead({
     address,
     abi: abi as Abi,
-    functionName: 'marketPrice',
+    functionName: 'calculatePrice',
     args: [selectedMarket?.id],
   });
+  console.log('priceInfo', selectedMarket);
 
   const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } =
     useContractInfo('ChainlinkPriceFeed');
@@ -85,8 +89,9 @@ export const BuyFormProvider: React.FC = (props) => {
   });
 
   const maxPayoutFormatted = useMemo(() => {
+    console.log(selectedMarket?.marketData);
     if (selectedMarket?.marketData?.maxPayout) {
-      const max = formatUnits(BigInt(selectedMarket.marketData.maxPayout), 9);
+      const max = formatUnits(selectedMarket.marketData.capacity, 9);
       return Number(max);
     }
 
@@ -133,11 +138,15 @@ export const BuyFormProvider: React.FC = (props) => {
                   discountRateYield: termsValues[6],
                   maxDebt: termsValues[7],
                 };
-                const vestingInMonths =  Math.floor(terms.vesting / 60 / 60 / 24 / 30);
+                const vestingInMonths = Math.floor(terms.vesting / 60 / 60 / 24 / 30);
                 const vestingInWeeks = Math.floor(terms.vesting / 60 / 60 / 24 / 7);
                 const vestingInMinutes = terms.vesting / 60;
                 const vestingTime =
-                  process.env.NEXT_PUBLIC_ENV !== 'production' ? vestingInMinutes : terms.vesting > 2629799 ? vestingInMonths : vestingInWeeks;
+                  process.env.NEXT_PUBLIC_ENV !== 'production'
+                    ? vestingInMinutes
+                    : terms.vesting > 2629799
+                    ? vestingInMonths
+                    : vestingInWeeks;
 
                 const marketValues = (await contract.read.markets([bondMarket])) as any;
                 const market = {
@@ -153,18 +162,22 @@ export const BuyFormProvider: React.FC = (props) => {
 
                 try {
                   marketPrice = BigInt(
-                    (await contract.read.marketPrice([bondMarket])) as any
+                    (await contract.read.calculatePrice([bondMarket])) as any
                   ).toString();
                 } catch {
                   marketPrice = '';
                   console.log('error getting market price');
                 }
 
-                const discountRate = BigInt(
-                  (await contract.read.bondRateVariable([bondMarket])) as string
-                );
+                // const discountRate = BigInt(
+                //   (await contract.read.bondRateVariable([bondMarket])) as string
+                // );
                 const vestingTimeIncrement =
-                  process.env.NEXT_PUBLIC_ENV !== 'production' ? 'minutes' : terms.vesting > 2629799 ? 'months' : 'weeks';
+                  process.env.NEXT_PUBLIC_ENV !== 'production'
+                    ? 'minutes'
+                    : terms.vesting > 2629799
+                    ? 'months'
+                    : 'weeks';
                 const termWithMarkets = {
                   mapKey: vestingTime,
                   header: `${vestingTime} ${vestingTimeIncrement}`,
@@ -176,7 +189,7 @@ export const BuyFormProvider: React.FC = (props) => {
                     ...market,
                     marketPrice,
                     valuationPrice,
-                    discountRate,
+                    // discountRate,
                   },
                   id: Number(bondMarket),
                 };
@@ -315,11 +328,12 @@ export const BuyFormProvider: React.FC = (props) => {
           terms,
           UIBondMarketsIsLoading,
           maxPayoutFormatted,
+          bondDepoName,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}
     >
-      {props.children}
+      {children}
     </BuyFormContext.Provider>
   );
 };

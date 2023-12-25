@@ -6,7 +6,7 @@ import PendingTransaction from '@/components/PendingTransaction';
 import { TokenPrice } from '@/components/TokenPrice';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { useContractInfo } from '@/hooks/useContractInfo';
+import { BondDepoNameType, useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
 import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
@@ -26,7 +26,8 @@ export const Price = () => {
 
   return (
     <>
-      <TokenPrice market={selectedMarket} /> {cleanSymbol(purchaseToken?.symbol)}
+      <TokenPrice market={selectedMarket} bondDepoName="PublicPreListBondDepository" />{' '}
+      {cleanSymbol(purchaseToken?.symbol)}
     </>
   );
 };
@@ -64,12 +65,12 @@ export const LockDurationRow = () => {
   );
 };
 
-const ConfirmBuy = () => {
+const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   const [, { openModal, closeModal }] = useModal();
   const [{ selectedMarket, purchaseToken, purchaseCost, maxSlippage }] = useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
-  const { address: activeBondDepoAddress, abi: activeBondDepoAbi } = useActiveBondDepo();
+
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
 
   const { logEvent } = useAnalytics();
@@ -106,7 +107,7 @@ const ConfirmBuy = () => {
     <FailedTransaction
       Icon={Intersect}
       onRetry={() => {
-        openModal(<ConfirmBuy />);
+        openModal(<ConfirmBuy bondDepoName={bondDepoName} />);
       }}
       error={{ code: error?.code ?? 'Something went wrong.' }}
     />
@@ -183,7 +184,7 @@ const ConfirmBuy = () => {
       ),
       account?.address,
       account?.address,
-      2, // Moby markets are 3, standard are 2
+      bondDepoName === 'PublicPreListBondDepository' ? 2 : 3, // Moby markets are 3, standard are 2
       false,
       signature?.wethHelperSignature || '0x00',
     ],

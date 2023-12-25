@@ -66,11 +66,12 @@ const YourPurchases = () => {
         width: '20%',
       },
       {
-        Header: 'Contract',
-        accessor: 'contractName',
+        Header: 'Discount',
+        accessor: 'discount',
         width: '10%',
-        Cell: ({ value }) =>
-          value.replace('BondDepository', '').replace('Staking', '').replace('Locked', ''),
+        Cell: ({ value }) => (
+          <span title={`${value / 10 ** 7}`}>{(value / 10 ** 7).toFixed()}%</span>
+        ),
       },
       {
         Header: 'Status',
