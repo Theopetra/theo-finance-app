@@ -4,7 +4,6 @@ import ConfirmClaim from '@/pages/claim/components/ConfirmClaim';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { format } from 'date-fns';
 import React, { useMemo } from 'react';
-import { useAccount } from 'wagmi';
 import { useUserPurchases } from '../state/use-user-purchases';
 import { UserPurchasesProvider } from '../state/UserPurchasesProvider';
 import PurchasesTable from './components/PurchasesTable';

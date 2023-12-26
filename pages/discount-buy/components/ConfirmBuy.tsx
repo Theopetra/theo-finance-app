@@ -4,7 +4,6 @@ import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import Icon from '@/components/Icons';
 import PendingTransaction from '@/components/PendingTransaction';
 import { TokenPrice } from '@/components/TokenPrice';
-import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { BondDepoNameType, useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
