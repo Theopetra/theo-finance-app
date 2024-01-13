@@ -90,6 +90,7 @@ export const BuyFormProvider: {
 
   const maxPayoutFormatted = useMemo(() => {
     console.log(selectedMarket?.marketData);
+
     if (selectedMarket?.marketData?.maxPayout) {
       const max = formatUnits(selectedMarket.marketData.capacity, 9);
       return Number(max);
@@ -169,9 +170,6 @@ export const BuyFormProvider: {
                   console.log('error getting market price');
                 }
 
-                // const discountRate = BigInt(
-                //   (await contract.read.bondRateVariable([bondMarket])) as string
-                // );
                 const vestingTimeIncrement =
                   process.env.NEXT_PUBLIC_ENV !== 'production'
                     ? 'minutes'
@@ -189,7 +187,6 @@ export const BuyFormProvider: {
                     ...market,
                     marketPrice,
                     valuationPrice,
-                    // discountRate,
                   },
                   id: Number(bondMarket),
                 };

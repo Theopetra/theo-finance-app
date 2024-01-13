@@ -13,8 +13,8 @@ export const navigation = [
     disabled: false,
   },
   {
-    name: 'Memberships',
-    href: '/memberships',
+    name: 'Unstake THEO',
+    href: '/unstake',
     icon: <LockLaminated size={26} className="mr-2 w-8" />,
     disabled: false,
   },

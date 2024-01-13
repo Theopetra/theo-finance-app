@@ -1,13 +1,15 @@
-import ActionCard from '@/components/ActionCard';
-import Card from '@/components/Card';
-import CardList from '@/components/CardList';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
-import { useRouter } from 'next/router';
-import { ArrowUpRight } from 'phosphor-react';
+import useBuyForm from './discount-buy/state/use-buy-form';
+import { useAccount, useBalance } from 'wagmi';
+import { BaseSyntheticEvent, useState } from 'react';
+import useModal from '@/state/ui/theme/hooks/use-modal';
+import DiscountBuyCard from './discount-buy';
+import { UserPurchasesProvider } from './discount-buy/state/UserPurchasesProvider';
+import BuyFormProvider from './discount-buy/state/BuyFormProvider';
+import DiscountBuyMobyCard from './discount-buy-moby';
 
 const Dashboard = ({}) => {
-  const router = useRouter();
   return (
     <>
       <div className="pt-4">
@@ -17,53 +19,19 @@ const Dashboard = ({}) => {
       </div>
       <PageContainer>
         <div className="mt-4">
+          <p className=" mb-4">
+            Growth Markets allow you to buy THEO directly from the protocol & allocate your funding
+            to the project of your choice. When you buy THEO, it is locked for a period of time
+            before you can claim it.{' '}
+            <a href="#" className="underline">
+              {' '}
+              Learn More
+            </a>
+          </p>
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
-            <div className="flex w-full space-x-4">
-              <ActionCard
-                icon={
-                  <img src="/assets/images/moby_icon-black.png" alt="moby Icon" className="w-16" />
-                }
-                header={{
-                  primary: <img src="/assets/images/moby-text.png" className="w-32" alt="Moby" />,
-                }}
-                data={[
-                  {
-                    label: 'Type',
-                    value: (
-                      <a href="#" className="underline">
-                        24/7 Microspaces
-                        <ArrowUpRight className=" inline-block h-6 w-6" />
-                      </a>
-                    ),
-                  },
-                  { label: 'Avg Cost/Unit', value: '$5,500' },
-                ]}
-                actionButton={{
-                  label: 'Buy THEO',
-                  onClick: () => router.push('/discount-buy-moby'),
-                }}
-              />
-              <ActionCard
-                icon={<img src="/assets/images/house-simple-fill.svg" className="w-12" alt="Y" />}
-                header={{
-                  primary: <img src="/assets/images/t-home-01.svg" className="w-36" alt="T-Home" />,
-                }}
-                data={[
-                  {
-                    label: 'Type',
-                    value: (
-                      <a href="#" className="underline">
-                        Affordable Housing <ArrowUpRight className=" inline-block h-6 w-6" />
-                      </a>
-                    ),
-                  },
-                  { label: 'Avg Cost/Unit', value: '$125,000' },
-                ]}
-                actionButton={{
-                  label: 'Buy THEO',
-                  onClick: () => router.push('/discount-buy'),
-                }}
-              />
+            <div className="flex w-full grid-cols-2 space-x-4">
+              <DiscountBuyCard />
+              <DiscountBuyMobyCard />
             </div>
           </div>
         </div>
@@ -72,8 +40,10 @@ const Dashboard = ({}) => {
   );
 };
 
+Dashboard.PageStateProvider = (props) => <UserPurchasesProvider {...props} />;
+
 Dashboard.PageHead = () => {
-  return <div>Welcome Home</div>;
+  return <div>Expand the Network</div>;
 };
 
 export default Dashboard;
