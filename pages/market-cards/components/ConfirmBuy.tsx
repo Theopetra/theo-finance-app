@@ -66,7 +66,8 @@ export const LockDurationRow = () => {
 
 const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   const [, { openModal, closeModal }] = useModal();
-  const [{ selectedMarket, purchaseToken, purchaseCost, purchaseAmounts, maxSlippage }] = useBuyForm();
+  const [{ selectedMarket, purchaseToken, purchaseCost, purchaseAmounts, maxSlippage }] =
+    useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
 
@@ -114,7 +115,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   const SuccessModal = ({ txId }) => (
     <SuccessfulTransaction
       txId={txId}
-      redirect={`/discount-buy/your-purchases`}
+      redirect={`/your-purchases`}
       title={'Purchase Successful!'}
       Icon={Intersect}
     />
@@ -146,44 +147,47 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   //   },
   // });
 
-  const wethDeposit = async (purchaseAmount, i) => useContractWrite({
-    address: WethHelperAddress,
-    account: account.address,
-    abi: WethHelperAbi as Abi,
-    functionName: 'deposit',
-    onSuccess: async (data) => {
-      openModal(
-        <PendingTransaction
-          message={ i > 1 ? `${i} of ${purchaseAmounts.length} transactions...` : "1 of 1 transactions..."}
-          secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
-        />
-      );
-      if (data.hash) {
-        logEvent({ name: 'purchase_completed' });
-        cache.clear();
-        reRender();
-        openModal(<SuccessModal txId={data.hash} />);
-      } else {
-        openModal(<FailedModal error={'call'} />);
-      }
-    },
-    onError: (error) => {
-      console.log('failing initial', depositAmount);
-      openModal(<FailedModal error={error} />);
-    },
-    args: [
-      selectedMarket.id,
-      toHex(
-        (BigInt(Math.floor(maxSlippage * 1000)) * depositAmount) / BigInt(1000) + depositAmount
-      ),
-      account?.address,
-      account?.address,
-      bondDepoName === 'PublicPreListBondDepository' ? 2 : 3, // Moby markets are 3, standard are 2
-      false,
-      signature?.wethHelperSignature || '0x00',
-    ],
-    value: depositAmount,
-  });
+  const wethDeposit = async (purchaseAmount, i) =>
+    useContractWrite({
+      address: WethHelperAddress,
+      account: account.address,
+      abi: WethHelperAbi as Abi,
+      functionName: 'deposit',
+      onSuccess: async (data) => {
+        openModal(
+          <PendingTransaction
+            message={
+              i > 1 ? `${i} of ${purchaseAmounts.length} transactions...` : '1 of 1 transactions...'
+            }
+            secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
+          />
+        );
+        if (data.hash) {
+          logEvent({ name: 'purchase_completed' });
+          cache.clear();
+          reRender();
+          openModal(<SuccessModal txId={data.hash} />);
+        } else {
+          openModal(<FailedModal error={'call'} />);
+        }
+      },
+      onError: (error) => {
+        console.log('failing initial', depositAmount);
+        openModal(<FailedModal error={error} />);
+      },
+      args: [
+        selectedMarket.id,
+        toHex(
+          (BigInt(Math.floor(maxSlippage * 1000)) * depositAmount) / BigInt(1000) + depositAmount
+        ),
+        account?.address,
+        account?.address,
+        bondDepoName === 'PublicPreListBondDepository' ? 2 : 3, // Moby markets are 3, standard are 2
+        false,
+        signature?.wethHelperSignature || '0x00',
+      ],
+      value: depositAmount,
+    });
 
   // const {
   //   data: approveData,
@@ -228,8 +232,11 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         />
       );
       for (const i of purchaseAmounts) {
-        const {data: wethData, isError: wethWriteErr, isLoading: wethWriteLoading} = 
-        await wethDeposit(purchaseAmounts[i], i);
+        const {
+          data: wethData,
+          isError: wethWriteErr,
+          isLoading: wethWriteLoading,
+        } = await wethDeposit(purchaseAmounts[i], i);
       }
     } else {
       // openModal(

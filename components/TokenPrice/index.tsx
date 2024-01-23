@@ -1,7 +1,7 @@
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { BondDepoNameType } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
-import { TermsWithMarket } from '@/pages/discount-buy/state/use-buy-form';
+import { TermsWithMarket } from '@/pages/market-cards/state/use-buy-form';
 import { Abi, formatEther } from 'viem';
 import { useContractRead, useToken } from 'wagmi';
 

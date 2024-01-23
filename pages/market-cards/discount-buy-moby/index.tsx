@@ -1,27 +1,28 @@
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
-import useBuyForm from './state/use-buy-form';
 import { useAccount, useBalance } from 'wagmi';
 import CurrencyInput from '@/components/CurrencyInput';
-import ConfirmBuy from './components/ConfirmBuy';
+import Icon from '@/components/Icons';
+
 import { formatUnits } from 'viem';
 import Tooltip from '@/components/Tooltip';
+import BuyFormProvider from '../state/BuyFormProvider';
+import useBuyForm from '../state/use-buy-form';
+import ConfirmBuy from '../components/ConfirmBuy';
 import Card from '@/components/Card';
-import BuyFormProvider from './state/BuyFormProvider';
 const DataRow = ({ label, value }: { label: string; value: any }) => (
-  <div className="flex w-full items-center justify-between">
+  <div className="flex w-full items-center justify-between text-white">
     <div className="text-sm">{label}</div>
     <div className="text-2xl font-bold">{value}</div>
   </div>
 );
-const DiscountBuy = () => {
+const DiscountBuyMobyCard = () => {
   const [
     {
       purchaseCost,
       purchaseAmount,
       maxSlippage,
       purchaseToken,
-      UIBondMarketsIsLoading,
       maxPayoutFormatted,
       selectedMarket,
     },
@@ -62,15 +63,18 @@ const DiscountBuy = () => {
 
   return (
     <Card
+      lightModeBgColor="bg-theo-dark-navy"
       darkModeBgColor="bg-theo-dark-navy"
-      cardHeader={<div className="w-full text-center text-2xl font-bold">24/7 MicroSpaces</div>}
+      cardHeader={
+        <div className="w-full text-center text-2xl font-bold text-white">Affordable Housing</div>
+      }
     >
       <>
         <div className="mb-4 flex w-full flex-col">
           {[
-            { label: 'Units Owned', value: '4 Units' },
-            { label: 'Avg. Cost/Unit', value: '$5,500' },
-            { label: 'Avg. Net Rent*', value: '$150-200 / MO' },
+            { label: 'Units Owned', value: '1 Unit' },
+            { label: 'Avg. Cost/Unit', value: '$150,000+' },
+            { label: 'Avg. Net Rent*', value: '$750-1000 / MO' },
             { label: 'Lock Period', value: '24 Hours' },
           ].map((item) => (
             <DataRow key={item.label} {...item} />
@@ -102,7 +106,7 @@ const DiscountBuy = () => {
           onChange={handleCurencyInputChange}
         />
         <div className="space-between mb-4 flex align-middle">
-          <label htmlFor="maxSlippage" className="space-between color w-full flex-1 text-gray-400 ">
+          <label htmlFor="maxSlippage" className="space-between color w-full flex-1 text-gray-200 ">
             Max Slippage &nbsp;
             <Tooltip size="small">
               {
@@ -110,7 +114,7 @@ const DiscountBuy = () => {
               }
             </Tooltip>
           </label>
-          <div className="rounded border bg-transparent pr-4 text-right ">
+          <div className="rounded border bg-gray-100 pr-4 text-right ">
             <input
               name="maxSlippage"
               value={maxSlippage * 100}
@@ -126,19 +130,25 @@ const DiscountBuy = () => {
                 }
               }}
             />
-            <span className="text-gray-400">%</span>
+            <span className="bg-gray-100 text-gray-400">%</span>
           </div>
         </div>
-        {UIBondMarketsIsLoading}{' '}
         <button
           className={`border-button w-full ${error && 'cursor-not-allowed opacity-50'} mt-4`}
           disabled={Boolean(error?.length)}
-          onClick={() => openModal(<ConfirmBuy bondDepoName="PublicPreListBondDepository" />)}
+          onClick={() => openModal(<ConfirmBuy bondDepoName="MobyBondDepository" />)}
         >
-          {Boolean(error?.length) ? error : <>Buy THEO</>}
+          {Boolean(error?.length) ? (
+            error
+          ) : (
+            <>
+              <Icon name={'theo'} className="mr-2 w-8" />
+              Purchase {purchaseAmount} THEO
+            </>
+          )}
         </button>
         <div className="text-xs text-gray-400">
-          *Based on a $55k Purchase Price Purchase price mav vary All Prices in USD
+          *Based on a $150k Purchase Price. Purchase price mav vary. All Prices in USD
         </div>
       </>
     </Card>
@@ -146,8 +156,8 @@ const DiscountBuy = () => {
 };
 
 const DiscountBuyMoby = (props) => (
-  <BuyFormProvider {...props} bondDepoName="PublicPreListBondDepository">
-    <DiscountBuy />
+  <BuyFormProvider {...props} bondDepoName="MobyBondDepository">
+    <DiscountBuyMobyCard />
   </BuyFormProvider>
 );
 

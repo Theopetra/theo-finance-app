@@ -6,17 +6,17 @@ import Icon from '@/components/Icons';
 
 import { formatUnits } from 'viem';
 import Tooltip from '@/components/Tooltip';
-import BuyFormProvider from '../discount-buy/state/BuyFormProvider';
-import useBuyForm from '../discount-buy/state/use-buy-form';
-import ConfirmBuy from '../discount-buy/components/ConfirmBuy';
+import BuyFormProvider from '../state/BuyFormProvider';
+import useBuyForm from '../state/use-buy-form';
+import ConfirmBuy from '../components/ConfirmBuy';
 import Card from '@/components/Card';
 const DataRow = ({ label, value }: { label: string; value: any }) => (
-  <div className="flex w-full items-center justify-between text-white">
+  <div className="flex w-full items-center justify-between dark:text-white">
     <div className="text-sm">{label}</div>
     <div className="text-2xl font-bold">{value}</div>
   </div>
 );
-const DiscountBuyMobyCard = () => {
+const LandEventCard = () => {
   const [
     {
       purchaseCost,
@@ -63,10 +63,12 @@ const DiscountBuyMobyCard = () => {
 
   return (
     <Card
-      lightModeBgColor="bg-theo-dark-navy"
       darkModeBgColor="bg-theo-dark-navy"
+      className="max-w-2xl"
       cardHeader={
-        <div className="w-full text-center text-2xl font-bold text-white">Affordable Housing</div>
+        <div className="w-full text-center text-2xl font-bold dark:text-white">
+          Affordable Housing
+        </div>
       }
     >
       <>
@@ -155,10 +157,11 @@ const DiscountBuyMobyCard = () => {
   );
 };
 
-const DiscountBuyMoby = (props) => (
+const LandEvent = (props) => (
+  // TODO: Update to land event depo name
   <BuyFormProvider {...props} bondDepoName="MobyBondDepository">
-    <DiscountBuyMobyCard />
+    <LandEventCard />
   </BuyFormProvider>
 );
 
-export default DiscountBuyMoby;
+export default LandEvent;

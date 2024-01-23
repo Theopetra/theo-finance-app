@@ -1,21 +1,19 @@
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
-import useBuyForm from './discount-buy/state/use-buy-form';
+import useBuyForm from './market-cards/state/use-buy-form';
 import { useAccount, useBalance } from 'wagmi';
 import { BaseSyntheticEvent, useState } from 'react';
 import useModal from '@/state/ui/theme/hooks/use-modal';
-import DiscountBuyCard from './discount-buy';
-import { UserPurchasesProvider } from './discount-buy/state/UserPurchasesProvider';
-import BuyFormProvider from './discount-buy/state/BuyFormProvider';
-import DiscountBuyMobyCard from './discount-buy-moby';
+import DiscountBuyCard from './market-cards/discount-buy';
+import { UserPurchasesProvider } from './market-cards/state/UserPurchasesProvider';
+import BuyFormProvider from './market-cards/state/BuyFormProvider';
+import DiscountBuyMobyCard from './market-cards/discount-buy-moby';
 
 const Dashboard = ({}) => {
   return (
     <>
       <div className="pt-4">
-        <HorizontalSubNav
-          items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
-        />
+        <HorizontalSubNav items={[{ href: '/your-purchases', name: 'Your Purchases' }]} />
       </div>
       <PageContainer>
         <div className="mt-4">

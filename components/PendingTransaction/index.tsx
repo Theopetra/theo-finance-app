@@ -1,4 +1,4 @@
-import useBuyForm from '@/pages/discount-buy/state/use-buy-form';
+import useBuyForm from '@/pages/market-cards/state/use-buy-form';
 import React, { ReactElement, useEffect } from 'react';
 import LottieAnimation from 'react-lottie';
 import animationData from './animation-data.json';

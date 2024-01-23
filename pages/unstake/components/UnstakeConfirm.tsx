@@ -3,7 +3,7 @@ import useModal from '@/state/ui/theme/hooks/use-modal';
 import { ArrowLeft, LockLaminated } from 'phosphor-react';
 import { useContractWrite } from 'wagmi';
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
-import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
+import { useUserPurchases } from '@/pages/market-cards/state/use-user-purchases';
 import { cache } from '@/lib/cache';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import FailedTransaction from '@/components/FailedTransaction';
@@ -106,10 +106,12 @@ const UnstakeConfirm = ({
         {purchase.contractName !== 'TheopetraStaking' && (
           <div className=" mx-auto mb-4 flex max-w-2xl flex-col gap-4 text-xl">
             <p>
-              Staking is being phased out as part of the tokenomics upgrade, so all unstaking penalties have been removed. 
+              Staking is being phased out as part of the tokenomics upgrade, so all unstaking
+              penalties have been removed.
             </p>
             <p>
-              Thank you for staking for the first two rebates! Be sure to check back soon for more updates!
+              Thank you for staking for the first two rebates! Be sure to check back soon for more
+              updates!
             </p>
             <div className="text-center text-2xl font-bold">
               -0 $THEO
