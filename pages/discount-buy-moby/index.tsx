@@ -64,6 +64,7 @@ const DiscountBuyMobyCard = () => {
   return (
     <Card
       lightModeBgColor="bg-theo-dark-navy"
+      darkModeBgColor="bg-theo-dark-navy"
       cardHeader={
         <div className="w-full text-center text-2xl font-bold text-white">Affordable Housing</div>
       }

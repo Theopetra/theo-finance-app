@@ -62,6 +62,7 @@ const DiscountBuy = () => {
 
   return (
     <Card
+      darkModeBgColor="bg-theo-dark-navy"
       cardHeader={<div className="w-full text-center text-2xl font-bold">24/7 MicroSpaces</div>}
     >
       <>

@@ -19,7 +19,7 @@ const Dashboard = ({}) => {
       </div>
       <PageContainer>
         <div className="mt-4">
-          <p className=" mb-4">
+          <p className=" mb-4 dark:text-white">
             Growth Markets allow you to buy THEO directly from the protocol & allocate your funding
             to the project of your choice. When you buy THEO, it is locked for a period of time
             before you can claim it.{' '}
