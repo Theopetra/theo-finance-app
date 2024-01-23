@@ -13,6 +13,7 @@ type formStateType = {
   theoPrice: number;
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount;
+  purchaseAmounts;
   purchaseCost;
   transactionPending: boolean;
   maxSlippage: number;
@@ -26,6 +27,7 @@ const initialFormState: formStateType = {
     symbol: 'ETH',
   },
   purchaseAmount: 0,
+  purchaseAmounts: 0,
   purchaseCost: 0,
   transactionPending: false,
   maxSlippage: 0.01,
@@ -93,6 +95,9 @@ export const BuyFormProvider: {
 
     if (selectedMarket?.marketData?.maxPayout) {
       const max = formatUnits(selectedMarket.marketData.capacity, 9);
+      return Number(max);
+    } else {
+      const max = formatUnits(getTotalCapacity(), 9);
       return Number(max);
     }
 
@@ -265,11 +270,17 @@ export const BuyFormProvider: {
       purchaseAmount: '',
     };
 
+    console.log("Value: ", value);
+    const [amountsIn, pricePerTheo, totalOut] = value > BigInt(0) ? getAmountsOut(BigInt(value * 10**18)) : [BigInt(0), quotePrice, BigInt(0)];
+    console.log("Getting amounts: ", amountsIn, pricePerTheo, totalOut);
+    console.log("Total Capacity: ", getTotalCapacity());
+
     if (fieldName === 'purchaseAmount') {
-      const purchaseCost = Number(value * quotePrice).toFixed(purchaseCostPrecision);
+      const purchaseCost = (Number(totalOut) * pricePerTheo).toFixed(purchaseCostPrecision);
       updateFields.purchaseCost = purchaseCost;
     } else {
-      const purchaseAmount = Number(value / quotePrice).toFixed(purchaseAmountPrecision);
+      const purchaseAmount = (Number(totalOut) / pricePerTheo).toFixed(purchaseAmountPrecision);
+      const purchaseAmounts = amountsIn;
       // this is a fallback. There should always be a quotePrice greater than 0.
       updateFields.purchaseAmount = purchaseAmount;
     }
@@ -286,6 +297,39 @@ export const BuyFormProvider: {
     const output = BigInt(Number(priceInfo || 0) / Math.pow(10, 9));
     return selectedToken?.symbol === 'USDC' ? Number(output).toFixed(2) : output;
   };
+
+  const getAmountsOut = (purchaseAmount: bigint) : [bigint[], number, bigint] => {
+    console.log("purchaseAmount: ", purchaseAmount, "marketLength: ");
+    Object.keys(groupedBondMarketsMap[selection.value]?.markets).forEach(key => console.log(key));
+    let amountRemaining = purchaseAmount;
+    let theoToBuy: bigint = BigInt(0);
+    const amountsOut: bigint[] = [];
+      groupedBondMarketsMap[selection.value]?.markets.forEach((market, i) => {
+        while (amountRemaining > 0) {
+          console.log(market.marketData.capacity, BigInt(market.marketData.marketPrice));
+          let availableAmount = market.marketData.capacity * BigInt(market.marketData.marketPrice);
+            if (amountRemaining > availableAmount && availableAmount > 0) {
+                amountRemaining = amountRemaining - availableAmount;
+                theoToBuy += market.marketData.capacity;
+                amountsOut.push(availableAmount);
+                continue;
+            } else {
+                amountsOut.push(amountRemaining);
+                theoToBuy += (BigInt(amountRemaining) / BigInt(market.marketData.marketPrice));
+                break;
+            }
+          }
+      })
+      return [amountsOut, Number(amountsOut.reduce((p, c) => p + c) / theoToBuy) / 10**9, theoToBuy];
+  }
+
+  const getTotalCapacity = () => {
+    let capacity = BigInt(0);
+    groupedBondMarketsMap[selection.value]?.markets.forEach((market, i) => {
+      capacity += market.marketData.capacity;
+    });
+    return capacity;
+  }
 
   useEffect(() => {
     handleUpdate(

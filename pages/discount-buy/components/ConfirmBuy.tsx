@@ -1,5 +1,5 @@
-import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages';
-import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages';
+import wethHelperSignedMessages from '@/artifacts/signed-messages/weth-helper-signed-messages.json';
+import wlBondDepoSignedMessages from '@/artifacts/signed-messages/wl-bonddepo-signed-messages.json';
 import { ConfirmRow } from '@/components/ConfirmationModalRow';
 import Icon from '@/components/Icons';
 import PendingTransaction from '@/components/PendingTransaction';
@@ -66,7 +66,7 @@ export const LockDurationRow = () => {
 
 const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   const [, { openModal, closeModal }] = useModal();
-  const [{ selectedMarket, purchaseToken, purchaseCost, maxSlippage }] = useBuyForm();
+  const [{ selectedMarket, purchaseToken, purchaseCost, purchaseAmounts, maxSlippage }] = useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
 
@@ -146,12 +146,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   //   },
   // });
 
-  const {
-    data: wethData,
-    isError: wethWriteErr,
-    isLoading: wethWriteLoading,
-    writeAsync: wethDeposit,
-  } = useContractWrite({
+  const wethDeposit = async (purchaseAmount, i) => useContractWrite({
     address: WethHelperAddress,
     account: account.address,
     abi: WethHelperAbi as Abi,
@@ -159,7 +154,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     onSuccess: async (data) => {
       openModal(
         <PendingTransaction
-          message="2 of 2 transactions..."
+          message={ i > 1 ? `${i} of ${purchaseAmounts.length} transactions...` : "1 of 1 transactions..."}
           secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
         />
       );
@@ -232,7 +227,10 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
-      await wethDeposit();
+      for (const i of purchaseAmounts) {
+        const {data: wethData, isError: wethWriteErr, isLoading: wethWriteLoading} = 
+        await wethDeposit(purchaseAmounts[i], i);
+      }
     } else {
       // openModal(
       //   <PendingTransaction
