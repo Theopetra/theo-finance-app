@@ -317,16 +317,18 @@ export const BuyFormProvider: {
     const amountsOut: bigint[] = [];
     groupedBondMarketsMap[selection.value]?.markets.forEach((market, i) => {
       while (amountRemaining > 0) {
-        console.log(market.marketData.capacity, BigInt(market.marketData.marketPrice));
-        let availableAmount = market.marketData.capacity * BigInt(market.marketData.marketPrice);
-        if (amountRemaining > availableAmount && availableAmount > 0) {
-          amountRemaining = amountRemaining - availableAmount;
+        console.log(`Loop #${i} `, market.marketData.capacity, BigInt(market.marketData.marketPrice));
+        const price = BigInt(market.marketData.marketPrice);
+        let availableAmount = market.marketData.capacity * price;
+        console.log("Available amount: ", availableAmount, "Amount remaining: ", amountRemaining);
+        if (amountRemaining > availableAmount * price && availableAmount > 0) {
+          amountRemaining -= availableAmount;
           theoToBuy += market.marketData.capacity;
           amountsOut.push(availableAmount);
           continue;
         } else {
           amountsOut.push(amountRemaining);
-          theoToBuy += BigInt(amountRemaining) / BigInt(market.marketData.marketPrice);
+          theoToBuy += BigInt(amountRemaining) / price;
           break;
         }
       }
