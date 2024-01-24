@@ -99,17 +99,10 @@ export const BuyFormProvider: {
   };
 
   const maxPayoutFormatted = useMemo(() => {
-    console.log(selectedMarket?.marketData);
-
-    if (selectedMarket?.marketData?.maxPayout) {
-      const max = formatUnits(selectedMarket.marketData.capacity, 9);
-      return Number(max);
-    } else {
+    if (selectedMarket?.marketData) {
       const max = formatUnits(getTotalCapacity(), 9);
       return Number(max);
-    }
-
-    return 0;
+    } return 0;
   }, [selectedMarket?.marketData]);
 
   const valuationPrice = useMemo(() => {
@@ -290,7 +283,8 @@ export const BuyFormProvider: {
       const purchaseCost = (Number(totalOut) * pricePerTheo).toFixed(purchaseCostPrecision);
       updateFields.purchaseCost = purchaseCost;
     } else {
-      const purchaseAmount = (Number(totalOut) / pricePerTheo).toFixed(purchaseAmountPrecision);
+      const purchaseAmount = (Number(totalOut) / 10 ** 9).toFixed(purchaseAmountPrecision);
+      console.log("Purchase Amount: ", purchaseAmount);
       const purchaseAmounts = amountsIn;
       // this is a fallback. There should always be a quotePrice greater than 0.
       updateFields.purchaseAmount = purchaseAmount;
@@ -315,7 +309,7 @@ export const BuyFormProvider: {
     let amountRemaining = purchaseAmount;
     let theoToBuy: bigint = BigInt(0);
     let i = 0;
-    while (amountRemaining > 0) {
+    while (amountRemaining > 0 && groupedBondMarketsMap[selection.value]?.markets[i]) {
       const market = groupedBondMarketsMap[selection.value]?.markets[i];
       console.log(`Loop #${i} `, market.marketData.capacity, BigInt(market.marketData.marketPrice));
       const price = BigInt(market.marketData.marketPrice);
