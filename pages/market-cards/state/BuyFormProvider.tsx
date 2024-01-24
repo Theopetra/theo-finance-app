@@ -310,29 +310,34 @@ export const BuyFormProvider: {
   };
 
   const getAmountsOut = (purchaseAmount: bigint): [bigint[], number, bigint] => {
-    console.log('purchaseAmount: ', purchaseAmount, 'marketLength: ');
-    Object.keys(groupedBondMarketsMap[selection.value]?.markets).forEach((key) => console.log(key));
+    console.log('purchaseAmount: ', purchaseAmount, 'marketLength: ', groupedBondMarketsMap[selection.value]?.markets.length);
+    const amountsOut: bigint[] = [];
     let amountRemaining = purchaseAmount;
     let theoToBuy: bigint = BigInt(0);
-    const amountsOut: bigint[] = [];
-    groupedBondMarketsMap[selection.value]?.markets.forEach((market, i) => {
-      while (amountRemaining > 0) {
-        console.log(`Loop #${i} `, market.marketData.capacity, BigInt(market.marketData.marketPrice));
-        const price = BigInt(market.marketData.marketPrice);
-        let availableAmount = market.marketData.capacity * price;
-        console.log("Available amount: ", availableAmount, "Amount remaining: ", amountRemaining);
-        if (amountRemaining > availableAmount * price && availableAmount > 0) {
-          amountRemaining -= availableAmount;
-          theoToBuy += market.marketData.capacity;
-          amountsOut.push(availableAmount);
-          continue;
-        } else {
-          amountsOut.push(amountRemaining);
-          theoToBuy += BigInt(amountRemaining) / price;
-          break;
-        }
+    let i = 0;
+    while (amountRemaining > 0) {
+      const market = groupedBondMarketsMap[selection.value]?.markets[i];
+      console.log(`Loop #${i} `, market.marketData.capacity, BigInt(market.marketData.marketPrice));
+      const price = BigInt(market.marketData.marketPrice);
+      const availableAmount = market.marketData.capacity * price;
+      console.log("Available amount: ", availableAmount, "Amount remaining: ", amountRemaining);
+      if (availableAmount == BigInt(0)) {
+        i++;
+        continue;
+      } else if (amountRemaining > availableAmount) {
+        amountRemaining -= availableAmount;
+        console.log("Amount remaining after: ", amountRemaining);
+        theoToBuy += market.marketData.capacity;
+        amountsOut.push(availableAmount);
+        i++;
+        continue;
+      } else {
+        amountsOut.push(amountRemaining);
+        theoToBuy += BigInt(amountRemaining) / price;
+        amountRemaining -= amountRemaining;
+        break;
       }
-    });
+    }
     return [
       amountsOut,
       Number(amountsOut.reduce((p, c) => p + c) / theoToBuy) / 10 ** 9,
