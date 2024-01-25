@@ -157,11 +157,4 @@ const LandEventCard = () => {
   );
 };
 
-const LandEvent = (props) => (
-  // TODO: Update to land event depo name
-  <BuyFormProvider {...props} bondDepoName="MobyBondDepository">
-    <LandEventCard />
-  </BuyFormProvider>
-);
-
-export default LandEvent;
+export default LandEventCard;

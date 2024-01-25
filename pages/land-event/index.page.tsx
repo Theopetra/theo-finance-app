@@ -3,6 +3,7 @@ import PageContainer from '@/components/PageContainer';
 
 import { UserPurchasesProvider } from '../market-cards/state/UserPurchasesProvider';
 import LandEvent from '../market-cards/land-event';
+import BuyFormProvider from '../market-cards/state/BuyFormProvider';
 
 const Dashboard = ({}) => {
   return (
@@ -24,7 +25,12 @@ const Dashboard = ({}) => {
   );
 };
 
-Dashboard.PageStateProvider = (props) => <UserPurchasesProvider {...props} />;
+Dashboard.PageStateProvider = (props) => (
+  <UserPurchasesProvider {...props}>
+    {/* // TODO: Update to land event depo name */}
+    <BuyFormProvider {...props} bondDepoName="MobyBondDepository" />
+  </UserPurchasesProvider>
+);
 
 Dashboard.PageHead = () => {
   return <div>Land Event</div>;
