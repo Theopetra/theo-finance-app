@@ -11,7 +11,7 @@ import { cleanSymbol } from '@/lib/clean_symbol';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { add, format } from 'date-fns';
 import { parseEther, parseUnits, toHex } from 'viem';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAccount, useContractWrite } from 'wagmi';
 import useBuyForm from '../state/use-buy-form';
 import { useUserPurchases } from '../state/use-user-purchases';
@@ -70,6 +70,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
+  const [depositTx, setDepositTx] = useState({depositTx: 1}); // Workaround for transaction loop
 
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
 
@@ -147,8 +148,12 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   //   },
   // });
 
-  const wethDeposit = async (purchaseAmount, i) =>
-    useContractWrite({
+  const {
+    data: wethData,
+    isError: wethWriteErr,
+    isLoading: wethWriteLoading,
+    writeAsync: wethDeposit
+  } = useContractWrite({
       address: WethHelperAddress,
       account: account.address,
       abi: WethHelperAbi as Abi,
@@ -157,7 +162,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         openModal(
           <PendingTransaction
             message={
-              i > 1 ? `${i} of ${depositAmounts.length} transactions...` : '1 of 1 transactions...'
+              depositAmounts.length > 1 ? `${depositTx.depositTx} of ${depositAmounts.length} transactions...` : '1 of 1 transactions...'
             }
             secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
           />
@@ -227,16 +232,27 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     if (purchaseToken?.symbol?.toLowerCase().includes('eth')) {
       openModal(
         <PendingTransaction
-          message="1 of 1 transactions..."
+          message={
+            depositAmounts.length > 1 ? `${depositTx.depositTx} of ${depositAmounts.length} transactions...` : '1 of 1 transactions...'
+          }
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
       for (const i of depositAmounts) {
-        const {
-          data: wethData,
-          isError: wethWriteErr,
-          isLoading: wethWriteLoading,
-        } = await wethDeposit(depositAmounts[Number(i)], i);
+        await wethDeposit({
+          args: [
+          selectedMarket.id,
+          toHex(
+            (BigInt(Math.floor(maxSlippage * 1000)) * depositAmount) / BigInt(1000) + depositAmount
+          ),
+          account?.address,
+          account?.address,
+          bondDepoName === 'PublicPreListBondDepository' ? 2 : 3, // Moby markets are 3, standard are 2
+          false,
+          signature?.wethHelperSignature || '0x00',
+        ],
+        value: depositAmount});
+        setDepositTx({depositTx: depositTx.depositTx + 1}); 
       }
     } else {
       // openModal(
