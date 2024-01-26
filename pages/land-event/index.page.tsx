@@ -2,10 +2,10 @@ import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 
 import { UserPurchasesProvider } from '../market-cards/state/UserPurchasesProvider';
-import LandEvent from '../market-cards/land-event';
+import LandEventCard from '../market-cards/land-event';
 import BuyFormProvider from '../market-cards/state/BuyFormProvider';
 
-const Dashboard = ({}) => {
+const LandEvent = ({}) => {
   return (
     <>
       <div className="pt-4">
@@ -16,7 +16,7 @@ const Dashboard = ({}) => {
           <p className=" mb-4 dark:text-white"></p>
           <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
             <div className="flex w-full grid-cols-2 space-x-4">
-              <LandEvent />
+              <LandEventCard />
             </div>
           </div>
         </div>
@@ -25,15 +25,15 @@ const Dashboard = ({}) => {
   );
 };
 
-Dashboard.PageStateProvider = (props) => (
+LandEvent.PageStateProvider = (props) => (
   <UserPurchasesProvider {...props}>
     {/* // TODO: Update to land event depo name */}
     <BuyFormProvider {...props} bondDepoName="MobyBondDepository" />
   </UserPurchasesProvider>
 );
 
-Dashboard.PageHead = () => {
+LandEvent.PageHead = () => {
   return <div>Land Event</div>;
 };
 
-export default Dashboard;
+export default LandEvent;

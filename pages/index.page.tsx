@@ -38,7 +38,11 @@ const Dashboard = ({}) => {
   );
 };
 
-Dashboard.PageStateProvider = (props) => <UserPurchasesProvider {...props} />;
+Dashboard.PageStateProvider = (props) => (
+  <UserPurchasesProvider {...props}>
+    <BuyFormProvider {...props} bondDepoName="MobyBondDepository" />
+  </UserPurchasesProvider>
+);
 
 Dashboard.PageHead = () => {
   return <div>Expand the Network</div>;

@@ -155,10 +155,4 @@ const DiscountBuyMobyCard = () => {
   );
 };
 
-const DiscountBuyMoby = (props) => (
-  <BuyFormProvider {...props} bondDepoName="MobyBondDepository">
-    <DiscountBuyMobyCard />
-  </BuyFormProvider>
-);
-
-export default DiscountBuyMoby;
+export default DiscountBuyMobyCard;
