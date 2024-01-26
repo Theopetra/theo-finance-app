@@ -13,7 +13,7 @@ type formStateType = {
   theoPrice: number;
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount;
-  purchaseAmounts;
+  depositAmounts;
   purchaseCost;
   transactionPending: boolean;
   maxSlippage: number;
@@ -27,7 +27,7 @@ const initialFormState: formStateType = {
     symbol: 'ETH',
   },
   purchaseAmount: 0,
-  purchaseAmounts: 0,
+  depositAmounts: 0,
   purchaseCost: 0,
   transactionPending: false,
   maxSlippage: 0.01,
@@ -266,16 +266,17 @@ export const BuyFormProvider: {
     const purchaseAmountPrecision =
       selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH' ? 9 : 2;
 
-    const updateFields: { purchaseCost: string; purchaseAmount: string } = {
+    const updateFields: { purchaseCost: string; purchaseAmount: string; depositAmounts: bigint[] } = {
       purchaseCost: '',
       purchaseAmount: '',
+      depositAmounts: [],
     };
 
     console.log('Value: ', value);
     const [amountsIn, pricePerTheo, totalOut] =
       value > BigInt(0)
         ? getAmountsOut(BigInt(value * 10 ** 18))
-        : [BigInt(0), quotePrice, BigInt(0)];
+        : [[BigInt(0)], quotePrice, BigInt(0)];
     console.log('Getting amounts: ', amountsIn, pricePerTheo, totalOut);
     console.log('Total Capacity: ', getTotalCapacity());
 
@@ -285,9 +286,10 @@ export const BuyFormProvider: {
     } else {
       const purchaseAmount = (Number(totalOut) / 10 ** 9).toFixed(purchaseAmountPrecision);
       console.log("Purchase Amount: ", purchaseAmount);
-      const purchaseAmounts = amountsIn;
+      const depositAmounts = amountsIn;
       // this is a fallback. There should always be a quotePrice greater than 0.
       updateFields.purchaseAmount = purchaseAmount;
+      updateFields.depositAmounts = depositAmounts;
     }
 
     updateFields[fieldName] = value;
@@ -364,6 +366,17 @@ export const BuyFormProvider: {
   const updateFormState = (vals: any) => {
     setFormState({ ...formState, ...vals });
   };
+
+  console.log({
+    ...formState,
+    selectedMarket,
+    groupedBondMarketsMap,
+    selection,
+    terms,
+    UIBondMarketsIsLoading,
+    maxPayoutFormatted,
+    bondDepoName,
+  })
 
   return (
     <BuyFormContext.Provider

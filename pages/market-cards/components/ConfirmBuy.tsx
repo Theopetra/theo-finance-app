@@ -66,7 +66,7 @@ export const LockDurationRow = () => {
 
 const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   const [, { openModal, closeModal }] = useModal();
-  const [{ selectedMarket, purchaseToken, purchaseCost, purchaseAmounts, maxSlippage }] =
+  const [{ selectedMarket, purchaseToken, purchaseCost, depositAmounts, maxSlippage }] =
     useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
@@ -157,7 +157,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         openModal(
           <PendingTransaction
             message={
-              i > 1 ? `${i} of ${purchaseAmounts.length} transactions...` : '1 of 1 transactions...'
+              i > 1 ? `${i} of ${depositAmounts.length} transactions...` : '1 of 1 transactions...'
             }
             secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
           />
@@ -231,12 +231,12 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
-      for (const i of purchaseAmounts) {
+      for (const i of depositAmounts) {
         const {
           data: wethData,
           isError: wethWriteErr,
           isLoading: wethWriteLoading,
-        } = await wethDeposit(purchaseAmounts[i], i);
+        } = await wethDeposit(depositAmounts[Number(i)], i);
       }
     } else {
       // openModal(

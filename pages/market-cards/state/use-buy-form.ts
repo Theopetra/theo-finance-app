@@ -52,7 +52,7 @@ type BuyFormStateType = {
   theoPrice: number;
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount: number | string;
-  purchaseAmounts: number[] | string[];
+  depositAmounts: bigint[];
   purchaseCost: number;
   transactionPending;
   selectedMarket: TermsWithMarket;
