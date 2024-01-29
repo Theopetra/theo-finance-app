@@ -7,6 +7,8 @@ import Icon from '../Icons';
 import Logo from './Logo';
 import NavItem from './NavItem';
 import { getAccount } from '@wagmi/core';
+import { useTheme } from '@/state/ui/theme';
+import { classNames } from '@/util/class-names-util';
 
 const socialLinks = [
   { icon: 'twitter', href: 'https://twitter.com/TheopetraLabs' },
@@ -16,13 +18,12 @@ const socialLinks = [
 const classes = {
   statContainer: 'flex flex-row-reverse items-center justify-between flex-1  ',
   number: 'font-bold text-theo-cyan dark:text-white',
-  label: 'font-semibold text-sm text-theo-navy dark:text-theo-cyan',
+  label: 'font-semibold text-sm text-theo-navy dark:text-theo-green',
 };
 
 const Navigation = () => {
   const account = getAccount();
   const { address } = useContractInfo('TheopetraERC20Token');
-
   const { data: balance } = useBalance({
     address: account?.address,
     formatUnits: 9,
@@ -48,7 +49,7 @@ const Navigation = () => {
             <Fragment key={x.icon}>
               <a
                 href={x.href}
-                className="flex h-16  w-16 items-center rounded p-4 text-theo-navy transition hover:bg-theo-cyan hover:text-white dark:text-theo-cyan dark:hover:bg-theo-gray"
+                className="flex h-16  w-16 items-center rounded p-4 text-theo-navy transition hover:bg-theo-cyan hover:text-white dark:text-theo-green dark:hover:bg-theo-gray "
                 target={'_blank'}
                 rel="noreferrer"
               >

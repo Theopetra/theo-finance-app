@@ -25,7 +25,7 @@ const NavItem = ({ item }: NavItem) => {
 
   const activeClass =
     href === router.pathname || activeSubNav === name
-      ? 'bg-theo-navy text-white dark:bg-theo-cyan dark:text-theo-navy'
+      ? 'bg-theo-navy text-white dark:bg-theo-green dark:text-theo-navy'
       : 'bg-theo-light text-theo-navy dark:bg-black dark:text-white';
 
   const hoverClasses =

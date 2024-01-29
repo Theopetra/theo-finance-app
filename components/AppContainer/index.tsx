@@ -48,7 +48,6 @@ const AppContainer: React.FC<{ Header?: any; PageStateProvider }> = ({
               </h1>
               <div className="mb-12 flex flex-1 justify-end space-x-2 md:mb-0">
                 <ConnectWallet />
-                <LightSwitch />
               </div>
             </div>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
