@@ -180,18 +180,6 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         console.log('failing initial', depositAmount);
         openModal(<FailedModal error={error} />);
       },
-      args: [
-        selectedMarket.id,
-        toHex(
-          (BigInt(Math.floor(maxSlippage * 1000)) * depositAmount) / BigInt(1000) + depositAmount
-        ),
-        account?.address,
-        account?.address,
-        bondDepoName === 'PublicPreListBondDepository' ? 2 : 3, // Moby markets are 3, standard are 2
-        false,
-        signature?.wethHelperSignature || '0x00',
-      ],
-      value: depositAmount,
     });
 
   // const {
@@ -238,20 +226,21 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
       );
-      for (const i of depositAmounts) {
+      for (let i = 0; i < depositAmounts.length; i++) {
+        console.log(depositAmounts[i]);
         await wethDeposit({
           args: [
           selectedMarket.id,
           toHex(
-            (BigInt(Math.floor(maxSlippage * 1000)) * depositAmount) / BigInt(1000) + depositAmount
+            (BigInt(Math.floor(maxSlippage * 1000)) * depositAmounts[i]) / BigInt(1000) + depositAmounts[i]
           ),
           account?.address,
           account?.address,
-          bondDepoName === 'PublicPreListBondDepository' ? 2 : 3, // Moby markets are 3, standard are 2
+          bondDepoName === 'PublicPreListBondDepository' ? 1 : 3, // Moby markets are 3, standard are 2
           false,
           signature?.wethHelperSignature || '0x00',
         ],
-        value: depositAmount});
+        value: depositAmounts[i]});
         setDepositTx({depositTx: depositTx.depositTx + 1}); 
       }
     } else {

@@ -24,7 +24,7 @@ export const TokenPrice = ({
   } = useContractRead({
     address: address,
     abi: abi as Abi,
-    functionName: 'marketPrice',
+    functionName: 'calculatePrice',
     args: [id || BigInt(0)],
     cacheTime: cache.cacheTimesInMs.prices,
   });
