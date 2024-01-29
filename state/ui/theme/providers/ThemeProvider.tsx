@@ -19,6 +19,10 @@ export const ThemeProvider: React.FC = (props) => {
     lsUiTheme && setTheme(lsUiTheme);
   }, []);
 
+  useEffect(() => {
+    setTheme(router.pathname.includes('yimby') ? 'dark' : 'light');
+  }, [router.pathname]);
+
   return (
     <ThemeContext.Provider
       value={[

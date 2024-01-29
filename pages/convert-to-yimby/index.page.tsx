@@ -1,7 +1,14 @@
 import Card from '@/components/Card';
+import { useTheme } from '@/state/ui/theme';
 import React from 'react';
 
 const ConvertToYimbyPage = () => {
+  const [, { setTheme }] = useTheme();
+
+  // React.useEffect(() => {
+  //   setTheme('dark');
+  // }, [setTheme]);
+
   return (
     <div className="grid h-full grid-cols-5">
       <div className="col-span-3">
