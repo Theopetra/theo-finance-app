@@ -70,7 +70,8 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
-  const [depositTx, setDepositTx] = useState(1); // Workaround for transaction loop
+  
+  let depositTx = useMemo(() => 1, depositAmounts); // Workaround for transaction loop
 
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
 
@@ -159,7 +160,8 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
       abi: WethHelperAbi as Abi,
       functionName: 'deposit',
       onSuccess: async (data) => {
-        setDepositTx(depositTx + 1);
+        console.log("txLoop: ", depositTx, depositAmounts.length);
+        depositTx += 1;
         openModal(
           <PendingTransaction
             message={
@@ -172,7 +174,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
           logEvent({ name: 'purchase_completed' });
           cache.clear();
           reRender();
-          if (depositTx == depositAmounts.length) {
+          if (depositTx >= depositAmounts.length + 1) {
             openModal(<SuccessModal txId={data.hash} />);
           }
         } else {
