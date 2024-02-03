@@ -20,12 +20,13 @@ import { Intersect } from 'phosphor-react';
 import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import { Abi } from 'viem';
 
-export const Price = () => {
-  const [{ selectedMarket, purchaseToken }] = useBuyForm();
-
+export const Price = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
+  const [{ selectedMarket, purchaseToken, depositAmounts }] = useBuyForm();
+  const ids =  Array.from(depositAmounts, (value, index) => index + selectedMarket.id);
+  
   return (
     <>
-      <TokenPrice market={selectedMarket} bondDepoName="PublicPreListBondDepository" />{' '}
+      <TokenPrice market={selectedMarket} bondDepoName={bondDepoName} marketIds={ids} />{' '}
       {cleanSymbol(purchaseToken?.symbol)}
     </>
   );
@@ -43,8 +44,8 @@ export const PurchaseAmountRow = () => {
   );
 };
 
-export const TheoPurchasePriceRow = () => {
-  return <ConfirmRow title="$THEO Purchase Price" value={<Price />} subtext={`Per $THEO`} />;
+export const TheoPurchasePriceRow = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
+  return <ConfirmRow title="$THEO Purchase Price" value={<Price bondDepoName={bondDepoName} />} subtext={`Per $THEO`} />;
 };
 
 export const LockDurationRow = () => {
@@ -160,7 +161,6 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
       abi: WethHelperAbi as Abi,
       functionName: 'deposit',
       onSuccess: async (data) => {
-        console.log("txLoop: ", depositTx, depositAmounts.length);
         depositTx += 1;
         openModal(
           <PendingTransaction
@@ -182,7 +182,6 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         }
       },
       onError: (error) => {
-        console.log('failing initial', depositAmount);
         openModal(<FailedModal error={error} />);
       },
     });
@@ -245,7 +244,6 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
           signature?.wethHelperSignature || '0x00',
         ],
         value: depositAmounts[i]}); 
-        console.log("depositTx", depositTx);
       }
     } else {
       // openModal(
@@ -288,7 +286,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         </div>
       </div>
       <div className="mb-4 flex flex-col gap-2">
-        <TheoPurchasePriceRow />
+        <TheoPurchasePriceRow bondDepoName={bondDepoName} />
         <PurchaseAmountRow />
         <LockDurationRow />
         {/* TODO: calc time remaining */}
