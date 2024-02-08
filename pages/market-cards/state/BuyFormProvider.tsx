@@ -274,7 +274,7 @@ export const BuyFormProvider: {
 
     console.log('Value: ', value);
     const [amountsIn, pricePerTheo, totalOut] =
-      value > BigInt(0)
+      BigInt(value * 10 ** 18) > BigInt(0)
         ? getAmountsOut(BigInt(value * 10 ** 18))
         : [[BigInt(0)], quotePrice, BigInt(0)];
     console.log('Getting amounts: ', amountsIn, pricePerTheo, totalOut);
