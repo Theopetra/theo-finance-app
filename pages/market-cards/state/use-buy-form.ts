@@ -49,7 +49,7 @@ export type GroupedBondMarketsMapType = {
 };
 
 type BuyFormStateType = {
-  theoPrice: number;
+  pricePerTheo: number;
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount: number | string;
   depositAmounts: bigint[];

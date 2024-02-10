@@ -10,7 +10,7 @@ import { GroupedBondMarketsMapType, Terms } from './use-buy-form';
 export const BuyFormContext = React.createContext<any>(null);
 
 type formStateType = {
-  theoPrice: number;
+  pricePerTheo: number;
   purchaseToken: CurrencySelectOptionType | null;
   purchaseAmount;
   depositAmounts;
@@ -20,7 +20,7 @@ type formStateType = {
 };
 
 const initialFormState: formStateType = {
-  theoPrice: 100,
+  pricePerTheo: 0,
   purchaseToken: {
     quoteToken: process.env.NEXT_PUBLIC_ETH_ADDRESS as `0x${string}`,
     address: process.env.NEXT_PUBLIC_ETH_ADDRESS,
@@ -70,7 +70,6 @@ export const BuyFormProvider: {
     functionName: 'calculatePrice',
     args: [selectedMarket?.id],
   });
-  console.log('priceInfo', selectedMarket);
 
   const { address: ChainlinkPriceFeed, abi: ChainlinkPriceFeedAbi } =
     useContractInfo('ChainlinkPriceFeed');
@@ -102,7 +101,8 @@ export const BuyFormProvider: {
     if (selectedMarket?.marketData) {
       const max = formatUnits(getTotalCapacity(), 9);
       return Number(max);
-    } return 0;
+    }
+    return 0;
   }, [selectedMarket?.marketData]);
 
   const valuationPrice = useMemo(() => {
@@ -266,11 +266,12 @@ export const BuyFormProvider: {
     const purchaseAmountPrecision =
       selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH' ? 9 : 2;
 
-    const updateFields: { purchaseCost: string; purchaseAmount: string; depositAmounts: bigint[] } = {
-      purchaseCost: '',
-      purchaseAmount: '',
-      depositAmounts: [],
-    };
+    const updateFields: { purchaseCost: string; purchaseAmount: string; depositAmounts: bigint[] } =
+      {
+        purchaseCost: '',
+        purchaseAmount: '',
+        depositAmounts: [],
+      };
 
     console.log('Value: ', value);
     const [amountsIn, pricePerTheo, totalOut] =
@@ -285,7 +286,7 @@ export const BuyFormProvider: {
       updateFields.purchaseCost = purchaseCost;
     } else {
       const purchaseAmount = (Number(totalOut) / 10 ** 9).toFixed(purchaseAmountPrecision);
-      console.log("Purchase Amount: ", purchaseAmount);
+      console.log('Purchase Amount: ', purchaseAmount);
       const depositAmounts = amountsIn;
       // this is a fallback. There should always be a quotePrice greater than 0.
       updateFields.purchaseAmount = purchaseAmount;
@@ -306,7 +307,12 @@ export const BuyFormProvider: {
   };
 
   const getAmountsOut = (purchaseAmount: bigint): [bigint[], number, bigint] => {
-    console.log('purchaseAmount: ', purchaseAmount, 'marketLength: ', groupedBondMarketsMap[selection.value]?.markets.length);
+    console.log(
+      'purchaseAmount: ',
+      purchaseAmount,
+      'marketLength: ',
+      groupedBondMarketsMap[selection.value]?.markets.length
+    );
     const amountsOut: bigint[] = [];
     let amountRemaining = purchaseAmount;
     let theoToBuy: bigint = BigInt(0);
@@ -316,13 +322,13 @@ export const BuyFormProvider: {
       console.log(`Loop #${i} `, market.marketData.capacity, BigInt(market.marketData.marketPrice));
       const price = BigInt(market.marketData.marketPrice);
       const availableAmount = market.marketData.capacity * price;
-      console.log("Available amount: ", availableAmount, "Amount remaining: ", amountRemaining);
+      console.log('Available amount: ', availableAmount, 'Amount remaining: ', amountRemaining);
       if (availableAmount == BigInt(0)) {
         i++;
         continue;
       } else if (amountRemaining > availableAmount) {
         amountRemaining -= availableAmount;
-        console.log("Amount remaining after: ", amountRemaining);
+        console.log('Amount remaining after: ', amountRemaining);
         theoToBuy += market.marketData.capacity;
         amountsOut.push(availableAmount);
         i++;
@@ -334,11 +340,12 @@ export const BuyFormProvider: {
         break;
       }
     }
-    return [
-      amountsOut,
-      Number(amountsOut.reduce((p, c) => p + c) / theoToBuy) / 10 ** 9,
-      theoToBuy,
-    ];
+    const pricePerTheo = Number(amountsOut.reduce((p, c) => p + c) / theoToBuy) / 10 ** 9;
+    setFormState((prevState) => ({
+      ...prevState,
+      pricePerTheo,
+    }));
+    return [amountsOut, pricePerTheo, theoToBuy];
   };
 
   useEffect(() => {
@@ -376,7 +383,7 @@ export const BuyFormProvider: {
     UIBondMarketsIsLoading,
     maxPayoutFormatted,
     bondDepoName,
-  })
+  });
 
   return (
     <BuyFormContext.Provider

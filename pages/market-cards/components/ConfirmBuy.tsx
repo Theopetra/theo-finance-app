@@ -21,12 +21,11 @@ import SuccessfulTransaction from '@/components/SuccessfulTransaction';
 import { Abi } from 'viem';
 
 export const Price = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
-  const [{ selectedMarket, purchaseToken, depositAmounts }] = useBuyForm();
-  const ids =  Array.from(depositAmounts, (value, index) => index + selectedMarket.id);
-  
+  const [{ purchaseToken, pricePerTheo }] = useBuyForm();
+
   return (
     <>
-      <TokenPrice market={selectedMarket} bondDepoName={bondDepoName} marketIds={ids} />{' '}
+      {pricePerTheo}
       {cleanSymbol(purchaseToken?.symbol)}
     </>
   );
@@ -45,7 +44,13 @@ export const PurchaseAmountRow = () => {
 };
 
 export const TheoPurchasePriceRow = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
-  return <ConfirmRow title="$THEO Purchase Price" value={<Price bondDepoName={bondDepoName} />} subtext={`Per $THEO`} />;
+  return (
+    <ConfirmRow
+      title="$THEO Purchase Price"
+      value={<Price bondDepoName={bondDepoName} />}
+      subtext={`Per $THEO`}
+    />
+  );
 };
 
 export const LockDurationRow = () => {
@@ -71,7 +76,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     useBuyForm();
   const [, { reRender }] = useUserPurchases();
   const account = useAccount();
-  
+
   let depositTx = useMemo(() => 1, depositAmounts); // Workaround for transaction loop
 
   const { address: WethHelperAddress, abi: WethHelperAbi } = useContractInfo('WethHelper');
@@ -154,37 +159,39 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     data: wethData,
     isError: wethWriteErr,
     isLoading: wethWriteLoading,
-    writeAsync: wethDeposit
+    writeAsync: wethDeposit,
   } = useContractWrite({
-      address: WethHelperAddress,
-      account: account.address,
-      abi: WethHelperAbi as Abi,
-      functionName: 'deposit',
-      onSuccess: async (data) => {
-        depositTx += 1;
-        openModal(
-          <PendingTransaction
-            message={
-              depositAmounts.length > 1 ? `${depositTx} of ${depositAmounts.length} transactions...` : '1 of 1 transactions...'
-            }
-            secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
-          />
-        );
-        if (data.hash) {
-          logEvent({ name: 'purchase_completed' });
-          cache.clear();
-          reRender();
-          if (depositTx >= depositAmounts.length + 1) {
-            openModal(<SuccessModal txId={data.hash} />);
+    address: WethHelperAddress,
+    account: account.address,
+    abi: WethHelperAbi as Abi,
+    functionName: 'deposit',
+    onSuccess: async (data) => {
+      depositTx += 1;
+      openModal(
+        <PendingTransaction
+          message={
+            depositAmounts.length > 1
+              ? `${depositTx} of ${depositAmounts.length} transactions...`
+              : '1 of 1 transactions...'
           }
-        } else {
-          openModal(<FailedModal error={'call'} />);
+          secondaryMessage={`Submitting ${cleanSymbol(purchaseToken?.symbol)} transaction...`}
+        />
+      );
+      if (data.hash) {
+        logEvent({ name: 'purchase_completed' });
+        cache.clear();
+        reRender();
+        if (depositTx >= depositAmounts.length + 1) {
+          openModal(<SuccessModal txId={data.hash} />);
         }
-      },
-      onError: (error) => {
-        openModal(<FailedModal error={error} />);
-      },
-    });
+      } else {
+        openModal(<FailedModal error={'call'} />);
+      }
+    },
+    onError: (error) => {
+      openModal(<FailedModal error={error} />);
+    },
+  });
 
   // const {
   //   data: approveData,
@@ -225,7 +232,9 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
       openModal(
         <PendingTransaction
           message={
-            depositAmounts.length > 1 ? `${depositTx} of ${depositAmounts.length} transactions...` : '1 of 1 transactions...'
+            depositAmounts.length > 1
+              ? `${depositTx} of ${depositAmounts.length} transactions...`
+              : '1 of 1 transactions...'
           }
           secondaryMessage={`Approving ${cleanSymbol(purchaseToken?.symbol)} spend...`}
         />
@@ -233,17 +242,19 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
       for (let i = 0; i < depositAmounts.length; i++) {
         await wethDeposit({
           args: [
-          (selectedMarket.id + i),
-          toHex(
-            (BigInt(Math.floor(maxSlippage * 1000)) * depositAmounts[i]) / BigInt(1000) + depositAmounts[i]
-          ),
-          account?.address,
-          account?.address,
-          bondDepoName === 'PublicPreListBondDepository' ? 2 : 4, // Moby markets are 4, standard are 2
-          false,
-          signature?.wethHelperSignature || '0x00',
-        ],
-        value: depositAmounts[i]}); 
+            selectedMarket.id + i,
+            toHex(
+              (BigInt(Math.floor(maxSlippage * 1000)) * depositAmounts[i]) / BigInt(1000) +
+                depositAmounts[i]
+            ),
+            account?.address,
+            account?.address,
+            bondDepoName === 'PublicPreListBondDepository' ? 2 : 4, // Moby markets are 4, standard are 2
+            false,
+            signature?.wethHelperSignature || '0x00',
+          ],
+          value: depositAmounts[i],
+        });
       }
     } else {
       // openModal(

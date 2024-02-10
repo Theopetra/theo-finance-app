@@ -1,13 +1,9 @@
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
-import useBuyForm from './market-cards/state/use-buy-form';
-import { useAccount, useBalance } from 'wagmi';
-import { BaseSyntheticEvent, useState } from 'react';
-import useModal from '@/state/ui/theme/hooks/use-modal';
+
 import DiscountBuyCard from './market-cards/discount-buy';
 import { UserPurchasesProvider } from './market-cards/state/UserPurchasesProvider';
 import BuyFormProvider from './market-cards/state/BuyFormProvider';
-import DiscountBuyMobyCard from './market-cards/discount-buy-moby';
 
 const Dashboard = ({}) => {
   return (
@@ -26,10 +22,10 @@ const Dashboard = ({}) => {
               Learn More
             </a>
           </p>
-          <div className="mb-14 flex flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
+          <div className="mb-14 flex max-w-lg flex-col gap-x-2 space-x-0 space-y-4 sm:space-x-2  md:flex-row">
             <div className="flex w-full grid-cols-2 space-x-4">
               <DiscountBuyCard />
-              <DiscountBuyMobyCard />
+              {/* <DiscountBuyMobyCard /> */}
             </div>
           </div>
         </div>
