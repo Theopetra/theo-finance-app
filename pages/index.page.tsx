@@ -1,9 +1,9 @@
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
 
-import DiscountBuyCard from './market-cards/discount-buy';
 import { UserPurchasesProvider } from './market-cards/state/UserPurchasesProvider';
 import BuyFormProvider from './market-cards/state/BuyFormProvider';
+import DiscountBuyCard from './market-cards/discount-buy';
 
 const Dashboard = ({}) => {
   return (
@@ -36,7 +36,7 @@ const Dashboard = ({}) => {
 
 Dashboard.PageStateProvider = (props) => (
   <UserPurchasesProvider {...props}>
-    <BuyFormProvider {...props} bondDepoName="MobyBondDepository" />
+    <BuyFormProvider {...props} bondDepoName="PublicPreListBondDepository" />
   </UserPurchasesProvider>
 );
 

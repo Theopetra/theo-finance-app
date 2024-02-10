@@ -16,7 +16,7 @@ const DataRow = ({ label, value }: { label: string; value: any }) => (
   </div>
 );
 
-const DiscountBuy = () => {
+const DiscountBuyCard = () => {
   const [
     {
       purchaseCost,
@@ -147,10 +147,4 @@ const DiscountBuy = () => {
   );
 };
 
-const DiscountBuyMoby = (props) => (
-  <BuyFormProvider {...props} bondDepoName="PublicPreListBondDepository">
-    <DiscountBuy />
-  </BuyFormProvider>
-);
-
-export default DiscountBuyMoby;
+export default DiscountBuyCard;
