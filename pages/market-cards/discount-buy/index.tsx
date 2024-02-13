@@ -8,6 +8,7 @@ import { formatUnits } from 'viem';
 import Tooltip from '@/components/Tooltip';
 import Card from '@/components/Card';
 import BuyFormProvider from '../state/BuyFormProvider';
+import Icon from '@/components/Icons';
 
 const DataRow = ({ label, value }: { label: string; value: any }) => (
   <div className="flex w-full items-center justify-between">
@@ -65,14 +66,16 @@ const DiscountBuyCard = () => {
   return (
     <Card
       darkModeBgColor="bg-theo-dark-navy"
-      cardHeader={<div className="w-full text-center text-2xl font-bold">24/7 MicroSpaces</div>}
+      cardHeader={
+        <div className="w-full text-center text-2xl font-bold">Affordable Housing</div>
+      }
     >
       <>
         <div className="mb-4 flex w-full flex-col">
           {[
-            { label: 'Units Owned', value: '4 Units' },
-            { label: 'Avg. Cost/Unit', value: '$5,500' },
-            { label: 'Avg. Net Rent*', value: '$150-200 / MO' },
+            { label: 'Units Owned', value: '1 Unit' },
+            { label: 'Avg. Cost/Unit', value: '$150,000+' },
+            { label: 'Avg. Net Rent*', value: '$750-1000 / MO' },
             { label: 'Lock Period', value: '24 Hours' },
           ].map((item) => (
             <DataRow key={item.label} {...item} />
@@ -137,10 +140,17 @@ const DiscountBuyCard = () => {
           disabled={Boolean(error?.length)}
           onClick={() => openModal(<ConfirmBuy bondDepoName="PublicPreListBondDepository" />)}
         >
-          {Boolean(error?.length) ? error : <>Buy THEO</>}
+          {Boolean(error?.length) ? (
+            error
+          ) : (
+            <>
+              <Icon name={'theo'} className="mr-2 w-8" />
+              Purchase {purchaseAmount} THEO
+            </>
+          )}
         </button>
         <div className="text-xs text-gray-400">
-          *Based on a $55k Purchase Price Purchase price mav vary All Prices in USD
+        *Based on a $150k Purchase Price. Purchase price may vary. All Prices in USD
         </div>
       </>
     </Card>
