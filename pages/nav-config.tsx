@@ -10,12 +10,12 @@ export const navigation = [
     href: '/land-event',
     icon: <img src={'/assets/icons/Growth-Icon-navy.png'} className="mr-2 w-8" />,
   },
-  {
-    name: 'Convert to YIMBY',
-    href: '/convert-to-yimby',
-    icon: <img src={'/assets/icons/key.png'} className="mr-2 w-8" />,
-    disabled: false,
-  },
+  // {
+  //   name: 'Convert to YIMBY',
+  //   href: '/convert-to-yimby',
+  //   icon: <img src={'/assets/icons/key.png'} className="mr-2 w-8" />,
+  //   disabled: false,
+  // },
   {
     name: 'Unstake THEO',
     href: '/unstake',
