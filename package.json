@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",
-    "@heroicons/react": "^2.0.18",
+    "@heroicons/react": "v1",
     "@ngneat/falso": "^5.0.0",
     "@rainbow-me/rainbowkit": "1.0.2",
     "date-fns": "^2.28.0",
