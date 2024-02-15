@@ -17,7 +17,7 @@ const Dashboard = ({}) => {
             Growth Markets allow you to buy THEO directly from the protocol & allocate your funding
             to the project of your choice. When you buy THEO, it is locked for a period of time
             before you can claim it.{' '}
-            <a href="#" className="underline">
+            <a href="https://docs.theopetralabs.com/on-chain-ecosystem/growth-markets" className="underline">
               {' '}
               Learn More
             </a>

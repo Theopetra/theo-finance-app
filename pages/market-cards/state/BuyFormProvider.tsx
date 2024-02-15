@@ -45,6 +45,7 @@ export const BuyFormProvider: {
   const [formState, setFormState] = useState<formStateType>(initialFormState);
   const [UIBondMarketsIsLoading, setUIBondMarketsIsLoading] = useState(true);
   const { address, abi } = useActiveBondDepo(bondDepoName);
+  console.log("Active depo: ", bondDepoName, address);
   const { data: selectedToken } = useToken({ address: formState.purchaseToken?.quoteToken });
   const selectedMarket = useMemo(() => {
     if (selection.value && Object.keys(groupedBondMarketsMap).length > 0) {

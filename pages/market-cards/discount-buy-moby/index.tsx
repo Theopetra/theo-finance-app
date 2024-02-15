@@ -66,15 +66,15 @@ const DiscountBuyMobyCard = () => {
       lightModeBgColor="bg-theo-dark-navy"
       darkModeBgColor="bg-theo-dark-navy"
       cardHeader={
-        <div className="w-full text-center text-2xl font-bold text-white">Affordable Housing</div>
+        <div className="w-full text-center text-2xl font-bold text-white">24/7 MicroSpaces</div>
       }
     >
       <>
         <div className="mb-4 flex w-full flex-col">
           {[
-            { label: 'Units Owned', value: '1 Unit' },
-            { label: 'Avg. Cost/Unit', value: '$150,000+' },
-            { label: 'Avg. Net Rent*', value: '$750-1000 / MO' },
+            { label: 'Units Owned', value: '4 Units' },
+            { label: 'Avg. Cost/Unit', value: '$5,500' },
+            { label: 'Avg. Net Rent*', value: '$150-200 / MO' },
             { label: 'Lock Period', value: '24 Hours' },
           ].map((item) => (
             <DataRow key={item.label} {...item} />
@@ -148,7 +148,7 @@ const DiscountBuyMobyCard = () => {
           )}
         </button>
         <div className="text-xs text-gray-400">
-          *Based on a $150k Purchase Price. Purchase price mav vary. All Prices in USD
+          *Based on a $6k Purchase Price. Purchase price may vary. All Prices in USD
         </div>
       </>
     </Card>
