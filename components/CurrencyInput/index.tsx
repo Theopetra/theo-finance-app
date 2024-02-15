@@ -65,10 +65,11 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
                 </>
               )}
               <span
-                onClick={() => 
-                  isDiscountBuy === true ? 
-                  onChange({ target: { value: Number(maxPayout) } }, 'purchasePrice') : 
-                  onChange({ target: { value: Number(balance) } }, 'purchasePrice')}
+                onClick={() =>
+                  isDiscountBuy === true
+                    ? onChange({ target: { value: Number(maxPayout) } }, 'purchasePrice')
+                    : onChange({ target: { value: Number(balance) } }, 'purchasePrice')
+                }
                 className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white"
               >
                 max
@@ -79,9 +80,10 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
           )}
           {/*  */}
           <input
+            type="number"
             value={value}
             onChange={onChange}
-            className="w-full flex-1 bg-transparent pr-2 text-right hover:appearance-none focus:outline-none"
+            className="w-full flex-1 bg-transparent pr-2 text-right [appearance:textfield] hover:appearance-none focus:outline-none"
             placeholder="00.00"
             onKeyPress={(event) => {
               if (!/^\d*\.?\d*$/.test(event.key)) {
@@ -89,7 +91,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
               }
             }}
           />
-          <div className="pr-4 pl-2">{cleanSymbol(selectedToken?.symbol)}</div>
+          <div className="pl-2 pr-4">{cleanSymbol(selectedToken?.symbol)}</div>
         </div>
         <div className="p-2 text-right text-xs sm:hidden">
           Balance: {balance}

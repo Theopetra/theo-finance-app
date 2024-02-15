@@ -273,20 +273,16 @@ export const BuyFormProvider: {
         depositAmounts: [],
       };
 
-    console.log('Value: ', value);
     const [amountsIn, pricePerTheo, totalOut] =
-      BigInt(value * 10 ** 18) > BigInt(0)
+      BigInt(Number(value) * 10 ** 18) > BigInt(0)
         ? getAmountsOut(BigInt(value * 10 ** 18))
         : [[BigInt(0)], quotePrice, BigInt(0)];
-    console.log('Getting amounts: ', amountsIn, pricePerTheo, totalOut);
-    console.log('Total Capacity: ', getTotalCapacity());
 
     if (fieldName === 'purchaseAmount') {
       const purchaseCost = (Number(totalOut) * pricePerTheo).toFixed(purchaseCostPrecision);
       updateFields.purchaseCost = purchaseCost;
     } else {
       const purchaseAmount = (Number(totalOut) / 10 ** 9).toFixed(purchaseAmountPrecision);
-      console.log('Purchase Amount: ', purchaseAmount);
       const depositAmounts = amountsIn;
       // this is a fallback. There should always be a quotePrice greater than 0.
       updateFields.purchaseAmount = purchaseAmount;
@@ -319,16 +315,13 @@ export const BuyFormProvider: {
     let i = 0;
     while (amountRemaining > 0 && groupedBondMarketsMap[selection.value]?.markets[i]) {
       const market = groupedBondMarketsMap[selection.value]?.markets[i];
-      console.log(`Loop #${i} `, market.marketData.capacity, BigInt(market.marketData.marketPrice));
       const price = BigInt(market.marketData.marketPrice);
       const availableAmount = market.marketData.capacity * price;
-      console.log('Available amount: ', availableAmount, 'Amount remaining: ', amountRemaining);
       if (availableAmount == BigInt(0)) {
         i++;
         continue;
       } else if (amountRemaining > availableAmount) {
         amountRemaining -= availableAmount;
-        console.log('Amount remaining after: ', amountRemaining);
         theoToBuy += market.marketData.capacity;
         amountsOut.push(availableAmount);
         i++;
@@ -373,17 +366,6 @@ export const BuyFormProvider: {
   const updateFormState = (vals: any) => {
     setFormState({ ...formState, ...vals });
   };
-
-  console.log({
-    ...formState,
-    selectedMarket,
-    groupedBondMarketsMap,
-    selection,
-    terms,
-    UIBondMarketsIsLoading,
-    maxPayoutFormatted,
-    bondDepoName,
-  });
 
   return (
     <BuyFormContext.Provider

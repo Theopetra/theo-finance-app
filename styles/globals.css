@@ -45,4 +45,12 @@
   .sticky-list {
     @apply sticky top-[194px] bg-gray-100 dark:bg-[#262626] md:relative md:top-0;
   }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number'] {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield !important;
+  }
 }

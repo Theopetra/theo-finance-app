@@ -7,7 +7,6 @@ import ConfirmBuy from '../components/ConfirmBuy';
 import { formatUnits } from 'viem';
 import Tooltip from '@/components/Tooltip';
 import Card from '@/components/Card';
-import BuyFormProvider from '../state/BuyFormProvider';
 
 const DataRow = ({ label, value }: { label: string; value: any }) => (
   <div className="flex w-full items-center justify-between">
@@ -41,6 +40,7 @@ const DiscountBuyCard = () => {
   const [error, setError] = useState<string>('');
 
   const handleCurencyInputChange = (e: BaseSyntheticEvent) => {
+    console.log(e.target.value);
     if (Number(e.target.value) < 0) return;
     if (Number(e.target.value) > Number(balance?.formatted)) {
       setError('Insufficient balance');
