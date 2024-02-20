@@ -14,7 +14,7 @@ import useModal from '@/state/ui/theme/hooks/use-modal';
 import UnstakeConfirm from './components/UnstakeConfirm';
 import { Abi } from 'viem';
 import { getAccount } from '@wagmi/core';
-import { InformationCircleIcon } from '@heroicons/react/20/solid';
+import { InformationCircleIcon } from '@heroicons/react/solid';
 const RewardsPoolPopover = ({ reward }) => (
   <Popover className="relative -mt-2  ">
     <Popover.Button>

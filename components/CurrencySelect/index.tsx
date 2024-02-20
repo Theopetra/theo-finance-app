@@ -5,7 +5,7 @@ import EthIcon from '../../public/assets/icons/eth.svg';
 import UdcIcon from '../../public/assets/icons/usdc.svg';
 import { TokenInfo } from '../TokenName';
 import { cleanSymbol } from '@/lib/clean_symbol';
-import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import ChevronUpDownIcon from '../ChevronUpDownIcon/ChevronUpDownIcon';
 
 export type CurrencySelectOptionType = {
   symbol?: string | undefined;

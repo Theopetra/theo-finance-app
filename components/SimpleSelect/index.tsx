@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import { CheckIcon } from '@heroicons/react/solid';
+import ChevronUpDownIcon from '../ChevronUpDownIcon/ChevronUpDownIcon';
 import { classNames } from '@/util/class-names-util';
 
 export default function SimpleSelect({ options, selected, onChange }) {
