@@ -89,8 +89,7 @@ const DiscountBuyCard = () => {
               ? Number(
                   formatUnits(
                     BigInt(
-                      Number(selectedMarket.marketData.marketPrice) *
-                        Number(selectedMarket.marketData.maxPayout)
+                      maxPayoutFormatted
                     ),
                     18
                   )

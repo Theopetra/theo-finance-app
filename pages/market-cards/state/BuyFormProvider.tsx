@@ -98,9 +98,17 @@ export const BuyFormProvider: {
     return capacity;
   };
 
+  const getMaxPayout = () => {
+    let maxPayout = BigInt(0);
+    groupedBondMarketsMap[selection.value]?.markets.forEach((market, i) => {
+      maxPayout += BigInt(market.marketData.capacity) * BigInt(market.marketData.marketPrice);
+    });
+    return maxPayout;
+  };
+
   const maxPayoutFormatted = useMemo(() => {
     if (selectedMarket?.marketData) {
-      const max = formatUnits(getTotalCapacity(), 9);
+      const max = getMaxPayout();
       return Number(max);
     }
     return 0;

@@ -66,7 +66,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
               )}
               <span
                 onClick={() =>
-                  isDiscountBuy === true
+                  Number(balance) > Number(maxPayout) && isDiscountBuy === true
                     ? onChange({ target: { value: Number(maxPayout) } }, 'purchasePrice')
                     : onChange({ target: { value: Number(balance) } }, 'purchasePrice')
                 }
