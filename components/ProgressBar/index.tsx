@@ -20,7 +20,6 @@ const ProgressBar = ({ progress }) => {
   const labelStyles = {
     padding: 1,
     color: "#34445A",
-    textAlign: "right",
     fontSize: 20,
   };
 
