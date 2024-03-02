@@ -2,7 +2,7 @@ import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useActiveBondDepo } from '@/hooks/useActiveBondDepo';
 import { cache } from '@/lib/cache';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useContractRead, useToken } from 'wagmi';
+import { useBalance, useContractRead, useToken } from 'wagmi';
 import { BondDepoNameType, useContractInfo } from '@/hooks/useContractInfo';
 import { getContract } from '@wagmi/core';
 import { Abi, formatUnits } from 'viem';
@@ -350,6 +350,23 @@ export const BuyFormProvider: {
     return [amountsOut, pricePerTheo, theoToBuy];
   };
 
+  const { data: treasuryBalance } = useBalance({
+    address: '0xf3143ae15deA73F4E8F32360F6b669173c854388',
+    });
+
+  const unitProgress = useMemo(() => {
+    const unitCost = 150000;
+    if (priceFeed && treasuryBalance?.value) {
+      const price = formatUnits(BigInt(priceFeed as bigint), 8);
+      const balanceFormatted = formatUnits(treasuryBalance?.value as bigint, 18);
+      const percentageValue = ((Number(balanceFormatted) * Number(price)) / unitCost) * 100;
+        
+        if (percentageValue > BigInt(100)) {
+            return 100;
+        } else return percentageValue;
+    } else return 0;
+    }, [treasuryBalance, priceFeed]);
+
   useEffect(() => {
     handleUpdate(
       {
@@ -389,6 +406,7 @@ export const BuyFormProvider: {
           UIBondMarketsIsLoading,
           maxPayoutFormatted,
           bondDepoName,
+          unitProgress,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}

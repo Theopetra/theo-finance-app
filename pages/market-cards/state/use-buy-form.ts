@@ -67,6 +67,7 @@ type BuyFormStateType = {
   terms: Terms[];
   maxPayoutFormatted: number;
   bondDepoName: BondDepoNameType;
+  unitProgress: number;
 };
 type BuyFormDispatchType = {
   setSelection;

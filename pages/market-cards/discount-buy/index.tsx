@@ -9,6 +9,7 @@ import Tooltip from '@/components/Tooltip';
 import Card from '@/components/Card';
 import BuyFormProvider from '../state/BuyFormProvider';
 import Icon from '@/components/Icons';
+import ProgressBar from '@/components/ProgressBar';
 
 const DataRow = ({ label, value }: { label: string; value: any }) => (
   <div className="flex w-full items-center justify-between">
@@ -27,6 +28,7 @@ const DiscountBuyCard = () => {
       UIBondMarketsIsLoading,
       maxPayoutFormatted,
       selectedMarket,
+      unitProgress,
     },
     { handleUpdate, handleTokenInput },
   ] = useBuyForm();
@@ -76,10 +78,12 @@ const DiscountBuyCard = () => {
             { label: 'Avg. Cost/Unit', value: '$150,000+' },
             { label: 'Avg. Net Rent*', value: '$750-1000 / MO' },
             { label: 'Lock Period', value: '24 Hours' },
+            { label: 'Next Unit Progress', value: <ProgressBar progress={unitProgress}></ProgressBar> },
           ].map((item) => (
             <DataRow key={item.label} {...item} />
           ))}
         </div>
+        {/* <ProgressBar progress={unitProgress}></ProgressBar> */}
         <CurrencyInput
           className={'mb-2'}
           selectedToken={{ ...purchaseToken }}
