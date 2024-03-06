@@ -32,10 +32,8 @@ const Dashboard = ({}) => {
               <DiscountBuyCard />
               <Card>
                 <div className="m-10">
-                  <Image
+                  <img
                     src="/assets/images/dashboard/theo-steps.svg"
-                    width={330}
-                    height={417}
                     alt="steps"
                     className="h-auto w-full max-w-[330px]"
                   />
