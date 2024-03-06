@@ -17,11 +17,11 @@
     @apply flex cursor-pointer items-center justify-center rounded-[10px] border-2 p-[7px] font-semibold transition;
     @apply border-theo-navy  bg-white;
     /* dark  */
-    @apply dark:border-theo-cyan dark:bg-black dark:text-theo-cyan;
+    @apply dark:border-theo-green dark:bg-black dark:text-theo-green;
     /* dark hover */
     @apply dark:bg-[#1e1f20];
     /* dark active */
-    @apply dark:active:bg-white dark:active:text-theo-cyan;
+    @apply dark:active:bg-white dark:active:text-theo-green;
     /* light hover */
     @apply hover:bg-theo-navy hover:text-white;
     /* light active */
@@ -44,5 +44,13 @@
   }
   .sticky-list {
     @apply sticky top-[194px] bg-gray-100 dark:bg-[#262626] md:relative md:top-0;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number'] {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield !important;
   }
 }

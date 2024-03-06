@@ -3,7 +3,7 @@ import PendingTransaction from '@/components/PendingTransaction';
 import { useContractInfo } from '@/hooks/useContractInfo';
 import { logEvent } from '@/lib/analytics';
 import { cache } from '@/lib/cache';
-import { useUserPurchases } from '@/pages/discount-buy/state/use-user-purchases';
+import { useUserPurchases } from '@/pages/market-cards/state/use-user-purchases';
 
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import { format } from 'date-fns';

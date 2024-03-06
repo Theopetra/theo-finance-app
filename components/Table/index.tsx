@@ -1,4 +1,5 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import ChevronUpDownIcon from '../ChevronUpDownIcon/ChevronUpDownIcon';
 import { useTable, useSortBy } from 'react-table';
 
 const Table = ({ columns, data, initialState }) => {
@@ -31,7 +32,7 @@ const Table = ({ columns, data, initialState }) => {
                       scope="col"
                       className={`${
                         column.isSorted ? 'underline' : ''
-                      } py-3.5 pl-3 pr-3 text-left align-middle text-sm font-semibold text-gray-900 dark:text-theo-cyan `}
+                      } py-3.5 pl-3 pr-3 text-left align-middle text-sm font-semibold text-gray-900 dark:text-theo-green `}
                     >
                       {
                         // Render the header

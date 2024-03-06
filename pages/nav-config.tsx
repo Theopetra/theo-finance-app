@@ -1,27 +1,31 @@
 import { Coin, File, Gauge, Intersect, LockLaminated } from 'phosphor-react';
 export const navigation = [
-  { name: 'Dashboard', href: '/', icon: <Gauge size={26} className="mr-2 w-8" /> },
+  // {
+  //   name: 'Growth Markets',
+  //   href: '/',
+  //   icon: <img src={'/assets/icons/Growth-Icon-navy.png'} className="mr-2 w-8" />,
+  // },
+  // {
+  //   name: 'Land Event',
+  //   href: '/land-event',
+  //   icon: <img src={'/assets/icons/Growth-Icon-navy.png'} className="mr-2 w-8" />,
+  // },
+  // {
+  //   name: 'Convert to YIMBY',
+  //   href: '/convert-to-yimby',
+  //   icon: <img src={'/assets/icons/key.png'} className="mr-2 w-8" />,
+  //   disabled: false,
+  // },
   {
-    name: 'Discount Buy',
-    href: '/discount-buy',
-    icon: <Intersect size={26} className="mr-2 w-8" />,
-    subNav: [
-      {
-        name: 'Your Purchases',
-        href: '/discount-buy/your-purchases',
-      },
-    ],
+    name: 'Unstake THEO',
+    href: '/unstake',
+    icon: <LockLaminated size={26} className="mr-2 w-8" />,
+    disabled: false,
   },
   {
     name: 'Claim Tokens',
     href: '/claim',
     icon: <Coin size={26} className="mr-2 w-8" />,
-    disabled: false,
-  },
-  {
-    name: 'Memberships',
-    href: '/memberships',
-    icon: <LockLaminated size={26} className="mr-2 w-8" />,
     disabled: false,
   },
   {

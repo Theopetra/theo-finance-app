@@ -25,6 +25,16 @@ export const contractMetadata = {
     },
     abi: PublicPreListBondDepositoryArtifact.abi,
   },
+  MobyBondDepository: {
+    address: {
+      1: '0x0B1a87021ec75fBaE919b1e86b2B1335FFC8F4d3',
+      4: '0x4A351C6aE3249499CBb50E8FE6566E2615386Da8',
+      5: '0x4A351C6aE3249499CBb50E8FE6566E2615386Da8',
+      31337: '0x0B1a87021ec75fBaE919b1e86b2B1335FFC8F4d3',
+      11155111: '0x4A351C6aE3249499CBb50E8FE6566E2615386Da8',
+    },
+    abi: PublicPreListBondDepositoryArtifact.abi,
+  },
   StakingDistributor: {
     address: {
       1: '0x1BE45D4069329CE41d07953FBB8a5cC6B9E545Ce',
@@ -90,7 +100,7 @@ export const contractMetadata = {
       1: '0xF6dA2B78eE3287715705e80B6c588A0078CFE84C',
       4: '0x2E48f1E6C53ace80BA34F4f138d9b4A7488ca9E9',
       5: '0x1B8f83f219e89b33c09c0222aB95622D40d5481F',
-      31337: '0xF6dA2B78eE3287715705e80B6c588A0078CFE84C',
+      31337: '0x1c1521cf734CD13B02e8150951c3bF2B438be780',
       11155111: '0xa8551F2AC23C4e1c1505f771DE76CbA4a9063e76',
     },
     abi: wethHelper.abi,

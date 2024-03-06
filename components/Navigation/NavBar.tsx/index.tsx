@@ -11,7 +11,7 @@ const NavBar = () => {
   const classes = {
     statContainer: 'flex flex-col items-center justify-center flex-1 ',
     number: 'font-bold text-theo-cyan dark:text-white',
-    label: 'text-xs font-normal text-theo-navy dark:text-theo-cyan',
+    label: 'text-xs font-normal text-theo-navy dark:text-theo-green',
   };
   const account = getAccount();
   const { address } = useContractInfo('TheopetraERC20Token');

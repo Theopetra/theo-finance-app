@@ -1,11 +1,19 @@
-import Card from '@/components/Card';
 import HorizontalSubNav from '@/components/HorizontalSubNav';
 import PageContainer from '@/components/PageContainer';
+
+import { UserPurchasesProvider } from './market-cards/state/UserPurchasesProvider';
+import BuyFormProvider from './market-cards/state/BuyFormProvider';
+import DiscountBuyCard from './market-cards/discount-buy';
+import Card from '@/components/Card';
+import Image from 'next/image';
+import YourPurchases from './your-purchases/index.page';
+import Claim from './claim/index.page';
 
 const Dashboard = ({}) => {
   return (
     <>
-      <div className="pt-4">
+      <Claim></Claim>
+      {/* <div className="pt-4">
         <HorizontalSubNav
           items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
         />
@@ -18,13 +26,19 @@ const Dashboard = ({}) => {
             </Card>
           </div>
         </div>
-      </PageContainer>
+      </PageContainer> */}
     </>
   );
 };
 
+Dashboard.PageStateProvider = (props) => (
+  <UserPurchasesProvider {...props}>
+    <BuyFormProvider {...props} bondDepoName="PublicPreListBondDepository" />
+  </UserPurchasesProvider>
+);
+
 Dashboard.PageHead = () => {
-  return <div>Welcome Home</div>;
+  return <div>Claim your THEO</div>;
 };
 
 export default Dashboard;

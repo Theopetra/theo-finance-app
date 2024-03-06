@@ -23,13 +23,13 @@ const Card = ({
 }: CardProps) => {
   const [{ theme }] = useTheme();
   const LMBGC = lightModeBgColor ? lightModeBgColor : 'bg-gradient-to-b from-white to-[#EDEDED]';
-  const DMBGC = darkModeBgColor ? `dark:${darkModeBgColor}` : 'dark:bg-theo-cyan dark:bg-none';
+  const DMBGC = darkModeBgColor ? `dark:${darkModeBgColor}` : LMBGC;
 
   return (
     <div
       className={`${
         theme != 'dark' && LMBGC
-      } ${DMBGC} ${className} mt-2 flex flex-1 flex-col rounded-xl text-theo-navy dark:text-white sm:mt-4 `}
+      } ${DMBGC} ${className} mt-2 flex flex-1 flex-col rounded text-theo-navy dark:text-white sm:mt-4 `}
     >
       {(title || cardHeader) && (
         <div

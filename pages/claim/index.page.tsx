@@ -8,10 +8,10 @@ import ConfirmClaim from './components/ConfirmClaim';
 import useModal from '@/state/ui/theme/hooks/use-modal';
 import Icon from '@/components/Icons';
 import { CircleWavyCheck, Clock } from 'phosphor-react';
-import { useUserPurchases } from '../discount-buy/state/use-user-purchases';
+import { useUserPurchases } from '../market-cards/state/use-user-purchases';
 import { formatTheo } from '@/lib/format_theo';
 import { useMemo } from 'react';
-import { UserPurchasesProvider } from '../discount-buy/state/UserPurchasesProvider';
+import { UserPurchasesProvider } from '../market-cards/state/UserPurchasesProvider';
 
 const Claim = () => {
   const [{ purchases }] = useUserPurchases();
@@ -33,9 +33,7 @@ const Claim = () => {
   return (
     <>
       <div className="pt-4">
-        <HorizontalSubNav
-          items={[{ href: '/discount-buy/your-purchases', name: 'Your Purchases' }]}
-        />
+        <HorizontalSubNav items={[{ href: '/your-purchases', name: 'Your Purchases' }]} />
       </div>
       <PageContainer>
         <CardList>
