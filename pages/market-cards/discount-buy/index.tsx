@@ -7,14 +7,13 @@ import ConfirmBuy from '../components/ConfirmBuy';
 import { formatUnits } from 'viem';
 import Tooltip from '@/components/Tooltip';
 import Card from '@/components/Card';
-import BuyFormProvider from '../state/BuyFormProvider';
 import Icon from '@/components/Icons';
 import ProgressBar from '@/components/ProgressBar';
 
 const DataRow = ({ label, value }: { label: string; value: any }) => (
-  <div className="flex w-full items-center justify-between">
-    <div className="text-sm">{label}</div>
-    <div className="text-2xl font-bold">{value}</div>
+  <div className="my-2 flex w-full items-center justify-between">
+    <div className="text-xl">{label}</div>
+    <div className=" text-xl font-bold leading-none">{value}</div>
   </div>
 );
 
@@ -78,28 +77,19 @@ const DiscountBuyCard = () => {
             { label: 'Avg. Cost/Unit', value: '$150,000+' },
             { label: 'Avg. Net Rent*', value: '$750-1000 / MO' },
             { label: 'Lock Period', value: '24 Hours' },
-            { label: 'Next Unit Progress', value: <ProgressBar progress={unitProgress}></ProgressBar> },
+            {
+              label: 'Next Unit Progress',
+              value: <ProgressBar progress={unitProgress}></ProgressBar>,
+            },
           ].map((item) => (
             <DataRow key={item.label} {...item} />
           ))}
         </div>
-        {/* <ProgressBar progress={unitProgress}></ProgressBar> */}
         <CurrencyInput
           className={'mb-2'}
           selectedToken={{ ...purchaseToken }}
           isDiscountBuy={true}
-          maxPayout={
-            selectedMarket
-              ? Number(
-                  formatUnits(
-                    BigInt(
-                      maxPayoutFormatted
-                    ),
-                    18
-                  )
-                )
-              : 0
-          }
+          maxPayout={selectedMarket ? Number(formatUnits(BigInt(maxPayoutFormatted), 18)) : 0}
           balance={balanceIsLoading ? '0' : balance?.formatted}
           value={purchaseCost}
           onCurrencyChange={(e: BaseSyntheticEvent) => {

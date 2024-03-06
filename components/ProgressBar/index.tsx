@@ -1,35 +1,17 @@
-import React from "react";
+import React from 'react';
 
-const ProgressBar = ({ progress }) => {
-  const containerStyles = {
-    height: 14,
-    width: "100%",
-    backgroundColor: "#e0e0de",
-    borderRadius: 4,
-    margin: 1,
-    boxShadow: "5px 10px 5px #D9D9D9"
-  };
-
-  const fillerStyles = {
-    height: "100%",
-    width: `${progress}%`,
-    backgroundColor: "#34445A",
-    borderRadius: "inherit",
-  };
-
-  const labelStyles = {
-    padding: 1,
-    color: "#34445A",
-    fontSize: 20,
-  };
-
+const ProgressBar = ({ progress }: { progress: number }) => {
   return (
     <div>
-    <div className="progress-bar" style={containerStyles}>
-      <div style={fillerStyles}>
+      <div className="progress-bar w-full min-w-[200px] overflow-hidden rounded-full">
+        <div className="relative h-2 w-full rounded-full bg-gray-300">
+          <div
+            className={`absolute inset-0 inline-block h-2 rounded-full bg-theo-navy`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
-    </div>
-        <div style={labelStyles}>{progress}% complete</div>
+      <div className="text-right text-sm font-medium">{progress}% complete</div>
     </div>
   );
 };
