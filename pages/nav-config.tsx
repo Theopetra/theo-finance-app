@@ -1,15 +1,15 @@
 import { Coin, File, Gauge, Intersect, LockLaminated } from 'phosphor-react';
 export const navigation = [
-  // {
-  //   name: 'Growth Markets',
-  //   href: '/',
-  //   icon: <img src={'/assets/icons/Growth-Icon-navy.png'} className="mr-2 w-8" />,
-  // },
-  // {
-  //   name: 'Land Event',
-  //   href: '/land-event',
-  //   icon: <img src={'/assets/icons/Growth-Icon-navy.png'} className="mr-2 w-8" />,
-  // },
+  {
+    name: 'Growth Markets',
+    href: '/',
+    icon: <img src={'/assets/icons/Growth-Icon-navy.png'} className="mr-2 w-8" />,
+  },
+  {
+    name: 'Land Event',
+    href: '/land-event',
+    icon: <img src={'/assets/icons/Growth-Icon-navy.png'} className="mr-2 w-8" />,
+  },
   // {
   //   name: 'Convert to YIMBY',
   //   href: '/convert-to-yimby',
