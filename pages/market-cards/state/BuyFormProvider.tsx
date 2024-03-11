@@ -352,6 +352,7 @@ export const BuyFormProvider: {
 
   const { data: treasuryBalance } = useBalance({
     address: '0xf3143ae15deA73F4E8F32360F6b669173c854388',
+    token: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     });
 
   const unitProgress = useMemo(() => {
@@ -363,7 +364,7 @@ export const BuyFormProvider: {
         
         if (percentageValue > BigInt(100)) {
             return 100;
-        } else return percentageValue;
+        } else return Math.floor(percentageValue * 100) / 100;
     } else return 0;
     }, [treasuryBalance, priceFeed]);
 
