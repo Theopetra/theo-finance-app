@@ -142,7 +142,7 @@ const DiscountBuyCard = () => {
           )}
         </button>
         <div className="text-xs text-gray-400">
-          *Based on a $150k Purchase Price. Purchase price may vary. All Prices in USD
+          *Based on a $150K purchase price. Purchase price may vary. All prices are in USD. 
         </div>
       </>
     </Card>

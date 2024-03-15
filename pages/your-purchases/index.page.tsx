@@ -34,7 +34,7 @@ const YourPurchases = () => {
         return {
           date: created,
           amount: `${formatTheo(p.payout)}`,
-          discount: p.created < whitelistExpiry ? `Discount Market` : p.discount,
+          discount: p.created < whitelistExpiry ? `Growth Market` : p.discount,
           unlockDate,
           ...p,
         };
@@ -69,7 +69,7 @@ const YourPurchases = () => {
         accessor: 'contractName',
         width: '10%',
         Cell: ({ value }) =>
-          value.replace('BondDepository', '').replace('Staking', '').replace('Locked', ''),
+          value.replace('BondDepository', '').replace('Staking', '').replace('Locked', '').replace('PublicPreList', 'Standard'),
       },
       {
         Header: 'Status',

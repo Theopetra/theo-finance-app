@@ -19,7 +19,7 @@ export const MarketDiscountRow = ({ date }) => {
   return (
     <ConfirmRow
       title="Purchase Type"
-      value={Number(BigInt(date)) > whitelistExpiry ? `Discount Market` : 'Pre-Market'}
+      value={Number(BigInt(date)) > whitelistExpiry ? `Growth Market` : 'Pre-Market'}
     />
   );
 };

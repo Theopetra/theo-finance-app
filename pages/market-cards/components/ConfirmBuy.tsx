@@ -286,7 +286,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         <div className="mb-8 text-center text-theo-navy dark:text-white">
           <div className="mb-4 text-3xl font-bold sm:text-4xl">Confirm Buy</div>
           <div>
-            dasda Please review carefully, this purchase is final.
+            Please review carefully, this purchase is final.
             <br />
             Click <strong>Confirm Purchase</strong> below to confirm.
           </div>
