@@ -17,6 +17,7 @@ type formStateType = {
   purchaseCost;
   transactionPending: boolean;
   maxSlippage: number;
+  startingPrice: string;
 };
 
 const initialFormState: formStateType = {
@@ -31,6 +32,7 @@ const initialFormState: formStateType = {
   purchaseCost: 0,
   transactionPending: false,
   maxSlippage: 0.01,
+  startingPrice: '',
 };
 
 export const BuyFormProvider: {
@@ -275,9 +277,10 @@ export const BuyFormProvider: {
     const purchaseAmountPrecision =
       selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH' ? 9 : 2;
 
-    const updateFields: { purchaseCost: string; purchaseAmount: string; depositAmounts: bigint[] } =
+    const updateFields: { purchaseCost: string; startingPrice: string; purchaseAmount: string; depositAmounts: bigint[] } =
       {
         purchaseCost: '',
+        startingPrice: '',
         purchaseAmount: '',
         depositAmounts: [],
       };
@@ -286,6 +289,11 @@ export const BuyFormProvider: {
       BigInt(Number(value) * 10 ** 18) > BigInt(0)
         ? getAmountsOut(BigInt(value * 10 ** 18))
         : [[BigInt(0)], quotePrice, BigInt(0)];
+
+        // just compare the price per theo to the starting price to validate slippage
+
+      updateFields.startingPrice = groupedBondMarketsMap[selection.value]?.markets[0].marketData.marketPrice;
+      
 
     if (fieldName === 'purchaseAmount') {
       const purchaseCost = (Number(totalOut) * pricePerTheo).toFixed(purchaseCostPrecision);

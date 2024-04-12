@@ -2,6 +2,7 @@ import useModal from '@/state/ui/theme/hooks/use-modal';
 import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react';
 import useBuyForm from '../state/use-buy-form';
 import { useAccount, useBalance } from 'wagmi';
+import { watchPendingTransactions } from '@wagmi/core';
 import CurrencyInput from '@/components/CurrencyInput';
 import ConfirmBuy from '../components/ConfirmBuy';
 import { formatUnits } from 'viem';
@@ -23,6 +24,7 @@ const DiscountBuyCard = () => {
       purchaseCost,
       purchaseAmount,
       maxSlippage,
+      startingPrice,
       purchaseToken,
       UIBondMarketsIsLoading,
       maxPayoutFormatted,
@@ -33,14 +35,21 @@ const DiscountBuyCard = () => {
   ] = useBuyForm();
   const [, { openModal }] = useModal();
   const account = useAccount();
-  const { data: balance, isLoading: balanceIsLoading } = useBalance({
+  const { data: balance, isLoading: balanceIsLoading, refetch } = useBalance({
     address: account?.address,
     ...(purchaseToken?.symbol === 'USDC' && {
       formatUnits: 'wei',
       token: purchaseToken?.quoteToken,
     }),
-  });
+  }); 
   const [error, setError] = useState<string>('');
+ 
+  useEffect(() => {
+    watchPendingTransactions({}, (transactions) =>
+    refetch(),
+  );
+  })
+  
 
   const handleCurencyInputChange = (e: BaseSyntheticEvent) => {
     console.log(e.target.value);
@@ -56,6 +65,8 @@ const DiscountBuyCard = () => {
   useEffect(() => {
     if (Number(purchaseAmount) > maxPayoutFormatted) {
       setError('Amount exceeds max payout');
+    } else if (Number(startingPrice) * Number(purchaseAmount) * maxSlippage > maxPayoutFormatted) {
+      setError('Purchase exceeds slippage settings');
     } else if (
       Number(purchaseAmount) <= 0 ||
       purchaseAmount === 'NaN' ||
@@ -63,7 +74,7 @@ const DiscountBuyCard = () => {
     ) {
       setError('Please enter a valid amount');
     }
-  }, [purchaseCost, purchaseAmount, maxPayoutFormatted]);
+  }, [startingPrice, purchaseCost, purchaseAmount, maxPayoutFormatted]);
 
   return (
     <Card
@@ -75,7 +86,7 @@ const DiscountBuyCard = () => {
           {[
             { label: 'Units Owned', value: '1 Unit' },
             { label: 'Avg. Cost/Unit', value: '$150,000+' },
-            { label: 'Avg. Net Rent*', value: '$750-1000 / MO' },
+            { label: 'Avg. Net Rent*', value: '$750-1000 / Month' },
             { label: 'Lock Period', value: '24 Hours' },
             {
               label: 'Next Unit Progress',
@@ -103,7 +114,7 @@ const DiscountBuyCard = () => {
             Max Slippage &nbsp;
             <Tooltip size="small">
               {
-                'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the discount rate may have changed due to interactions with other users, resulting in a different payout than expected.'
+                'Slippage sets the maximum difference between the purchase sent by the user, and the amount of tokens the user receives in return. \n In the time it takes a transaction to settle on Ethereum, the final price may have changed due to interactions with other users, resulting in a different payout than expected.'
               }
             </Tooltip>
           </label>

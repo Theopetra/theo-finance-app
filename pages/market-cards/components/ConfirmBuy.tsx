@@ -123,8 +123,8 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   const SuccessModal = ({ txId }) => (
     <SuccessfulTransaction
       txId={txId}
-      redirect={`/your-purchases`}
-      title={'Purchase Successful!'}
+      redirect={`/`}
+      title={'Purchase successful!'}
       Icon={Intersect}
     />
   );
