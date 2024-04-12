@@ -25,6 +25,7 @@ const DiscountBuyCard = () => {
       purchaseAmount,
       maxSlippage,
       startingPrice,
+      pricePerTheo,
       purchaseToken,
       UIBondMarketsIsLoading,
       maxPayoutFormatted,
@@ -65,7 +66,7 @@ const DiscountBuyCard = () => {
   useEffect(() => {
     if (Number(purchaseAmount) > maxPayoutFormatted) {
       setError('Amount exceeds max payout');
-    } else if (Number(startingPrice) * Number(purchaseAmount) * maxSlippage > maxPayoutFormatted) {
+    } else if (Number(startingPrice) * Number(1 + maxSlippage) < (pricePerTheo * 10**9)) {
       setError('Purchase exceeds slippage settings');
     } else if (
       Number(purchaseAmount) <= 0 ||
@@ -74,7 +75,7 @@ const DiscountBuyCard = () => {
     ) {
       setError('Please enter a valid amount');
     }
-  }, [startingPrice, purchaseCost, purchaseAmount, maxPayoutFormatted]);
+  }, [startingPrice, purchaseCost, purchaseAmount, maxPayoutFormatted, maxSlippage]);
 
   return (
     <Card
