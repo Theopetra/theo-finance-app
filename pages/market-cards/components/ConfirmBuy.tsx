@@ -159,7 +159,8 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     data: wethData,
     isError: wethWriteErr,
     isLoading: wethWriteLoading,
-    writeAsync: wethDeposit,
+    writeAsync: 
+    wethDeposit,
   } = useContractWrite({
     address: WethHelperAddress,
     account: account.address,
@@ -248,9 +249,10 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
             ),
             account?.address,
             account?.address,
-            bondDepoName === 'PublicPreListBondDepository' ? 2 : 4, // Moby markets are 4, standard are 2
+            // bondDepoName === 'PublicPreListBondDepository' ? 2 : 4, // Moby markets are 4, standard are 2
             false,
-            signature?.wethHelperSignature || '0x00',
+            true,
+            signature?.wethHelperSignature || '0x0000000000000000000000000000000000000000000000000000000000000000',
           ],
           value: depositAmounts[i],
         });
