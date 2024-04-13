@@ -2,7 +2,7 @@ import { useContractInfo } from '@/hooks/useContractInfo';
 import { cache } from '@/lib/cache';
 import { useContext, useEffect, useState } from 'react';
 import { UserPurchasesContext } from './UserPurchasesProvider';
-import { getContract, getAccount } from '@wagmi/core';
+import { getContract, getAccount, watchPendingTransactions } from '@wagmi/core';
 import { Abi } from 'viem';
 import { contractMetadata } from '@/lib/contracts';
 // stakingInfo interface
@@ -168,6 +168,12 @@ export const usePurchasesByContract = (contractName) => {
 
     fetchData();
   }, [account?.address, render, contractName]);
+
+  useEffect(() => {
+    watchPendingTransactions({}, (transactions) =>
+    reRender()
+  );
+  })
 
   return { pendingNotes, reRender, isLoadingPurchases };
 };

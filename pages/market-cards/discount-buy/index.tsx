@@ -88,7 +88,7 @@ const DiscountBuyCard = () => {
             { label: 'Units Owned', value: '1 Unit' },
             { label: 'Avg. Cost/Unit', value: '$150,000+' },
             { label: 'Avg. Net Rent*', value: '$750-1000 / Month' },
-            { label: 'Lock Period', value: '24 Hours' },
+            { label: 'Lock Period', value: '7 Days' },
             {
               label: 'Next Unit Progress',
               value: <ProgressBar progress={unitProgress}></ProgressBar>,

@@ -29,7 +29,7 @@ const initialFormState: formStateType = {
   },
   purchaseAmount: 0,
   depositAmounts: 0,
-  purchaseCost: 0,
+  purchaseCost: '',
   transactionPending: false,
   maxSlippage: 0.01,
   startingPrice: 0,

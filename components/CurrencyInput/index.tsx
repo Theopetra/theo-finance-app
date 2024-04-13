@@ -60,7 +60,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
             <div className="hidden p-2 text-xs sm:block">
               {!hideValue && (
                 <>
-                  Balance: {Number(balance).toFixed(selectedToken?.symbol === 'USDC' ? 2 : 6)}
+                  Balance: {Number(balance).toFixed(selectedToken?.symbol === 'USDC' ? 2 : 4)}
                   {cleanSymbol(selectedToken?.symbol)}
                 </>
               )}
