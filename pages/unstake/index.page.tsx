@@ -253,7 +253,7 @@ const YourMemberships = () => {
       return 'Checking your memberships...';
     }
     if (account?.address && formattedPurchases?.length === 0 && !isLoadingMemberships) {
-      return 'You have no active memberships.';
+      return 'The staking feature has been removed, please unstake any staked tokens.';
     }
     if (!account?.address) {
       return 'Please connect your wallet.';
