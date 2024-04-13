@@ -28,8 +28,8 @@ const YourPurchases = () => {
   const formattedPurchases = useMemo(
     () =>
       purchases?.map((p) => {
-        const unlockDate = new Date(Number(p.expiry) * 1000);
-        const created = new Date(Number(p.created) * 1000);
+        const unlockDate = new Date(Number(p.expiry));
+        const created = new Date(Number(p.created));
 
         return {
           date: created,
@@ -48,7 +48,7 @@ const YourPurchases = () => {
     () => [
       {
         Header: 'Purchased Date',
-        accessor: (c) => c.date,
+        accessor: (c) => c.date * 1000,
         Cell: ({ value }) => (
           <span title={format(value, 'yyyy-MM-dd HH:mm:ss zzzz')}>
             {format(value, 'yyyy-MM-dd')}
@@ -84,7 +84,7 @@ const YourPurchases = () => {
       },
       {
         Header: 'Unlock Date',
-        accessor: (c) => c.unlockDate,
+        accessor: (c) => c.unlockDate * 1000,
         Cell: ({ value }) => (
           <span title={format(value, 'yyyy-MM-dd HH:mm:ss zzzz')}>
             {format(value, 'yyyy-MM-dd')}
