@@ -28,8 +28,8 @@ const YourPurchases = () => {
   const formattedPurchases = useMemo(
     () =>
       purchases?.map((p) => {
-        const unlockDate = new Date(Number(BigInt(p.expiry)) * 1000);
-        const created = new Date(Number(BigInt(p.created)) * 1000);
+        const unlockDate = new Date(Number(p.expiry) * 1000);
+        const created = new Date(Number(p.created) * 1000);
 
         return {
           date: created,
@@ -41,6 +41,7 @@ const YourPurchases = () => {
       }),
     [purchases]
   );
+  
 
   // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(
