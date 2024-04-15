@@ -167,7 +167,7 @@ export const usePurchasesByContract = (contractName) => {
     };
 
     fetchData();
-  }, [account?.address, render, contractName]);
+  }, [account?.address, render, contractName, account]);
 
   useEffect(() => {
     watchPendingTransactions({}, (transactions) =>
