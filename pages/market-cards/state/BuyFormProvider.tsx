@@ -17,6 +17,7 @@ type formStateType = {
   purchaseCost;
   transactionPending: boolean;
   maxSlippage: number;
+  startingPrice: number;
 };
 
 const initialFormState: formStateType = {
@@ -28,9 +29,10 @@ const initialFormState: formStateType = {
   },
   purchaseAmount: 0,
   depositAmounts: 0,
-  purchaseCost: 0,
+  purchaseCost: '',
   transactionPending: false,
   maxSlippage: 0.01,
+  startingPrice: 0,
 };
 
 export const BuyFormProvider: {
@@ -275,9 +277,16 @@ export const BuyFormProvider: {
     const purchaseAmountPrecision =
       selectedToken?.symbol === 'WETH' || selectedToken?.symbol === 'ETH' ? 9 : 2;
 
-    const updateFields: { purchaseCost: string; purchaseAmount: string; depositAmounts: bigint[] } =
+    const updateFields: { 
+      purchaseCost: string; 
+      startingPrice: number; 
+      pricePerTheo: number;
+      purchaseAmount: string; 
+      depositAmounts: bigint[] } =
       {
         purchaseCost: '',
+        startingPrice: 0,
+        pricePerTheo: 0,
         purchaseAmount: '',
         depositAmounts: [],
       };
@@ -286,6 +295,12 @@ export const BuyFormProvider: {
       BigInt(Number(value) * 10 ** 18) > BigInt(0)
         ? getAmountsOut(BigInt(value * 10 ** 18))
         : [[BigInt(0)], quotePrice, BigInt(0)];
+
+        // just compare the price per theo to the starting price to validate slippage
+
+      updateFields.startingPrice = groupedBondMarketsMap[selection.value]?.markets[0].marketData.marketPrice;
+      updateFields.pricePerTheo = pricePerTheo;
+      
 
     if (fieldName === 'purchaseAmount') {
       const purchaseCost = (Number(totalOut) * pricePerTheo).toFixed(purchaseCostPrecision);
@@ -352,6 +367,7 @@ export const BuyFormProvider: {
 
   const { data: treasuryBalance } = useBalance({
     address: '0xf3143ae15deA73F4E8F32360F6b669173c854388',
+    token: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     });
 
   const unitProgress = useMemo(() => {
@@ -363,7 +379,7 @@ export const BuyFormProvider: {
         
         if (percentageValue > BigInt(100)) {
             return 100;
-        } else return percentageValue;
+        } else return Math.floor(percentageValue * 100) / 100;
     } else return 0;
     }, [treasuryBalance, priceFeed]);
 

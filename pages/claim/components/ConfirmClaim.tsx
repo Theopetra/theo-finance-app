@@ -19,7 +19,7 @@ export const MarketDiscountRow = ({ date }) => {
   return (
     <ConfirmRow
       title="Purchase Type"
-      value={Number(BigInt(date)) > whitelistExpiry ? `Discount Market` : 'Pre-Market'}
+      value={Number(BigInt(date)) > whitelistExpiry ? `Growth Market` : 'Pre-Market'}
     />
   );
 };
@@ -48,7 +48,7 @@ const ConfirmClaim = ({ purchase }) => {
 
   const dataRows = (
     <>
-      <MarketDiscountRow date={purchase.date} />
+      <MarketDiscountRow date={purchase.date * 1000} />
       <TheoPurchaseDateRow date={purchase.date * 1000} />
       <TokensToClaimRow total={purchase.amount} />
       <TokensUnlockedRow date={purchase.unlockDate * 1000} />

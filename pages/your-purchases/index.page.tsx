@@ -28,26 +28,27 @@ const YourPurchases = () => {
   const formattedPurchases = useMemo(
     () =>
       purchases?.map((p) => {
-        const unlockDate = new Date(Number(BigInt(p.expiry)) * 1000);
-        const created = new Date(Number(BigInt(p.created)) * 1000);
+        const unlockDate = new Date(Number(p.expiry));
+        const created = new Date(Number(p.created));
 
         return {
           date: created,
           amount: `${formatTheo(p.payout)}`,
-          discount: p.created < whitelistExpiry ? `Discount Market` : p.discount,
+          discount: p.created < whitelistExpiry ? `Growth Market` : p.discount,
           unlockDate,
           ...p,
         };
       }),
     [purchases]
   );
+  
 
   // POST-LAUNCH TODO: add button for redeem() when relevant
   const columns = useMemo(
     () => [
       {
         Header: 'Purchased Date',
-        accessor: (c) => c.date,
+        accessor: (c) => c.date * 1000,
         Cell: ({ value }) => (
           <span title={format(value, 'yyyy-MM-dd HH:mm:ss zzzz')}>
             {format(value, 'yyyy-MM-dd')}
@@ -69,7 +70,7 @@ const YourPurchases = () => {
         accessor: 'contractName',
         width: '10%',
         Cell: ({ value }) =>
-          value.replace('BondDepository', '').replace('Staking', '').replace('Locked', ''),
+          value.replace('BondDepository', '').replace('Staking', '').replace('Locked', '').replace('PublicPreList', 'Standard'),
       },
       {
         Header: 'Status',
@@ -83,7 +84,7 @@ const YourPurchases = () => {
       },
       {
         Header: 'Unlock Date',
-        accessor: (c) => c.unlockDate,
+        accessor: (c) => c.unlockDate * 1000,
         Cell: ({ value }) => (
           <span title={format(value, 'yyyy-MM-dd HH:mm:ss zzzz')}>
             {format(value, 'yyyy-MM-dd')}

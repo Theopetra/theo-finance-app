@@ -63,6 +63,7 @@ type BuyFormStateType = {
   };
   setSelection: (selection: { label: string; value: string }) => void;
   maxSlippage: number;
+  startingPrice: bigint;
   UIBondMarketsIsLoading: boolean;
   terms: Terms[];
   maxPayoutFormatted: number;

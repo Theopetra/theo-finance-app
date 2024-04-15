@@ -22,11 +22,11 @@ export const UserPurchasesProvider = ({ children }) => {
     reRender: tslReRender,
     isLoadingPurchases: isLoadingPremiumMemberships,
   } = usePurchasesByContract('TheopetraStakingLocked');
-  const {
-    pendingNotes: mobyPurchases,
-    reRender: mobyReRender,
-    isLoadingPurchases: isLoadingMobyPurchases,
-  } = usePurchasesByContract('MobyBondDepository');
+  // const {
+  //   pendingNotes: mobyPurchases,
+  //   reRender: mobyReRender,
+  //   isLoadingPurchases: isLoadingMobyPurchases,
+  // } = usePurchasesByContract('MobyBondDepository');
 
   const reRender = function () {
     wlReRender();
@@ -34,7 +34,7 @@ export const UserPurchasesProvider = ({ children }) => {
     tbdReRender();
     tsReRender();
     tslReRender();
-    mobyReRender();
+    // mobyReRender();
   };
 
   return (
@@ -46,7 +46,7 @@ export const UserPurchasesProvider = ({ children }) => {
             ...whitelistPurchases,
             ...publicPrelistPurchases,
             ...theopetraPurchases,
-            ...mobyPurchases,
+            // ...mobyPurchases,
           ],
           memberships: [...standardMemberships, ...premiumMemberships],
         },

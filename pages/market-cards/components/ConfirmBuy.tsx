@@ -123,8 +123,8 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
   const SuccessModal = ({ txId }) => (
     <SuccessfulTransaction
       txId={txId}
-      redirect={`/your-purchases`}
-      title={'Purchase Successful!'}
+      redirect={`/`}
+      title={'Purchase successful!'}
       Icon={Intersect}
     />
   );
@@ -159,7 +159,8 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
     data: wethData,
     isError: wethWriteErr,
     isLoading: wethWriteLoading,
-    writeAsync: wethDeposit,
+    writeAsync: 
+    wethDeposit,
   } = useContractWrite({
     address: WethHelperAddress,
     account: account.address,
@@ -248,9 +249,10 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
             ),
             account?.address,
             account?.address,
-            bondDepoName === 'PublicPreListBondDepository' ? 2 : 4, // Moby markets are 4, standard are 2
+            // bondDepoName === 'PublicPreListBondDepository' ? 2 : 4, // Moby markets are 4, standard are 2
             false,
-            signature?.wethHelperSignature || '0x00',
+            true,
+            signature?.wethHelperSignature || '0x0000000000000000000000000000000000000000000000000000000000000000',
           ],
           value: depositAmounts[i],
         });
@@ -286,7 +288,7 @@ const ConfirmBuy = ({ bondDepoName }: { bondDepoName: BondDepoNameType }) => {
         <div className="mb-8 text-center text-theo-navy dark:text-white">
           <div className="mb-4 text-3xl font-bold sm:text-4xl">Confirm Buy</div>
           <div>
-            dasda Please review carefully, this purchase is final.
+            Please review carefully, this purchase is final.
             <br />
             Click <strong>Confirm Purchase</strong> below to confirm.
           </div>

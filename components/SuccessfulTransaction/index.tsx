@@ -66,14 +66,14 @@ const SuccessfulTransaction = ({
       <div className="flex w-full flex-col items-center justify-center sm:flex-row">
         <button disabled={!txId} className="border-button mr-2 mb-4 w-72 sm:mb-0">
           <a href={etherscanUrl} target="_blank" rel="noreferrer">
-            View Etherscan Transaction
+            View Etherscan transaction
           </a>
         </button>
         <button className="border-button mr-2 mb-4 w-72 sm:mb-0" onClick={addTheoToken}>
-          Add $THEO to wallet
+          Import $THEO to wallet
         </button>
-        <button className="border-button w-72" onClick={handleClick}>
-          Finish
+        <button className="border-button mr-2 mb-4 w-72 sm:mb-0" onClick={handleClick}>
+            Make another purchase
         </button>
       </div>
     </div>
