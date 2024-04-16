@@ -83,68 +83,81 @@ export const usePurchasesByContract = (contractName) => {
           indexes = (await contract.read.indexesFor([account?.address])) as any;
         }
 
-        const pnPromises = indexes.map(async (index) => {
+        if (indexes.length == 0) {
           let rewards = BigInt(0);
           let slashingPoolRewards = BigInt(0);
           let totalRewards = BigInt(0);
           let stakingInfo: StakingInfo = {};
           let pendingFor: PendingFor = {};
-
-          if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
-            // "0": "deposit",
-            // "1": "gonsInWarmup",
-            // "2": "warmupExpiry",
-            // "3": "stakingExpiry",
-            // "4": "gonsRemaining",
-            const sValues = (await contract.read.stakingInfo([account?.address, index])) as any;
-            stakingInfo = {
-              deposit: sValues?.[0],
-              gonsInWarmup: sValues?.[1],
-              warmupExpiry: sValues?.[2],
-              stakingExpiry: sValues?.[3],
-              gonsRemaining: sValues?.[4],
-            };
-          } else {
-            const pValues = (await contract.read.pendingFor([account?.address, index])) as any;
-            pendingFor = {
-              payout: pValues?.[0],
-              created: pValues?.[1],
-              expiry: pValues?.[2],
-              timeRemaining: pValues?.[3],
-              matured: pValues?.[4],
-              discount: pValues?.[5],
-            } as any;
-            // "0": "payout_",
-            // "1": "created_",
-            // "2": "expiry_",
-            // "3": "timeRemaining_",
-            // "4": "matured_",
-            // "5": "discount_",
-          }
-
-          try {
-            totalRewards = (await stakedTheoContract.read.balanceForGons([
-              stakingInfo?.gonsRemaining,
-            ])) as any;
-            rewards = totalRewards - BigInt(stakingInfo?.deposit || 0);
-            if (contractName === 'TheopetraStakingLocked') {
-              const slashingPoolRewardsVal = (await contract.read.rewardsFor([
-                account?.address,
-                index,
-              ])) as any;
-              slashingPoolRewards = slashingPoolRewardsVal - rewards;
-            }
-          } catch (e) {
-            console.log(e);
-          }
-
           return {
             rewards,
             slashingPoolRewards,
             ...stakingInfo,
             ...pendingFor,
           };
-        });
+        } else {
+          const pnPromises = indexes.map(async (index) => {
+            let rewards = BigInt(0);
+            let slashingPoolRewards = BigInt(0);
+            let totalRewards = BigInt(0);
+            let stakingInfo: StakingInfo = {};
+            let pendingFor: PendingFor = {};
+
+            if (contractName === 'TheopetraStaking' || contractName === 'TheopetraStakingLocked') {
+              // "0": "deposit",
+              // "1": "gonsInWarmup",
+              // "2": "warmupExpiry",
+              // "3": "stakingExpiry",
+              // "4": "gonsRemaining",
+              const sValues = (await contract.read.stakingInfo([account?.address, index])) as any;
+              stakingInfo = {
+                deposit: sValues?.[0],
+                gonsInWarmup: sValues?.[1],
+                warmupExpiry: sValues?.[2],
+                stakingExpiry: sValues?.[3],
+                gonsRemaining: sValues?.[4],
+              };
+            } else {
+              const pValues = (await contract.read.pendingFor([account?.address, index])) as any;
+              pendingFor = {
+                payout: pValues?.[0],
+                created: pValues?.[1],
+                expiry: pValues?.[2],
+                timeRemaining: pValues?.[3],
+                matured: pValues?.[4],
+                discount: pValues?.[5],
+              } as any;
+              // "0": "payout_",
+              // "1": "created_",
+              // "2": "expiry_",
+              // "3": "timeRemaining_",
+              // "4": "matured_",
+              // "5": "discount_",
+            }
+
+            try {
+              totalRewards = (await stakedTheoContract.read.balanceForGons([
+                stakingInfo?.gonsRemaining,
+              ])) as any;
+              rewards = totalRewards - BigInt(stakingInfo?.deposit || 0);
+              if (contractName === 'TheopetraStakingLocked') {
+                const slashingPoolRewardsVal = (await contract.read.rewardsFor([
+                  account?.address,
+                  index,
+                ])) as any;
+                slashingPoolRewards = slashingPoolRewardsVal - rewards;
+              }
+            } catch (e) {
+              console.log(e);
+            }
+
+            return {
+              rewards,
+              slashingPoolRewards,
+              ...stakingInfo,
+              ...pendingFor,
+            };
+          });
 
         const pnData = await Promise.all(pnPromises);
         const pnObjs = pnData.map((p, i) => ({
@@ -159,7 +172,7 @@ export const usePurchasesByContract = (contractName) => {
         //   pnObjs,
         //   process.env.NEXT_PUBLIC_PURCHASE_CACHE_SECS
         // );
-      } catch (e) {
+      }} catch (e) {
         console.log(e);
       }
 
@@ -167,7 +180,7 @@ export const usePurchasesByContract = (contractName) => {
     };
 
     fetchData();
-  }, [account?.address, render, contractName, account]);
+  }, [account?.address, render, contractName]);
 
   useEffect(() => {
     watchPendingTransactions({}, (transactions) =>

@@ -68,7 +68,7 @@ const CurrencyInput: React.FC<CurrrencyInputProps> = ({
                 onClick={() =>
                   Number(balance) > Number(maxPayout) && isDiscountBuy === true
                     ? onChange({ target: { value: Number(maxPayout) } }, 'purchasePrice')
-                    : onChange({ target: { value: Number(balance) } }, 'purchasePrice')
+                    : onChange({ target: { value: (Number(balance) - 0.015) } }, 'purchasePrice')
                 }
                 className="ml-2 cursor-pointer rounded bg-theo-navy p-1 text-[10px] font-bold uppercase text-white"
               >
