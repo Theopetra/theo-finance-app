@@ -92,6 +92,11 @@ export const BuyFormProvider: {
     args: [theoERC20address, 1e9],
   });
 
+  const { data: treasuryBalance } = useBalance({
+    address: '0xf3143ae15deA73F4E8F32360F6b669173c854388',
+    token: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    });
+
   const getTotalCapacity = () => {
     let capacity = BigInt(0);
     groupedBondMarketsMap[selection.value]?.markets.forEach((market, i) => {
@@ -125,7 +130,21 @@ export const BuyFormProvider: {
       return totalValue as number;
     }
     return 0;
-  }, [valuation, priceFeed]);
+  }, [valuation, priceFeed, treasuryBalance]);
+
+  const openingPrice = useMemo(() => {
+    return groupedBondMarketsMap[selection.value]?.markets[0].marketData.marketPrice;
+  }, [groupedBondMarketsMap, treasuryBalance]);
+
+  const discountCapacity = useMemo(() => {
+    const referencePrice = 10**9 * Number(formatUnits(BigInt(priceFeed as bigint), 8));
+    let capacity = BigInt(0);
+    let i = 0;
+    while ((groupedBondMarketsMap[selection.value]?.markets[i]?.marketData.marketPrice) / referencePrice <= valuationPrice) {
+      capacity += groupedBondMarketsMap[selection.value]?.markets[i].marketData.capacity;
+      i++;
+    } return capacity;
+  }, [groupedBondMarketsMap, valuationPrice, treasuryBalance]);
 
   useEffect(() => {
     const callContract = async () => {
@@ -365,11 +384,6 @@ export const BuyFormProvider: {
     return [amountsOut, pricePerTheo, theoToBuy];
   };
 
-  const { data: treasuryBalance } = useBalance({
-    address: '0xf3143ae15deA73F4E8F32360F6b669173c854388',
-    token: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    });
-
   const unitProgress = useMemo(() => {
     const unitCost = 150000;
     if (priceFeed && treasuryBalance?.value) {
@@ -423,6 +437,11 @@ export const BuyFormProvider: {
           maxPayoutFormatted,
           bondDepoName,
           unitProgress,
+          valuationPrice,
+          discountCapacity,
+          priceFeed,
+          treasuryBalance,
+          openingPrice,
         },
         { setSelection, updateFormState, handleUpdate, getSelectedMarketPrice, handleTokenInput },
       ]}

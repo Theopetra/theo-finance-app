@@ -2,6 +2,7 @@ import { CurrencySelectOptionType } from '@/components/CurrencySelect';
 import { useContext } from 'react';
 import { BuyFormContext } from './BuyFormProvider';
 import { BondDepoNameType } from '@/hooks/useContractInfo';
+import { FetchBalanceResult } from 'wagmi/dist/actions';
 
 type MarketData = {
   valuationPrice;
@@ -64,6 +65,11 @@ type BuyFormStateType = {
   setSelection: (selection: { label: string; value: string }) => void;
   maxSlippage: number;
   startingPrice: bigint;
+  valuationPrice: number;
+  discountCapacity: bigint;
+  openingPrice: bigint;
+  treasuryBalance: FetchBalanceResult;
+  priceFeed: bigint;
   UIBondMarketsIsLoading: boolean;
   terms: Terms[];
   maxPayoutFormatted: number;
