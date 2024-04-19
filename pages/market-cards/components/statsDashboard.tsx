@@ -57,7 +57,7 @@ const StatsDashboard = () => {
                     <Card className="flex mx-1 h-32 items-center justify-center">
                         <>
                             <div className="flex text-2xl font-bold h-full items-center justify-center">{nextUpdate}</div>
-                            <div className="flex items-center justify-center">Next Price Update</div>
+                            <div className="flex items-center justify-center">Next price update</div>
                         </>
                     </Card>
                     <Card className="flex mx-1 h-32 items-center justify-center">
