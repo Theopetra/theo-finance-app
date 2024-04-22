@@ -137,14 +137,16 @@ export const BuyFormProvider: {
   }, [groupedBondMarketsMap, treasuryBalance]);
 
   const discountCapacity = useMemo(() => {
-    const referencePrice = 10**9 * Number(formatUnits(BigInt(priceFeed as bigint), 8));
-    let capacity = BigInt(0);
-    let i = 0;
-    while ((groupedBondMarketsMap[selection.value]?.markets[i]?.marketData.marketPrice) / referencePrice <= valuationPrice) {
-      capacity += groupedBondMarketsMap[selection.value]?.markets[i].marketData.capacity;
-      i++;
-    } return capacity;
-  }, [groupedBondMarketsMap, valuationPrice, treasuryBalance]);
+    if (priceFeed && valuationPrice) {
+      const referencePrice = 10**9 * Number(formatUnits(BigInt(priceFeed as bigint), 8));
+      let capacity = BigInt(0);
+      let i = 0;
+      while ((groupedBondMarketsMap[selection.value]?.markets[i]?.marketData.marketPrice) / referencePrice <= valuationPrice) {
+        capacity += groupedBondMarketsMap[selection.value]?.markets[i].marketData.capacity;
+        i++;
+      } return capacity;
+    } else return 0;
+  }, [groupedBondMarketsMap, valuationPrice, treasuryBalance, priceFeed]);
 
   useEffect(() => {
     const callContract = async () => {

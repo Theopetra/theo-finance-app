@@ -20,8 +20,8 @@ const StatsDashboard = () => {
       const marketInterval = 2617920;
       const marketStart = 1713220095;
 
-      const ethPrice = formatUnits(BigInt(priceFeed as bigint), 8);
-      const balanceFormatted = formatUnits(treasuryBalance?.value as bigint, 18)
+      const ethPrice = (priceFeed? formatUnits(BigInt(priceFeed as bigint), 8) : 0);
+      const balanceFormatted = (treasuryBalance? formatUnits(treasuryBalance.value as bigint, 18) : 0);
 
       const now = Math.floor(new Date().getTime() / 1000);
       const updateSeconds = ((marketInterval - ((now - marketStart) % marketInterval)) + now);
