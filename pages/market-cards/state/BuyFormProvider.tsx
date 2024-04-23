@@ -138,10 +138,10 @@ export const BuyFormProvider: {
 
   const discountCapacity = useMemo(() => {
     if (priceFeed && valuationPrice) {
-      const referencePrice = 10**9 * Number(formatUnits(BigInt(priceFeed as bigint), 8));
+      const referencePrice = Math.floor(10**9 * (valuationPrice / Number(formatUnits(BigInt(priceFeed as bigint), 8))));
       let capacity = BigInt(0);
       let i = 0;
-      while ((groupedBondMarketsMap[selection.value]?.markets[i]?.marketData.marketPrice) / referencePrice <= valuationPrice) {
+      while ((groupedBondMarketsMap[selection.value]?.markets[i]?.marketData.marketPrice) <= referencePrice) {
         capacity += groupedBondMarketsMap[selection.value]?.markets[i].marketData.capacity;
         i++;
       } return capacity;
