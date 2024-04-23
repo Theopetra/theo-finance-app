@@ -182,11 +182,11 @@ export const usePurchasesByContract = (contractName) => {
     fetchData();
   }, [account?.address, render, contractName]);
 
-  useEffect(() => {
-    watchPendingTransactions({}, (transactions) =>
-    reRender()
-  );
-  })
+  // useEffect(() => {
+  //   watchPendingTransactions({}, (transactions) =>
+  //   reRender()
+  // );
+  // })
 
   return { pendingNotes, reRender, isLoadingPurchases };
 };

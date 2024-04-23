@@ -4,6 +4,7 @@ import PageContainer from '@/components/PageContainer';
 import { UserPurchasesProvider } from './market-cards/state/UserPurchasesProvider';
 import BuyFormProvider from './market-cards/state/BuyFormProvider';
 import DiscountBuyCard from './market-cards/discount-buy';
+import StatsDashboard from './market-cards/components/statsDashboard';
 import Card from '@/components/Card';
 import Image from 'next/image';
 
@@ -42,6 +43,7 @@ const Dashboard = ({}) => {
               {/* <DiscountBuyMobyCard /> */}
             </div>
           </div>
+          <StatsDashboard />
         </div>
       </PageContainer>
     </>
